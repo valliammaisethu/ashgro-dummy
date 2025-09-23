@@ -1,0 +1,176 @@
+@import "variables";
+
+/* Helpers CSS */
+
+.d-block {
+  display: block !important;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.float-right {
+  float: right !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-underline {
+  text-decoration: underline !important;
+}
+
+.text-primary {
+  color: $primary-color;
+}
+
+.text-light-grey {
+  color: $light-grey;
+}
+
+.text-dark-grey {
+  color: $dark-grey;
+}
+
+.text-white {
+  color: #FFFFFF !important;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.bb-5 {
+  border-bottom: ($spacer-y * 1.25) solid $primary-color !important;
+}
+
+.float-right {
+  float: right !important;
+}
+
+.float-left {
+  float: left !important;
+}
+
+.float-none {
+  float: none !important;
+}
+
+.primary-black {
+  color: $primary-black !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+
+/* Padding */
+
+.p-0 {
+  padding: 0 !important;
+}
+
+.pr-0 {
+  padding-right: 0 !important;
+}
+
+.pb-0 {
+  padding-bottom: 0 !important;
+}
+
+/* Margins */
+
+.mt-0 {
+  margin-top: 0 !important;
+}
+
+.mt-1 {
+  margin-top: ($spacer-y * .25) !important;
+}
+
+.mt-2 {
+  margin-top: ($spacer-y * .5) !important;
+}
+
+.mt-3 {
+  margin-top: ($spacer-y * .75) !important;
+}
+
+.mt-4 {
+  margin-top: ($spacer-y * 1) !important;
+}
+
+.mt-5 {
+  margin-top: ($spacer-y * 1.25) !important;
+}
+
+.mb-2 {
+  margin-bottom: ($spacer-y * .5) !important;
+}
+
+.mb-3 {
+  margin-bottom: ($spacer-y * .75) !important;
+}
+
+.mb-4 {
+  margin-bottom: ($spacer-y * 1) !important;
+}
+
+.mb-5 {
+  margin-bottom: ($spacer-y * 1.25) !important;
+}
+
+.ml-2 {
+  margin-left: ($spacer-x * .5) !important;
+}
+
+.ml-3 {
+  margin-left: ($spacer-x * .75) !important;
+}
+
+.ml-4 {
+  margin-left: ($spacer-x * 1) !important;
+}
+
+.ml-5 {
+  margin-left: ($spacer-x * 1.25) !important;
+}
+
+.mr-1 {
+  margin-right: ($spacer-x * .25) !important;
+}
+
+.mr-2 {
+  margin-right: ($spacer-x * .5) !important;
+}
+
+.mr-3 {
+  margin-right: ($spacer-x * .75) !important;
+}
+
+.mr-4 {
+  margin-right: ($spacer-x * 1) !important;
+}
+
+.mr-5 {
+  margin-right: ($spacer-x * 1.25) !important;
+}

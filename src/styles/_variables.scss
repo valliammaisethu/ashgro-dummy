@@ -1,0 +1,62 @@
+/* Color palette */
+$primary-color: #0D494E;
+$secondary-color: #006FBA;
+$light-white: #FFFFFF40;
+$primary-light-color: #0D494E10;
+$primary-black: #4B4B4B;
+$dark-blue: #22509D;
+$light-grey: #00000015;
+$dark-grey: #8898AA;
+$success-color: green;
+$danger-color: #FE0000;
+$warning-color: #F3B21B;
+$body-bg: #F5F8FA;
+$table-bg: #F7FAFC;
+$input-bg: #F8FBFC;
+
+/* Component colors */
+
+/* Input Field */
+$input-border-color: rgba(0, 0, 0, 0.164);
+$input-border-color-hover: $primary-color;
+$input-border-box-shadow: 0 0 0 2px rgba($color: $primary-color, $alpha: 0.2);
+$input-border-radius: 4px;
+
+/* Default Button */
+$button-default-border-color: $primary-color;
+$button-default-bg-color: white;
+$button-default-text-color: $primary-color;
+$button-default-border-radius: 4px;
+
+/* Primary Button */
+$button-primary-border-color: $primary-color;
+$button-primary-bg-color: $primary-color;
+$button-primary-text-color: white;
+$button-primary-border-radius: 4px;
+
+/* Checkbox */
+$checkbox-bg-color: $primary-color;
+$checkbox-hover-border-color: $primary-color;
+$checkbox-text-color: white;
+$checkbox-hover-text-color: $primary-color;
+
+/* Radio */
+$radio-border-color: rgb(202, 202, 202);
+$radio-checked-border-color: $primary-color;
+$radio-checked-bg-color: $primary-color;
+
+/* Switch */
+$switch-bg-color: $primary-color;
+
+/* Select */
+$select-border-color: rgb(202, 202, 202);
+$select-hover-border-color: $primary-color;
+$select-focus-box-shadow: 0 0 0 2px rgba($color: $primary-color, $alpha: 0.2);
+
+/* Shadows */
+$primary-shadow: 0 8px 22px #0000001A;
+$secondary-shadow: 0px 3px 6px #2C28281C;
+
+/* Spacer variables */
+$spacer-x : 1rem;
+$spacer-y : 1rem;

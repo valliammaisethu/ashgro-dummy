@@ -1,0 +1,20 @@
+@import "src/styles/variables";
+
+.otp__container {
+    .otp-field{
+        input {
+            width: 40px !important;
+            height: 40px;
+            border-width: 1px;
+            border-radius: $input-border-radius;
+            border-color: $input-border-color;
+            &:focus,
+            &:hover {
+              border-color: $input-border-color-hover;
+            }
+            &:focus {
+              box-shadow: $input-border-box-shadow !important;
+            }
+          }
+    }
+}

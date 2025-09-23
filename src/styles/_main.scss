@@ -1,0 +1,112 @@
+@import "variables";
+@import "helpers";
+@import "@antOverrides";
+
+/* General component styles */
+body {
+  background-color: #FFFFFF;
+  color: $primary-black;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+button,
+input {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+
+.avatar-bg-color--1 {
+  background-color: #ef6c0033 !important;
+  color: #EF6C00 !important
+}
+
+.avatar-bg-color--2 {
+  background-color: #c2175a33 !important;
+  color: #C2175A !important
+}
+
+.avatar-bg-color--3 {
+  background-color: #be360933 !important;
+  color: #BE3609 !important
+}
+
+.avatar-bg-color--4 {
+  background-color: #7c58c033 !important;
+  color: #7C58C0 !important
+}
+
+.avatar-bg-color--5 {
+  background-color: #ab47bb33 !important;
+  color: #AB47BB !important
+}
+
+.avatar-bg-color--6 {
+  background-color: #01897b33 !important;
+  color: #01897B !important
+}
+
+.avatar-bg-color--7 {
+  background-color: #00579b33 !important;
+  color: #00579B !important
+}
+
+.avatar-bg-color--8 {
+  background-color: #bf350d33 !important;
+  color: #BF350D !important
+}
+
+.avatar-bg-color--9 {
+  background-color: #5b6bc033 !important;
+  color: #5B6BC0 !important
+}
+
+.avatar-bg-color--10 {
+  background-color: #00579a33 !important;
+  color: #00579A !important
+}
+
+.avatar-bg-color--11 {
+  background-color: #33691c33 !important;
+  color: #33691C !important
+}
+
+.avatar-bg-color--12 {
+  background-color: #7e57c233 !important;
+  color: #7E57C2 !important;
+
+}
+
+.avatar-bg-color--13 {
+  background-color: #77909c33 !important;
+  color: #77909C !important
+}
+
+.avatar-bg-color--14 {
+  background-color: #455a6433 !important;
+  color: #455A64 !important
+}
+
+.avatar-bg-color--15 {
+  background-color: #669f3733 !important;
+  color: #669F37 !important
+}
+
+.avatar-bg-color--16 {
+  background-color: #eb407a33 !important;
+  color: #EB407A !important
+}
+
+.avatar-bg-color--17 {
+  background-color: #bf360d33 !important;
+  color: #BF360D !important
+}
+
+.avatar-bg-color--18 {
+  background-color: #0097a733 !important;
+  color: #0097A7 !important
+}
