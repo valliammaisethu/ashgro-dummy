@@ -8,7 +8,7 @@ import styles from "./dropdownField.module.scss";
 
 interface DropdownProps<
   ValueType,
-  OptionType extends BaseOptionType | DefaultOptionType = DefaultOptionType
+  OptionType extends BaseOptionType | DefaultOptionType = DefaultOptionType,
 > extends SelectProps<ValueType, OptionType> {
   name: string;
   title?: string;
@@ -16,7 +16,7 @@ interface DropdownProps<
 
 const Dropdown = <
   ValueType,
-  OptionType extends BaseOptionType | DefaultOptionType = DefaultOptionType
+  OptionType extends BaseOptionType | DefaultOptionType = DefaultOptionType,
 >({
   title,
   ...props

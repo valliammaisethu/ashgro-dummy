@@ -12,7 +12,7 @@ interface CheckboxProps {
   group?: boolean;
   onChange: (
     singleHandler?: CheckboxChangeEvent,
-    groupHandler?: Array<string | number>
+    groupHandler?: Array<string | number>,
   ) => void;
   options?: Array<CheckboxOptionType | string | number>;
   checked?: boolean;

@@ -11,7 +11,6 @@ import "./appComponents.scss";
 import DatePicker from "../../shared/components/DatePickerField";
 import Dropdown from "../../shared/components/DropdownField";
 import { Gender } from "../../enums/genders.enum";
-import OTPField from "../../shared/components/OTPField";
 import { tooltipPosition } from "../../enums/tooltipPosition";
 import Drawer from "../../shared/components/Drawer";
 import BreadCrumb from "../../shared/components/BreadCrumb";
@@ -63,7 +62,7 @@ const AppComponents: FC = () => {
 
   const handleCheckbox = (e: CheckboxChangeEvent) => {
     setChecked((prevState) => !prevState);
-    console.log(e.target.checked);
+    // console.log(e.target.checked);
   };
 
   const modalFooter = [
@@ -72,12 +71,12 @@ const AppComponents: FC = () => {
     </Button>,
     <Button key="submit" type="primary" clickHandler={handleCloseModal}>
       Submit
-    </Button>
+    </Button>,
   ];
   const OpenCloseDrawer = () => setIsDrawerOpen(!isDrawerOpen);
 
   const activeKeyChanged = (key: string | string[]) => {
-    console.log("what was changed?", key);
+    // TODO: implement this function
   };
 
   return (
@@ -85,7 +84,9 @@ const AppComponents: FC = () => {
       <h1 className="text-center text-decoration">App Components</h1>
       <Formik
         initialValues={{ startDate: "", gender: "", otp: "", framework: "" }}
-        onSubmit={() => {}}
+        onSubmit={() => {
+          // TODO: implement this function
+        }}
       >
         <Form>
           <Space direction="vertical">
@@ -140,7 +141,9 @@ const AppComponents: FC = () => {
                 <SearchField
                   setSearchValue={setSearchValue}
                   searchValue={searchValue}
-                  onSearch={() => {}}
+                  onSearch={() => {
+                    // TODO: implement this function
+                  }}
                 />
               </Col>
               <Col span={8}>
@@ -157,7 +160,7 @@ const AppComponents: FC = () => {
                   placeholder="Choose Gender"
                   options={[
                     { label: "Male", value: Gender.MALE },
-                    { label: "Female", value: Gender.FEMALE }
+                    { label: "Female", value: Gender.FEMALE },
                   ]}
                 />
                 {/* <OTPField.Formik name="otp" /> */}
@@ -165,7 +168,7 @@ const AppComponents: FC = () => {
                   name="framework"
                   options={[
                     { label: "React", value: "react" },
-                    { label: "Angular", value: "angular" }
+                    { label: "Angular", value: "angular" },
                   ]}
                   label="Category"
                 />
@@ -183,7 +186,7 @@ const AppComponents: FC = () => {
                   name="select"
                   options={AppComponentsConstants.OPTIONS}
                   onChange={(value) => {
-                    console.log(value);
+                    // TODO: implement this function
                   }}
                   placeholder={"Select"}
                 />
@@ -199,7 +202,7 @@ const AppComponents: FC = () => {
                   options={AppComponentsConstants.OPTIONS}
                   mode={"multiple"}
                   onChange={(value) => {
-                    console.log(value);
+                    // TODO: implement this function
                   }}
                   placeholder={"Select"}
                 />
@@ -226,7 +229,11 @@ const AppComponents: FC = () => {
               </Col>
               <Col span={8}>
                 <p className="mt-5 app-components__title">File upload:</p>
-                <FileUpload handleChange={(value) => console.log(value)}>
+                <FileUpload
+                  handleChange={(value) => {
+                    // TODO: implement this function
+                  }}
+                >
                   <Button>Upload File</Button>
                 </FileUpload>
               </Col>
@@ -236,7 +243,7 @@ const AppComponents: FC = () => {
                 <FileUpload
                   dragdrop
                   handleChange={(values) => {
-                    console.log(values);
+                    // console.log(values);
                   }}
                   uploadIcon={<InboxOutlined />}
                   uploadText={
@@ -291,7 +298,7 @@ const AppComponents: FC = () => {
                 <Checkbox
                   group
                   options={AppComponentsConstants.OPTIONS}
-                  onChange={(_, event) => event }//handleCheckboxGroup(event)}
+                  onChange={(_, event) => event} //handleCheckboxGroup(event)}
                 />
               </Col>
 
@@ -304,7 +311,6 @@ const AppComponents: FC = () => {
                   name="radio"
                   onChange={(event) => {
                     setRadio(event.target.value);
-                    console.log(event.target.value);
                   }}
                 />
               </Col>

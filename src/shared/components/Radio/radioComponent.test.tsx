@@ -4,20 +4,20 @@ import RadioButton from ".";
 import { screen } from "@testing-library/react";
 import { Form, Formik } from "formik";
 import { DOM_ELEMENT_ROLE } from "../../../enums/domElementRole.enum";
-import { vi } from 'vitest'
+import { vi } from "vitest";
 
 const { getByRole, getByText, getAllByRole } = screen;
 const { RADIO } = DOM_ELEMENT_ROLE;
 
 const formikWrappedRadioButton = (
-  props?: ComponentProps<typeof RadioButton.Formik>
+  props?: ComponentProps<typeof RadioButton.Formik>,
 ) => (
   <Formik initialValues={{ framework: "" }} onSubmit={vi.fn()}>
     <Form>
       <RadioButton
         options={[
           { label: "React", value: "react" },
-          { label: "Angular", value: "angular" }
+          { label: "Angular", value: "angular" },
         ]}
         {...props}
       />
@@ -30,7 +30,7 @@ describe("<RadioButton />", () => {
     const { container } = renderWithContext(<RadioButton />);
 
     expect(
-      container.querySelector(".radio-component__label")
+      container.querySelector(".radio-component__label"),
     ).not.toBeInTheDocument();
   });
 
@@ -46,21 +46,21 @@ describe("<RadioButton />", () => {
       <RadioButton
         options={[
           { label: "React", value: "react" },
-          { label: "Angular", value: "angular" }
+          { label: "Angular", value: "angular" },
         ]}
-      />
+      />,
     );
 
     const reactOption = getByRole(RADIO, {
-      name: /react/i
+      name: /react/i,
     });
 
     await user.click(reactOption);
 
     expect(
       getAllByRole(RADIO, {
-        checked: true
-      }).length
+        checked: true,
+      }).length,
     ).toBe(1);
   });
 
@@ -69,17 +69,17 @@ describe("<RadioButton />", () => {
       <RadioButton
         options={[
           { label: "React", value: "react" },
-          { label: "Angular", value: "angular" }
+          { label: "Angular", value: "angular" },
         ]}
-      />
+      />,
     );
 
     const reactOption = getByRole(RADIO, {
-      name: /react/i
+      name: /react/i,
     });
 
     const angularOption = getByRole(RADIO, {
-      name: /angular/i
+      name: /angular/i,
     });
 
     await user.click(reactOption);
@@ -94,13 +94,13 @@ describe("<RadioButton />", () => {
       <RadioButton
         options={[
           { label: "React", value: "react" },
-          { label: "Angular", value: "angular" }
+          { label: "Angular", value: "angular" },
         ]}
-      />
+      />,
     );
 
     const reactOption = getByRole(RADIO, {
-      name: /react/i
+      name: /react/i,
     });
 
     await user.click(reactOption);
@@ -114,15 +114,15 @@ describe("<RadioButton.Formik />", () => {
     const { user } = renderWithContext(formikWrappedRadioButton());
 
     const reactOption = getByRole(RADIO, {
-      name: /react/i
+      name: /react/i,
     });
 
     await user.click(reactOption);
 
     expect(
       getAllByRole(RADIO, {
-        checked: true
-      }).length
+        checked: true,
+      }).length,
     ).toBe(1);
   });
 
@@ -130,11 +130,11 @@ describe("<RadioButton.Formik />", () => {
     const { user } = renderWithContext(formikWrappedRadioButton());
 
     const reactOption = getByRole(RADIO, {
-      name: /react/i
+      name: /react/i,
     });
 
     const angularOption = getByRole(RADIO, {
-      name: /angular/i
+      name: /angular/i,
     });
 
     await user.click(angularOption);
@@ -142,8 +142,8 @@ describe("<RadioButton.Formik />", () => {
 
     expect(
       getAllByRole(RADIO, {
-        checked: true
-      }).length
+        checked: true,
+      }).length,
     ).toBe(1);
   });
 
@@ -151,11 +151,11 @@ describe("<RadioButton.Formik />", () => {
     const { user } = renderWithContext(formikWrappedRadioButton());
 
     const reactOption = getByRole(RADIO, {
-      name: /react/i
+      name: /react/i,
     });
 
     const angularOption = getByRole(RADIO, {
-      name: /angular/i
+      name: /angular/i,
     });
 
     await user.click(reactOption);
@@ -169,7 +169,7 @@ describe("<RadioButton.Formik />", () => {
     const { user } = renderWithContext(formikWrappedRadioButton());
 
     const reactOption = getByRole(RADIO, {
-      name: /react/i
+      name: /react/i,
     });
 
     await user.click(reactOption);

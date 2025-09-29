@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { action } from '@storybook/addon-actions';
-import Drawer, { drawerProps } from '.';
-import { Meta, StoryObj } from '@storybook/react';
-import Button from '../Button';
-
+import React, { useState } from "react";
+import { action } from "@storybook/addon-actions";
+import Drawer, { drawerProps } from ".";
+import { Meta } from "@storybook/react";
+import Button from "../Button";
 
 export default {
-  title: 'Components/Drawer',
+  title: "Components/Drawer",
   component: Drawer,
 } as Meta<typeof Drawer>;
 
@@ -15,7 +14,7 @@ export const Interactive = (args: drawerProps) => {
 
   const handleButtonClick = () => {
     setIsOpen(true);
-    action('onButtonClick')();
+    action("onButtonClick")();
   };
 
   const handleDrawerClose = () => {
@@ -25,21 +24,23 @@ export const Interactive = (args: drawerProps) => {
 
   return (
     <>
-    <Button  type='primary' clickHandler={handleButtonClick}>Open Drawer</Button>
+      <Button type="primary" clickHandler={handleButtonClick}>
+        Open Drawer
+      </Button>
       <Drawer {...args} open={isOpen} onClose={handleDrawerClose} />
     </>
   );
 };
 
 Interactive.args = {
-  title: 'Drawer Title',
+  title: "Drawer Title",
   width: 300,
   closable: true,
-  onClose: action('onClose'),
+  onClose: action("onClose"),
   closeIcon: null,
   footer: null,
-  size: 'default',
+  size: "default",
   zIndex: 1000,
-  placement: 'right',
+  placement: "right",
   children: <p>Drawer Content</p>,
 };

@@ -5,7 +5,7 @@ import { ApiRoutes } from "./../../routes/routeConstants/apiRoutes";
 import Axios from "axios";
 import {
   Attachment,
-  AttachmentPresignedUrl
+  AttachmentPresignedUrl,
 } from "../../models/attachment.model";
 
 const AttachmentService = () => {
@@ -29,18 +29,18 @@ const AttachmentService = () => {
       const payload = {
         attachment: serialize(Attachment, {
           format: file.type,
-          name: file.name
-        })
+          name: file.name,
+        }),
       };
 
       const { data } = await axiosInstance.post(
         ApiRoutes.ATTACHMENT_PRESIGNED_URL,
-        payload
+        payload,
       );
 
       const attachmentPreSignedUrl = deserialize(
         AttachmentPresignedUrl,
-        data["attachment"]
+        data["attachment"],
       );
 
       setAttachmentPreSignedUrl(attachmentPreSignedUrl);
@@ -70,7 +70,7 @@ const AttachmentService = () => {
       setLoading(true);
 
       const response = await axiosInstance.post(ApiRoutes.ATTACHMENTS, {
-        attachment: serialize(Attachment, attachment)
+        attachment: serialize(Attachment, attachment),
       });
 
       const data = deserialize(Attachment, response.data["attachment"]);
@@ -96,7 +96,7 @@ const AttachmentService = () => {
         s3Key: attachment?.key,
         size: file.size,
         name: file.name,
-        format: attachment.format
+        format: attachment.format,
       });
 
       return newAttachment;
@@ -115,7 +115,7 @@ const AttachmentService = () => {
     setAttachment,
     isUploading,
     uploadAttachment,
-    isAttachmentAdding
+    isAttachmentAdding,
   };
 };
 

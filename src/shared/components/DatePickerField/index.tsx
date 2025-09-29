@@ -1,7 +1,7 @@
 import React from "react";
 import {
   DatePicker as AntDatePicker,
-  DatePickerProps as AntDatePickerProps
+  DatePickerProps as AntDatePickerProps,
 } from "antd";
 import styles from "./datePickerField.module.scss";
 import { ErrorMessage, Field, useField } from "formik";

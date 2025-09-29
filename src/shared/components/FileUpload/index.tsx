@@ -7,7 +7,7 @@ import { FILE_STATUS } from "../../../enums/fileStatus.enum";
 import {
   getFileErrorMessage,
   getFileSuccessMessage,
-  SharedComponentsConstants
+  SharedComponentsConstants,
 } from "../../../constants/sharedComponents";
 
 interface FileUploadProps {
@@ -35,7 +35,7 @@ const FileUpload = ({
   fileTypes,
   multiple,
   maxCount,
-  handleChange
+  handleChange,
 }: FileUploadProps) => {
   const { Dragger } = Upload;
   const propsDragDrop: UploadProps = {
@@ -45,7 +45,7 @@ const FileUpload = ({
       ? actionURL
       : SharedComponentsConstants.FILE_UPLOAD.mockUrl, //uploading URL
     headers: {
-      authorization: SharedComponentsConstants.FILE_UPLOAD.authorization
+      authorization: SharedComponentsConstants.FILE_UPLOAD.authorization,
     },
     accept: fileTypes,
     onChange(info) {
@@ -60,7 +60,7 @@ const FileUpload = ({
     },
     onDrop(e) {
       handleChange(e.dataTransfer.files);
-    }
+    },
   };
   const propsGeneric: UploadProps = {
     name: SharedComponentsConstants.FILE_UPLOAD.name,
@@ -69,7 +69,7 @@ const FileUpload = ({
       ? actionURL
       : SharedComponentsConstants.FILE_UPLOAD.mockUrl, //uploading URL
     headers: {
-      authorization: SharedComponentsConstants.FILE_UPLOAD.authorization
+      authorization: SharedComponentsConstants.FILE_UPLOAD.authorization,
     },
     maxCount: maxCount,
     onChange(info) {
@@ -81,7 +81,7 @@ const FileUpload = ({
       } else if (info.file.status === FILE_STATUS.ERROR) {
         message.error(getFileErrorMessage(info.file.name));
       }
-    }
+    },
   };
   return (
     <div className={styles["file-upload-container"]}>

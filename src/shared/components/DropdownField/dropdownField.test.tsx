@@ -6,13 +6,13 @@ import { Gender } from "../../../enums/genders.enum";
 import { Form, Formik } from "formik";
 import { DOM_ELEMENT_ROLE } from "../../../enums/domElementRole.enum";
 import { DOM_ELEMENT_ATTRIBUTE } from "../../../enums/domElementAttribute";
-import { vi } from 'vitest'
+import { vi } from "vitest";
 
 const { getByText, getByRole, getByTitle } = screen;
 
 const genderOptions = [
   { label: "Male", value: Gender.MALE },
-  { label: "Female", value: Gender.FEMALE }
+  { label: "Female", value: Gender.FEMALE },
 ];
 
 const initialValues = { gender: "" };
@@ -38,13 +38,13 @@ describe("<Dropdown />", () => {
     const { container } = renderWithContext(<Dropdown name="gender" />);
 
     expect(
-      container.getElementsByClassName("dropdown-field__title").length
+      container.getElementsByClassName("dropdown-field__title").length,
     ).toBeFalsy();
   });
 
   it("Should Render Selected Option", async () => {
     const { user } = renderWithContext(
-      <Dropdown name="gender" options={genderOptions} />
+      <Dropdown name="gender" options={genderOptions} />,
     );
 
     const dropdown = getByRole(DOM_ELEMENT_ROLE.COMBOBOX) as HTMLInputElement;
@@ -63,14 +63,14 @@ describe("<Dropdown />", () => {
     expect(
       Array.from(options.children).filter(
         (elem) =>
-          elem.getAttribute(DOM_ELEMENT_ATTRIBUTE.ARIA_SELECTED) === "true"
-      ).length
+          elem.getAttribute(DOM_ELEMENT_ATTRIBUTE.ARIA_SELECTED) === "true",
+      ).length,
     ).toBe(1);
   });
 
   it("Should Render no value if no option is selected", async () => {
     const { user } = renderWithContext(
-      <Dropdown name="gender" options={genderOptions} />
+      <Dropdown name="gender" options={genderOptions} />,
     );
 
     const dropdown = getByRole(DOM_ELEMENT_ROLE.COMBOBOX) as HTMLInputElement;
@@ -86,8 +86,8 @@ describe("<Dropdown />", () => {
     expect(
       Array.from(options.children).filter(
         (elem) =>
-          elem.getAttribute(DOM_ELEMENT_ATTRIBUTE.ARIA_SELECTED) === "true"
-      ).length
+          elem.getAttribute(DOM_ELEMENT_ATTRIBUTE.ARIA_SELECTED) === "true",
+      ).length,
     ).toBe(0);
   });
 });
@@ -111,7 +111,7 @@ describe("<Dropdown.Formik />", () => {
       getQueriesForElement(baseElement).getByLabelText("Female");
 
     expect(
-      selectedOption.getAttribute(DOM_ELEMENT_ATTRIBUTE.ARIA_SELECTED)
+      selectedOption.getAttribute(DOM_ELEMENT_ATTRIBUTE.ARIA_SELECTED),
     ).toBe("true");
   });
 
@@ -131,8 +131,8 @@ describe("<Dropdown.Formik />", () => {
     expect(
       Array.from(options.children).filter(
         (elem) =>
-          elem.getAttribute(DOM_ELEMENT_ATTRIBUTE.ARIA_SELECTED) === "true"
-      ).length
+          elem.getAttribute(DOM_ELEMENT_ATTRIBUTE.ARIA_SELECTED) === "true",
+      ).length,
     ).toBe(0);
   });
 });

@@ -1,8 +1,8 @@
-import { Meta, StoryObj, } from '@storybook/react';
-import Skeleton from '.';
+import { Meta, StoryObj } from "@storybook/react";
+import Skeleton from ".";
 
 export default {
-  title: 'Components/Skeleton',
+  title: "Components/Skeleton",
   component: Skeleton,
 } as Meta;
 type Story = StoryObj<typeof Skeleton>;
@@ -15,5 +15,5 @@ Default.args = {
   loading: true,
   paragraph: true,
   round: true,
-  title: true
-}
+  title: true,
+};

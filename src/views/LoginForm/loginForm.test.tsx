@@ -5,7 +5,7 @@ import renderWithContext from "../../shared/utils/renderWithContext";
 import * as router from "react-router";
 import { AppRoutes } from "../../routes/routeConstants/appRoutes";
 import { DOM_ELEMENT_ROLE } from "../../enums/domElementRole.enum";
-import { vi } from 'vitest'
+import { vi } from "vitest";
 
 const { getByText, getByPlaceholderText, getByRole, queryByText } = screen;
 
@@ -22,7 +22,7 @@ describe("<LoginForm />", () => {
     ["Password is a required field"],
     ["Email is a required field"],
     ["Email must be a valid email"],
-    ["Password must be at least 8 characters"]
+    ["Password must be at least 8 characters"],
   ])(
     "Shouldn't have validation errors when loading the form",
     async (errorMessage) => {
@@ -31,7 +31,7 @@ describe("<LoginForm />", () => {
 
       //Assert
       expect(queryByText(errorMessage)).toBeNull();
-    }
+    },
   );
 
   it.each([["Email is a required field"], ["Password is a required field"]])(
@@ -41,7 +41,7 @@ describe("<LoginForm />", () => {
       const { user } = renderWithContext(<LoginForm />);
 
       const submitButton = getByRole(DOM_ELEMENT_ROLE.BUTTON, {
-        name: /Login/i
+        name: /Login/i,
       });
 
       // Act
@@ -49,7 +49,7 @@ describe("<LoginForm />", () => {
 
       // Assert
       expect(getByText(errorMessage)).toBeInTheDocument();
-    }
+    },
   );
 
   it("Should Show Email Validation Error when submitting form with empty email & valid password", async () => {
@@ -58,7 +58,7 @@ describe("<LoginForm />", () => {
 
     const passwordField = getByPlaceholderText(/Enter Password/i);
     const submitButton = getByRole(DOM_ELEMENT_ROLE.BUTTON, {
-      name: /Login/i
+      name: /Login/i,
     });
 
     // Act
@@ -75,7 +75,7 @@ describe("<LoginForm />", () => {
 
     const emailField = getByPlaceholderText(/Enter Email/i);
     const submitButton = getByRole(DOM_ELEMENT_ROLE.BUTTON, {
-      name: /Login/i
+      name: /Login/i,
     });
 
     // Act
@@ -92,7 +92,7 @@ describe("<LoginForm />", () => {
 
     const emailField = getByPlaceholderText(/Enter Email/i);
     const submitButton = getByRole(DOM_ELEMENT_ROLE.BUTTON, {
-      name: /Login/i
+      name: /Login/i,
     });
 
     // Act
@@ -109,7 +109,7 @@ describe("<LoginForm />", () => {
 
     const passwordField = getByPlaceholderText(/Enter Password/i);
     const submitButton = getByRole(DOM_ELEMENT_ROLE.BUTTON, {
-      name: /Login/i
+      name: /Login/i,
     });
 
     // Act
@@ -118,7 +118,7 @@ describe("<LoginForm />", () => {
 
     // Assert
     expect(
-      getByText(/Password must be at least 8 characters/i)
+      getByText(/Password must be at least 8 characters/i),
     ).toBeInTheDocument();
   });
 
@@ -134,7 +134,7 @@ describe("<LoginForm />", () => {
     const emailField = getByPlaceholderText(/Enter Email/i);
     const passwordField = getByPlaceholderText(/Enter Password/i);
     const submitButton = getByRole(DOM_ELEMENT_ROLE.BUTTON, {
-      name: /Login/i
+      name: /Login/i,
     });
 
     // Act

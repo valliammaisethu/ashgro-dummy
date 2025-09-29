@@ -1,4 +1,3 @@
 export enum DOM_ELEMENT_ATTRIBUTE {
-    ARIA_SELECTED = "aria-selected"
-  }
-  
+  ARIA_SELECTED = "aria-selected",
+}

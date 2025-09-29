@@ -5,21 +5,21 @@ import { screen } from "@testing-library/react";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Button } from "antd";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 import { DOM_ELEMENT_ROLE } from "../../../enums/domElementRole.enum";
 import { SharedComponentsConstants } from "../../../constants/sharedComponents";
-import { vi } from 'vitest'
+import { vi } from "vitest";
 
 const { getByText, getByRole, queryByText } = screen;
 
 const START_DATE_REQUIRED = "Start Date is a required Field";
 
 const validationSchema = Yup.object().shape({
-  startDate: Yup.date().required().label("Start Date")
+  startDate: Yup.date().required().label("Start Date"),
 });
 
 const formikWrappedField = (
-  props?: Omit<ComponentProps<typeof DatePicker.Formik>, "name">
+  props?: Omit<ComponentProps<typeof DatePicker.Formik>, "name">,
 ) => (
   <Formik
     initialValues={{ startDate: "" }}
@@ -46,7 +46,7 @@ describe("<DatePicker />", () => {
     const { container } = renderWithContext(<DatePicker name="startDate" />);
 
     expect(
-      container.getElementsByClassName("dropdown-field__title").length
+      container.getElementsByClassName("dropdown-field__title").length,
     ).toBeFalsy();
   });
 
@@ -89,7 +89,7 @@ describe("<DatePicker.Formik />", () => {
     (errorMessage) => {
       renderWithContext(formikWrappedField());
       expect(queryByText(errorMessage)).toBeNull();
-    }
+    },
   );
 
   it.each([[START_DATE_REQUIRED]])(
@@ -106,6 +106,6 @@ describe("<DatePicker.Formik />", () => {
       await user.click(submitButton);
 
       expect(queryByText(errorMessage)).not.toBeInTheDocument();
-    }
+    },
   );
 });

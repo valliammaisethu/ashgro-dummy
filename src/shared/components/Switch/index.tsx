@@ -4,7 +4,7 @@ import { ErrorMessage, Field, useField } from "formik";
 import styles from "./switch.module.scss";
 import Error from "../Error";
 
-export interface SwitchProps extends AntSwitchProps {}
+export type SwitchProps = AntSwitchProps;
 
 export interface SwitchFormikProps extends SwitchProps {
   name: string;

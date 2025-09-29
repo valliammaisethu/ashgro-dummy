@@ -6,7 +6,7 @@ import { action } from "@storybook/addon-actions";
 export default {
   title: "Components/OtpField",
   component: OTPField,
-  decorators: [withFormik]
+  decorators: [withFormik],
 } as Meta;
 type Story = StoryObj<typeof OTPField.Formik>;
 
@@ -15,5 +15,5 @@ export const Default: Story = {};
 Default.args = {
   name: "otp",
   numInputs: 4,
-  onChange: (value: string) => action("onChangeCalled")(value)
+  onChange: (value: string) => action("onChangeCalled")(value),
 };

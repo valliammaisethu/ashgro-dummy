@@ -26,8 +26,13 @@ const LoginForm = () => {
         validationSchema={validationSchema}
       >
         <Form>
-          {INPUT_FIELDS.map(({ TYPE, NAME, PLACEHOLDER }) => (
-            <InputField type={TYPE} name={NAME} placeholder={PLACEHOLDER} />
+          {INPUT_FIELDS.map(({ TYPE, NAME, PLACEHOLDER }, index) => (
+            <InputField
+              type={TYPE}
+              name={NAME}
+              placeholder={PLACEHOLDER}
+              key={index}
+            />
           ))}
           <Button htmlType={BUTTON.TYPE} loading={loading}>
             {BUTTON.TEXT}

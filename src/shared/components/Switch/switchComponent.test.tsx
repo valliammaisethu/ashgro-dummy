@@ -4,7 +4,7 @@ import Switch, { SwitchProps } from ".";
 import renderWithContext from "../../utils/renderWithContext";
 import { screen } from "@testing-library/react";
 import { DOM_ELEMENT_ROLE } from "../../../enums/domElementRole.enum";
-import { vi } from 'vitest'
+import { vi } from "vitest";
 
 const { getByRole } = screen;
 
@@ -18,7 +18,7 @@ describe("<SwitchComponent />", () => {
   it("Should onChange when clicked", async () => {
     const mockChangeHandler = vi.fn();
     const { user } = renderWithContext(
-      getFormikWrappedField({ onChange: mockChangeHandler })
+      getFormikWrappedField({ onChange: mockChangeHandler }),
     );
     const switchField = getByRole(DOM_ELEMENT_ROLE.SWITCH);
 

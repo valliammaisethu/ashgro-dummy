@@ -1,14 +1,11 @@
 name: CI Pipeline
 
-trigger:
-  branches:
-    include:
-      - "*" # Adjust to restrict to specific branches if needed
-
 pr:
   branches:
     include:
-      - "*" # Trigger on all pull requests
+      - "develop"
+      - "qa"
+      - "staging"
 
 pool:
   vmImage: "ubuntu-latest"

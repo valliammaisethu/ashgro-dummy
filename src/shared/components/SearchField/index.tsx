@@ -4,9 +4,9 @@ import Search from "antd/lib/input/Search";
 import { SharedComponentsConstants } from "../../../constants/sharedComponents";
 
 interface SearchComponentProps {
-  onSearch: Function;
+  onSearch: (value: string) => void;
   searchValue: string;
-  setSearchValue: Function;
+  setSearchValue: (value: string) => void;
 }
 
 const SearchField: FC<SearchComponentProps> = (props) => {

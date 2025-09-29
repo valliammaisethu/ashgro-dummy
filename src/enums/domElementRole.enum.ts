@@ -4,5 +4,5 @@ export enum DOM_ELEMENT_ROLE {
   SWITCH = "switch",
   COMBOBOX = "combobox",
   LISTBOX = "listbox",
-  RADIO = "radio"
+  RADIO = "radio",
 }

@@ -1,64 +1,64 @@
-import { Meta, StoryObj } from '@storybook/react';
-import Button from '.';
-import { MouseEvent } from 'react';
+import { Meta, StoryObj } from "@storybook/react";
+import Button from ".";
+import { MouseEvent } from "react";
 
 export default {
-  title: 'Components/Button',
+  title: "Components/Button",
   component: Button,
 } as Meta<typeof Button>;
 type Story = StoryObj<typeof Button>;
 
-
 export const Primary: Story = {
   args: {
-    type: 'primary',
+    type: "primary",
     children: "button",
-    clickHandler: (e: MouseEvent) => console.log(e)
-  }
-}
+    clickHandler: (e: MouseEvent) => {
+      // TODO: implement this function
+    },
+  },
+};
 
 export const Default: Story = {
   args: {
     ...Primary.args,
-    type: 'default'
-  }
-}
+    type: "default",
+  },
+};
 
 export const Dashed: Story = {
   args: {
     ...Primary.args,
-    type: 'dashed'
-  }
-}
+    type: "dashed",
+  },
+};
 
 export const Text: Story = {
   args: {
     ...Primary.args,
-    type: 'text'
-  }
-}
+    type: "text",
+  },
+};
 
 export const Link: Story = {
   args: {
     ...Primary.args,
-    type: 'link',
-    href: "https://www.google.com/"
-  }
-}
+    type: "link",
+    href: "https://www.google.com/",
+  },
+};
 
 export const Disabled: Story = {
   args: {
     ...Primary.args,
-    type: 'primary',
-    disabled: true
-  }
-}
+    type: "primary",
+    disabled: true,
+  },
+};
 
 export const Loading: Story = {
   args: {
     ...Primary.args,
-    type: 'primary',
-    loading: true
-  }
-}
-
+    type: "primary",
+    loading: true,
+  },
+};

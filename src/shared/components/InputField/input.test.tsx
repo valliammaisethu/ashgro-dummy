@@ -7,7 +7,7 @@ import renderWithContext from "../../utils/renderWithContext";
 import * as Yup from "yup";
 import { INPUT_TYPE } from "../../../enums/inputType";
 import { DOM_ELEMENT_ROLE } from "../../../enums/domElementRole.enum";
-import { vi } from 'vitest'
+import { vi } from "vitest";
 
 const { getByRole, getByText, getByPlaceholderText, queryByText } = screen;
 
@@ -38,7 +38,7 @@ describe("<InputField />", () => {
 
       // Assert
       expect(queryByText(errorMessage)).toBeNull();
-    }
+    },
   );
 
   it("Should have validation error when input is empty", async () => {
