@@ -8,6 +8,7 @@ import AppComponents from "../views/AppComponents";
 import { AppRoutes } from "./routeConstants/appRoutes";
 
 const AppRouter = () => {
+  console.log("🚀 React app starting...");
   const routes: RouterProps[] = [
     { path: AppRoutes.AUTH, component: <AuthWrapper /> },
     { path: AppRoutes.HOME, component: isAuthenticated(<Home />) },
