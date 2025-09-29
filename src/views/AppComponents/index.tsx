@@ -105,6 +105,16 @@ const AppComponents: FC = () => {
                 <Button clickHandler={OpenCloseDrawer}>Open</Button>
               </Col>
               <Col span={8}>
+                <p className="app-components__title">Error button: </p>
+                <button
+                  onClick={() => {
+                    throw new Error('This is your first error!');
+                  }}
+                >
+                  Break the world
+                </button>
+              </Col>
+              <Col span={8}>
                 <p className="app-components__title">Tooltip: </p>
                 <Space>
                   <Tooltip
