@@ -1,11 +1,11 @@
 import React from "react";
-import OtpInput, { OtpInputProps } from "react-otp-input";
+import OtpInput, { OTPInputProps } from "react-otp-input";
 import { ErrorMessage, Field, useField } from "formik";
 import Error from "../Error";
 
 import styles from "./otpField.module.scss";
 
-interface OTPFieldProps extends Omit<OtpInputProps, "numInputs"> {
+interface OTPFieldProps extends Omit<OTPInputProps, "numInputs"> {
   numInputs?: number;
 }
 
@@ -16,7 +16,8 @@ interface OTPFieldFormikProps extends Partial<OTPFieldProps> {
 const OTPField = ({ numInputs = 6, ...props }: OTPFieldProps) => (
   <div className={styles["otp__container"]}>
     <OtpInput
-      className={styles["otp-field"]}
+      inputStyle={styles["otp-field"]}
+      containerStyle={styles["otp__container"]}
       numInputs={numInputs}
       {...props}
     />
@@ -28,15 +29,7 @@ const OTPFieldWithFormik = ({ name, ...props }: OTPFieldFormikProps) => {
 
   return (
     <>
-      <Field name={name}>
-        {() => (
-          <OTPField
-            value={value}
-            onChange={setValue}
-            {...props}
-          />
-        )}
-      </Field>
+      <Field as={OTPField} onChange={setValue} value={value} {...props} />
       <ErrorMessage name={name}>
         {(msg) => <Error message={msg} />}
       </ErrorMessage>
