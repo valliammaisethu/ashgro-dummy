@@ -16,7 +16,9 @@
     "jsx": "react",
     "experimentalDecorators": true,
     "types": ["vite/client"],
-    "outDir": "./build"
+    "outDir": "./build",
+    "baseUrl": "src",
+    "ignoreDeprecations": "6.0"
   },
-  "include": ["src"]
+  "include": ["src", "vite.config.ts"]
 }
