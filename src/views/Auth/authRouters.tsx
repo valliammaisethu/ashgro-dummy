@@ -1,6 +1,5 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import RegisterForm from "../../views/Auth/RegisterForm";
 import LoginForm from "../../views/Auth/LoginForm";
 import { RouterProps } from "../../shared/types/route.type";
 import {
@@ -10,7 +9,6 @@ import {
 
 const authRouter = () => {
   const routes: RouterProps[] = [
-    { path: AppRoutes.REGISTER, component: <RegisterForm /> },
     { path: AppRoutes.LOGIN, component: <LoginForm /> },
   ];
 

@@ -11,7 +11,7 @@ interface ButtonProps {
   type?: ButtonType;
   className?: string;
   moduleClassName?: string;
-  icon?: any;
+  icon?: ReactNode;
   disabled?: boolean;
   size?: "small" | "medium";
   loading?: boolean;

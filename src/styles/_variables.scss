@@ -1,26 +1,41 @@
+$font-primary: "Merriweather", "Open Sans", serif;
+$font-secondary: "Open Sans", sans-serif;
+
 /* Color palette */
-$primary-color: #0D494E;
-$secondary-color: #006FBA;
-$light-white: #FFFFFF40;
-$primary-light-color: #0D494E10;
-$primary-black: #4B4B4B;
-$dark-blue: #22509D;
+$primary-color: #0d494e;
+$secondary-color: #006fba;
+$light-white: #ffffff40;
+$primary-light-color: #0d494e10;
+$primary-black: #4b4b4b;
+$dark-blue: #22509d;
 $light-grey: #00000015;
-$dark-grey: #8898AA;
+$dark-grey: #8898aa;
 $success-color: green;
-$danger-color: #FE0000;
-$warning-color: #F3B21B;
-$body-bg: #F5F8FA;
-$table-bg: #F7FAFC;
-$input-bg: #F8FBFC;
+$danger-color: #ee3042;
+$warning-color: #f3b21b;
+$body-bg: #f5f8fa;
+$table-bg: #f7fafc;
+$input-bg: #f8fbfc;
+$input-border: #dadada;
+
+// App Colors
+$ashgro-navy: #0c2340;
+$ashgro-gold: #c5a25d;
+$ashgro-black: #0f131c;
+$ashgro-white: #ffffff;
+$ashgro-cream: #f7f4ed;
+$ashgro-grey: #5b6770;
+$ashgro-pale-gold: #daccb0;
+$ashgro-grey-1: #eef1f5;
+$ashgro-grey-2: #e6eaf1;
+$ashgro-label: #253345;
 
 /* Component colors */
 
 /* Input Field */
-$input-border-color: rgba(0, 0, 0, 0.164);
-$input-border-color-hover: $primary-color;
-$input-border-box-shadow: 0 0 0 2px rgba($color: $primary-color, $alpha: 0.2);
-$input-border-radius: 4px;
+$input-border-color: $input-border;
+$input-border-color-hover: $ashgro-black;
+$input-border-radius: 2px;
 
 /* Default Button */
 $button-default-border-color: $primary-color;
@@ -35,8 +50,8 @@ $button-primary-text-color: white;
 $button-primary-border-radius: 4px;
 
 /* Checkbox */
-$checkbox-bg-color: $primary-color;
-$checkbox-hover-border-color: $primary-color;
+$checkbox-bg-color: $ashgro-navy;
+$checkbox-hover-border-color: $ashgro-navy;
 $checkbox-text-color: white;
 $checkbox-hover-text-color: $primary-color;
 
@@ -51,12 +66,16 @@ $switch-bg-color: $primary-color;
 /* Select */
 $select-border-color: rgb(202, 202, 202);
 $select-hover-border-color: $primary-color;
-$select-focus-box-shadow: 0 0 0 2px rgba($color: $primary-color, $alpha: 0.2);
+$select-focus-box-shadow: 0 0 0 2px
+  rgba(
+    $color: $primary-color,
+    $alpha: 0.2,
+  );
 
 /* Shadows */
-$primary-shadow: 0 8px 22px #0000001A;
-$secondary-shadow: 0px 3px 6px #2C28281C;
+$primary-shadow: 0 8px 22px #0000001a;
+$secondary-shadow: 0px 3px 6px #2c28281c;
 
 /* Spacer variables */
-$spacer-x : 1rem;
-$spacer-y : 1rem;
+$spacer-x: 1rem;
+$spacer-y: 1rem;

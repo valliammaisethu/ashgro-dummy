@@ -6,7 +6,14 @@ interface ErrorMessageProps {
 }
 
 const ErrorMessage: FC<ErrorMessageProps> = ({ message }) => {
-  return <div className={styles["input__error"]}>{message}</div>;
+  return (
+    <div className={styles.inputError}>
+      <span>
+        <i className="ri-error-warning-fill" />
+      </span>
+      <span>{message}</span>
+    </div>
+  );
 };
 
 export default ErrorMessage;

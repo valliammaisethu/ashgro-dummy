@@ -1,5 +1,8 @@
-@import "src/styles/variables";
+@use "src/styles/variables" as *;
 
-.input__error {
-    color: $danger-color;   
+.inputError {
+  color: $danger-color;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
 }

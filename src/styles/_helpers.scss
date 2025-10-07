@@ -47,7 +47,7 @@
 }
 
 .text-white {
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 .text-capitalize {
@@ -82,7 +82,6 @@
   width: 100% !important;
 }
 
-
 /* Padding */
 
 .p-0 {
@@ -104,15 +103,15 @@
 }
 
 .mt-1 {
-  margin-top: ($spacer-y * .25) !important;
+  margin-top: ($spacer-y * 0.25) !important;
 }
 
 .mt-2 {
-  margin-top: ($spacer-y * .5) !important;
+  margin-top: ($spacer-y * 0.5) !important;
 }
 
 .mt-3 {
-  margin-top: ($spacer-y * .75) !important;
+  margin-top: ($spacer-y * 0.75) !important;
 }
 
 .mt-4 {
@@ -124,11 +123,11 @@
 }
 
 .mb-2 {
-  margin-bottom: ($spacer-y * .5) !important;
+  margin-bottom: ($spacer-y * 0.5) !important;
 }
 
 .mb-3 {
-  margin-bottom: ($spacer-y * .75) !important;
+  margin-bottom: ($spacer-y * 0.75) !important;
 }
 
 .mb-4 {
@@ -140,11 +139,11 @@
 }
 
 .ml-2 {
-  margin-left: ($spacer-x * .5) !important;
+  margin-left: ($spacer-x * 0.5) !important;
 }
 
 .ml-3 {
-  margin-left: ($spacer-x * .75) !important;
+  margin-left: ($spacer-x * 0.75) !important;
 }
 
 .ml-4 {
@@ -156,15 +155,15 @@
 }
 
 .mr-1 {
-  margin-right: ($spacer-x * .25) !important;
+  margin-right: ($spacer-x * 0.25) !important;
 }
 
 .mr-2 {
-  margin-right: ($spacer-x * .5) !important;
+  margin-right: ($spacer-x * 0.5) !important;
 }
 
 .mr-3 {
-  margin-right: ($spacer-x * .75) !important;
+  margin-right: ($spacer-x * 0.75) !important;
 }
 
 .mr-4 {
