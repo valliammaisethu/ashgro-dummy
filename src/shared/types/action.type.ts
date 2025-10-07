@@ -1,4 +1,4 @@
 export interface ActionProps {
-    type: string;
-    payload?: any;
+  type: string;
+  payload?: any;
 }

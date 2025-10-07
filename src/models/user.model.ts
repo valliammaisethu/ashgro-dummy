@@ -1,9 +1,9 @@
-import {serializable, alias, primitive} from 'serializr';
+import { serializable, alias, primitive } from "serializr";
 
 export class User {
-    @serializable(alias('email', primitive()))
-    email?: string;
+  @serializable(alias("email", primitive()))
+  email?: string;
 
-    @serializable(alias('password', primitive()))
-    password?: string;
+  @serializable(alias("password", primitive()))
+  password?: string;
 }

@@ -1,4 +1,4 @@
 export enum AttachmentFormat {
   JPEG = "jpeg",
-  PDF = "pdf"
+  PDF = "pdf",
 }

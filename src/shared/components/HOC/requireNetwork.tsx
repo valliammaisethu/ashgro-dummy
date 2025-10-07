@@ -2,11 +2,7 @@ import React, { PropsWithChildren } from "react";
 import { useNetwork } from "../../hooks/useNetwork";
 import Offline from "../Offline";
 
-interface RequireNetworkProps {}
-
-const RequireNetwork = ({
-  children,
-}: PropsWithChildren<RequireNetworkProps>) => {
+const RequireNetwork = ({ children }: PropsWithChildren) => {
   const {
     networkStatus: { isOnline },
   } = useNetwork();

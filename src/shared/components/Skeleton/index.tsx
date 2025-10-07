@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import {
   Skeleton as AntSkeleton,
-  SkeletonProps as AntSkeletonProps
+  SkeletonProps as AntSkeletonProps,
 } from "antd";
 
 import styles from "./skeleton.module.scss";

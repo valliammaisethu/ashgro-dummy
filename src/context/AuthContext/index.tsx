@@ -1,4 +1,11 @@
-import React, { useContext, createContext, useMemo, useState, Dispatch, SetStateAction } from "react";
+import React, {
+  useContext,
+  createContext,
+  useMemo,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { User } from "../../models/user.model";
 
 export interface AuthState {
@@ -26,7 +33,7 @@ const AuthContext = () => {
     throw new Error(`useMeContext must be used within a MeContextProvider`);
   }
   const [auth, setAuth] = context;
-  
+
   const setAuthenticated = (user?: User) => {
     setAuth((auth) => ({
       ...auth,
@@ -37,7 +44,7 @@ const AuthContext = () => {
 
   return {
     ...auth,
-    setAuthenticated
+    setAuthenticated,
   };
 };
 
@@ -46,6 +53,6 @@ const AuthProvider = (ownProps: any) => {
   const [auth, setAuth] = useState<AuthState>(initialValues);
   const value = useMemo(() => [auth, setAuth], [auth]);
   return <AuthContent.Provider value={value} {...ownProps} />;
-}
+};
 
 export { AuthProvider, AuthContext };

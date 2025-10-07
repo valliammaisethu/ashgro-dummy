@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { Meta } from '@storybook/react';
-import Modal, { ModalProps } from '.';
-import Button from '../Button';
-
+import React, { useState } from "react";
+import { Meta } from "@storybook/react";
+import Modal, { ModalProps } from ".";
+import Button from "../Button";
 
 export default {
-  title: 'Components/Modal',
+  title: "Components/Modal",
   component: Modal,
 } as Meta<typeof Modal>;
 
@@ -22,7 +21,9 @@ export const Simple = (args: ModalProps) => {
 
   return (
     <>
-      <Button type='primary' clickHandler={handleButtonClick}>Open Modal</Button>
+      <Button type="primary" clickHandler={handleButtonClick}>
+        Open Modal
+      </Button>
       <Modal {...args} visible={isOpen} closeModal={handleDrawerClose} />
     </>
   );
@@ -30,6 +31,5 @@ export const Simple = (args: ModalProps) => {
 
 Simple.args = {
   children: <p>Modal Content</p>,
-  title: 'Modal Title',
+  title: "Modal Title",
 };
-

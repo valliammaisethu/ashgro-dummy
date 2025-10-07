@@ -1,7 +1,5 @@
-
 export enum LoaderSizes {
- SMALL =  'small',
- LARGE = 'large',
- DEFAULT = 'default'
-
+  SMALL = "small",
+  LARGE = "large",
+  DEFAULT = "default",
 }

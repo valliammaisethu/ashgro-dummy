@@ -8,6 +8,6 @@ export const AppRoutes = {
   AUTH: "/auth/*",
   REGISTER: "/register",
   LOGIN: "/login",
-  APP_COMPONENTS:"/",
-  HOME: "/home"
+  APP_COMPONENTS: "/",
+  HOME: "/home",
 };

@@ -3,7 +3,7 @@ import { ExclamationCircleFilled } from "@ant-design/icons";
 import { Modal } from "antd";
 import {
   SharedComponentsConstants,
-  getDeleteModalTitle
+  getDeleteModalTitle,
 } from "../../../constants/sharedComponents";
 
 export interface DeleteModalProps {
@@ -18,7 +18,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   onOk,
   onCancel,
   resource,
-  description
+  description,
 }: DeleteModalProps) => {
   const { confirm } = Modal;
   const showDeleteConfirm = () => {
@@ -30,7 +30,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
       okType: SharedComponentsConstants.DELETE_MODAL.okType,
       cancelText: SharedComponentsConstants.DELETE_MODAL.cancelText,
       onOk,
-      onCancel
+      onCancel,
     });
   };
 
