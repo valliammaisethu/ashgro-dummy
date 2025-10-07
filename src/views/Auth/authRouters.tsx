@@ -1,9 +1,12 @@
-import React, { FC } from "react";
+import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import RegisterForm from "../../views/Auth/RegisterForm";
 import LoginForm from "../../views/Auth/LoginForm";
 import { RouterProps } from "../../shared/types/route.type";
-import { AppRoutes, NavigationRoutes } from "../../routes/routeConstants/appRoutes";
+import {
+  AppRoutes,
+  NavigationRoutes,
+} from "../../routes/routeConstants/appRoutes";
 
 const authRouter = () => {
   const routes: RouterProps[] = [
@@ -17,7 +20,7 @@ const authRouter = () => {
         return (
           <Route key={index} path={route?.path} element={route?.component}>
             {route.children &&
-              route.children.map(childRoute => (
+              route.children.map((childRoute) => (
                 <Route
                   key={childRoute.path}
                   path={childRoute.path}

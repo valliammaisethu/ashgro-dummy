@@ -6,13 +6,13 @@ export const SharedComponentsConstants = {
   DELETE_MODAL: {
     okText: "Yes",
     okType: "danger" as LegacyButtonType,
-    cancelText: "No"
+    cancelText: "No",
   },
 
   SELECT_PLACEHOLDER: "Select",
 
   NAVBAR: {
-    MODE: "horizontal" as MenuMode
+    MODE: "horizontal" as MenuMode,
   },
 
   LOGOUT_TEXT: "Logout",
@@ -20,7 +20,7 @@ export const SharedComponentsConstants = {
   LOGOUT_NOTIFICATION: {
     message: "Logout",
     description: "user loggedout successfully",
-    type: NotificationTypes.SUCCESS
+    type: NotificationTypes.SUCCESS,
   },
 
   OFFLINE_TEXT: "No Internet Connection",
@@ -34,8 +34,8 @@ export const SharedComponentsConstants = {
   FILE_UPLOAD: {
     name: "file",
     mockUrl: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    authorization: "authorization-text"
-  }
+    authorization: "authorization-text",
+  },
 };
 
 export const getDeleteModalTitle = (resource: string) =>

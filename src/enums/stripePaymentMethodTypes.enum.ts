@@ -1,3 +1,3 @@
 export enum StripePaymentMethodTypes {
-  CARD = "card"
+  CARD = "card",
 }

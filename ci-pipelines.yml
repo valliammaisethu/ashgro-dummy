@@ -1,14 +1,11 @@
 name: CI Pipeline
 
-trigger:
-  branches:
-    include:
-      - "*" # Adjust to restrict to specific branches if needed
-
 pr:
   branches:
     include:
-      - "*" # Trigger on all pull requests
+      - "develop"
+      - "qa"
+      - "staging"
 
 pool:
   vmImage: "ubuntu-latest"
@@ -23,7 +20,7 @@ steps:
   # Step 2: Setup Node.js
   - task: NodeTool@0
     inputs:
-      versionSpec: "18.12.1"
+      versionSpec: "20.19.5"
     displayName: "Install Node.js"
 
   # Step 3: Install dependencies

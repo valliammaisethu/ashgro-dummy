@@ -1,6 +1,6 @@
-import React from 'react';
-import { Modal as CustomModal } from 'antd';
-import styles from './Modal.module.scss';
+import React from "react";
+import { Modal as CustomModal } from "antd";
+import styles from "./Modal.module.scss";
 
 export interface ModalProps {
   children?: React.ReactNode;
@@ -34,11 +34,11 @@ const Modal: React.FC<ModalProps> = ({
   confirmLoading,
 }: ModalProps) => {
   return (
-    <div className={styles['modal-container']}>
+    <div className={styles["modal-container"]}>
       <CustomModal
         width={width ?? width}
         footer={footer ?? footer}
-        title={title ? title : ''}
+        title={title ? title : ""}
         visible={visible}
         onOk={handleOk ? handleOk : closeModal}
         onCancel={closeModal}

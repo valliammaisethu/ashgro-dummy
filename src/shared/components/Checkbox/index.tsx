@@ -1,8 +1,8 @@
-import React from 'react';
-import { Checkbox as CustomCheckbox } from 'antd';
-import type { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { CheckboxValueType, CheckboxOptionType } from 'antd/lib/checkbox/Group';
-import styles from './Checkbox.module.scss';
+import React from "react";
+import { Checkbox as CustomCheckbox } from "antd";
+import type { CheckboxChangeEvent } from "antd/es/checkbox";
+import type { CheckboxOptionType } from "antd/es/checkbox/Group";
+import styles from "./Checkbox.module.scss";
 
 interface CheckboxProps {
   children?: React.ReactNode;
@@ -10,19 +10,13 @@ interface CheckboxProps {
   indeterminate?: boolean;
   defaultChecked?: boolean;
   group?: boolean;
-  onChange: (singleHandler?: CheckboxChangeEvent, groupHandler?: CheckboxValueType[]) => void;
+  onChange: (
+    singleHandler?: CheckboxChangeEvent,
+    groupHandler?: Array<string | number>,
+  ) => void;
   options?: Array<CheckboxOptionType | string | number>;
   checked?: boolean;
 }
-
-/*
-Features included: 
-- Single Checkbox
-  - Pass Label as a child
-- Checkbox Group
-  - Pass list of options as an array
-  - onChange function - to handle checked changes
-*/
 
 const Checkbox = ({
   children,
@@ -35,9 +29,12 @@ const Checkbox = ({
   checked,
 }: CheckboxProps) => {
   return (
-    <div className={styles['checkbox-container']} >
+    <div className={styles["checkbox-container"]}>
       {group ? (
-        <CustomCheckbox.Group options={options} onChange={(event) => onChange(undefined, event)} />
+        <CustomCheckbox.Group
+          options={options}
+          onChange={(event) => onChange(undefined, event)}
+        />
       ) : (
         <CustomCheckbox
           indeterminate={indeterminate}

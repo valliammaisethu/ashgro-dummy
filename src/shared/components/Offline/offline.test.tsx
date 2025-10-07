@@ -7,7 +7,9 @@ describe("<Offline />", () => {
   it("Should Render Error Message When offline is true", () => {
     const { getByText } = renderWithContext(<Offline isOffline />);
 
-    expect(getByText(SharedComponentsConstants.OFFLINE_TEXT)).toBeInTheDocument();
+    expect(
+      getByText(SharedComponentsConstants.OFFLINE_TEXT),
+    ).toBeInTheDocument();
   });
 
   it("Should Render Error Message When offline is false", () => {

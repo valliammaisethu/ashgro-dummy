@@ -1,8 +1,8 @@
-import { Meta, StoryObj } from '@storybook/react';
-import Checkbox from '.';
+import { Meta, StoryObj } from "@storybook/react";
+import Checkbox from ".";
 
 export default {
-  title: 'Components/Checkbox',
+  title: "Components/Checkbox",
   component: Checkbox,
 } as Meta<typeof Checkbox>;
 type Story = StoryObj<typeof Checkbox>;
@@ -16,18 +16,16 @@ export const SingleCheckbox: Story = {
     defaultChecked: false,
     group: false,
     onChange(singleHandler, groupHandler) {
-      console.log(" singleHandler", singleHandler)
-      console.log(" groupHandler", groupHandler)
+      // console.log(" singleHandler", singleHandler);
+      // console.log(" groupHandler", groupHandler);
     },
-  }
-}
+  },
+};
 
 export const GroupCheckbox: Story = {
   args: {
     ...SingleCheckbox.args,
     group: true,
-    options: [
-      "Option 1", "Option 2", "Option 3"
-    ]
-  }
-}
+    options: ["Option 1", "Option 2", "Option 3"],
+  },
+};

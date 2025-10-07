@@ -19,16 +19,19 @@ const Stepper: FC<StepperProps> = ({ items, destroyOnChange, ...props }) => {
     <div className={styles["stepper"]}>
       <div className={styles["stepper__header"]}>
         <Steps current={current} onChange={setCurrent} {...props}>
-          {items.map(({ component, ...props }) => (
-            <Steps.Step {...props} />
+          {items.map(({ component, ...stepProps }, index) => (
+            <Steps.Step key={String(stepProps.title ?? index)} {...stepProps} />
           ))}
         </Steps>
       </div>
       <div className={styles["stepper__content"]}>
         {destroyOnChange
           ? items[current]?.component
-          : items?.map(({ component = <></> }, index) => (
-              <div className={index !== current ? styles["d-none"] : ""}>
+          : items.map(({ component = <></> }, index) => (
+              <div
+                key={index}
+                className={index !== current ? styles["d-none"] : ""}
+              >
                 {component}
               </div>
             ))}
