@@ -13,14 +13,7 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: [
-    "react",
-    "@typescript-eslint",
-    "prettier",
-    "unused-imports"
-    // ❌ removed "import"
-    // ❌ removed "prettier-plugin-organize-imports" (this is a Prettier plugin, not ESLint)
-  ],
+  plugins: ["react", "@typescript-eslint", "prettier", "unused-imports"],
   extends: [
     "eslint:recommended",
     "plugin:react/recommended",
