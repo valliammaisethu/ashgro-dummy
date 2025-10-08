@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import styles from "./error.module.scss";
 
 interface ErrorMessageProps {
-  message: string;
+  message?: string;
 }
 
 const ErrorMessage: FC<ErrorMessageProps> = ({ message }) => {

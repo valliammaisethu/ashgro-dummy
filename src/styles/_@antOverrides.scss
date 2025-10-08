@@ -122,7 +122,8 @@
 /* Radio Group */
 .ant-radio {
   .ant-radio-inner {
-    border-color: $radio-border-color !important;
+    background-color: $ashgro-grey-2;
+    border-color: transparent;
   }
 
   &.ant-radio-checked {
@@ -131,6 +132,26 @@
       &::after {
         background-color: $radio-checked-bg-color;
       }
+    }
+  }
+}
+.ant-radio-wrapper:hover .ant-radio-inner {
+  border-color: transparent;
+}
+
+.ant-radio {
+  &:hover {
+    .ant-radio-inner {
+      border: 0.5px solid $ashgro-navy !important;
+      background-color: $ashgro-white !important;
+    }
+  }
+}
+
+.ant-radio-wrapper {
+  .ant-radio-checked {
+    .ant-radio-inner {
+      background-color: $ashgro-navy;
     }
   }
 }

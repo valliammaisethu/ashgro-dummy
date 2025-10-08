@@ -57,8 +57,8 @@ $checkbox-hover-text-color: $primary-color;
 
 /* Radio */
 $radio-border-color: rgb(202, 202, 202);
-$radio-checked-border-color: $primary-color;
-$radio-checked-bg-color: $primary-color;
+$radio-checked-border-color: $ashgro-navy;
+$radio-checked-bg-color: $ashgro-white;
 
 /* Switch */
 $switch-bg-color: $primary-color;
@@ -79,3 +79,6 @@ $secondary-shadow: 0px 3px 6px #2c28281c;
 /* Spacer variables */
 $spacer-x: 1rem;
 $spacer-y: 1rem;
+
+// Borders
+$button-stroke: #d3d3d3;

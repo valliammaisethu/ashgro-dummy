@@ -1,11 +1,17 @@
 import { Col, Row } from "antd";
 import React, { FC } from "react";
-import InputField from "../../shared/components/InputField";
-import { INPUT_TYPE } from "../../enums/inputType";
-import "./appComponents.scss";
-import Form from "../../shared/components/Form";
+
+import InputField from "src/shared/components/InputField";
+import { INPUT_TYPE } from "src/enums/inputType";
+import Form from "src/shared/components/Form";
 import { appComponentsValidation } from "./validation";
-import CheckboxField from "../../shared/components/CheckboxField";
+import CheckboxField from "src/shared/components/CheckboxField";
+import NumberIncrementer from "src/shared/components/NumberIncrementer";
+import RadioField from "src/shared/components/RadioField";
+import Button from "src/shared/components/Button";
+import { AppComponentsConstants } from "src/constants/appComponents";
+
+import "./appComponents.scss";
 
 const AppComponents: FC = () => {
   return (
@@ -26,7 +32,17 @@ const AppComponents: FC = () => {
           <Col span={8}>
             <CheckboxField label="Checkbox" name="checkbox" />
           </Col>
+          <Col span={4}>
+            <NumberIncrementer disabled name="numberIncrement" />
+          </Col>
+          <Col span={4}>
+            <RadioField
+              name="radioButton"
+              options={AppComponentsConstants.OPTIONS}
+            />
+          </Col>
         </Row>
+        <Button htmlType="submit">Submit</Button>
       </Form>
     </div>
   );
