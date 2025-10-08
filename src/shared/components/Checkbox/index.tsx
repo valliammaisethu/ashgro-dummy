@@ -1,22 +1,9 @@
 import React from "react";
 import { Checkbox as CustomCheckbox } from "antd";
-import type { CheckboxChangeEvent } from "antd/es/checkbox";
-import type { CheckboxOptionType } from "antd/es/checkbox/Group";
-import styles from "./Checkbox.module.scss";
 
-interface CheckboxProps {
-  children?: React.ReactNode;
-  disabled?: boolean;
-  indeterminate?: boolean;
-  defaultChecked?: boolean;
-  group?: boolean;
-  onChange: (
-    singleHandler?: CheckboxChangeEvent,
-    groupHandler?: Array<string | number>,
-  ) => void;
-  options?: Array<CheckboxOptionType | string | number>;
-  checked?: boolean;
-}
+import { CustomCheckboxProps } from "src/shared/types/sharedComponents.type";
+
+import styles from "./Checkbox.module.scss";
 
 const Checkbox = ({
   children,
@@ -27,7 +14,7 @@ const Checkbox = ({
   defaultChecked,
   onChange,
   checked,
-}: CheckboxProps) => {
+}: CustomCheckboxProps) => {
   return (
     <div className={styles["checkbox-container"]}>
       {group ? (

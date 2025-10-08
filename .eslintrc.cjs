@@ -21,7 +21,6 @@ module.exports = {
     "plugin:prettier/recommended",
   ],
   rules: {
-    // Auto-remove unused imports & vars
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "warn",
@@ -33,9 +32,8 @@ module.exports = {
       },
     ],
 
-    // Show prettier errors as ESLint errors
     "prettier/prettier": "error",
-    // Error on console.log, allow warn and error only
+
     "no-console": ["error", { allow: ["warn", "error"] }],
 
     "@typescript-eslint/no-explicit-any": "warn",
@@ -44,6 +42,15 @@ module.exports = {
   settings: {
     react: {
       version: "detect",
+    },
+    "import/resolver": {
+      typescript: {
+        alwaysTryTypes: true,
+        project: "./tsconfig.json",
+      },
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
     },
   },
 };

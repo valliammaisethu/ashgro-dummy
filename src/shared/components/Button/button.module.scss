@@ -1,21 +1,86 @@
 @import "src/styles/variables";
 
-.button {
-  .primary {
-  }
+:global(.ant-btn).secondary {
+  background-color: $ashgro-navy;
+  color: $ashgro-white;
+  border-radius: 0.4rem;
+  border-color: $ashgro-navy;
 
-  .secondary {
+  &:not(:disabled):not(.ant-btn-disabled):hover {
+    background-color: $ashgro-navy;
+    border-color: $ashgro-navy;
+    color: $ashgro-white;
   }
+}
 
-  .outlined {
+:global(.ant-btn).tertiary {
+  background-color: $ashgro-light-gold;
+  color: $ashgro-gold;
+  border-radius: 0.4rem;
+  border-color: $ashgro-light-gold;
+
+  &:not(:disabled):not(.ant-btn-disabled):hover {
+    border-color: $ashgro-light-gold;
   }
+}
 
-  .cancel {
+:global(.ant-btn).secondaryTwo {
+  background-color: $ashgro-light-grey;
+  color: $ashgro-black;
+  border-radius: 0.4rem;
+  border-color: $ashgro-light-grey;
+
+  &:not(:disabled):not(.ant-btn-disabled):hover {
+    background-color: $ashgro-light-grey;
+    color: $ashgro-black;
+    border-color: $ashgro-light-grey;
   }
+}
 
-  .danger {
+:global(.ant-btn.ant-btn-link) {
+  background-color: $ashgro-white;
+  border: 0.1rem solid $ashgro-gold;
+  color: $ashgro-gold;
+  border-radius: 0.4rem;
+  &:hover {
+    color: $ashgro-gold;
   }
+}
 
-  .text {
+:global(.ant-btn).tertiaryTwo {
+  background-color: $ashgro-white;
+  color: $ashgro-black;
+  border: 0.1rem solid $ashgro-black;
+  border-radius: 0.4rem;
+
+  &:not(:disabled):not(.ant-btn-disabled):hover {
+    background-color: $ashgro-white;
+    color: $ashgro-black;
+    border: 0.1rem solid $ashgro-black;
+  }
+}
+:global(.ant-btn).primaryTwo {
+  background-color: $ashgro-black;
+  color: $ashgro-white;
+  border: 0.1rem solid $ashgro-black;
+  border-radius: 0.4rem;
+
+  &:not(:disabled):not(.ant-btn-disabled):hover {
+    background-color: $ashgro-black;
+    color: $ashgro-white;
+    border: 0.1rem solid $ashgro-black;
+  }
+}
+
+:global(.ant-btn).transparent {
+  background-color: $ashgro-white;
+  color: $ashgro-black;
+  border: 0.1rem solid transparent;
+  border-radius: 0.4rem;
+
+  &:not(:disabled):not(.ant-btn-disabled):hover {
+    background-color: $ashgro-white;
+    color: $ashgro-black;
+    border: 0.1rem solid transparent;
   }
 }

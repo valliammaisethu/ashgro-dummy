@@ -1,63 +1,41 @@
+import React, { FC } from "react";
 import { Button as AntButton } from "antd";
-import { ButtonType } from "antd/lib/button";
-import React, { FC, MouseEvent, ReactNode } from "react";
-import { styledClassnames } from "../../utils/styledClassnames";
+import clsx from "clsx";
+
+import { ButtonSizes, ButtonTypes, HtmlButtonType } from "src/enums/buttonType";
+import { mapToAntdType } from "src/shared/utils/mapButtonType";
+import { ButtonProps } from "src/shared/types/sharedComponents.type";
+
 import styles from "./button.module.scss";
 
-interface ButtonProps {
-  clickHandler?: (event: MouseEvent) => void;
-  children: ReactNode;
-  htmlType?: "reset" | "submit" | "button";
-  type?: ButtonType;
-  className?: string;
-  moduleClassName?: string;
-  icon?: ReactNode;
-  disabled?: boolean;
-  size?: "small" | "medium";
-  loading?: boolean;
-  name?: string;
-  target?: string;
-  href?: string;
-}
+const Button: FC<ButtonProps> = ({
+  children,
+  className,
+  moduleClassName,
+  type = ButtonTypes.PRIMARY,
+  size = ButtonSizes.MEDIUM,
+  htmlType = HtmlButtonType.BUTTON,
+  ...restProps
+}) => {
+  const antType = mapToAntdType(type);
 
-const Button: FC<ButtonProps> = (props) => {
-  const {
-    clickHandler,
-    children,
-    htmlType = "button",
+  const buttonClassName = clsx(
+    styles.button,
+    styles[type],
+    styles[size],
+    moduleClassName && styles[moduleClassName],
     className,
-    moduleClassName,
-    icon,
-    disabled,
-    size,
-    loading,
-    name,
-    target,
-    href,
-    type,
-  } = props;
-
-  const globalClassnames = className && [className].join(" ");
-  const moduleClassnames =
-    moduleClassName && styledClassnames(moduleClassName, styles);
+  );
 
   return (
-    <div className={`button ${moduleClassnames} ${globalClassnames}`}>
-      <AntButton
-        loading={!!loading}
-        disabled={disabled}
-        icon={icon}
-        className={`${type} ${size}`}
-        htmlType={htmlType}
-        onClick={clickHandler}
-        name={name}
-        target={target}
-        href={href}
-        type={type}
-      >
-        {children}
-      </AntButton>
-    </div>
+    <AntButton
+      {...restProps}
+      htmlType={htmlType}
+      type={antType}
+      className={buttonClassName}
+    >
+      {children}
+    </AntButton>
   );
 };
 

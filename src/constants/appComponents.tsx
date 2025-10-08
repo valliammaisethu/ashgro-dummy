@@ -117,6 +117,42 @@ export const AppComponentsConstants = {
         age: 42,
         address: "1 Up Town",
       },
+      {
+        key: "3",
+        name: "John",
+        age: 42,
+        address: "1 Up Town",
+      },
+      {
+        key: "4",
+        name: "John",
+        age: 42,
+        address: "1 Up Town",
+      },
+      {
+        key: "5",
+        name: "John",
+        age: 42,
+        address: "1 Up Town",
+      },
+      {
+        key: "6",
+        name: "John",
+        age: 42,
+        address: "1 Up Town",
+      },
+      {
+        key: "7",
+        name: "John",
+        age: 42,
+        address: "1 Up Town",
+      },
+      {
+        key: "8",
+        name: "John",
+        age: 42,
+        address: "1 Up Town",
+      },
     ],
   },
 };
