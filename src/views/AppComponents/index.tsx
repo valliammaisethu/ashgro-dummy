@@ -49,7 +49,7 @@ const AppComponents: FC = () => {
                 type={INPUT_TYPE.TEXT}
                 name="input"
                 placeholder="Enter some text"
-                suffixIcon={<i className={Icons.EYE_LINE}></i>}
+                suffix={<i className={Icons.EYE_LINE}></i>}
                 label="Input Field"
               />
             </Col>
@@ -59,7 +59,7 @@ const AppComponents: FC = () => {
                 type={INPUT_TYPE.TEXT}
                 name="inputs"
                 placeholder="Enter some text"
-                suffixIcon={<i className={Icons.EYE_LINE}></i>}
+                suffix={<i className={Icons.EYE_LINE}></i>}
                 label="Input Field"
                 disabled
               />

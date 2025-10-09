@@ -1,41 +1,53 @@
 import React from "react";
-import styles from "./loginForm.module.scss";
-import { fields, labels, loginFormConstants, placeholders } from "./constants";
+
 import Form from "src/shared/components/Form";
 import InputField from "src/shared/components/InputField";
-import { INPUT_TYPE } from "src/enums/inputType";
 import CheckboxField from "src/shared/components/CheckboxField";
 import Button from "src/shared/components/Button";
+import PasswordField from "src/shared/components/PasswordField";
+import { INPUT_TYPE } from "src/enums/inputType";
 import { Buttons } from "src/enums/buttons.enum";
 import logo from "src/assets/images/logo.webp";
+import { fields, labels, loginFormConstants, placeholders } from "./constants";
 import { imageAlts } from "src/constants/imageAlts";
 import { validationSchema } from "./LoginValidation";
+
+import styles from "./loginForm.module.scss";
+
+const { email: emailPlaceholder, password: passwordPlaceholder } = placeholders;
+const {
+  email: emailLabel,
+  password: passwordLabel,
+  rememberMe: rememberMeLabel,
+} = labels;
+const { email, password, rememberMe } = fields;
 
 const LoginForm = () => {
   return (
     <div className={styles.loginFormContainer}>
-      <img alt={imageAlts.loginLogo} src={logo} />
+      <img className={styles.loginLogo} alt={imageAlts.loginLogo} src={logo} />
       <div className={styles.container}>
-        <h1>{loginFormConstants.title}</h1>
+        <h1 className={styles.title}>{loginFormConstants.title}</h1>
         <Form validationSchema={validationSchema} className={styles.form}>
           <div className={styles.formFields}>
             <InputField
-              placeholder={placeholders.email}
-              name={fields.email}
-              label={labels.email}
+              placeholder={emailPlaceholder}
+              name={email}
+              label={emailLabel}
               type={INPUT_TYPE.EMAIL}
             />
-            <InputField
-              placeholder={placeholders.password}
-              name={fields.password}
-              label={labels.password}
-              type={INPUT_TYPE.PASSWORD}
+            <PasswordField
+              name={password}
+              label={passwordLabel}
+              placeholder={passwordPlaceholder}
               className={styles.passwordInput}
             />
           </div>
           <div className={styles.footer}>
-            <CheckboxField name={fields.rememberMe} label={labels.rememberMe} />
-            <span>{loginFormConstants.forgotPassword}</span>
+            <CheckboxField name={rememberMe} label={rememberMeLabel} />
+            <span className={styles.forgotPassword}>
+              {loginFormConstants.forgotPassword}
+            </span>
           </div>
           <Button className={styles.loginButton}>{Buttons.LOGIN}</Button>
         </Form>

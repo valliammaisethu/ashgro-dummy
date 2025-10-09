@@ -19,3 +19,9 @@ export const placeholders = {
   email: "Enter your email address",
   password: "Enter your password",
 };
+
+export const validationMessages = {
+  email: "Please enter a valid email address!",
+  password: "Password is required!",
+  requiredEmail: "E-mail is required!",
+};

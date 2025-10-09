@@ -1,33 +1,29 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC, useState } from "react";
 import { Input, InputProps } from "antd";
 import { useFormContext, useController, FieldValues } from "react-hook-form";
 
-import { INPUT_TYPE } from "src/enums/inputType";
 import { InputStatus } from "src/enums/inputStatus.enum";
-import Label from "../Label";
 import Error from "../Error";
+import Label from "../Label";
 
-import styles from "./inputField.module.scss";
+import styles from "src/shared/components/InputField/inputField.module.scss";
+import { inputType, passwordSuffix } from "./atoms";
 
-interface InputFieldProps extends InputProps {
+interface PasswordFieldProps extends InputProps {
   name: string;
   label?: string;
-  type?: INPUT_TYPE;
-  suffix?: ReactNode;
 }
 
-const InputField: FC<InputFieldProps> = ({
-  name,
-  label,
-  type = INPUT_TYPE.TEXT,
-  suffix,
-  ...rest
-}) => {
+const PasswordField: FC<PasswordFieldProps> = ({ name, label, ...rest }) => {
   const { control } = useFormContext<FieldValues>();
   const {
     field: { value, onChange, onBlur },
     fieldState,
   } = useController({ name, control });
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   return (
     <div className={styles.inputWrapper}>
@@ -38,9 +34,9 @@ const InputField: FC<InputFieldProps> = ({
         onChange={onChange}
         onBlur={onBlur}
         {...rest}
-        type={type}
-        suffix={suffix}
+        type={inputType(showPassword)}
         status={fieldState.error ? InputStatus.ERROR : undefined}
+        suffix={passwordSuffix(showPassword, togglePasswordVisibility)}
       />
 
       {fieldState.error && <Error message={fieldState.error.message} />}
@@ -48,4 +44,4 @@ const InputField: FC<InputFieldProps> = ({
   );
 };
 
-export default InputField;
+export default PasswordField;
