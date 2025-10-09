@@ -1,0 +1,45 @@
+@import "variables";
+@import "helpers";
+@import "@antOverrides";
+@import "src/assets/fonts/remixicon.scss";
+@import "mixins";
+
+/* General component styles */
+
+html {
+  font-size: 62.5%; // 1 rem = 10px
+}
+
+::placeholder {
+  font-family: $font-secondary;
+}
+
+label {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: $ashgro-label;
+  font-family: $font-secondary !important;
+}
+
+body {
+  background-color: #ffffff;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  color: $primary-black;
+}
+
+[class^="ri-"],
+[class*=" ri-"] {
+  font-family: "RemixIcon";
+  font-style: normal;
+  font-weight: normal;
+  display: inline-block;
+  text-decoration: inherit;
+  text-align: center;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
