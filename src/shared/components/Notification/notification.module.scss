@@ -1,0 +1,36 @@
+@use "src/styles/variables" as *;
+
+.successNotificationOuter {
+  margin-top: 2.4rem;
+  width: calc(100% + 3.7rem);
+  height: 1rem;
+  border-radius: 1.8rem;
+  overflow: hidden;
+  background-color: $notification-success-unfill;
+  margin-left: -4rem;
+}
+.successNotificationInner {
+  height: 100%;
+}
+.notificationDescriptionText {
+  font-size: 1.4rem;
+  color: $ashgro-navy;
+}
+.closeIcon {
+  &::before {
+    color: $ashgro-navy;
+    font-size: 2rem;
+  }
+}
+.successNotification {
+  &::before {
+    font-size: 3.2rem;
+    color: $notification-success;
+  }
+}
+.errorNotification {
+  &::before {
+    font-size: 3.2rem;
+    color: $notification-error;
+  }
+}
