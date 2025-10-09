@@ -11,11 +11,13 @@ export enum AntdButtonType {
   TEXT = "text",
   LINK = "link",
 }
+
 export enum ButtonSizes {
   SMALL = "small",
   MEDIUM = "medium",
   LARGE = "large",
 }
+
 export enum ButtonTypes {
   PRIMARY = "primary",
   DASHED = "dashed",

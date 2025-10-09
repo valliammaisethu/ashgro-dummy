@@ -333,6 +333,54 @@
 .ant-pagination
   .ant-pagination-jump-next
   .ant-pagination-item-container
+  .ant-pagination-item-ellipsis,
+.ant-pagination
+  .ant-pagination-jump-prev
+  .ant-pagination-item-container
   .ant-pagination-item-ellipsis {
+  letter-spacing: 0px;
+}
+
+.ant-notification
+  .ant-notification-notice-wrapper
+  .ant-notification-notice-with-icon
+  .ant-notification-notice-message,
+.ant-notification
+  .ant-notification-notice-wrapper
+  .ant-notification-notice-with-icon
+  .ant-notification-notice-description {
+  margin-inline-start: 4.5rem;
+}
+
+.ant-notification
+  .ant-notification-notice-wrapper
+  .ant-notification-notice-icon {
+  top: 3rem;
+}
+
+.ant-notification-topRight.ant-notification-stack
+  > .ant-notification-notice-wrapper {
+  background-color: $ashgro-cream;
+  border-radius: 1.8rem;
+  box-shadow: 4px 6px 0px 0px rgba(12, 35, 64, 1);
+}
+.ant-notification
+  .ant-notification-notice-wrapper
+  .ant-notification-notice-description {
+  margin-top: 0.4rem;
+}
+
+.ant-notification
+  .ant-notification-notice-wrapper
+  .ant-notification-notice-with-icon
+  .ant-notification-notice-message {
+  color: $ashgro-navy;
+  font-size: 2rem;
+  font-weight: 600;
+}
+.ant-pagination-item-ellipsis {
+  letter-spacing: 0px;
+}
+.ant-pagination-item-ellipsis {
   letter-spacing: 0px;
 }

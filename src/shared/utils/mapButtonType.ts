@@ -1,4 +1,4 @@
-import { AntdButtonType, ButtonTypes } from "../../enums/buttonType";
+import { AntdButtonType, ButtonTypes } from "../../enums/buttons.enum";
 
 export const mapToAntdType = (type?: ButtonTypes): AntdButtonType => {
   switch (type) {

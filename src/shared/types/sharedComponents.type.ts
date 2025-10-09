@@ -1,5 +1,4 @@
 import { ComponentProps, CSSProperties, MouseEvent, ReactNode } from "react";
-
 import {
   CheckboxChangeEvent,
   CheckboxOptionType,
@@ -10,8 +9,8 @@ import {
 } from "antd";
 
 import { ButtonSize } from "antd/es/button";
-import { ButtonTypes, HtmlButtonType } from "src/enums/buttonType";
-
+import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
+import { NotificationTypes } from "src/enums/notificationTypes";
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
   phoneCodeName: string;
@@ -95,4 +94,17 @@ export interface ButtonProps {
   name?: string;
   target?: string;
   href?: string;
+}
+
+export interface INotification {
+  message: string;
+  description: string;
+  type: NotificationTypes;
+  showProgress?: boolean;
+  duration?: number;
+}
+
+export interface ProgressBarProps {
+  duration: number;
+  type: NotificationTypes;
 }

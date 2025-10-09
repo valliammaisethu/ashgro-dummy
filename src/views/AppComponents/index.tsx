@@ -3,8 +3,10 @@ import { Col, Row } from "antd";
 
 import { AppComponentsConstants } from "src/constants/appComponents";
 import { Icons } from "src/enums/icons.enum";
-import { ButtonTypes, HtmlButtonType } from "src/enums/buttonType";
+import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
+import { NotificationTypes } from "src/enums/notificationTypes";
+
 import InputField from "src/shared/components/InputField";
 import Button from "src/shared/components/Button";
 import Form from "src/shared/components/Form";
@@ -14,11 +16,28 @@ import RadioField from "src/shared/components/RadioField";
 import SwitchField from "src/shared/components/SwitchField";
 import Tabs from "src/shared/components/Tabs";
 import Table from "src/shared/components/Table";
+import Notification from "src/shared/components/Notification";
 import { appComponentsValidation } from "./validation";
 
 import styles from "./appComponents.module.scss";
 
 const AppComponents: FC = () => {
+  const renderSuccessNotification = () => {
+    Notification({
+      description: "Notification description",
+      message: "Notification title",
+      type: NotificationTypes.SUCCESS,
+    });
+  };
+
+  const renderErrorNotification = () => {
+    Notification({
+      description: "Notification description",
+      message: "Notification title",
+      type: NotificationTypes.ERROR,
+    });
+  };
+
   return (
     <div className={styles.appComponents}>
       <h1 className="text-center text-decoration">App Components</h1>
@@ -87,10 +106,28 @@ const AppComponents: FC = () => {
         </Col>
         <Row>
           <Col span={6}>
-            <Button type={ButtonTypes.PRIMARY}>Primary Button</Button>
+            <Button
+              onClick={renderSuccessNotification}
+              type={ButtonTypes.PRIMARY}
+            >
+              Primary Button
+            </Button>
           </Col>
           <Col span={6}>
-            <Button type={ButtonTypes.SECONDARY}>Secondary Button</Button>
+            <Button
+              onClick={renderErrorNotification}
+              type={ButtonTypes.SECONDARY}
+            >
+              Secondary Button
+            </Button>
+          </Col>
+          <Col span={6}>
+            <Button type={ButtonTypes.TERTIARY}>Tertiary Button</Button>
+          </Col>
+          <Col span={6}>
+            <Button type={ButtonTypes.SECONDARY_TWO}>
+              Secondary Two Button
+            </Button>
           </Col>
           <Col span={6}>
             <Button type={ButtonTypes.TERTIARY}>Tertiary Button</Button>
