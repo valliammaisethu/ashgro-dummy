@@ -19,15 +19,15 @@ import { validationSchema } from "./LoginValidation";
 
 import styles from "./loginForm.module.scss";
 
+const { email: emailPlaceholder, password: passwordPlaceholder } = placeholders;
+const {
+  email: emailLabel,
+  password: passwordLabel,
+  rememberMe: rememberMeLabel,
+} = labels;
+const { email, password, rememberMe } = fields;
+
 const LoginForm = () => {
-  const { email: emailPlaceholder, password: passwordPlaceholder } =
-    placeholders;
-  const {
-    email: emailLabel,
-    password: passwordLabel,
-    rememberMe: rememberMeLabel,
-  } = labels;
-  const { email, password, rememberMe } = fields;
   const { loginUser } = AuthService();
 
   const { mutateAsync, isPending } = useMutation(loginUser());
