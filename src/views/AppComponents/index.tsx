@@ -3,9 +3,10 @@ import { Col, Row } from "antd";
 
 import { AppComponentsConstants } from "src/constants/appComponents";
 import { Icons } from "src/enums/icons.enum";
-import { ButtonTypes, HtmlButtonType } from "src/enums/buttonType";
+import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { NotificationTypes } from "src/enums/notificationTypes";
+
 import InputField from "src/shared/components/InputField";
 import Button from "src/shared/components/Button";
 import Form from "src/shared/components/Form";

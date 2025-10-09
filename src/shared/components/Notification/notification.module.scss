@@ -34,3 +34,11 @@
     color: $notification-error;
   }
 }
+
+.success {
+  background-color: $notification-success;
+}
+
+.error {
+  background-color: $notification-error;
+}

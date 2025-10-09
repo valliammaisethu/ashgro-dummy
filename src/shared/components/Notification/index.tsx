@@ -4,10 +4,7 @@ import { ArgsProps } from "antd/lib/message";
 import clsx from "clsx";
 
 import { Icons } from "src/enums/icons.enum";
-import {
-  getNotificationIcon,
-  renderNotificationColor,
-} from "src/shared/utils/renderNotificationColor";
+import { getNotificationIcon } from "src/shared/utils/renderNotificationColor";
 import {
   INotification,
   ProgressBarProps,
@@ -26,10 +23,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ duration, type }) => {
   return (
     <div className={styles.successNotificationOuter}>
       <div
-        className={styles.successNotificationInner}
+        className={clsx(styles.successNotificationInner, styles[type])}
         style={{
           width: `${percent}%`,
-          backgroundColor: renderNotificationColor(type),
           transition: `width ${duration}s linear`,
         }}
       />

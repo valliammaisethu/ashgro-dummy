@@ -1,5 +1,4 @@
 import { ComponentProps, CSSProperties, MouseEvent, ReactNode } from "react";
-
 import {
   CheckboxChangeEvent,
   CheckboxOptionType,
@@ -10,16 +9,8 @@ import {
 } from "antd";
 
 import { ButtonSize } from "antd/es/button";
-import { ButtonTypes, HtmlButtonType } from "src/enums/buttonType";
+import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
-
-export interface NumberIncrementerProps {
-  name: string;
-  min?: number;
-  max?: number;
-  step?: number;
-  disabled?: boolean;
-}
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
   phoneCodeName: string;

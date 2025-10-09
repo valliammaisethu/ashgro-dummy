@@ -2,7 +2,11 @@ import React, { FC } from "react";
 import { Button as AntButton } from "antd";
 import clsx from "clsx";
 
-import { ButtonSizes, ButtonTypes, HtmlButtonType } from "src/enums/buttonType";
+import {
+  ButtonSizes,
+  ButtonTypes,
+  HtmlButtonType,
+} from "src/enums/buttons.enum";
 import { mapToAntdType } from "src/shared/utils/mapButtonType";
 import { ButtonProps } from "src/shared/types/sharedComponents.type";
 

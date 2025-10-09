@@ -3,12 +3,6 @@ import { Switch as AntSwitch } from "antd";
 
 import { SwitchFieldProps } from "src/shared/types/sharedComponents.type";
 
-import styles from "./switch.module.scss";
-
-const Switch = (props: SwitchFieldProps) => (
-  <div className={styles["switch-component"]}>
-    <AntSwitch {...props} />
-  </div>
-);
+const Switch = (props: SwitchFieldProps) => <AntSwitch {...props} />;
 
 export default Switch;
