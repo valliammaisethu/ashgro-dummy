@@ -1,0 +1,92 @@
+@use "src/styles/variables" as *;
+
+.loginFormContainer {
+  background-image: url("src/assets/images/Login.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0;
+
+  img {
+    margin-top: 4rem;
+  }
+}
+
+.container {
+  width: 48rem;
+  height: 44.6rem;
+  background-color: $ashgro-white;
+  margin: 4rem auto auto auto;
+  padding: 3.6rem 4rem 3.2rem 4rem;
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    font-weight: 300;
+    font-size: 3.2rem;
+    color: $ashgro-navy;
+    font-family: $font-primary;
+  }
+
+  .form {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    flex: 1;
+
+    .formFields {
+      display: flex;
+      gap: 1.6rem;
+      flex-flow: column nowrap;
+    }
+
+    .passwordInput {
+      i {
+        &::before {
+          color: $disabled-text;
+          cursor: pointer;
+          font-size: 2rem;
+        }
+      }
+      :global(.ant-input) {
+        height: 3.9rem;
+      }
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+
+      span {
+        color: $ashgro-gold;
+        font-weight: 600;
+        font-size: 1.4rem;
+        font-family: $font-secondary;
+        cursor: pointer;
+      }
+
+      :global(.ant-checkbox-wrapper .ant-checkbox-inner) {
+        border: 0.5px solid $ashgro-navy;
+      }
+    }
+  }
+}
+.loginButton {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  button {
+    width: 40rem;
+    height: 5.4rem;
+    font-family: $font-secondary;
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+}
