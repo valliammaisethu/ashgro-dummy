@@ -5,14 +5,14 @@ import axiosInstance from "src/interceptor/axiosInstance";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { MutationKeys } from "src/enums/cacheEvict.enum";
-import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LoginRequest, LoginResponse } from "src/models/user.model";
 import { ResponseModel } from "src/models/response.model";
 import { AuthContext } from "src/context/AuthContext";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
 export const AuthService = () => {
-  const { USER_LOGIN } = ApiRoutes;
+  const { USER_LOGIN, FORGOT_PASSWORD } = ApiRoutes;
   const { setAuthenticated } = AuthContext();
   const loginUser = (): UseMutationOptions<
     LoginResponse,
@@ -29,12 +29,32 @@ export const AuthService = () => {
       return deserialize(LoginResponse, response.data);
     },
     onSuccess: (response) => {
+      const { title, description } = response;
       setAuthenticated(response?.data?.user, response?.data?.token);
       localStorageHelper.setItem(LocalStorageKeys.USER, response?.data?.user);
       localStorageHelper.setItem(LocalStorageKeys.TOKEN, response?.data?.token);
-      renderNotification(response.title, response.description);
+      renderNotification(title, description);
     },
   });
 
-  return { loginUser };
+  const forgotPassword = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    LoginRequest
+  > => ({
+    mutationKey: [MutationKeys.FORGOT_PASSWORD],
+    mutationFn: async (user: LoginRequest) => {
+      const serializedData = serialize(LoginRequest, user);
+      const response = await axiosInstance.post(FORGOT_PASSWORD, {
+        user: serializedData,
+      });
+      return deserialize(ResponseModel, response.data);
+    },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description);
+    },
+  });
+
+  return { loginUser, forgotPassword };
 };

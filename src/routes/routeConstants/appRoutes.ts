@@ -3,6 +3,8 @@ export const NavigationRoutes = {
   AUTH: "/auth",
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
+  FORGOT_PASSWORD: "/auth/forgot-password",
+  HOME: "/home",
 };
 
 export const AppRoutes = {
@@ -11,4 +13,5 @@ export const AppRoutes = {
   LOGIN: "/login",
   APP_COMPONENTS: "/app-components",
   HOME: "/home",
+  FORGOT_PASSWORD: "/forgot-password",
 };
