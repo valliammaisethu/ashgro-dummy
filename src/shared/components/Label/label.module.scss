@@ -1,0 +1,23 @@
+.label {
+  display: inline-block;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.4rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &.disabled {
+    color: #aaa;
+    cursor: not-allowed;
+  }
+}
+
+.required {
+  color: #333;
+}
+
+.asterisk {
+  color: #e63946;
+  margin-left: 0.3rem;
+}

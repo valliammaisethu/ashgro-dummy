@@ -16,12 +16,14 @@ export interface FormProps<T extends FieldValues> extends UseFormProps<T> {
   onSubmit?: (data: T, methods: UseFormReturn<T>) => void;
   validationSchema?: Yup.ObjectSchema<T>;
   methods?: UseFormReturn<T>;
+  className?: string;
 }
 
 function Form<T extends FieldValues>({
   onSubmit,
   children,
   methods,
+  className,
   ...rest
 }: FormProps<T>) {
   const hookMethods = useForm(rest);
@@ -35,7 +37,12 @@ function Form<T extends FieldValues>({
 
   return (
     <FormProvider {...formMethods}>
-      <form onSubmit={formMethods.handleSubmit(handleSubmit)}>{content}</form>
+      <form
+        className={className}
+        onSubmit={formMethods.handleSubmit(handleSubmit)}
+      >
+        {content}
+      </form>
     </FormProvider>
   );
 }

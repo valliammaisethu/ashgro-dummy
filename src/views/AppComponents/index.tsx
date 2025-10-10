@@ -6,7 +6,6 @@ import { Icons } from "src/enums/icons.enum";
 import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { NotificationTypes } from "src/enums/notificationTypes";
-
 import InputField from "src/shared/components/InputField";
 import Button from "src/shared/components/Button";
 import Form from "src/shared/components/Form";
@@ -50,7 +49,7 @@ const AppComponents: FC = () => {
                 type={INPUT_TYPE.TEXT}
                 name="input"
                 placeholder="Enter some text"
-                suffixIcon={<i className={Icons.EYE_LINE}></i>}
+                suffix={<i className={Icons.EYE_LINE}></i>}
                 label="Input Field"
               />
             </Col>
@@ -60,7 +59,7 @@ const AppComponents: FC = () => {
                 type={INPUT_TYPE.TEXT}
                 name="inputs"
                 placeholder="Enter some text"
-                suffixIcon={<i className={Icons.EYE_LINE}></i>}
+                suffix={<i className={Icons.EYE_LINE}></i>}
                 label="Input Field"
                 disabled
               />

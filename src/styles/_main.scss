@@ -9,19 +9,8 @@ html {
   font-size: 62.5%; // 1 rem = 10px
 }
 
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-button,
-input,
-textarea,
-span,
-p,
-select {
-  font-family: $font-secondary !important;
+::placeholder {
+  font-family: $font-secondary;
 }
 
 label {

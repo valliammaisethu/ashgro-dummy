@@ -1,3 +1,7 @@
+export enum Buttons {
+  LOGIN = "Login",
+}
+
 export enum HtmlButtonType {
   SUBMIT = "submit",
   RESET = "reset",

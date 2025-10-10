@@ -38,7 +38,7 @@ const Notification = ({
   description,
   type,
   showProgress = true,
-  duration = 25.5,
+  duration = 4.5,
 }: INotification): void => {
   if (window.innerWidth <= 768) {
     MobileNotification[type]({

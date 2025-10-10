@@ -173,3 +173,14 @@
 .mr-5 {
   margin-right: ($spacer-x * 1.25) !important;
 }
+
+@mixin flex-container(
+  $justify: space-between,
+  $align: center,
+  $direction: row
+) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+}
