@@ -98,9 +98,9 @@ export interface ButtonProps {
 }
 
 export interface INotification {
-  message?: string;
+  title?: string;
   description?: string;
-  type: NotificationTypes;
+  type?: NotificationTypes;
   showProgress?: boolean;
   duration?: number;
   placement?: Placement;

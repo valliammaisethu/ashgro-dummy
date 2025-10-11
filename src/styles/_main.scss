@@ -5,6 +5,12 @@
 
 /* General component styles */
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 html {
   font-size: 62.5%; // 1 rem = 10px
 }

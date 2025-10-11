@@ -46,3 +46,31 @@ export const getFileSuccessMessage = (name?: string) =>
 
 export const getFileErrorMessage = (name?: string) =>
   `${name} file upload failed.`;
+
+export const axiosInstanceErrors = {
+  networkError: {
+    title: "Network Error!",
+    description: "Please check your internet connection.",
+  },
+  forbidden: {
+    title: "Forbidden!",
+    description: "Your session has expired. Please log in again.",
+  },
+  unAuthorised: {
+    title: "Unauthorized!",
+    description: "Your session has expired. Please log in again.",
+  },
+  notFound: {
+    title: "Not Found!",
+    description: "The requested resource could not be found.",
+  },
+  failed: {
+    title: "Operation Failed!",
+    description: "Something went wrong. Please try again later.",
+  },
+  serverError: {
+    title: "Server Error!",
+    description: "Something went wrong. Please try again later.",
+  },
+  genericError: "Something went wrong. Please try again later.",
+};

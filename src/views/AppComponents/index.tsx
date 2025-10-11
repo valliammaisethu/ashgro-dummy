@@ -24,7 +24,7 @@ const AppComponents: FC = () => {
   const renderSuccessNotification = () => {
     Notification({
       description: "Notification description",
-      message: "Notification title",
+      title: "Notification title",
       type: NotificationTypes.SUCCESS,
     });
   };
@@ -32,7 +32,7 @@ const AppComponents: FC = () => {
   const renderErrorNotification = () => {
     Notification({
       description: "Notification description",
-      message: "Notification title",
+      title: "Notification title",
       type: NotificationTypes.ERROR,
     });
   };

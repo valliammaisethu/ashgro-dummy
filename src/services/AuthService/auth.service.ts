@@ -5,12 +5,11 @@ import axiosInstance from "src/interceptor/axiosInstance";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { MutationKeys } from "src/enums/cacheEvict.enum";
-import { NotificationTypes } from "src/enums/notificationTypes";
-import Notification from "src/shared/components/Notification";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LoginRequest, LoginResponse } from "src/models/user.model";
 import { ResponseModel } from "src/models/response.model";
 import { AuthContext } from "src/context/AuthContext";
+import { renderNotification } from "src/shared/utils/renderNotification";
 
 export const AuthService = () => {
   const { USER_LOGIN } = ApiRoutes;
@@ -27,25 +26,13 @@ export const AuthService = () => {
         user: serializedData,
       });
 
-      const data = deserialize(LoginResponse, response.data);
-      return data;
+      return deserialize(LoginResponse, response.data);
     },
     onSuccess: (response) => {
       setAuthenticated(response?.data?.user, response?.data?.token);
       localStorageHelper.setItem(LocalStorageKeys.USER, response?.data?.user);
       localStorageHelper.setItem(LocalStorageKeys.TOKEN, response?.data?.token);
-      Notification({
-        message: response?.title,
-        description: response.description,
-        type: NotificationTypes.SUCCESS,
-      });
-    },
-    onError: (error) => {
-      Notification({
-        message: error?.title,
-        description: error.description,
-        type: NotificationTypes.ERROR,
-      });
+      renderNotification(response.title, response.description);
     },
   });
 
