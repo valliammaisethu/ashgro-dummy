@@ -4,6 +4,8 @@ import { ArgsProps } from "antd/lib/message";
 import clsx from "clsx";
 
 import { Icons } from "src/enums/icons.enum";
+import { Placement } from "src/enums/placement.enum";
+import { NotificationTypes } from "src/enums/notificationTypes";
 import { getNotificationIcon } from "src/shared/utils/renderNotificationColor";
 import {
   INotification,
@@ -34,15 +36,16 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ duration, type }) => {
 };
 
 const Notification = ({
-  message,
+  title,
   description,
-  type,
+  type = NotificationTypes.SUCCESS,
   showProgress = true,
   duration = 4.5,
+  placement = Placement.BOTTOM,
 }: INotification): void => {
   if (window.innerWidth <= 768) {
     MobileNotification[type]({
-      content: message,
+      content: title,
     } as ArgsProps);
     return;
   }
@@ -57,7 +60,8 @@ const Notification = ({
   );
 
   notification[type]({
-    message,
+    placement,
+    message: title,
     description: descriptionWithProgress,
     duration: duration,
     pauseOnHover: true,

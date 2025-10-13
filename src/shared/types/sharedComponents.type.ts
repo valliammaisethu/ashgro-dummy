@@ -11,6 +11,7 @@ import {
 import { ButtonSize } from "antd/es/button";
 import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
+import { Placement } from "src/enums/placement.enum";
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
   phoneCodeName: string;
@@ -97,11 +98,12 @@ export interface ButtonProps {
 }
 
 export interface INotification {
-  message: string;
-  description: string;
-  type: NotificationTypes;
+  title?: string;
+  description?: string;
+  type?: NotificationTypes;
   showProgress?: boolean;
   duration?: number;
+  placement?: Placement;
 }
 
 export interface ProgressBarProps {

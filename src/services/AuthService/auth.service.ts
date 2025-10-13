@@ -1,56 +1,40 @@
-import axiosInstance from "../../interceptor/axiosInstance";
-import { deserialize } from "serializr";
-import { User } from "../../models/user.model";
-import Notification from "../../shared/components/Notification";
-import { NotificationTypes } from "../../enums/notificationTypes";
-import { useState } from "react";
-import { ApiRoutes } from "../../routes/routeConstants/apiRoutes";
-import { AuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { AppRoutes } from "../../routes/routeConstants/appRoutes";
+import { UseMutationOptions } from "@tanstack/react-query";
+import { deserialize, serialize } from "serializr";
 
-const UserService = () => {
-  const navigate = useNavigate();
+import axiosInstance from "src/interceptor/axiosInstance";
+import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { MutationKeys } from "src/enums/cacheEvict.enum";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LoginRequest, LoginResponse } from "src/models/user.model";
+import { ResponseModel } from "src/models/response.model";
+import { AuthContext } from "src/context/AuthContext";
+import { renderNotification } from "src/shared/utils/renderNotification";
 
-  const [error, setError] = useState<Error>();
-
-  const [loading, setLoading] = useState(false);
-
+export const AuthService = () => {
+  const { USER_LOGIN } = ApiRoutes;
   const { setAuthenticated } = AuthContext();
-
-  const loginUser = (data: User) => {
-    setLoading(true);
-    return axiosInstance
-      .post(ApiRoutes.USER_LOGIN, data)
-      .then((response) => {
-        const user = deserialize(User, response.data["user"]);
-        Notification({
-          message: "Login",
-          description: "Logged in successfully",
-          type: NotificationTypes.SUCCESS,
-        });
-        setAuthenticated(user);
-        navigate(AppRoutes.HOME);
-      })
-      .catch((error) => {
-        Notification({
-          message: "Login failed",
-          description: "incorrect email or password",
-          type: NotificationTypes.ERROR,
-        });
-
-        setError(error);
-      })
-      .finally(() => {
-        setLoading(false);
+  const loginUser = (): UseMutationOptions<
+    LoginResponse,
+    ResponseModel,
+    LoginRequest
+  > => ({
+    mutationKey: [MutationKeys.LOGIN],
+    mutationFn: async (user: LoginRequest) => {
+      const serializedData = serialize(LoginRequest, user);
+      const response = await axiosInstance.post(USER_LOGIN, {
+        user: serializedData,
       });
-  };
 
-  return {
-    error,
-    loading,
-    loginUser,
-  };
+      return deserialize(LoginResponse, response.data);
+    },
+    onSuccess: (response) => {
+      setAuthenticated(response?.data?.user, response?.data?.token);
+      localStorageHelper.setItem(LocalStorageKeys.USER, response?.data?.user);
+      localStorageHelper.setItem(LocalStorageKeys.TOKEN, response?.data?.token);
+      renderNotification(response.title, response.description);
+    },
+  });
+
+  return { loginUser };
 };
-
-export default UserService;

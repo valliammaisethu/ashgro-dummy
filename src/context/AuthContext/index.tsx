@@ -6,11 +6,12 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
-import { User } from "../../models/user.model";
+import { TokenData, UserData } from "src/models/user.model";
 
 export interface AuthState {
   authenticated?: boolean;
-  user?: User;
+  user?: UserData;
+  token?: TokenData;
 }
 
 type SetAuthState = Dispatch<SetStateAction<AuthState>>;
@@ -20,7 +21,8 @@ type AuthContentProps = [AuthState, SetAuthState];
 // Define the default context state
 const initialValues: AuthState = {
   authenticated: false,
-  user: new User(),
+  user: new UserData(),
+  token: new TokenData(),
 };
 
 // Create the context
@@ -34,11 +36,12 @@ const AuthContext = () => {
   }
   const [auth, setAuth] = context;
 
-  const setAuthenticated = (user?: User) => {
+  const setAuthenticated = (user?: UserData, token?: TokenData) => {
     setAuth((auth) => ({
       ...auth,
       authenticated: true,
       user,
+      token,
     }));
   };
 
