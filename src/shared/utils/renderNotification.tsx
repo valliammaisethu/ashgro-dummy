@@ -2,12 +2,12 @@ import { NotificationTypes } from "src/enums/notificationTypes";
 import Notification from "../components/Notification";
 
 export const renderNotification = (
-  title: string,
-  message: string,
-  type: NotificationTypes,
+  title: string = "",
+  message: string = "",
+  type: NotificationTypes = NotificationTypes.SUCCESS,
 ) => {
   return Notification({
-    message: title,
+    title: title,
     description: message,
     type: type,
   });

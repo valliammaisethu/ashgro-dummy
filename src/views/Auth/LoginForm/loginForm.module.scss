@@ -17,12 +17,13 @@
 
 .container {
   width: 48rem;
-  height: 44.6rem;
+  min-height: 44.6rem;
   background-color: $ashgro-white;
   margin: 4rem auto auto auto;
   padding: 3.6rem 4rem 3.2rem 4rem;
   display: flex;
   flex-direction: column;
+  border-radius: 0.4rem;
 
   .title {
     font-weight: 300;
@@ -32,7 +33,7 @@
   }
 
   .form {
-    margin-top: 2rem;
+    margin-top: 3.2rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -77,7 +78,7 @@
   }
 }
 .loginButton {
-  margin-top: auto;
+  margin-top: 5rem;
   display: flex;
   align-items: center;
   justify-content: center;
