@@ -1,13 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import { AppRoutes } from "../../routes/routeConstants/appRoutes";
+
+import { NavigationRoutes } from "../../routes/routeConstants/appRoutes";
+
+const { HOME, FORGOT_PASSWORD } = NavigationRoutes;
 
 const useRedirect = () => {
   const navigate = useNavigate();
 
-  const navigateToHome = () => navigate(AppRoutes.HOME);
+  const navigateToHome = () => navigate(HOME);
+
+  const navigateToForgotPassword = () => navigate(FORGOT_PASSWORD);
 
   return {
     navigateToHome,
+    navigateToForgotPassword,
   };
 };
 
