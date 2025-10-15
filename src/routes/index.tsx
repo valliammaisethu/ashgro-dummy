@@ -22,6 +22,26 @@ const AppRouter = () => {
           path: AppRoutes.PROSPECTS_LISTING,
           component: <ProspectsListing />,
         },
+        {
+          path: AppRoutes.DASHBOARD,
+          component: <ProspectsListing />,
+        },
+        {
+          path: AppRoutes.CALENDAR,
+          component: <ProspectsListing />,
+        },
+        {
+          path: AppRoutes.MEMBERS,
+          component: <ProspectsListing />,
+        },
+        {
+          path: AppRoutes.CLUB_STAFF,
+          component: <ProspectsListing />,
+        },
+        {
+          path: AppRoutes.SETTINGS,
+          component: <ProspectsListing />,
+        },
       ],
     },
   ];
