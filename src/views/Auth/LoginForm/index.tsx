@@ -14,6 +14,7 @@ import { AuthService } from "src/services/AuthService/auth.service";
 
 import logo from "src/assets/images/logo.webp";
 import { imageAlts } from "src/constants/imageAlts";
+import useRedirect from "src/shared/hooks/useRedirect";
 import { fields, labels, loginFormConstants, placeholders } from "./constants";
 import { validationSchema } from "./LoginValidation";
 
@@ -28,6 +29,8 @@ const {
 const { email, password, rememberMe } = fields;
 
 const LoginForm = () => {
+  const { navigateToForgotPassword } = useRedirect();
+
   const { loginUser } = AuthService();
 
   const { mutateAsync, isPending } = useMutation(loginUser());
@@ -37,6 +40,7 @@ const LoginForm = () => {
       ...values,
       rememberMe: values.rememberMe ? true : false,
     });
+
   return (
     <div className={styles.loginFormContainer}>
       <img className={styles.loginLogo} alt={imageAlts.loginLogo} src={logo} />
@@ -63,7 +67,10 @@ const LoginForm = () => {
           </div>
           <div className={styles.footer}>
             <CheckboxField name={rememberMe} label={rememberMeLabel} />
-            <span className={styles.forgotPassword}>
+            <span
+              onClick={navigateToForgotPassword}
+              className={styles.forgotPassword}
+            >
               {loginFormConstants.forgotPassword}
             </span>
           </div>

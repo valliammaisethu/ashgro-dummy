@@ -21,6 +21,14 @@ $input-border: #dadada;
 // App Colors
 $ashgro-navy: #0c2340;
 $ashgro-gold: #c5a25d;
+$nav-text: #43330bcc;
+$nav-active-text: #bd8420;
+$nav-active-bg: linear-gradient(
+  270deg,
+  #eadbbd -12.5%,
+  #bd8420 53.12%,
+  #eadbbd 118.75%
+);
 $ashgro-black: #0f131c;
 $ashgro-white: #ffffff;
 $ashgro-cream: #f7f4ed;
@@ -40,6 +48,8 @@ $body-bg: #f5f8fa;
 $table-bg: #f7fafc;
 $input-bg: #f8fbfc;
 $input-border: #dadada;
+$club-name: #f0ede1;
+$club-name-text: #43330bb2;
 
 /* Component colors */
 $notification-success: #8bc34a;

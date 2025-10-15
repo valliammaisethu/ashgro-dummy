@@ -1,17 +1,24 @@
 export const NavigationRoutes = {
+  HOME: "/home",
   APP_COMPONENTS: "/app-components",
+
   AUTH: "/auth",
-  REGISTER: "/auth/register",
   LOGIN: "/auth/login",
+  REGISTER: "/auth/register",
+  FORGOT_PASSWORD: "/auth/forgot-password",
+
   PROSPECTS_LISTING: "/home/prospects",
 };
 
 export const AppRoutes = {
-  AUTH: "/auth/*",
-  REGISTER: "/register",
-  LOGIN: "/login",
-  APP_COMPONENTS: "/app-components",
   HOME: "/home",
+  APP_COMPONENTS: "/app-components",
+
+  AUTH: "/auth/*",
+  LOGIN: "/login",
+  REGISTER: "/register",
+  FORGOT_PASSWORD: "/forgot-password",
+
   DASHBOARD: "/home/dashboard",
   PROSPECTS_LISTING: "/home/prospects",
   CALENDAR: "/home/calendar",

@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { IconLogOut } from "obra-icons-react";
 import homeLogo from "src/assets/images/homeLogo.webp";
 import textLogo from "src/assets/images/textLogo.webp";
 import { topBarItems } from "src/constants/sharedComponents";
@@ -29,10 +29,17 @@ const TopBar = () => {
               key={item.path}
               onClick={() => handleItemClick(item.path)}
             >
+              {item.icon}
               {item.title}
             </div>
           );
         })}
+      </div>
+      <div className={styles.topBarEnd}>
+        <div className={styles.clubName}>Pine Valley Club</div>
+        <div>
+          <IconLogOut />{" "}
+        </div>
       </div>
     </div>
   );
