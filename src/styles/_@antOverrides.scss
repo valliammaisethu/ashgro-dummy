@@ -55,8 +55,8 @@
     border-radius: $button-primary-border-radius;
 
     &:hover {
-      background-color: $ashgro-gold !important;
-      color: $button-primary-text-color !important;
+      background-color: $ashgro-gold;
+      color: $button-primary-text-color;
       border-color: transparent;
       border-radius: $button-primary-border-radius;
     }
@@ -227,12 +227,6 @@
       border-color: $select-hover-border-color !important;
     }
   }
-
-  &.ant-select-open {
-    .ant-select-selector {
-      box-shadow: $select-focus-box-shadow !important;
-    }
-  }
 }
 
 .ant-select:not(.ant-select-customize-input) .ant-select-selector {
@@ -383,4 +377,19 @@
 }
 .ant-pagination-item-ellipsis {
   letter-spacing: 0px;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th {
+  background-color: $ashgro-white;
+}
+.ant-select-focused:where(
+    .css-dev-only-do-not-override-1odpy5d
+  ).ant-select-outlined:not(.ant-select-disabled):not(
+    .ant-select-customize-input
+  ):not(.ant-pagination-size-changer)
+  .ant-select-selector {
+  box-shadow: none;
+}
+.ant-select-single .ant-select-selector .ant-select-selection-item {
+  line-height: 1.3rem;
 }

@@ -1,6 +1,8 @@
 export enum Buttons {
   LOGIN = "Login",
   CONFIRM_EMAIL = "Confirm email",
+  BULK_MAIL = "Bulk Mail",
+  ADD_PROSPECT = "Add Prospect",
 }
 
 export enum HtmlButtonType {

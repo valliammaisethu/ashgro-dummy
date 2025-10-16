@@ -110,3 +110,24 @@ export interface ProgressBarProps {
   duration: number;
   type: NotificationTypes;
 }
+
+export interface SearchFieldProps {
+  onSearch: (value: string) => void;
+  onFilter?: () => void;
+  placeholder?: string;
+  className?: string;
+}
+
+export interface ProspectData {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  avatar: string;
+  followUpDate: string;
+  leadSource: string;
+  leadStatus: {
+    label: string;
+    color: string;
+  };
+}
