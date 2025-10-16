@@ -3,7 +3,7 @@
 :global(.ant-btn).secondary {
   background-color: $ashgro-navy;
   color: $ashgro-white;
-  border-radius: 0.4rem;
+  border-radius: 3.2rem;
   border-color: $ashgro-navy;
 
   &:not(:disabled):not(.ant-btn-disabled):hover {
@@ -16,7 +16,7 @@
 :global(.ant-btn).tertiary {
   background-color: $ashgro-light-gold;
   color: $ashgro-gold;
-  border-radius: 0.4rem;
+  border-radius: 3.2rem;
   border-color: $ashgro-light-gold;
 
   &:not(:disabled):not(.ant-btn-disabled):hover {
@@ -27,7 +27,7 @@
 :global(.ant-btn).secondaryTwo {
   background-color: $ashgro-light-grey;
   color: $ashgro-black;
-  border-radius: 0.4rem;
+  border-radius: 3.2rem;
   border-color: $ashgro-light-grey;
 
   &:not(:disabled):not(.ant-btn-disabled):hover {
@@ -41,7 +41,7 @@
   background-color: $ashgro-white;
   border: 0.1rem solid $ashgro-gold;
   color: $ashgro-gold;
-  border-radius: 0.4rem;
+  border-radius: 3.2rem;
   &:hover {
     color: $ashgro-gold;
   }
@@ -51,7 +51,7 @@
   background-color: $ashgro-white;
   color: $ashgro-black;
   border: 0.1rem solid $ashgro-black;
-  border-radius: 0.4rem;
+  border-radius: 3.2rem;
 
   &:not(:disabled):not(.ant-btn-disabled):hover {
     background-color: $ashgro-white;
@@ -63,7 +63,7 @@
   background-color: $ashgro-black;
   color: $ashgro-white;
   border: 0.1rem solid $ashgro-black;
-  border-radius: 0.4rem;
+  border-radius: 3.2rem;
 
   &:not(:disabled):not(.ant-btn-disabled):hover {
     background-color: $ashgro-black;
@@ -76,7 +76,7 @@
   background-color: $ashgro-white;
   color: $ashgro-black;
   border: 0.1rem solid transparent;
-  border-radius: 0.4rem;
+  border-radius: 3.2rem;
 
   &:not(:disabled):not(.ant-btn-disabled):hover {
     background-color: $ashgro-white;

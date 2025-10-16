@@ -101,9 +101,9 @@ export interface INotification {
   title?: string;
   description?: string;
   type?: NotificationTypes;
-  showProgress?: boolean;
   duration?: number;
   placement?: Placement;
+  className?: string;
 }
 
 export interface ProgressBarProps {
