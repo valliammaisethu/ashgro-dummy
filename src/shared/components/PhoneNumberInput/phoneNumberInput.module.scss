@@ -1,0 +1,84 @@
+@import "src/styles/variables";
+
+.wrapper {
+  display: flex;
+  flex-flow: column;
+
+  label {
+    font-size: 1.2rem;
+    margin: 0 0 0.6rem 1.6rem;
+  }
+
+  .dropDownWrapper {
+    div {
+      height: 4rem;
+    }
+    :global {
+      .ant-select:not(.ant-select-customize-input) {
+        .ant-select-selector {
+          border-right: none;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          position: relative;
+
+          &::after {
+            content: "";
+            position: absolute;
+            top: 1rem;
+            bottom: 1rem;
+            right: 1px;
+            width: 1px;
+            visibility: visible;
+          }
+        }
+      }
+    }
+
+    .dropDown {
+      min-width: 10.9rem;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 1rem;
+        bottom: 1rem;
+        right: 1px;
+        width: 1px;
+        background-color: $light-grey;
+        visibility: visible;
+      }
+    }
+  }
+
+  :global {
+    .ant-input {
+      border-left: none;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}
+
+.phoneCode {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  span {
+    font-size: 1.6rem;
+  }
+}
+
+.codeError {
+  width: 10.9rem;
+}
+.inputWrapper {
+  display: flex;
+  width: 100%;
+
+  input {
+    height: 4rem;
+    &:disabled {
+      background-color: $input-background;
+    }
+  }
+}

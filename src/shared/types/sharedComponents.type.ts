@@ -5,6 +5,7 @@ import {
   CheckboxProps,
   InputProps,
   Radio,
+  SelectProps,
   SwitchProps,
 } from "antd";
 
@@ -110,3 +111,11 @@ export interface ProgressBarProps {
   duration: number;
   type: NotificationTypes;
 }
+
+export type DropDownProps = {
+  name: string;
+  stopPropagation?: boolean;
+  enableResponsiveTags?: boolean;
+  label?: string;
+  showCheckboxes?: boolean;
+} & SelectProps;

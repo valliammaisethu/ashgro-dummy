@@ -4,8 +4,11 @@
   color: $danger-color;
   display: flex;
   gap: 0.4rem;
-  align-items: center;
   font-size: 1.2rem;
   font-weight: 400;
   font-family: $font-secondary;
+
+  svg {
+    padding-top: 0.3rem;
+  }
 }

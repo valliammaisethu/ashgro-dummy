@@ -19,6 +19,8 @@ import { appComponentsValidation } from "./validation";
 
 import styles from "./appComponents.module.scss";
 import PasswordField from "src/shared/components/PasswordField";
+import PhoneNumberField from "src/shared/components/PhoneNumberInput";
+import SelectField from "src/shared/components/SelectField";
 
 const AppComponents: FC = () => {
   const renderSuccessNotification = () => {
@@ -96,6 +98,22 @@ const AppComponents: FC = () => {
             </Col>
             <Col span={12}>
               <SwitchField name="switchFields" />
+            </Col>
+            <Col span={12}>
+              <PhoneNumberField name="phone" phoneCodeName="code" />
+            </Col>
+            <Col span={12}>
+              <SelectField
+                name="selectField"
+                options={AppComponentsConstants.OPTIONS}
+              />
+            </Col>
+            <Col span={12}>
+              <SelectField
+                name="selectFields"
+                options={AppComponentsConstants.OPTIONS}
+                showCheckboxes
+              />
             </Col>
           </Row>
           <Button htmlType={HtmlButtonType.SUBMIT}>Submit</Button>
