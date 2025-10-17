@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./offline.module.scss";
-import { SharedComponentsConstants } from "../../../constants/sharedComponents";
+import { SharedComponentsConstants } from "src/constants/sharedComponents";
 
 interface OfflineProps {
   isOffline: boolean;
