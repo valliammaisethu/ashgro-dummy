@@ -16,11 +16,15 @@ import Checkbox from "src/shared/components/Checkbox";
 import { ProspectData } from "src/shared/types/sharedComponents.type";
 
 import styles from "./listing.module.scss";
+import { useQuery } from "@tanstack/react-query";
+import { ProspectsService } from "src/services/ProspectsService/prospects.service";
+import ConditionalRender from "src/shared/components/ConditionalRender";
 
 const ProspectsListing = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [prospects, setProspects] = useState<ProspectData[]>(mockProspects);
 
+  const { getProspects } = ProspectsService();
   const handleSelectAll = useCallback(
     (checked: boolean) => {
       setSelectedIds(toggleAllSelections(checked, prospects));
@@ -63,6 +67,8 @@ const ProspectsListing = () => {
     [prospects, selectedIds],
   );
 
+  const { data, isPending, isSuccess } = useQuery(getProspects());
+
   return (
     <div>
       <Header />
@@ -81,19 +87,24 @@ const ProspectsListing = () => {
             <div className={styles.sourceCol}>{TABLE_HEADERS.LEAD_SOURCE}</div>
             <div className={styles.statusCol}>{TABLE_HEADERS.LEAD_STATUS}</div>
           </div>
-
-          <div className={styles.tableBody}>
-            {prospects.map((prospect) => (
-              <ProspectRow
-                key={prospect.id}
-                prospect={prospect}
-                isSelected={selectedIds.includes(prospect.id)}
-                leadStatusOptions={leadStatusOptions}
-                onSelectChange={handleSelectOne}
-                onStatusChange={handleStatusChange}
-              />
-            ))}
-          </div>
+          <ConditionalRender
+            records={data?.data?.prospects}
+            isFetched={isSuccess}
+            isFetching={isPending}
+          >
+            <div className={styles.tableBody}>
+              {data?.data?.prospects?.filter(Boolean).map((prospect) => (
+                <ProspectRow
+                  key={prospect.id}
+                  prospect={prospect}
+                  isSelected={selectedIds.includes(prospect.id!)}
+                  leadStatusOptions={leadStatusOptions}
+                  onSelectChange={handleSelectOne}
+                  onStatusChange={handleStatusChange}
+                />
+              ))}
+            </div>
+          </ConditionalRender>
         </div>
       </div>
     </div>

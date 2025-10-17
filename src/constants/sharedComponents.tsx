@@ -122,3 +122,4 @@ export const axiosInstanceErrors = {
 
 export const defaultSearchPlaceholder = "Search by name";
 export const defaultFilterPlaceholder = "Filter";
+export const noDataFound = "No data found";

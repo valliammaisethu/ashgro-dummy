@@ -135,12 +135,16 @@
   background-color: $ashgro-navy;
 }
 
-.ant-checkbox .ant-checkbox-inner:after {
+.ant-checkbox:not(.ant-checkbox-indeterminate) .ant-checkbox-inner:after {
   top: 47%;
   inset-inline-start: 25%;
   width: 0.67rem;
   height: 1.34rem;
   border-top-left-radius: 0.2rem;
+}
+
+.ant-checkbox-indeterminate .ant-checkbox-inner:after {
+  background-color: $ashgro-navy;
 }
 
 /* Radio Group */
@@ -392,4 +396,7 @@
 }
 .ant-select-single .ant-select-selector .ant-select-selection-item {
   line-height: 1.3rem;
+}
+.ant-btn:not(:disabled):focus-visible {
+  outline: none;
 }
