@@ -4,4 +4,6 @@ export enum Icons {
   CLOSE_LARGE_LINE = "ri-close-large-line",
   CHECKBOX_FILL = "ri-checkbox-fill",
   SPAM_2_FILL = "ri-spam-2-fill",
+  CHECK_LINE = "ri-check-line",
+  CLOSE_FILL = "ri-close-fill",
 }
