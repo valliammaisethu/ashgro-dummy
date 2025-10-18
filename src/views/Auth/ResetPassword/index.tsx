@@ -1,4 +1,6 @@
 import React from "react";
+import { useMutation } from "@tanstack/react-query";
+import { FieldValues } from "react-hook-form";
 
 import logo from "src/assets/images/logo.webp";
 import { imageAlts } from "src/constants/imageAlts";
@@ -8,6 +10,7 @@ import PasswordField from "src/shared/components/PasswordField";
 import Button from "src/shared/components/Button";
 import useForm from "src/shared/components/UseForm";
 import useRedirect from "src/shared/hooks/useRedirect";
+import { AuthService } from "src/services/AuthService/auth.service";
 import {
   fields,
   labels,
@@ -35,8 +38,17 @@ const ResetPassword = () => {
   const password = methods.watch(newPassword);
   const { navigateToLogin } = useRedirect();
   const {
-    formState: { isValid, isDirty },
+    formState: { isDirty, isValid },
   } = methods;
+
+  const { resetPassword } = AuthService();
+
+  const { mutateAsync, isPending } = useMutation(resetPassword());
+
+  const handleSubmit = (values: FieldValues) =>
+    mutateAsync(values, {
+      onSuccess: navigateToLogin,
+    });
 
   return (
     <div className={styles.resetPasswordContainer}>
@@ -47,6 +59,7 @@ const ResetPassword = () => {
           methods={methods}
           validationSchema={validationSchema}
           className={styles.form}
+          onSubmit={handleSubmit}
         >
           <div className={styles.formFields}>
             <PasswordField
@@ -73,6 +86,7 @@ const ResetPassword = () => {
               htmlType={HtmlButtonType.SUBMIT}
               className={styles.submitButton}
               disabled={!isValid || !isDirty}
+              loading={isPending}
             >
               {RESET_PASSWORD}
             </Button>
