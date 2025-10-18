@@ -5,10 +5,12 @@ interface SingleRoute {
   component?: ReactNode;
   children?: SingleRoute[];
   index?: boolean;
+  hideTopBar?: boolean;
 }
 
 export interface RouterProps {
   path: string;
   component: ReactNode;
   children?: SingleRoute[];
+  hideTopBar?: boolean;
 }

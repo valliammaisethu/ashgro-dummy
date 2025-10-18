@@ -18,6 +18,7 @@ interface ProspectRowProps {
   leadStatusOptions: LeadStatusOption[];
   onSelectChange: (id: string, checked: boolean) => void;
   onStatusChange: (id: string, newStatus: string) => void;
+  onClick: () => void;
 }
 
 const ProspectRow: React.FC<ProspectRowProps> = ({
@@ -26,6 +27,7 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   leadStatusOptions,
   onSelectChange,
   onStatusChange,
+  onClick,
 }) => {
   const handleCheckboxChange = (e?: CheckboxChangeEvent) =>
     onSelectChange(prospect.id!, e?.target?.checked ?? false);
@@ -39,7 +41,7 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   );
 
   return (
-    <div className={styles.tableRow}>
+    <div onClick={onClick} className={styles.tableRow}>
       <div className={styles.checkboxCol}>
         <Checkbox checked={isSelected} onChange={handleCheckboxChange} />
       </div>

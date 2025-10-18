@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Button as AntButton } from "antd";
+import { Button as AntButton, Tooltip } from "antd";
 import clsx from "clsx";
 
 import {
@@ -11,14 +11,17 @@ import { mapToAntdType } from "src/shared/utils/mapButtonType";
 import { ButtonProps } from "src/shared/types/sharedComponents.type";
 
 import styles from "./button.module.scss";
+import { tooltipPosition } from "src/enums/tooltipPosition";
+import { Colors } from "src/enums/colors.enum";
 
 const Button: FC<ButtonProps> = ({
   children,
   className,
   moduleClassName,
-  type = ButtonTypes.PRIMARY,
+  type = ButtonTypes.DEFAULT,
   size = ButtonSizes.MEDIUM,
   htmlType = HtmlButtonType.BUTTON,
+  tooltip,
   ...restProps
 }) => {
   const antType = mapToAntdType(type);
@@ -31,7 +34,7 @@ const Button: FC<ButtonProps> = ({
     className,
   );
 
-  return (
+  const buttonElement = (
     <AntButton
       {...restProps}
       htmlType={htmlType}
@@ -40,6 +43,23 @@ const Button: FC<ButtonProps> = ({
     >
       {children}
     </AntButton>
+  );
+
+  if (!tooltip) {
+    return buttonElement;
+  }
+
+  const tooltipProps =
+    typeof tooltip === "string" ? { title: tooltip } : tooltip;
+
+  return (
+    <Tooltip
+      {...tooltipProps}
+      color={Colors.ASHGRO_BLACK}
+      placement={tooltipPosition.BOTTOM}
+    >
+      {buttonElement}
+    </Tooltip>
   );
 };
 

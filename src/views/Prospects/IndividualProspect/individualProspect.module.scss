@@ -1,0 +1,264 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.individualProspect {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+
+  .card {
+    margin-top: 2rem;
+    padding: 1.4rem;
+    display: flex;
+    gap: 2rem;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+
+    .leftSide {
+      flex: 1;
+      min-width: 0;
+      padding-left: 4rem;
+      overflow-y: auto;
+
+      .header {
+        @include flex-container(flex-end, center, row, 1rem);
+        margin-top: 2rem;
+        .editButton {
+          background-color: $search-bg;
+          border-color: transparent;
+          color: $filter-icon;
+          padding: 2rem 1rem;
+          border-radius: 1.6rem;
+
+          &:hover {
+            background-color: $search-bg !important;
+            color: $filter-icon !important;
+            border-color: transparent !important;
+          }
+        }
+
+        .deleteButton {
+          background-color: $search-bg;
+          border-color: transparent;
+          color: $filter-icon;
+          padding: 2rem 1rem;
+          border-radius: 1.6rem;
+
+          &:hover {
+            background-color: $search-bg !important;
+            color: $filter-icon !important;
+            border-color: transparent !important;
+          }
+        }
+      }
+      .content {
+        .top {
+          display: flex;
+          align-items: center;
+          gap: 3.2rem;
+          .left {
+            .prospectImage {
+              width: 18.2rem;
+              height: 18.2rem;
+              border-radius: 50%;
+              object-fit: cover;
+            }
+          }
+          .right {
+            .name {
+              color: $ashgro-navy;
+              font-size: 3.2rem;
+              font-family: $font-primary;
+            }
+            .details {
+              margin-top: 0.5rem;
+              .dateTitle {
+                color: $ashgro-gold;
+                font-size: 1.4rem;
+                font-family: $font-secondary;
+              }
+              .date {
+                color: $ashgro-navy;
+                font-weight: 600;
+                font-size: 1.6rem;
+                font-family: $font-secondary;
+              }
+            }
+            .email {
+              display: flex;
+              align-items: center;
+              gap: 3.2rem;
+              margin-top: 2rem;
+              .iconContainer {
+                display: flex;
+                align-items: center;
+                gap: 0.8rem;
+              }
+              .mail {
+                color: $ashgro-blue;
+                font-size: 1.6rem;
+                font-family: $font-secondary;
+              }
+              .phone {
+                color: $ashgro-navy;
+                font-size: 1.6rem;
+                font-family: $font-secondary;
+              }
+            }
+          }
+        }
+        .bottom {
+          margin-top: 5.4rem;
+          display: flex;
+          flex-flow: column nowrap;
+          gap: 4rem;
+          .container {
+            display: flex;
+            align-items: center;
+            gap: 8.4rem;
+            margin-top: 1.2rem;
+          }
+          .details {
+            .title {
+              color: $add-icon-bg;
+              font-size: 1.6rem;
+              font-family: $font-secondary;
+            }
+            .subDetails {
+              .title {
+                color: $subdetails-title;
+                font-size: 1.3rem;
+                font-family: $font-secondary;
+              }
+              .value {
+                margin-top: 0.2rem;
+                color: $ashgro-navy;
+                font-size: 1.6rem;
+                font-weight: 600;
+                font-family: $font-secondary;
+              }
+            }
+          }
+        }
+      }
+    }
+    .rightSide {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid $activity-border;
+      padding: 2rem 2.4rem;
+      border-radius: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+
+      .activityContainer {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        .header {
+          display: flex;
+          align-items: center;
+
+          .activity {
+            font-size: 2rem;
+            font-family: $font-primary;
+            color: $ashgro-navy;
+          }
+          .buttons {
+            @include flex-flow(row, wrap, center);
+            gap: 1.2rem;
+
+            .messageButton,
+            .addButton {
+              padding: 2rem 1rem;
+              border-radius: 1.6rem;
+              background-color: $search-bg;
+              color: $filter-icon;
+
+              &:hover {
+                background-color: $search-bg;
+                color: $filter-icon;
+              }
+            }
+            .addButton {
+              background-color: $add-icon-bg;
+              color: $ashgro-white;
+
+              &:hover {
+                background-color: $add-icon-bg;
+                color: $ashgro-white;
+              }
+            }
+          }
+        }
+        .activityCard {
+          margin-top: 1.4rem;
+          background-color: $activity-card;
+          padding: 1.4rem 2.4rem;
+          .title {
+            font-weight: 600;
+            font-family: $font-secondary;
+            font-size: 1.4rem;
+            color: $activity-title;
+          }
+          .content {
+            margin-top: 1.2rem;
+            color: $activity-content;
+            font-weight: 400;
+            font-size: 1.4rem;
+            font-family: $font-secondary;
+          }
+        }
+      }
+    }
+  }
+}
+
+.header {
+  @include flex-container(space-between, center, row);
+
+  .headerLeft {
+    @include flex-flow(row, nowrap, center);
+    gap: 0.4rem;
+  }
+
+  .backText {
+    color: $ashgro-navy;
+    font-weight: 600;
+    font-size: 1.4rem;
+    font-family: $font-secondary;
+  }
+
+  .headerRight {
+    @include flex-flow(row, nowrap, center);
+    gap: 1.6rem;
+
+    .meetingButton {
+      border-radius: 1.4rem;
+      background-color: $search-bg;
+      color: $filter-icon;
+      padding: 2rem 1rem;
+
+      &:hover {
+        border-radius: 1.4rem;
+        background-color: $search-bg !important;
+        color: $filter-icon !important;
+      }
+    }
+
+    .emailButton {
+      background-color: transparent;
+      border-radius: 3.6rem;
+      padding: 2rem;
+    }
+
+    .memberButton {
+      border-radius: 3.6rem;
+      padding: 2rem;
+    }
+  }
+}

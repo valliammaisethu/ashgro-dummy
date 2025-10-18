@@ -8,6 +8,7 @@ export const NavigationRoutes = {
   FORGOT_PASSWORD: "/auth/forgot-password",
 
   PROSPECTS_LISTING: "/home/prospects",
+  INDIVIDUAL_PROSPECT: "/home/prospects/:id",
 };
 
 export const AppRoutes = {
@@ -21,6 +22,7 @@ export const AppRoutes = {
 
   DASHBOARD: "/home/dashboard",
   PROSPECTS_LISTING: "/home/prospects",
+  INDIVIDUAL_PROSPECT: "/home/prospects/:id",
   CALENDAR: "/home/calendar",
   MEMBERS: "/home/members",
   CLUB_STAFF: "/home/club-staff",

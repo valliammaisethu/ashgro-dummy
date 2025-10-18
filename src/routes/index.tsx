@@ -2,6 +2,8 @@ import React from "react";
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 
 import AppLayout from "../shared/components/AppLayout";
+import RouteWrapper from "../shared/components/RouteWrapper";
+import { TopBarProvider } from "../shared/contexts/TopBarContext";
 import isAuthenticated from "../shared/components/HOC/requireAuth";
 import NotFound from "../shared/components/FallbackPage";
 import { AppRoutes } from "./routeConstants/appRoutes";
@@ -9,6 +11,7 @@ import { RouterProps } from "../shared/types/route.type";
 import AuthWrapper from "../views/Auth/AuthWrapper";
 import AppComponents from "../views/AppComponents";
 import ProspectsListing from "../views/Prospects/Listing";
+import IndividualProspect from "src/views/Prospects/IndividualProspect";
 
 const AppRouter = () => {
   const routes: RouterProps[] = [
@@ -42,33 +45,44 @@ const AppRouter = () => {
           path: AppRoutes.SETTINGS,
           component: <ProspectsListing />,
         },
+        {
+          path: AppRoutes.INDIVIDUAL_PROSPECT,
+          component: <IndividualProspect />,
+          hideTopBar: true,
+        },
       ],
     },
   ];
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={<Navigate to={AppRoutes.PROSPECTS_LISTING} replace />}
-        />
+      <TopBarProvider>
+        <Routes>
+          <Route
+            path="/"
+            element={<Navigate to={AppRoutes.PROSPECTS_LISTING} replace />}
+          />
 
-        {routes.map((route, index) => (
-          <Route key={index} path={route.path} element={route.component}>
-            {route.children &&
-              route.children.map((childRoute) => (
-                <Route
-                  key={childRoute.path}
-                  path={childRoute.path}
-                  element={childRoute.component}
-                />
-              ))}
-          </Route>
-        ))}
+          {routes.map((route, index) => (
+            <Route key={index} path={route.path} element={route.component}>
+              {route.children &&
+                route.children.map((childRoute) => (
+                  <Route
+                    key={childRoute.path}
+                    path={childRoute.path}
+                    element={
+                      <RouteWrapper hideTopBar={childRoute.hideTopBar}>
+                        {childRoute.component}
+                      </RouteWrapper>
+                    }
+                  />
+                ))}
+            </Route>
+          ))}
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </TopBarProvider>
     </BrowserRouter>
   );
 };

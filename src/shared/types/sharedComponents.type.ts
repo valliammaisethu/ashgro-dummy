@@ -12,6 +12,7 @@ import { ButtonSize } from "antd/es/button";
 import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
 import { Placement } from "src/enums/placement.enum";
+import { tooltipPosition } from "src/enums/tooltipPosition";
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
   phoneCodeName: string;
@@ -81,6 +82,14 @@ export interface CheckboxFieldProps extends CheckboxProps {
   label?: string;
 }
 
+export interface ButtonTooltipProps {
+  title: string;
+  placement?: tooltipPosition;
+  trigger?: "hover" | "focus" | "click";
+  color?: string;
+  arrowPointAtCenter?: boolean;
+}
+
 export interface ButtonProps {
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   children: ReactNode;
@@ -95,6 +104,7 @@ export interface ButtonProps {
   name?: string;
   target?: string;
   href?: string;
+  tooltip?: string | ButtonTooltipProps;
 }
 
 export interface INotification {
@@ -130,4 +140,9 @@ export interface ProspectData {
     label: string;
     color: string;
   };
+}
+
+export class CardProps {
+  children: ReactNode;
+  className?: string;
 }
