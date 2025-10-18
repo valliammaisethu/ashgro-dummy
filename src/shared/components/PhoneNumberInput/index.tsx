@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { AsYouType } from "libphonenumber-js";
-import InputField from "../InputField";
-import DropdownField from "../DropdownField";
-import styles from "./phoneNumberInput.module.scss";
-import { PhoneNumberFieldProps } from "../../types/sharedComponents.type";
-import { getPhoneCodeOptions } from "../../utils/phoneNumberUtils";
-import { INPUT_TYPE } from "../../../enums/inputType";
-import { getDigitsOnly } from "../../utils/parser";
-import { phoneNumberData } from "../../../constants/phoneNumberData";
+import { AsYouType, CountryCode } from "libphonenumber-js";
+
+import { INPUT_TYPE } from "src/enums/inputType";
+import { phoneNumberData } from "src/constants/phoneNumberData";
 import { USPhoneCode } from "src/constants/sharedComponents";
+import { getDigitsOnly } from "src/shared/utils/parser";
+import { getPhoneCodeOptions } from "src/shared/utils/phoneNumberUtils";
+import { PhoneNumberFieldProps } from "src/shared/types/sharedComponents.type";
+
+import InputField from "../InputField";
+import DropdownField from "../Dropdown";
+
+import styles from "./phoneNumberInput.module.scss";
+import Label from "../Label";
 
 const PhoneNumberField = ({
   phoneCodeName,
@@ -19,41 +23,38 @@ const PhoneNumberField = ({
 }: PhoneNumberFieldProps) => {
   const { watch, setValue } = useFormContext();
 
-  const selectedIsoCode = watch(phoneCodeName);
-  const phoneValue = watch(name);
+  const { [phoneCodeName]: selectedIsoCode, [name]: phoneValue } = watch();
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const formatAndSetPhoneNumber = (input: string, selectedIsoCode?: string) => {
     if (!selectedIsoCode) return;
 
-    const raw = getDigitsOnly(e.target.value);
-
-    const formatted = new AsYouType(selectedIsoCode).input(raw ?? "");
+    const raw = getDigitsOnly(input);
+    const formatted = new AsYouType(selectedIsoCode as CountryCode).input(raw);
     setValue(name, formatted, { shouldValidate: true });
   };
-  /// TODO: Search has to be implemented after BE API
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    formatAndSetPhoneNumber(e.target.value, selectedIsoCode);
+  };
+
   const [, setSearchText] = useState<string>("");
 
   const handleOnSearch = (value: string) => setSearchText(value);
 
   useEffect(() => {
-    if (!selectedIsoCode || !phoneValue) return;
-
-    const raw = getDigitsOnly(phoneValue);
-    const formatted = new AsYouType(selectedIsoCode).input(raw ?? "");
-    setValue(name, formatted);
+    formatAndSetPhoneNumber(phoneValue, selectedIsoCode);
   }, [selectedIsoCode]);
 
   return (
     <div className={styles.wrapper}>
-      <label>{label}</label>
+      <Label className={styles.label} htmlFor={name}>
+        {label}
+      </Label>
       <div className={styles.inputWrapper}>
         <div className={styles.dropDownWrapper}>
           <DropdownField.RHF
             name={phoneCodeName}
-            options={getPhoneCodeOptions(
-              phoneNumberData.data.mobileCodes,
-              styles.phoneCode,
-            )}
+            options={getPhoneCodeOptions(phoneNumberData.data.mobileCodes)}
             className={styles.dropDown}
             showSearch
             defaultValue={USPhoneCode}
@@ -69,6 +70,7 @@ const PhoneNumberField = ({
           onChange={handlePhoneChange}
           disabled={!selectedIsoCode}
           inputMode={INPUT_TYPE.TEL}
+          className={styles.phoneInput}
         />
       </div>
     </div>

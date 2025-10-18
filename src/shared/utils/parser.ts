@@ -7,6 +7,6 @@ export const parseNumber = (val: unknown, defaultValue = 0) => {
 };
 
 export const getDigitsOnly = (val?: string) => {
-  if (!val) return;
+  if (!val) return "";
   return val.replace(REGEX.DIGITS, "");
 };

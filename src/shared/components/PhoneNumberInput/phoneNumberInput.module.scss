@@ -1,16 +1,16 @@
 @import "src/styles/variables";
+@import "src/styles/_helpers.scss";
 
 .wrapper {
-  display: flex;
-  flex-flow: column;
+  @include flex-container(normal, normal, column);
 
-  label {
+  .label {
     font-size: 1.2rem;
-    margin: 0 0 0.6rem 1.6rem;
+    margin-bottom: 0.4rem;
   }
 
   .dropDownWrapper {
-    div {
+    :global(.ant-select) {
       height: 4rem;
     }
     :global {
@@ -60,10 +60,10 @@
 }
 
 .phoneCode {
-  display: flex;
+  @include flex-container(normal, center, row);
   gap: 0.9rem;
-  align-items: center;
-  span {
+
+  .flag {
     font-size: 1.6rem;
   }
 }
@@ -72,11 +72,10 @@
   width: 10.9rem;
 }
 .inputWrapper {
-  display: flex;
+  @include flex-container(normal, normal, row);
   width: 100%;
 
-  input {
-    height: 4rem;
+  .phoneInput {
     &:disabled {
       background-color: $input-background;
     }

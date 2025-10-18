@@ -100,7 +100,11 @@ const AppComponents: FC = () => {
               <SwitchField name="switchFields" />
             </Col>
             <Col span={12}>
-              <PhoneNumberField name="phone" phoneCodeName="code" />
+              <PhoneNumberField
+                label="Phone Code"
+                name="phone"
+                phoneCodeName="code"
+              />
             </Col>
             <Col span={12}>
               <SelectField

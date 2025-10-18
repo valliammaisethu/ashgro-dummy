@@ -15,7 +15,11 @@ const Notification = ({
   duration = 4.5,
   placement = Placement.BOTTOM,
 }: INotification): void => {
-  const combinedClass = clsx(styles.customNotification, styles[type]);
+  const combinedClass = clsx(
+    styles.customNotification,
+    styles[type],
+    description && styles.withDescription,
+  );
 
   if (window.innerWidth <= 768) {
     MobileNotification[type]({

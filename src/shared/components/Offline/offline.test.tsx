@@ -1,7 +1,7 @@
 import React from "react";
 import renderWithContext from "../../utils/renderWithContext";
 import Offline from ".";
-import { SharedComponentsConstants } from "../../../constants/sharedComponents";
+import { SharedComponentsConstants } from "src/constants/sharedComponents";
 
 describe("<Offline />", () => {
   it("Should Render Error Message When offline is true", () => {

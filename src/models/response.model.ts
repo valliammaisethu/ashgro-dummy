@@ -6,4 +6,7 @@ export class ResponseModel {
 
   @serializable
   description?: string;
+
+  @serializable
+  success?: boolean;
 }
