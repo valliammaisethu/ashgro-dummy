@@ -1,72 +1,40 @@
-import React, { useEffect, useState } from "react";
 import { notification, message as MobileNotification } from "antd";
 import { ArgsProps } from "antd/lib/message";
 import clsx from "clsx";
 
-import { Icons } from "src/enums/icons.enum";
 import { Placement } from "src/enums/placement.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
-import { getNotificationIcon } from "src/shared/utils/renderNotificationColor";
-import {
-  INotification,
-  ProgressBarProps,
-} from "src/shared/types/sharedComponents.type";
+import { INotification } from "src/shared/types/sharedComponents.type";
 
 import styles from "./notification.module.scss";
-
-const ProgressBar: React.FC<ProgressBarProps> = ({ duration, type }) => {
-  const [percent, setPercent] = useState(100);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setPercent(0), 10);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <div className={styles.successNotificationOuter}>
-      <div
-        className={clsx(styles.successNotificationInner, styles[type])}
-        style={{
-          width: `${percent}%`,
-          transition: `width ${duration}s linear`,
-        }}
-      />
-    </div>
-  );
-};
 
 const Notification = ({
   title,
   description,
   type = NotificationTypes.SUCCESS,
-  showProgress = true,
   duration = 4.5,
   placement = Placement.BOTTOM,
 }: INotification): void => {
+  const combinedClass = clsx(
+    styles.customNotification,
+    styles[type],
+    description && styles.withDescription,
+  );
+
   if (window.innerWidth <= 768) {
     MobileNotification[type]({
       content: title,
+      className: combinedClass,
     } as ArgsProps);
     return;
   }
 
-  const descriptionWithProgress = showProgress ? (
-    <div className={styles.notificationDescription}>
-      <div className={styles.notificationDescriptionText}>{description}</div>
-      <ProgressBar duration={duration} type={type} />
-    </div>
-  ) : (
-    description
-  );
-
   notification[type]({
     placement,
     message: title,
-    description: descriptionWithProgress,
-    duration: duration,
-    pauseOnHover: true,
-    icon: getNotificationIcon(type),
-    closeIcon: <i className={clsx(Icons.CLOSE_LARGE_LINE, styles.closeIcon)} />,
+    description,
+    duration,
+    className: combinedClass,
   });
 };
 

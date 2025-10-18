@@ -1,30 +1,30 @@
-import clsx from "clsx";
 import React, { MouseEventHandler } from "react";
+import {
+  IconEye,
+  IconEyeClose,
+  IconEyeFill,
+  IconEyeOff,
+} from "obra-icons-react";
 
-import { Icons } from "src/enums/icons.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { HandlePasswordChangeParams } from "src/shared/types/sharedComponents.type";
 import { passwordAsterisk } from "src/constants/sharedComponents";
 
-import styles from "../../InputField/inputField.module.scss";
-
 const { TEXT, PASSWORD } = INPUT_TYPE;
-const { EYE_LINE, EYE_OFF_LINE } = Icons;
 
 export const inputType = (showPassword: boolean) =>
   showPassword ? TEXT : PASSWORD;
 
 export const iconClass = (showPassword: boolean) =>
-  showPassword ? EYE_LINE : EYE_OFF_LINE;
+  showPassword ? <IconEyeFill /> : <IconEyeClose />;
 
 export const passwordSuffix = (
   showPassword: boolean,
   togglePasswordVisibility: MouseEventHandler,
 ) => (
-  <i
-    className={clsx(iconClass(showPassword), styles.passwordSuffix)}
-    onClick={togglePasswordVisibility}
-  />
+  <span onClick={togglePasswordVisibility}>
+    {showPassword ? <IconEye /> : <IconEyeOff />}
+  </span>
 );
 
 export const handlePasswordChange = ({

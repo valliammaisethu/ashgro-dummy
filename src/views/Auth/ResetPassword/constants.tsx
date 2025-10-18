@@ -10,10 +10,11 @@ export const labels = {
 export const fields = {
   newPassword: "newPassword",
   confirmPassword: "confirmPassword",
-};
+} as const;
 
 export const placeholders = {
   newPassword: "Enter new password",
+  confirmPassword: "Confirm new password",
 };
 
 export const passwordConstraintContent: {

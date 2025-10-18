@@ -1,10 +1,11 @@
 import React from "react";
-import { Icons } from "src/enums/icons.enum";
 import { passwordCriteriaMap, passwordConstraintContent } from "../constants";
 import styles from "../resetPassword.module.scss";
+import { IconCheck, IconClose } from "obra-icons-react";
+import { Colors } from "src/enums/colors.enum";
 
 export interface PasswordValidationProps {
-  password: string;
+  password?: string;
 }
 
 const getMatchedCriteria = (password: string): string[] => {
@@ -19,7 +20,7 @@ const getMatchedCriteria = (password: string): string[] => {
 };
 
 const PasswordValidation: React.FC<PasswordValidationProps> = ({
-  password,
+  password = "",
 }) => {
   const matchedCriteria = getMatchedCriteria(password);
   const hasPasswordInput = password && password.trim() !== "";
@@ -39,9 +40,17 @@ const PasswordValidation: React.FC<PasswordValidationProps> = ({
             {password && (
               <span className={styles.criteriaIcon}>
                 {isMatched(child.name) ? (
-                  <i className={Icons.CHECK_LINE}></i>
+                  <IconCheck
+                    color={Colors.TICK_COLOR}
+                    size={14}
+                    strokeWidth={1.25}
+                  />
                 ) : (
-                  <i className={Icons.CLOSE_FILL}></i>
+                  <IconClose
+                    color={Colors.ERROR_NOTIFICATION}
+                    size={14}
+                    strokeWidth={1.25}
+                  />
                 )}
               </span>
             )}

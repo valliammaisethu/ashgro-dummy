@@ -23,7 +23,10 @@ import PasswordValidation from "./PasswordValidation";
 import styles from "./resetPassword.module.scss";
 
 const { confirmPassword, newPassword } = fields;
-const { newPassword: newPasswordPlaceholder } = placeholders;
+const {
+  newPassword: newPasswordPlaceholder,
+  confirmPassword: confirmPasswordPlaceholder,
+} = placeholders;
 const { newPassword: newPasswordLabel, confirmPassword: confirmPasswordLabel } =
   labels;
 const { BACK_TO_LOGIN, RESET_PASSWORD } = Buttons;
@@ -32,14 +35,12 @@ const ResetPassword = () => {
   const methods = useForm({
     validationSchema: validationSchema,
   });
-
+  const password = methods.watch(newPassword);
+  const { navigateToLogin } = useRedirect();
   const {
     formState: { isDirty, isValid },
   } = methods;
 
-  const password = methods.watch("newPassword");
-
-  const { navigateToLogin } = useRedirect();
   const { resetPassword } = AuthService();
 
   const { mutateAsync, isPending } = useMutation(resetPassword());
@@ -66,9 +67,9 @@ const ResetPassword = () => {
               name={newPassword}
               label={newPasswordLabel}
             />
-            <PasswordValidation password={password || ""} />
+            <PasswordValidation password={password} />
             <PasswordField
-              placeholder={newPasswordPlaceholder}
+              placeholder={confirmPasswordPlaceholder}
               name={confirmPassword}
               label={confirmPasswordLabel}
             />
