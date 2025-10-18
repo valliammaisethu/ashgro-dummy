@@ -10,6 +10,7 @@ import Error from "../Error";
 import Label from "../Label";
 
 import styles from "src/shared/components/InputField/inputField.module.scss";
+import { AutoComplete } from "src/enums/autoComplete.enum";
 
 interface PasswordFieldProps extends InputProps {
   name: string;
@@ -61,6 +62,9 @@ const PasswordField: FC<PasswordFieldProps> = ({ name, label, ...rest }) => {
           passwordState.showPassword,
           togglePasswordVisibility,
         )}
+        autoComplete={AutoComplete.OFF}
+        autoCorrect={AutoComplete.OFF}
+        spellCheck={false}
       />
 
       {fieldState.error && <Error message={fieldState.error.message} />}

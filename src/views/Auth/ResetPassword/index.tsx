@@ -1,4 +1,6 @@
 import React from "react";
+import { useMutation } from "@tanstack/react-query";
+import { FieldValues } from "react-hook-form";
 
 import logo from "src/assets/images/logo.webp";
 import { imageAlts } from "src/constants/imageAlts";
@@ -8,6 +10,7 @@ import PasswordField from "src/shared/components/PasswordField";
 import Button from "src/shared/components/Button";
 import useForm from "src/shared/components/UseForm";
 import useRedirect from "src/shared/hooks/useRedirect";
+import { AuthService } from "src/services/AuthService/auth.service";
 import {
   fields,
   labels,
@@ -23,16 +26,28 @@ const { confirmPassword, newPassword } = fields;
 const { newPassword: newPasswordPlaceholder } = placeholders;
 const { newPassword: newPasswordLabel, confirmPassword: confirmPasswordLabel } =
   labels;
+const { BACK_TO_LOGIN, RESET_PASSWORD } = Buttons;
 
 const ResetPassword = () => {
   const methods = useForm({
     validationSchema: validationSchema,
   });
-  const password = methods.watch("newPassword");
-  const { navigateToLogin } = useRedirect();
+
   const {
-    formState: { isValid, isDirty },
+    formState: { isDirty, isValid },
   } = methods;
+
+  const password = methods.watch("newPassword");
+
+  const { navigateToLogin } = useRedirect();
+  const { resetPassword } = AuthService();
+
+  const { mutateAsync, isPending } = useMutation(resetPassword());
+
+  const handleSubmit = (values: FieldValues) =>
+    mutateAsync(values, {
+      onSuccess: navigateToLogin,
+    });
 
   return (
     <div className={styles.resetPasswordContainer}>
@@ -43,6 +58,7 @@ const ResetPassword = () => {
           methods={methods}
           validationSchema={validationSchema}
           className={styles.form}
+          onSubmit={handleSubmit}
         >
           <div className={styles.formFields}>
             <PasswordField
@@ -63,14 +79,15 @@ const ResetPassword = () => {
               type={ButtonTypes.SECONDARY_TWO}
               onClick={navigateToLogin}
             >
-              {Buttons.BACK_TO_LOGIN}
+              {BACK_TO_LOGIN}
             </Button>
             <Button
               htmlType={HtmlButtonType.SUBMIT}
               className={styles.submitButton}
               disabled={!isValid || !isDirty}
+              loading={isPending}
             >
-              {Buttons.RESET_PASSWORD}
+              {RESET_PASSWORD}
             </Button>
           </div>
         </Form>
