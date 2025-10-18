@@ -18,9 +18,9 @@ import {
   resetPasswordConstants,
 } from "./constants";
 import { validationSchema } from "./validation";
+import PasswordValidation from "./PasswordValidation";
 
 import styles from "./resetPassword.module.scss";
-import PasswordValidation from "./PasswordValidation";
 
 const { confirmPassword, newPassword } = fields;
 const { newPassword: newPasswordPlaceholder } = placeholders;
@@ -46,7 +46,7 @@ const ResetPassword = () => {
 
   const handleSubmit = (values: FieldValues) =>
     mutateAsync(values, {
-      onSuccess: () => navigateToLogin(),
+      onSuccess: navigateToLogin,
     });
 
   return (
