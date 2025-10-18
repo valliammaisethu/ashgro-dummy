@@ -3,6 +3,8 @@ export enum Buttons {
   CONFIRM_EMAIL = "Confirm email",
   BULK_MAIL = "Bulk Mail",
   ADD_PROSPECT = "Add Prospect",
+  BACK_TO_LOGIN = "Back to Login",
+  RESET_PASSWORD = "Reset Password",
 }
 
 export enum HtmlButtonType {

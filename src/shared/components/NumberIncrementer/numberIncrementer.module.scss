@@ -1,11 +1,12 @@
-@use "src/styles/variables" as *;
+@import "src/styles/variables";
 
 .wrapper {
-  height: 4.4rem;
-  border: 1px solid $button-stroke;
+  height: 4rem;
+  border: 1px solid $incrementer-border;
   display: flex;
   justify-content: space-between;
-  border-radius: 2px;
+  border-radius: 1.2rem;
+  background-color: $input-background;
   width: 100%;
 
   &.disabled {
@@ -15,11 +16,11 @@
 
   .decrementer,
   .incrementer {
-    padding: 1rem 2.1rem;
+    padding: 0.6rem 2.1rem;
     text-align: center;
     cursor: pointer;
     position: relative;
-    background: transparent;
+    background: $input-background;
     border: none;
 
     i::before {
@@ -33,7 +34,7 @@
   }
 
   .value {
-    padding: 1rem 2.1rem;
+    padding: 0.9rem 2.1rem;
     color: $ashgro-black;
     font-size: 1.4rem;
   }
@@ -45,7 +46,7 @@
       height: 2.4rem;
       background-color: $button-stroke;
       position: absolute;
-      top: 1rem;
+      top: 0.7rem;
       right: 0;
     }
     &:disabled {
@@ -60,7 +61,7 @@
       height: 2.4rem;
       background-color: $button-stroke;
       position: absolute;
-      top: 1rem;
+      top: 0.7rem;
       left: 0;
     }
     &:disabled {

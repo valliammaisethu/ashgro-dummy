@@ -9,12 +9,10 @@ import Button from "src/shared/components/Button";
 import PasswordField from "src/shared/components/PasswordField";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { Buttons, HtmlButtonType } from "src/enums/buttons.enum";
-
 import { AuthService } from "src/services/AuthService/auth.service";
-
+import useRedirect from "src/shared/hooks/useRedirect";
 import logo from "src/assets/images/logo.webp";
 import { imageAlts } from "src/constants/imageAlts";
-import useRedirect from "src/shared/hooks/useRedirect";
 import { fields, labels, loginFormConstants, placeholders } from "./constants";
 import { validationSchema } from "./LoginValidation";
 

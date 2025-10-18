@@ -1,4 +1,10 @@
-import { ComponentProps, CSSProperties, MouseEvent, ReactNode } from "react";
+import {
+  ChangeEvent,
+  ComponentProps,
+  CSSProperties,
+  MouseEvent,
+  ReactNode,
+} from "react";
 import {
   CheckboxChangeEvent,
   CheckboxOptionType,
@@ -101,9 +107,9 @@ export interface INotification {
   title?: string;
   description?: string;
   type?: NotificationTypes;
-  showProgress?: boolean;
   duration?: number;
   placement?: Placement;
+  className?: string;
 }
 
 export interface ProgressBarProps {
@@ -130,4 +136,11 @@ export interface ProspectData {
     label: string;
     color: string;
   };
+}
+export interface HandlePasswordChangeParams {
+  e: ChangeEvent<HTMLInputElement>;
+  realValue: string;
+  setRealValue: (value: string) => void;
+  setMaskedValue: (value: string) => void;
+  onChange: (value: string) => void;
 }
