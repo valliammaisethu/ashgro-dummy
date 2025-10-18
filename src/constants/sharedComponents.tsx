@@ -60,6 +60,7 @@ export const getFileSuccessMessage = (name?: string) =>
 export const getFileErrorMessage = (name?: string) =>
   `${name} file upload failed.`;
 
+export const passwordAsterisk = "*";
 export const topBarItems = [
   {
     title: TopBarItems.DASHBOARD,
