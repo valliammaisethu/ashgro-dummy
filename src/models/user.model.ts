@@ -53,3 +53,8 @@ export class LoginResponse extends ResponseModel {
   @serializable(object(LoginData))
   data?: LoginData;
 }
+
+export class ResetPassword {
+  @serializable
+  newPassword?: string;
+}

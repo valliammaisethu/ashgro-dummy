@@ -1,4 +1,5 @@
 export enum Colors {
   SUCCESS_NOTIFICATION = "#8BC34A",
   ERROR_NOTIFICATION = "#FF3838",
+  TICK_COLOR = "#599F07",
 }

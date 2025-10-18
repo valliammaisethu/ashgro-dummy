@@ -4,6 +4,16 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
+
+  .homeLogo {
+    width: 3.6rem;
+    height: 3.8rem;
+  }
+
+  .textLogo {
+    height: 3.1rem;
+    width: 8rem;
+  }
 }
 
 .topBar {

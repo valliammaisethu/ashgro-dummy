@@ -5,21 +5,31 @@ import axiosInstance from "src/interceptor/axiosInstance";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { MutationKeys } from "src/enums/cacheEvict.enum";
-import { LoginRequest, LoginResponse } from "src/models/user.model";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import {
+  LoginRequest,
+  LoginResponse,
+  ResetPassword,
+} from "src/models/user.model";
 import { ResponseModel } from "src/models/response.model";
 import { AuthContext } from "src/context/AuthContext";
-import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
+const { USER_LOGIN, FORGOT_PASSWORD, RESET_PASSWORD } = ApiRoutes;
+const {
+  LOGIN,
+  FORGOT_PASSWORD: FORGOT_PASSWORD_KEY,
+  RESET_PASSWORD: RESET_PASSWORD_KEY,
+} = MutationKeys;
+
 export const AuthService = () => {
-  const { USER_LOGIN, FORGOT_PASSWORD } = ApiRoutes;
   const { setAuthenticated } = AuthContext();
   const loginUser = (): UseMutationOptions<
     LoginResponse,
     ResponseModel,
     LoginRequest
   > => ({
-    mutationKey: [MutationKeys.LOGIN],
+    mutationKey: [LOGIN],
     mutationFn: async (user: LoginRequest) => {
       const serializedData = serialize(LoginRequest, user);
       const response = await axiosInstance.post(USER_LOGIN, {
@@ -29,8 +39,8 @@ export const AuthService = () => {
       return deserialize(LoginResponse, response.data);
     },
     onSuccess: (response) => {
-      const { title, description } = response;
-      setAuthenticated(response?.data?.user, response?.data?.token);
+      const { data, title, description } = response;
+      setAuthenticated(data?.user, response?.data?.token);
       localStorageHelper.setItem(LocalStorageKeys.USER, response?.data?.user);
       localStorageHelper.setItem(LocalStorageKeys.TOKEN, response?.data?.token);
       renderNotification(title, description);
@@ -42,7 +52,7 @@ export const AuthService = () => {
     ResponseModel,
     LoginRequest
   > => ({
-    mutationKey: [MutationKeys.FORGOT_PASSWORD],
+    mutationKey: [FORGOT_PASSWORD_KEY],
     mutationFn: async (user: LoginRequest) => {
       const serializedData = serialize(LoginRequest, user);
       const response = await axiosInstance.post(FORGOT_PASSWORD, {
@@ -56,5 +66,24 @@ export const AuthService = () => {
     },
   });
 
-  return { loginUser, forgotPassword };
+  const resetPassword = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    ResetPassword
+  > => ({
+    mutationKey: [RESET_PASSWORD_KEY],
+    mutationFn: async (user: ResetPassword) => {
+      const serializedData = serialize(ResetPassword, user);
+      const response = await axiosInstance.put(RESET_PASSWORD, {
+        user: serializedData,
+      });
+      return deserialize(ResponseModel, response.data);
+    },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description);
+    },
+  });
+
+  return { loginUser, forgotPassword, resetPassword };
 };

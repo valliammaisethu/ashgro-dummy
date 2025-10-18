@@ -12,7 +12,6 @@ import { LegacyButtonType } from "antd/lib/button/button";
 import { NotificationTypes } from "../enums/notificationTypes.js";
 import { TopBarItems } from "src/enums/topBar.enum.js";
 import type { MenuMode } from "rc-menu/lib/interface.js";
-
 import { AppRoutes } from "src/routes/routeConstants/appRoutes.js";
 
 export const SharedComponentsConstants = {
@@ -60,6 +59,7 @@ export const getFileSuccessMessage = (name?: string) =>
 export const getFileErrorMessage = (name?: string) =>
   `${name} file upload failed.`;
 
+export const passwordAsterisk = "*";
 export const topBarItems = [
   {
     title: TopBarItems.DASHBOARD,
@@ -123,3 +123,4 @@ export const axiosInstanceErrors = {
 export const defaultSearchPlaceholder = "Search by name";
 export const defaultFilterPlaceholder = "Filter";
 export const noDataFound = "No data found";
+export const sampleClubName = "Pine Valley Club";

@@ -39,17 +39,21 @@ $nav-active-bg: linear-gradient(
   #eadbbd 118.75%
 );
 $ashgro-black: #0f131c;
+$ashgro-input-border: #e5dbc5;
+$danger-input: #ffeaea;
+$danger-border: #ff9b9b;
 $ashgro-white: #ffffff;
 $ashgro-cream: #f7f4ed;
 $ashgro-grey: #5b6770;
 $ashgro-pale-gold: #daccb0;
 $ashgro-grey-1: #eef1f5;
 $ashgro-grey-2: #e6eaf1;
-$ashgro-grey-3: #ebeff4;
+$ashgro-grey-3: #d8d8d8;
 $ashgro-label: #253345;
 $disabled-text: #c1c8d1;
 $ashgro-light-gold: #fffaf0;
 $ashgro-light-grey: #f5f7f9;
+$ashgro-enabled-switch-bg: #ffffffbf;
 $ashgro-dark-grey: #929292;
 $danger-color: #ee3042;
 $warning-color: #f3b21b;
@@ -57,6 +61,9 @@ $body-bg: #f5f8fa;
 $table-bg: #f7fafc;
 $input-bg: #f8fbfc;
 $input-border: #dadada;
+$notification-description: #ffffffb2;
+$correct-bg: #e7fcd0;
+$incorrect-bg: #ffdfdf;
 $club-name: #f0ede1;
 $club-name-text: #43330bb2;
 
@@ -68,19 +75,20 @@ $notification-success-unfill: #d9d9d9;
 /* Input Field */
 $input-border-color: $input-border;
 $input-border-color-hover: $ashgro-black;
-$input-border-radius: 2px;
+$input-border-radius: 12px;
+$input-background: #f7f4ed;
 
 /* Default Button */
 $button-default-border-color: $primary-color;
 $button-default-bg-color: white;
 $button-default-text-color: $primary-color;
-$button-default-border-radius: 4px;
+$button-default-border-radius: 3.2rem;
 
 /* Primary Button */
 $button-primary-border-color: $primary-color;
 $button-primary-bg-color: $primary-color;
 $button-primary-text-color: white;
-$button-primary-border-radius: 4px;
+$button-primary-border-radius: 3.2rem;
 
 /* Checkbox */
 $checkbox-bg-color: $ashgro-navy;
@@ -127,3 +135,17 @@ $warm-tag-bg: #ffefe4;
 $warm-text: #b8581c;
 $closed-tag-bg: #ffedf1;
 $closed-tag-text: #b84c7a;
+$incrementer-border: #e5dbc566;
+
+$notification-success-gradient: linear-gradient(
+  180deg,
+  #28b128 0%,
+  #114b11 100%
+);
+$notification-error-gradient: linear-gradient(180deg, #ef2020 0%, #891212 100%);
+$notification-warning-gradient: linear-gradient(
+  180deg,
+  #ed6d1d 0%,
+  #873e10 100%
+);
+$notification-info-gradient: linear-gradient(180deg, #1d74ed 0%, #104287 100%);
