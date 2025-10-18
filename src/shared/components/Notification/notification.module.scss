@@ -7,12 +7,17 @@
   &::before {
     content: "";
     width: 0.4rem;
-    height: 4rem;
+    min-height: 2rem;
     border-radius: 0.4rem;
     position: absolute;
     top: 2rem;
     left: 2rem;
     z-index: 10;
+  }
+
+  &.withDescription::before {
+    bottom: 2rem;
+    min-height: auto;
   }
 
   &.success::before {

@@ -1,6 +1,19 @@
+import React from "react";
+import {
+  IconCalendarSelectedDate,
+  IconCrown,
+  IconEmployeeBadge,
+  IconMasonryAlt,
+  IconSettings,
+  IconUsers,
+} from "obra-icons-react";
 import { LegacyButtonType } from "antd/lib/button/button";
-import { NotificationTypes } from "../enums/notificationTypes";
-import type { MenuMode } from "../../node_modules/rc-menu/lib/interface.d.js";
+
+import { NotificationTypes } from "../enums/notificationTypes.js";
+import { TopBarItems } from "src/enums/topBar.enum.js";
+import type { MenuMode } from "rc-menu/lib/interface.js";
+
+import { AppRoutes } from "src/routes/routeConstants/appRoutes.js";
 
 export const SharedComponentsConstants = {
   DELETE_MODAL: {
@@ -47,6 +60,39 @@ export const getFileSuccessMessage = (name?: string) =>
 export const getFileErrorMessage = (name?: string) =>
   `${name} file upload failed.`;
 
+export const passwordAsterisk = "*";
+export const topBarItems = [
+  {
+    title: TopBarItems.DASHBOARD,
+    path: AppRoutes.DASHBOARD,
+    icon: <IconMasonryAlt size={20} />,
+  },
+  {
+    title: TopBarItems.CALENDAR,
+    path: AppRoutes.CALENDAR,
+    icon: <IconCalendarSelectedDate size={20} />,
+  },
+  {
+    title: TopBarItems.PROSPECTS,
+    path: AppRoutes.PROSPECTS_LISTING,
+    icon: <IconUsers size={20} />,
+  },
+  {
+    title: TopBarItems.MEMBERS,
+    path: AppRoutes.MEMBERS,
+    icon: <IconCrown size={20} />,
+  },
+  {
+    title: TopBarItems.CLUB_STAFF,
+    path: AppRoutes.CLUB_STAFF,
+    icon: <IconEmployeeBadge size={20} />,
+  },
+  {
+    title: TopBarItems.SETTINGS,
+    path: AppRoutes.SETTINGS,
+    icon: <IconSettings size={20} />,
+  },
+];
 export const axiosInstanceErrors = {
   networkError: {
     title: "Network Error!",
@@ -74,3 +120,5 @@ export const axiosInstanceErrors = {
   },
   genericError: "Something went wrong. Please try again later.",
 };
+
+export const sampleClubName = "Pine Valley Club";

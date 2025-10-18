@@ -16,7 +16,7 @@ export const labels = {
 };
 
 export const placeholders = {
-  email: "Enter your email address",
+  email: "Enter your email",
   password: "Enter your password",
 };
 

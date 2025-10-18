@@ -4,12 +4,12 @@ import { FieldValues } from "react-hook-form";
 
 import { imageAlts } from "src/constants/imageAlts";
 import { forgotPasswordConstants } from "./constants";
-import { validationSchema } from "./validation";
 import { fields, labels, placeholders } from "../LoginForm/constants";
 import logo from "src/assets/images/logo.webp";
+import { validationSchema } from "./validation";
+import Button from "src/shared/components/Button";
 import Form from "src/shared/components/Form";
 import InputField from "src/shared/components/InputField";
-import Button from "src/shared/components/Button";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { Buttons, HtmlButtonType } from "src/enums/buttons.enum";
 import { AuthService } from "src/services/AuthService/auth.service";
@@ -18,7 +18,12 @@ import styles from "./forgotPassword.module.scss";
 
 const { email: emailLabel } = labels;
 const { email: emailPlaceholder } = placeholders;
+const { title } = forgotPasswordConstants;
 const { email } = fields;
+const { EMAIL } = INPUT_TYPE;
+const { SUBMIT } = HtmlButtonType;
+const { CONFIRM_EMAIL } = Buttons;
+const { loginLogo } = imageAlts;
 
 const ForgotPassword = () => {
   const { forgotPassword } = AuthService();
@@ -29,9 +34,9 @@ const ForgotPassword = () => {
 
   return (
     <div className={styles.forgotPasswordContainer}>
-      <img className={styles.loginLogo} alt={imageAlts.loginLogo} src={logo} />
+      <img className={styles.loginLogo} alt={loginLogo} src={logo} />
       <div className={styles.container}>
-        <h1 className={styles.title}>{forgotPasswordConstants.title}</h1>
+        <h1 className={styles.title}>{title}</h1>
         <Form
           onSubmit={handleSubmit}
           validationSchema={validationSchema}
@@ -42,16 +47,16 @@ const ForgotPassword = () => {
               placeholder={emailPlaceholder}
               name={email}
               label={emailLabel}
-              type={INPUT_TYPE.EMAIL}
+              type={EMAIL}
             />
           </div>
           <div className={styles.footer}>
             <Button
-              htmlType={HtmlButtonType.SUBMIT}
+              htmlType={SUBMIT}
               className={styles.submitButton}
               loading={isPending}
             >
-              {Buttons.CONFIRM_EMAIL}
+              {CONFIRM_EMAIL}
             </Button>
           </div>
         </Form>

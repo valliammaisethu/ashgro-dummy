@@ -1,6 +1,8 @@
 export enum Buttons {
   LOGIN = "Login",
   CONFIRM_EMAIL = "Confirm email",
+  BACK_TO_LOGIN = "Back to Login",
+  RESET_PASSWORD = "Reset Password",
 }
 
 export enum HtmlButtonType {

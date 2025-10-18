@@ -87,6 +87,9 @@
   &::before {
     opacity: 0;
   }
+  &:disabled {
+    opacity: 50%;
+  }
 }
 
 .ant-btn-color-link.ant-btn-variant-link:not(:disabled):not(
