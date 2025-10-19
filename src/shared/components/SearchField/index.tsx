@@ -9,16 +9,19 @@ import {
 } from "src/constants/sharedComponents";
 
 import styles from "./searchField.module.scss";
+import { Input } from "antd";
+import { Colors } from "src/enums/colors.enum";
 
 const SearchField = (props: SearchFieldProps) => {
   const { onFilter, placeholder = defaultSearchPlaceholder, className } = props;
   return (
     <div className={clsx(styles.searchField, className)}>
       <div className={styles.searchWrapper}>
-        <div className={styles.searchFieldContainer}>
-          <div>{<IconSearch size={18} />}</div>
-          <div>{placeholder}</div>
-        </div>
+        <Input
+          className={styles.searchFieldContainer}
+          placeholder={placeholder}
+          prefix={<IconSearch color={Colors.SEARCH_ICON_COLOR} size={18} />}
+        />
         {onFilter && (
           <div
             title={defaultFilterPlaceholder}

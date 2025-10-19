@@ -3,11 +3,11 @@ import { CheckboxChangeEvent, Select } from "antd";
 
 import Checkbox from "src/shared/components/Checkbox";
 import { ProspectData } from "src/shared/types/sharedComponents.type";
-import { LeadStatusOption } from "./constants";
-import StatusTag from "./StatusTag";
-import { getStatusValue } from "./utils";
+import { LeadStatusOption } from "../../constants";
+import { getStatusValue } from "../../helpers";
+import StatusTag from "../../Atoms/StatusTag";
 
-import styles from "./listing.module.scss";
+import styles from "./prospectRow.module.scss";
 
 interface ProspectRowProps {
   prospect: ProspectData;

@@ -11,6 +11,7 @@ import {
   CheckboxProps,
   InputProps,
   Radio,
+  SelectProps,
   SwitchProps,
 } from "antd";
 
@@ -18,6 +19,8 @@ import { ButtonSize } from "antd/es/button";
 import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
 import { Placement } from "src/enums/placement.enum";
+import { BaseOptionType } from "antd/es/select";
+import { DefaultOptionType } from "antd/es/cascader";
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
   phoneCodeName: string;
@@ -89,7 +92,7 @@ export interface CheckboxFieldProps extends CheckboxProps {
 
 export interface ButtonProps {
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-  children: ReactNode;
+  children?: ReactNode;
   htmlType?: HtmlButtonType;
   type?: ButtonTypes;
   className?: string;
@@ -137,10 +140,30 @@ export interface ProspectData {
     color: string;
   };
 }
+export interface DropdownProps<
+  ValueType,
+  OptionType extends BaseOptionType | DefaultOptionType = DefaultOptionType,
+> extends SelectProps<ValueType, OptionType> {
+  name: string;
+  title?: string;
+}
+
+export type DropDownProps = {
+  name: string;
+  stopPropagation?: boolean;
+  enableResponsiveTags?: boolean;
+  label?: string;
+  showCheckboxes?: boolean;
+} & SelectProps;
 export interface HandlePasswordChangeParams {
   e: ChangeEvent<HTMLInputElement>;
   realValue: string;
   setRealValue: (value: string) => void;
   setMaskedValue: (value: string) => void;
   onChange: (value: string) => void;
+}
+
+export interface StatusTagProps {
+  label: string;
+  color: string;
 }

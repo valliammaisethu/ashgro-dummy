@@ -123,4 +123,5 @@ export const axiosInstanceErrors = {
 
 export const defaultSearchPlaceholder = "Search by name";
 export const defaultFilterPlaceholder = "Filter";
+export const USPhoneCode = "+1";
 export const sampleClubName = "Pine Valley Club";

@@ -1,16 +1,13 @@
 import React from "react";
-
-import styles from "./listing.module.scss";
 import clsx from "clsx";
 
-interface StatusTagProps {
-  label: string;
-  color: string;
-}
+import { StatusTagProps } from "src/shared/types/sharedComponents.type";
+
+import styles from "../../listing.module.scss";
 
 const StatusTag: React.FC<StatusTagProps> = ({ label, color }) => {
   return (
-    <span className={clsx(styles.statusTag, styles[`statusTag--${color}`])}>
+    <span className={clsx(styles.statusTag, styles[color])}>
       <span className={styles.statusTagDot}></span>
       <span>{label}</span>
     </span>

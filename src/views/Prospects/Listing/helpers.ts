@@ -2,7 +2,7 @@ import { ProspectData } from "src/shared/types/sharedComponents.type";
 import { LeadStatusOption } from "./constants";
 
 export const getAllProspectIds = (prospects: ProspectData[]): string[] =>
-  prospects.map((p) => p.id);
+  prospects?.map((p) => p.id);
 
 export const toggleAllSelections = (
   checked: boolean,
@@ -15,7 +15,7 @@ export const toggleSingleSelection = (
   currentSelections: string[],
 ): string[] => {
   if (checked) return [...currentSelections, prospectId];
-  return currentSelections.filter((id) => id !== prospectId);
+  return currentSelections?.filter((id) => id !== prospectId);
 };
 
 export const updateProspectStatus = (
@@ -24,7 +24,7 @@ export const updateProspectStatus = (
   newStatusValue: string,
   statusOptions: LeadStatusOption[],
 ): ProspectData[] => {
-  return prospects.map((prospect) => {
+  return prospects?.map((prospect) => {
     if (prospect.id === prospectId) {
       const statusOption = statusOptions.find(
         (opt) => opt.value === newStatusValue,
@@ -45,7 +45,7 @@ export const getStatusValue = (
   statusLabel: string,
   statusOptions: LeadStatusOption[],
 ): string | undefined =>
-  statusOptions.find((opt) => opt.label === statusLabel)?.value;
+  statusOptions?.find((opt) => opt.label === statusLabel)?.value;
 
 export const areAllProspectsSelected = (
   prospects: ProspectData[],
