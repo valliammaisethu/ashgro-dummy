@@ -119,4 +119,5 @@ export const axiosInstanceErrors = {
   genericError: "Something went wrong. Please try again later.",
 };
 
+export const USPhoneCode = "+1";
 export const sampleClubName = "Pine Valley Club";
