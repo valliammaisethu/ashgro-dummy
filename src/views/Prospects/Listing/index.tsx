@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { CheckboxChangeEvent } from "antd";
+import { useQuery } from "@tanstack/react-query";
 
 import { mockProspects, leadStatusOptions, TABLE_HEADERS } from "./constants";
 import {
@@ -11,18 +12,18 @@ import {
 } from "./helpers";
 import Header from "./Header";
 import Checkbox from "src/shared/components/Checkbox";
+import ConditionalRender from "src/shared/components/ConditionalRender";
 import ProspectRow from "./Components/ProspectRow";
 import { ProspectData } from "src/shared/types/sharedComponents.type";
+import { ProspectsService } from "src/services/ProspectsService/prospects.service";
+import useRedirect from "src/shared/hooks/useRedirect";
 
 import styles from "./listing.module.scss";
-import { useQuery } from "@tanstack/react-query";
-import { ProspectsService } from "src/services/ProspectsService/prospects.service";
-import ConditionalRender from "src/shared/components/ConditionalRender";
 
 const ProspectsListing = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [prospects, setProspects] = useState<ProspectData[]>(mockProspects);
-
+  const { navigateToIndividualProspect } = useRedirect();
   const { getProspects } = ProspectsService();
   const handleSelectAll = useCallback(
     (checked: boolean) => {
@@ -68,6 +69,9 @@ const ProspectsListing = () => {
 
   const { data, isPending, isSuccess } = useQuery(getProspects());
 
+  const navigateToProspect = (id: string) => () =>
+    navigateToIndividualProspect(id);
+
   return (
     <div>
       <Header />
@@ -95,6 +99,7 @@ const ProspectsListing = () => {
               {data?.data?.prospects?.filter(Boolean).map((prospect) => (
                 <ProspectRow
                   key={prospect.id}
+                  onClick={navigateToProspect(prospect.id!)}
                   prospect={prospect}
                   isSelected={selectedIds.includes(prospect.id!)}
                   leadStatusOptions={leadStatusOptions}
