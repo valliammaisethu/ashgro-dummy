@@ -22,10 +22,8 @@ export const ProspectsService = () => {
   > => ({
     queryKey: [GET_PROSPECTS, params],
     queryFn: async () => {
-      const response = await axiosInstance.get(ApiRoutes.PROSPECTS, {
+      const response = await axiosInstance.get(PROSPECTS, {
         params: serialize(ProspectsListingParams, params),
-        baseURL:
-          "https://b24ce2c7-b74e-4b10-bbee-4c0b46658b5b.mock.pstmn.io/api/v1",
       });
 
       return deserialize(ProspectsListResponse, response?.data);

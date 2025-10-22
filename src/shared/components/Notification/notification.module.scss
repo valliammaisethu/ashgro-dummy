@@ -1,44 +1,35 @@
-@use "src/styles/variables" as *;
+@import "src/styles/variables";
 
-.successNotificationOuter {
-  margin-top: 2.4rem;
-  width: calc(100% + 3.7rem);
-  height: 1rem;
-  border-radius: 1.8rem;
-  overflow: hidden;
-  background-color: $notification-success-unfill;
-  margin-left: -4rem;
-}
-.successNotificationInner {
-  height: 100%;
-}
-.notificationDescriptionText {
-  font-size: 1.4rem;
-  color: $ashgro-navy;
-}
-.closeIcon {
-  &::before {
-    color: $ashgro-navy;
-    font-size: 2rem;
-  }
-}
-.successNotification {
-  &::before {
-    font-size: 3.2rem;
-    color: $notification-success;
-  }
-}
-.errorNotification {
-  &::before {
-    font-size: 3.2rem;
-    color: $notification-error;
-  }
-}
+.customNotification {
+  position: relative;
+  padding-left: 1.2rem;
 
-.success {
-  background-color: $notification-success;
-}
+  &::before {
+    content: "";
+    width: 0.4rem;
+    min-height: 2rem;
+    border-radius: 0.4rem;
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    z-index: 10;
+  }
 
-.error {
-  background-color: $notification-error;
+  &.withDescription::before {
+    bottom: 2rem;
+    min-height: auto;
+  }
+
+  &.success::before {
+    background: $notification-success-gradient;
+  }
+  &.error::before {
+    background: $notification-error-gradient;
+  }
+  &.warning::before {
+    background: $notification-warning-gradient;
+  }
+  &.info::before {
+    background: $notification-info-gradient;
+  }
 }

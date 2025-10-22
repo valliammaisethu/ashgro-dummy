@@ -5,6 +5,15 @@ export const AppComponentsConstants = {
     { label: "Apple", value: "Apple" },
     { label: "Pear", value: "Pear" },
     { label: "Orange", value: "Orange" },
+    { label: "Apple", value: "Apple2" },
+    { label: "Pear", value: "Pear2" },
+    { label: "Orange", value: "Orange2" },
+    { label: "Apple", value: "Apple3" },
+    { label: "Pear", value: "Pear3" },
+    { label: "Orange", value: "Orange3" },
+    { label: "Apple", value: "Apple4" },
+    { label: "Pear", value: "Pear4" },
+    { label: "Orange", value: "Orange4" },
   ],
   BREADCRUMB_PARAMS: [
     {

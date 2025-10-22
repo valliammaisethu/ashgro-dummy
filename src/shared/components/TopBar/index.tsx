@@ -2,9 +2,10 @@ import React from "react";
 import clsx from "clsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IconLogOut } from "obra-icons-react";
+
 import homeLogo from "src/assets/images/homeLogo.webp";
 import textLogo from "src/assets/images/textLogo.webp";
-import { topBarItems } from "src/constants/sharedComponents";
+import { sampleClubName, topBarItems } from "src/constants/sharedComponents";
 
 import styles from "./topBar.module.scss";
 
@@ -17,15 +18,16 @@ const TopBar = () => {
   return (
     <div className={styles.topBar}>
       <div className={styles.logoContainer}>
-        <img height={38} width={36} src={homeLogo} />
-        <img height={31} width={80} src={textLogo} />
+        <img className={styles.homeLogo} src={homeLogo} />
+        <img className={styles.textLogo} src={textLogo} />
       </div>
       <div className={styles.topBarRight}>
         {topBarItems.map((item) => {
-          const isActive = location.pathname === item.path;
           return (
             <div
-              className={clsx(styles.topBarItem, isActive && styles.active)}
+              className={clsx(styles.topBarItem, {
+                [styles.active]: location.pathname === item.path,
+              })}
               key={item.path}
               onClick={() => handleItemClick(item.path)}
             >
@@ -36,10 +38,8 @@ const TopBar = () => {
         })}
       </div>
       <div className={styles.topBarEnd}>
-        <div className={styles.clubName}>Pine Valley Club</div>
-        <div>
-          <IconLogOut />{" "}
-        </div>
+        <div className={styles.clubName}>{sampleClubName}</div>
+        <IconLogOut />
       </div>
     </div>
   );

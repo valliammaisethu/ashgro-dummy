@@ -6,6 +6,8 @@ import { NumberIncrementerProps } from "../../types/sharedComponents.type";
 
 import styles from "./numberIncrementer.module.scss";
 import { ButtonHtmlTypes } from "src/enums/buttonTypes.enum";
+import Add from "node_modules/obra-icons-react/dist/icons/Add";
+import Subtract from "node_modules/obra-icons-react/dist/icons/Subtract";
 
 const NumberIncrementer = (props: NumberIncrementerProps) => {
   // TODO: change max steps after confirming with BA
@@ -44,7 +46,7 @@ const NumberIncrementer = (props: NumberIncrementerProps) => {
         onClick={handleDecrement}
         disabled={disabled || value <= min}
       >
-        <i className="ri-subtract-line" />
+        <Subtract />
       </button>
 
       <div className={styles.value}>{value}</div>
@@ -55,7 +57,7 @@ const NumberIncrementer = (props: NumberIncrementerProps) => {
         onClick={handleIncrement}
         disabled={disabled || value >= max}
       >
-        <i className={clsx("ri-add-line")} />
+        <Add />
       </button>
 
       {error && <div className={styles.error}>{error.message}</div>}

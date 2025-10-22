@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import { Col, Row } from "antd";
 
 import { AppComponentsConstants } from "src/constants/appComponents";
-import { Icons } from "src/enums/icons.enum";
 import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { NotificationTypes } from "src/enums/notificationTypes";
@@ -19,6 +18,9 @@ import Notification from "src/shared/components/Notification";
 import { appComponentsValidation } from "./validation";
 
 import styles from "./appComponents.module.scss";
+import PasswordField from "src/shared/components/PasswordField";
+import PhoneNumberField from "src/shared/components/PhoneNumberInput";
+import SelectField from "src/shared/components/SelectField";
 
 const AppComponents: FC = () => {
   const renderSuccessNotification = () => {
@@ -49,7 +51,6 @@ const AppComponents: FC = () => {
                 type={INPUT_TYPE.TEXT}
                 name="input"
                 placeholder="Enter some text"
-                suffix={<i className={Icons.EYE_LINE}></i>}
                 label="Input Field"
               />
             </Col>
@@ -59,10 +60,13 @@ const AppComponents: FC = () => {
                 type={INPUT_TYPE.TEXT}
                 name="inputs"
                 placeholder="Enter some text"
-                suffix={<i className={Icons.EYE_LINE}></i>}
                 label="Input Field"
                 disabled
               />
+            </Col>
+            <Col span={12}>
+              <p className="mt-5 app-components__title">Input: </p>
+              <PasswordField name="password" />
             </Col>
             <Col span={12}>
               <CheckboxField label="Checkbox" name="checkbox" />
@@ -90,10 +94,30 @@ const AppComponents: FC = () => {
               />
             </Col>
             <Col span={12}>
-              <SwitchField disabled name="switchField" />
+              <SwitchField value disabled name="switchField" />
             </Col>
             <Col span={12}>
               <SwitchField name="switchFields" />
+            </Col>
+            <Col span={12}>
+              <PhoneNumberField
+                label="Phone Code"
+                name="phone"
+                phoneCodeName="code"
+              />
+            </Col>
+            <Col span={12}>
+              <SelectField
+                name="selectField"
+                options={AppComponentsConstants.OPTIONS}
+              />
+            </Col>
+            <Col span={12}>
+              <SelectField
+                name="selectFields"
+                options={AppComponentsConstants.OPTIONS}
+                showCheckboxes
+              />
             </Col>
           </Row>
           <Button htmlType={HtmlButtonType.SUBMIT}>Submit</Button>

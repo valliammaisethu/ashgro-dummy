@@ -16,15 +16,13 @@ const Header = () => {
         className={styles.searchField}
       />
       <div className={styles.actions}>
-        <div>
-          <Button className={styles.filterButton}>
-            <IconDocumentUpload size={20} />
-          </Button>
-        </div>
+        <Button
+          icon={<IconDocumentUpload size={20} />}
+          className={styles.filterButton}
+        />
         <div>
           <Button
             className={styles.bulkUploadButton}
-            type={ButtonTypes.TERTIARY}
             icon={<IconEmail size={20} />}
           >
             {Buttons.BULK_MAIL}

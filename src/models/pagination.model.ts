@@ -1,24 +1,24 @@
-import { primitive, serializable } from "serializr";
+import { serializable } from "serializr";
 
 export class Pagination {
-  @serializable(primitive())
+  @serializable
   limit?: number;
 
-  @serializable(primitive())
+  @serializable
   page?: number;
 
-  @serializable(primitive())
+  @serializable
   overallPages?: number;
 
-  @serializable(primitive())
+  @serializable
   overallCount?: number;
 
-  @serializable(primitive())
+  @serializable
   previousPage?: number;
 
-  @serializable(primitive())
+  @serializable
   currentPage?: number;
 
-  @serializable(primitive())
+  @serializable
   nextPage?: number;
 }

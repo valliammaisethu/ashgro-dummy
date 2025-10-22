@@ -1,10 +1,17 @@
-import { ComponentProps, CSSProperties, MouseEvent, ReactNode } from "react";
+import {
+  ChangeEvent,
+  ComponentProps,
+  CSSProperties,
+  MouseEvent,
+  ReactNode,
+} from "react";
 import {
   CheckboxChangeEvent,
   CheckboxOptionType,
   CheckboxProps,
   InputProps,
   Radio,
+  SelectProps,
   SwitchProps,
 } from "antd";
 
@@ -13,6 +20,8 @@ import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
 import { Placement } from "src/enums/placement.enum";
 import { tooltipPosition } from "src/enums/tooltipPosition";
+import { BaseOptionType } from "antd/es/select";
+import { DefaultOptionType } from "antd/es/cascader";
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
   phoneCodeName: string;
@@ -92,7 +101,7 @@ export interface ButtonTooltipProps {
 
 export interface ButtonProps {
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-  children: ReactNode;
+  children?: ReactNode;
   htmlType?: HtmlButtonType;
   type?: ButtonTypes;
   className?: string;
@@ -111,9 +120,9 @@ export interface INotification {
   title?: string;
   description?: string;
   type?: NotificationTypes;
-  showProgress?: boolean;
   duration?: number;
   placement?: Placement;
+  className?: string;
 }
 
 export interface ProgressBarProps {
@@ -145,4 +154,31 @@ export interface ProspectData {
 export class CardProps {
   children: ReactNode;
   className?: string;
+}
+export interface DropdownProps<
+  ValueType,
+  OptionType extends BaseOptionType | DefaultOptionType = DefaultOptionType,
+> extends SelectProps<ValueType, OptionType> {
+  name: string;
+  title?: string;
+}
+
+export interface DropDownProps extends SelectProps {
+  name: string;
+  stopPropagation?: boolean;
+  enableResponsiveTags?: boolean;
+  label?: string;
+  showCheckboxes?: boolean;
+}
+export interface HandlePasswordChangeParams {
+  e: ChangeEvent<HTMLInputElement>;
+  realValue: string;
+  setRealValue: (value: string) => void;
+  setMaskedValue: (value: string) => void;
+  onChange: (value: string) => void;
+}
+
+export interface StatusTagProps {
+  label: string;
+  color: string;
 }

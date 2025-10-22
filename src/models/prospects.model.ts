@@ -18,34 +18,34 @@ export class ProspectsListingParams {
 }
 
 export class ProspectsList {
-  @serializable(primitive())
+  @serializable
   id?: string;
 
-  @serializable(primitive())
+  @serializable
   attachmentId?: string;
 
-  @serializable(primitive())
+  @serializable
   firstName?: string;
 
-  @serializable(primitive())
+  @serializable
   endName?: string;
 
-  @serializable(primitive())
+  @serializable
   email?: string;
 
-  @serializable(primitive())
+  @serializable
   contactNumber?: string;
 
-  @serializable(primitive())
+  @serializable
   countryCode?: string;
 
-  @serializable(primitive())
+  @serializable
   leadStatus?: string;
 
-  @serializable(primitive())
+  @serializable
   followUpDate?: string;
 
-  @serializable(primitive())
+  @serializable
   leadSource?: string;
 }
 

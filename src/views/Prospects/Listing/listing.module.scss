@@ -45,9 +45,11 @@
 }
 
 .bulkUploadButton {
-  &:global(.ant-btn) {
+  &:global(.ant-btn.ant-btn-primary) {
     border-color: $gold-bold;
+    color: $gold-text;
     border-radius: 3.6rem;
+    background-color: transparent;
     font-size: 1.4rem;
     height: 4.4rem;
     font-weight: 600;
@@ -58,6 +60,8 @@
     }
     &:hover {
       border-color: $gold-bold;
+      background-color: transparent;
+      color: $gold-text;
     }
   }
 }
@@ -79,6 +83,7 @@
     border: 1px solid $search-bg;
     border-radius: 1.4rem;
     height: 4.4rem;
+    width: 4.4rem;
 
     &:hover {
       background-color: $search-bg;
@@ -109,19 +114,6 @@
   border-top-right-radius: 2rem;
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
 }
-
-.dateColValue,
-.sourceColValue {
-  color: $ashgro-navy;
-  font-weight: 600;
-  font-family: $font-secondary;
-  font-size: 1.4rem;
-}
-
-// Table grid layout - shared between header and rows
-$table-grid-columns: 50px 1fr 200px 200px 200px;
-$table-gap: 1.6rem;
-$table-padding: 1.6rem 2rem;
 
 .tableHeader {
   display: grid;
@@ -236,36 +228,61 @@ $table-padding: 1.6rem 2rem;
   border: 1px solid transparent;
   text-align: left;
   gap: 0.5rem;
-}
 
-.statusTag--blue {
-  background-color: $new-lead-tag-bg;
-  color: $ashgro-blue;
-}
+  &.blue {
+    background-color: $new-lead-tag-bg;
+    color: $ashgro-blue;
 
-.statusTag--default {
-  background-color: $unqualified-lead-tag-bg;
-  color: $unqualified-lead-text;
-}
+    .statusTagDot {
+      border-color: rgba($new-lead-tag-bg, 0.3);
+      background-color: $ashgro-blue;
+    }
+  }
+  &.default {
+    background-color: $unqualified-lead-tag-bg;
+    color: $unqualified-lead-text;
 
-.statusTag--red {
-  background-color: $hot-tag-bg;
-  color: $hot-text;
-}
+    .statusTagDot {
+      border-color: rgba($unqualified-lead-tag-bg, 0.3);
+      background-color: $unqualified-lead-text;
+    }
+  }
+  &.red {
+    background-color: $hot-tag-bg;
+    color: $hot-text;
 
-.statusTag--orange {
-  background-color: $warm-tag-bg;
-  color: $warm-text;
-}
+    .statusTagDot {
+      border-color: rgb($hot-tag-bg, 0.3);
+      background-color: $hot-text;
+    }
+  }
+  &.orange {
+    background-color: $warm-tag-bg;
+    color: $warm-text;
 
-.statusTag--green {
-  background-color: $closed-won-tag;
-  color: $closed-won-tag-text;
-}
+    .statusTagDot {
+      border-color: rgb($warm-tag-bg, 0.3);
+      background-color: $warm-text;
+    }
+  }
+  &.green {
+    background-color: $closed-won-tag;
+    color: $closed-won-tag-text;
 
-.statusTag--purple {
-  background-color: $closed-tag-bg;
-  color: $closed-tag-text;
+    .statusTagDot {
+      border-color: rgb($closed-won-tag, 0.3);
+      background-color: $closed-won-tag-text;
+    }
+  }
+  &.purple {
+    background-color: $closed-tag-bg;
+    color: $closed-tag-text;
+
+    .statusTagDot {
+      border-color: rgb($closed-tag-bg, 0.3);
+      background-color: $closed-tag-text;
+    }
+  }
 }
 
 .statusSelect {
@@ -317,34 +334,4 @@ $table-padding: 1.6rem 2rem;
   border-radius: 50%;
   border: 2px solid;
   background-color: transparent;
-}
-
-.statusTag--blue .statusTagDot {
-  border-color: rgba($new-lead-tag-bg, 0.3);
-  background-color: $ashgro-blue;
-}
-
-.statusTag--default .statusTagDot {
-  border-color: rgba($unqualified-lead-tag-bg, 0.3);
-  background-color: $unqualified-lead-text;
-}
-
-.statusTag--red .statusTagDot {
-  border-color: rgb($hot-tag-bg, 0.3);
-  background-color: $hot-text;
-}
-
-.statusTag--orange .statusTagDot {
-  border-color: rgb($warm-tag-bg, 0.3);
-  background-color: $warm-text;
-}
-
-.statusTag--green .statusTagDot {
-  border-color: rgb($closed-won-tag, 0.3);
-  background-color: $closed-won-tag-text;
-}
-
-.statusTag--purple .statusTagDot {
-  border-color: rgb($closed-tag-bg, 0.3);
-  background-color: $closed-tag-text;
 }

@@ -4,4 +4,6 @@ export enum Colors {
   ASHGRO_BLACK = "#0F131C",
   ASHGRO_WHITE = "#FFFFFF",
   ASHGRO_GOLD = "#c5a25d",
+  TICK_COLOR = "#599F07",
+  SEARCH_ICON_COLOR = "#B5AA96",
 }
