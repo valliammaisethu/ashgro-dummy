@@ -9,11 +9,13 @@ import React from "react";
 import Button from "src/shared/components/Button";
 import { ButtonTypes } from "src/enums/buttons.enum";
 import { headerConstants } from "../constants";
+import useRedirect from "src/shared/hooks/useRedirect";
 
 const Header = () => {
+  const { navigateToProspects } = useRedirect();
   return (
     <div className={styles.header}>
-      <div className={styles.headerLeft}>
+      <div onClick={navigateToProspects} className={styles.headerLeft}>
         <IconChevronLeft /> <span className={styles.backText}>Back</span>
       </div>
       <div className={styles.headerRight}>

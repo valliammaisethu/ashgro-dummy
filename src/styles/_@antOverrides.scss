@@ -65,30 +65,26 @@
 /* Button */
 
 .ant-btn {
-  /* Primary button */
-  background-color: $ashgro-gold;
-  color: $button-default-text-color;
-  border-color: transparent;
-  border-radius: $button-default-border-radius;
+  &::before {
+    opacity: 0;
+  }
+  &:disabled {
+    opacity: 50%;
+  }
+
+  /* Primary button - only apply gold styles when it's explicitly a primary button */
   &.ant-btn-primary {
     background-color: $ashgro-gold;
     color: $button-primary-text-color;
     border-color: transparent;
     border-radius: $button-primary-border-radius;
 
-    &:hover {
+    &.ant-btn-variant-solid:not(:disabled):not(.ant-btn-disabled):hover {
       background-color: $ashgro-gold;
       color: $button-primary-text-color;
       border-color: transparent;
       border-radius: $button-primary-border-radius;
     }
-  }
-
-  &::before {
-    opacity: 0;
-  }
-  &:disabled {
-    opacity: 50%;
   }
 }
 
@@ -97,19 +93,21 @@
   ):hover {
   color: $ashgro-gold;
 }
-.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {
-  background-color: $ashgro-navy;
-  color: $ashgro-white;
-  border-color: $ashgro-navy;
-}
-
-.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {
-  background-color: $ashgro-light-gold;
-  color: $ashgro-gold;
-  border-color: $ashgro-light-gold;
-}
-.ant-btn-color-primary {
+.ant-btn-color-primary.ant-btn-variant-solid {
   box-shadow: none;
+}
+.ant-btn-variant-outlined {
+  border-color: transparent;
+}
+.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {
+  border-color: transparent;
+}
+.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):not(
+    [class*="Button"]
+  ):not([class*="button"]):hover {
+  background: unset;
+  color: unset;
+  border-color: unset;
 }
 .ant-input-affix-wrapper > input.ant-input:focus {
   box-shadow: 0 0 0 1000px $ashgro-white inset !important;
@@ -120,6 +118,11 @@
   }
 }
 
+.ant-input-outlined:hover {
+  background-color: $input-background;
+  border-color: $incrementer-border;
+  box-shadow: 0px 4px 10px 0px #00000014;
+}
 /* Checkbox */
 
 .ant-checkbox-wrapper {

@@ -13,12 +13,7 @@
 
   .left {
     @include flex-container(normal, flex-start, row, 1.2rem);
-    img {
-      height: 5.6rem;
-      width: 5.6rem;
-      border-radius: 0.2rem;
-      object-fit: cover;
-    }
+
     .profileInfo {
       @include flex-flow(column, nowrap);
 
@@ -28,6 +23,7 @@
         color: $ashgro-navy;
         font-family: $font-secondary;
       }
+
       .email {
         font-size: 1.2rem;
         font-weight: 400;
@@ -37,6 +33,7 @@
         @include flex-flow(row, wrap, center);
         gap: 0.6rem;
       }
+
       .dot {
         font-size: 2rem;
       }
@@ -45,7 +42,7 @@
 }
 
 .bulkUploadButton {
-  &:global(.ant-btn.ant-btn-primary) {
+  &:global(.ant-btn) {
     border-color: $gold-bold;
     color: $gold-text;
     border-radius: 3.6rem;
@@ -54,10 +51,12 @@
     height: 4.4rem;
     font-weight: 600;
     font-family: $font-secondary;
+    @include flex-flow(row, wrap, center);
 
-    span:first-child {
-      margin-top: 0.3rem;
+    :global(.ant-btn-icon) {
+      padding-top: 0.3rem;
     }
+
     &:hover {
       border-color: $gold-bold;
       background-color: transparent;
@@ -65,6 +64,14 @@
     }
   }
 }
+.bulkUploadButton:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
+  ):hover {
+  border-color: $gold-bold;
+  background-color: transparent;
+  color: $gold-text;
+}
+
 .addProspectButton {
   &:global(.ant-btn) {
     border-radius: 3.6rem;
@@ -77,22 +84,25 @@
 }
 
 .filterButton {
-  &:global(.ant-btn.ant-btn-primary) {
+  &:global(.ant-btn) {
     background-color: $search-bg;
     color: $filter-icon;
     border: 1px solid $search-bg;
     border-radius: 1.4rem;
     height: 4.4rem;
     width: 4.4rem;
-
-    &:hover {
-      background-color: $search-bg;
-      color: $filter-icon;
-      border: 1px solid $search-bg;
-      border-radius: 1.4rem;
-    }
   }
 }
+
+.filterButton:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
+  ):hover {
+  background-color: $search-bg;
+  color: $filter-icon;
+  border: 1px solid $search-bg;
+  border-radius: 1.4rem;
+}
+
 .header {
   @include flex-container(space-between, center, row);
 }
@@ -100,6 +110,7 @@
 .actions {
   @include flex-container(normal, center, row, 1.6rem);
 }
+
 .prospectListTable {
   ::global(.ant-table-cell) {
     background-color: $ashgro-white;
@@ -204,11 +215,13 @@
     font-size: 1.4rem;
     font-family: $font-secondary;
   }
+
   .phone {
     color: $ashgro-navy;
     font-size: 1.4rem;
     font-family: $font-secondary;
   }
+
   .dot {
     color: $dot-color;
     font-size: 2rem;
@@ -238,6 +251,7 @@
       background-color: $ashgro-blue;
     }
   }
+
   &.default {
     background-color: $unqualified-lead-tag-bg;
     color: $unqualified-lead-text;
@@ -247,6 +261,7 @@
       background-color: $unqualified-lead-text;
     }
   }
+
   &.red {
     background-color: $hot-tag-bg;
     color: $hot-text;
@@ -256,6 +271,7 @@
       background-color: $hot-text;
     }
   }
+
   &.orange {
     background-color: $warm-tag-bg;
     color: $warm-text;
@@ -265,6 +281,7 @@
       background-color: $warm-text;
     }
   }
+
   &.green {
     background-color: $closed-won-tag;
     color: $closed-won-tag-text;
@@ -274,6 +291,7 @@
       background-color: $closed-won-tag-text;
     }
   }
+
   &.purple {
     background-color: $closed-tag-bg;
     color: $closed-tag-text;
@@ -290,6 +308,7 @@
     border: none;
     box-shadow: none;
   }
+
   &:global(.ant-select) {
     width: 14rem;
     height: 3.6rem;
@@ -327,6 +346,7 @@
     }
   }
 }
+
 .statusTagDot {
   display: inline-block;
   width: 1rem;
