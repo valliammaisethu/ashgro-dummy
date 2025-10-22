@@ -23,6 +23,10 @@ $search-input-color: #9f8f72;
 $search-border: #e7dcc3;
 $search-bg: #f2f0e9;
 $filter-icon: #9a917b;
+$gold-text: #ad9360;
+$table-grid-columns: 50px 1fr 200px 200px 200px;
+$table-gap: 1.6rem;
+$table-padding: 1.6rem 2rem;
 $gold-bold: #ad936080;
 $gradient-border: #e7dcc280;
 $dot-color: #0c234040;
@@ -107,6 +111,8 @@ $switch-bg-color: $primary-color;
 /* Select */
 $select-border-color: rgb(202, 202, 202);
 $select-hover-border-color: $primary-color;
+$select-tag-background: #e5dbc5;
+$select-tag-color: #0c2340;
 $select-focus-box-shadow: 0 0 0 2px
   rgba(
     $color: $primary-color,

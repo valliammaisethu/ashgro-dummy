@@ -1,18 +1,17 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { CheckboxChangeEvent } from "antd";
 
-import Header from "./Header";
 import { mockProspects, leadStatusOptions, TABLE_HEADERS } from "./constants";
-import ProspectRow from "./ProspectRow";
 import {
   toggleAllSelections,
   toggleSingleSelection,
   updateProspectStatus,
   areAllProspectsSelected,
   areSomeProspectsSelected,
-} from "./utils";
-
+} from "./helpers";
+import Header from "./Header";
 import Checkbox from "src/shared/components/Checkbox";
+import ProspectRow from "./Components/ProspectRow";
 import { ProspectData } from "src/shared/types/sharedComponents.type";
 
 import styles from "./listing.module.scss";
