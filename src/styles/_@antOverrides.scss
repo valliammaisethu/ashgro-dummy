@@ -171,7 +171,7 @@
   background-color: $ashgro-navy;
 }
 
-.ant-checkbox .ant-checkbox-inner:after {
+.ant-checkbox:not(.ant-checkbox-indeterminate) .ant-checkbox-inner:after {
   top: 47%;
   inset-inline-start: 25%;
   width: 0.67rem;
@@ -179,6 +179,9 @@
   border-top-left-radius: 0.2rem;
 }
 
+.ant-checkbox-indeterminate .ant-checkbox-inner:after {
+  background-color: $ashgro-navy;
+}
 .ant-checkbox:not(.ant-checkbox-disabled):hover .ant-checkbox-inner {
   border-color: $ashgro-input-border;
   background-color: $input-background;
@@ -487,6 +490,9 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 }
 .ant-select-single .ant-select-selector .ant-select-selection-item {
   line-height: 1.3rem;
+}
+.ant-btn:not(:disabled):focus-visible {
+  outline: none;
 }
 .ant-notification .ant-notification-notice-wrapper {
   border-radius: 2.4rem;

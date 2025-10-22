@@ -148,13 +148,13 @@ export interface DropdownProps<
   title?: string;
 }
 
-export type DropDownProps = {
+export interface DropDownProps extends SelectProps {
   name: string;
   stopPropagation?: boolean;
   enableResponsiveTags?: boolean;
   label?: string;
   showCheckboxes?: boolean;
-} & SelectProps;
+}
 export interface HandlePasswordChangeParams {
   e: ChangeEvent<HTMLInputElement>;
   realValue: string;

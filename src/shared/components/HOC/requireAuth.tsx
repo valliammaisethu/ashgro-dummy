@@ -2,15 +2,15 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { NavigationRoutes } from "src/routes/routeConstants/appRoutes";
+import { AuthContext } from "src/context/AuthContext";
 import RestrictAccess from "../RestrictedAccess";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const Authentication = (props: any) => {
     const { allowedRoles } = props;
-    // const { authenticated } = AuthContext();
+    const { authenticated } = AuthContext();
     const location = useLocation();
     const navigate = useNavigate();
-    const authenticated = true;
 
     useEffect(() => {
       if (!authenticated && location.pathname !== NavigationRoutes.LOGIN) {
