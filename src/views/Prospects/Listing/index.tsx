@@ -69,7 +69,8 @@ const ProspectsListing = () => {
 
   const { data, isPending, isSuccess } = useQuery(getProspects());
 
-  const navigateToProspect = (id: string) => navigateToIndividualProspect(id);
+  const navigateToProspect = (id: string) => () =>
+    navigateToIndividualProspect(id);
 
   return (
     <div>
@@ -98,7 +99,7 @@ const ProspectsListing = () => {
               {data?.data?.prospects?.filter(Boolean).map((prospect) => (
                 <ProspectRow
                   key={prospect.id}
-                  onClick={() => navigateToProspect(prospect.id!)}
+                  onClick={navigateToProspect(prospect.id!)}
                   prospect={prospect}
                   isSelected={selectedIds.includes(prospect.id!)}
                   leadStatusOptions={leadStatusOptions}

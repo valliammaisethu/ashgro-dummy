@@ -25,5 +25,6 @@ export const mockActivities: ActivityData[] = [
     id: "1",
     title: PLACEHOLDER_DATA.activityTitle,
     content: PLACEHOLDER_DATA.activityContent,
+    date: "10:00 AM, 12 Aug 2025",
   },
 ];

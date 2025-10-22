@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 
 import AppLayout from "../shared/components/AppLayout";
-import RouteWrapper from "../shared/components/RouteWrapper";
+import Home from "../views/Home";
 import { TopBarProvider } from "../shared/contexts/TopBarContext";
 import isAuthenticated from "../shared/components/HOC/requireAuth";
 import NotFound from "../shared/components/FallbackPage";
@@ -48,7 +48,6 @@ const AppRouter = () => {
         {
           path: AppRoutes.INDIVIDUAL_PROSPECT,
           component: <IndividualProspect />,
-          hideTopBar: true,
         },
       ],
     },
@@ -65,18 +64,17 @@ const AppRouter = () => {
 
           {routes.map((route, index) => (
             <Route key={index} path={route.path} element={route.component}>
-              {route.children &&
-                route.children.map((childRoute) => (
-                  <Route
-                    key={childRoute.path}
-                    path={childRoute.path}
-                    element={
-                      <RouteWrapper hideTopBar={childRoute.hideTopBar}>
-                        {childRoute.component}
-                      </RouteWrapper>
-                    }
-                  />
-                ))}
+              {route.children && (
+                <Route element={<Home />}>
+                  {route.children.map((childRoute) => (
+                    <Route
+                      key={childRoute.path}
+                      path={childRoute.path}
+                      element={childRoute.component}
+                    />
+                  ))}
+                </Route>
+              )}
             </Route>
           ))}
 

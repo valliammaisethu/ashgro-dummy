@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { NavigationRoutes } from "src/routes/routeConstants/appRoutes";
-import { AuthContext } from "src/context/AuthContext";
 import RestrictAccess from "../RestrictedAccess";
+import { AuthContext } from "src/context/AuthContext";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const Authentication = (props: any) => {

@@ -22,6 +22,7 @@ import { Placement } from "src/enums/placement.enum";
 import { tooltipPosition } from "src/enums/tooltipPosition";
 import { BaseOptionType } from "antd/es/select";
 import { DefaultOptionType } from "antd/es/cascader";
+import { Trigger } from "src/enums/trigger.enum";
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
   phoneCodeName: string;
@@ -94,7 +95,7 @@ export interface CheckboxFieldProps extends CheckboxProps {
 export interface ButtonTooltipProps {
   title: string;
   placement?: tooltipPosition;
-  trigger?: "hover" | "focus" | "click";
+  trigger?: Trigger;
   color?: string;
   arrowPointAtCenter?: boolean;
 }

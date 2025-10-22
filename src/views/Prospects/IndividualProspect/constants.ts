@@ -18,7 +18,7 @@ export const PLACEHOLDER_DATA = {
     "https://i.pinimg.com/1200x/94/f6/a0/94f6a0c5f086c51cf042185aac29d555.jpg",
   activityTitle: "Title",
   activityContent:
-    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui magni ullam voluptates. At minima neque a, sequi ab tempore accusamus nam, earum ipsam ipsum sint debitis, deleniti illum consectetur tenetur?",
+    "Prospect expressed interest in learning more about golf club membership options during a call. Shared preliminary details about membership plans, benefits, and facilities. Prospect asked relevant questions regarding pricing, amenities, and guest access.",
 };
 
 export const headerConstants = {

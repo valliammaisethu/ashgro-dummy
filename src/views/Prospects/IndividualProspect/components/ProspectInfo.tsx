@@ -1,10 +1,12 @@
 import React from "react";
-import styles from "../individualProspect.module.scss";
-import IconText from "./IconText";
 import { IconEmail } from "obra-icons-react";
+
 import { Colors } from "src/enums/colors.enum";
 import { ContactInfo } from "../types";
 import { PROSPECT_LABELS } from "../constants";
+import IconText from "../atoms/IconText";
+
+import styles from "../individualProspect.module.scss";
 
 interface ProspectInfoProps {
   name: string;

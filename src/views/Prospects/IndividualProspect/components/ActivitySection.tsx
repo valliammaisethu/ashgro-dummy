@@ -1,10 +1,12 @@
 import React from "react";
-import styles from "../individualProspect.module.scss";
+import { IconAdd, IconMessage } from "obra-icons-react";
+
 import Card from "src/shared/components/Card";
 import Button from "src/shared/components/Button";
-import { IconAdd, IconMessage } from "obra-icons-react";
 import { ActivityData } from "../types";
 import { headerConstants, PROSPECT_LABELS } from "../constants";
+
+import styles from "../individualProspect.module.scss";
 
 interface ActivitySectionProps {
   activities: ActivityData[];
@@ -35,9 +37,12 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
           </Button>
         </div>
       </div>
-      {activities.map((activity) => (
+      {activities?.map((activity) => (
         <Card key={activity.id} className={styles.activityCard}>
-          <div className={styles.title}>{activity.title}</div>
+          <div className={styles.titleContainer}>
+            <div className={styles.title}>{activity.title}</div>
+            <div className={styles.date}>{activity.date}</div>
+          </div>
           <div className={styles.content}>{activity.content}</div>
         </Card>
       ))}

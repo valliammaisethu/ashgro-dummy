@@ -1,5 +1,6 @@
 import React from "react";
-import styles from "../individualProspect.module.scss";
+
+import styles from "../../individualProspect.module.scss";
 
 interface DetailItemProps {
   title: string;
