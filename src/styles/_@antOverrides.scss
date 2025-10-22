@@ -77,8 +77,8 @@
     border-radius: $button-primary-border-radius;
 
     &:hover {
-      background-color: $ashgro-gold !important;
-      color: $button-primary-text-color !important;
+      background-color: $ashgro-gold;
+      color: $button-primary-text-color;
       border-color: transparent;
       border-radius: $button-primary-border-radius;
     }
@@ -107,6 +107,9 @@
   background-color: $ashgro-light-gold;
   color: $ashgro-gold;
   border-color: $ashgro-light-gold;
+}
+.ant-btn-color-primary {
+  box-shadow: none;
 }
 .ant-input-affix-wrapper > input.ant-input:focus {
   box-shadow: 0 0 0 1000px $ashgro-white inset !important;
@@ -246,7 +249,16 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 /* Select */
 .ant-select {
   width: 100%;
-  height: 4rem;
+  &:focus-visible {
+    box-shadow: $select-focus-box-shadow;
+  }
+}
+.ant-select-selector {
+  border-color: $select-border-color;
+  &:hover {
+    border-color: $select-hover-border-color;
+    height: 4rem;
+  }
 
   .ant-select-selector {
     border-color: $ashgro-input-border;
@@ -460,6 +472,21 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 }
 .ant-pagination-item-ellipsis {
   letter-spacing: 0px;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th {
+  background-color: $ashgro-white;
+}
+.ant-select-focused:where(
+    .css-dev-only-do-not-override-1odpy5d
+  ).ant-select-outlined:not(.ant-select-disabled):not(
+    .ant-select-customize-input
+  ):not(.ant-pagination-size-changer)
+  .ant-select-selector {
+  box-shadow: none;
+}
+.ant-select-single .ant-select-selector .ant-select-selection-item {
+  line-height: 1.3rem;
 }
 .ant-notification .ant-notification-notice-wrapper {
   border-radius: 2.4rem;

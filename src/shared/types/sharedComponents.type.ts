@@ -92,7 +92,7 @@ export interface CheckboxFieldProps extends CheckboxProps {
 
 export interface ButtonProps {
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-  children: ReactNode;
+  children?: ReactNode;
   htmlType?: HtmlButtonType;
   type?: ButtonTypes;
   className?: string;
@@ -120,6 +120,26 @@ export interface ProgressBarProps {
   type: NotificationTypes;
 }
 
+export interface SearchFieldProps {
+  onSearch: (value: string) => void;
+  onFilter?: () => void;
+  placeholder?: string;
+  className?: string;
+}
+
+export interface ProspectData {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  avatar: string;
+  followUpDate: string;
+  leadSource: string;
+  leadStatus: {
+    label: string;
+    color: string;
+  };
+}
 export interface DropdownProps<
   ValueType,
   OptionType extends BaseOptionType | DefaultOptionType = DefaultOptionType,
@@ -141,4 +161,9 @@ export interface HandlePasswordChangeParams {
   setRealValue: (value: string) => void;
   setMaskedValue: (value: string) => void;
   onChange: (value: string) => void;
+}
+
+export interface StatusTagProps {
+  label: string;
+  color: string;
 }
