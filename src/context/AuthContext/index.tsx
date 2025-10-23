@@ -18,19 +18,17 @@ type SetAuthState = Dispatch<SetStateAction<AuthState>>;
 
 type AuthContentProps = [AuthState, SetAuthState];
 
-// Define the default context state
 const initialValues: AuthState = {
   authenticated: false,
   user: new UserData(),
   token: new TokenData(),
 };
 
-// Create the context
 const AuthContent: any = createContext({});
 
-// Create method to use context
 const AuthContext = () => {
   const context = useContext<AuthContentProps>(AuthContent);
+
   if (!context) {
     throw new Error(`useMeContext must be used within a MeContextProvider`);
   }
@@ -45,13 +43,17 @@ const AuthContext = () => {
     }));
   };
 
+  const resetAuthState = () => {
+    setAuth(initialValues);
+  };
+
   return {
     ...auth,
     setAuthenticated,
+    resetAuthState,
   };
 };
 
-// Create the context provider
 const AuthProvider = (ownProps: any) => {
   const [auth, setAuth] = useState<AuthState>(initialValues);
   const value = useMemo(() => [auth, setAuth], [auth]);

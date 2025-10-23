@@ -16,12 +16,12 @@ const {
 
 export const getHeaders = (): any => {
   let user;
-  if (localStorage.getItem("user")) {
-    user = JSON.parse(localStorage.getItem("user") || "");
+  if (localStorage.getItem("token")) {
+    user = JSON.parse(localStorage.getItem("token") || "");
   }
   const headers = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${user && user.adminAuthToken ? user.adminAuthToken : ""}`,
+    Authorization: `Bearer ${user && user.accessToken ? user.accessToken : ""}`,
   };
   return headers;
 };

@@ -171,11 +171,21 @@ export interface DropDownProps extends SelectProps {
   label?: string;
   showCheckboxes?: boolean;
 }
+
+export interface PasswordFieldProps extends InputProps {
+  name: string;
+  label?: string;
+}
+
+export interface PasswordState {
+  showPassword: boolean;
+  realValue: string;
+  maskedValue: string;
+}
 export interface HandlePasswordChangeParams {
   e: ChangeEvent<HTMLInputElement>;
-  realValue: string;
-  setRealValue: (value: string) => void;
-  setMaskedValue: (value: string) => void;
+  passwordState: PasswordState;
+  setPasswordState: React.Dispatch<React.SetStateAction<PasswordState>>;
   onChange: (value: string) => void;
 }
 

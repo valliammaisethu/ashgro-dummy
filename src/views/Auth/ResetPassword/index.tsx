@@ -87,6 +87,7 @@ const ResetPassword = () => {
               className={styles.submitButton}
               disabled={!isValid || !isDirty}
               loading={isPending}
+              type={ButtonTypes.PRIMARY}
             >
               {RESET_PASSWORD}
             </Button>

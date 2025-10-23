@@ -17,7 +17,6 @@ import { Colors } from "src/enums/colors.enum";
 const Button: FC<ButtonProps> = ({
   children,
   className,
-  moduleClassName,
   type = ButtonTypes.DEFAULT,
   size = ButtonSizes.MEDIUM,
   htmlType = HtmlButtonType.BUTTON,
@@ -30,7 +29,6 @@ const Button: FC<ButtonProps> = ({
     styles.button,
     styles[type],
     styles[size],
-    moduleClassName && styles[moduleClassName],
     className,
   );
 

@@ -1,4 +1,4 @@
 export enum RoleNames {
-  CLUB_ADMIN = "club_admin",
-  SUPER_ADMIN = "super_admin",
+  CLUB_ADMIN = "CLUB_ADMIN",
+  SUPER_ADMIN = "SUPER_ADMIN",
 }
