@@ -2,47 +2,58 @@ import React from "react";
 import { IconEmail } from "obra-icons-react";
 
 import { Colors } from "src/enums/colors.enum";
-import { ContactInfo } from "../types";
 import { PROSPECT_LABELS } from "../constants";
 import IconText from "../atoms/IconText";
 
 import styles from "../individualProspect.module.scss";
+import { ViewProspect } from "src/models/viewProspect.model";
+import { getFullName } from "src/shared/utils/helpers";
+import { formatDate } from "src/shared/utils/dateUtils";
+import { DateFormats } from "src/enums/dateFormats.enum";
+import { getPhoneNumber } from "../utils";
 
 interface ProspectInfoProps {
-  name: string;
-  imageUrl: string;
-  followUpDate: string;
-  contactInfo: ContactInfo;
+  imageUrl?: string;
+  data: ViewProspect;
 }
 
 const ProspectInfo: React.FC<ProspectInfoProps> = ({
-  name,
   imageUrl,
-  followUpDate,
-  contactInfo,
+  data: prospect,
 }) => {
+  const {
+    firstName,
+    endName,
+    followUpDate,
+    contactNumber,
+    countryCode,
+    email,
+  } = prospect;
+
   return (
     <div className={styles.top}>
       <div className={styles.left}>
-        <img src={imageUrl} className={styles.prospectImage} alt={name} />
+        <img src={imageUrl} className={styles.prospectImage} />
       </div>
       <div className={styles.right}>
-        <div className={styles.name}>{name}</div>
+        <div className={styles.name}>{getFullName(firstName, endName)}</div>
         <div className={styles.details}>
           <span className={styles.dateTitle}>
             {PROSPECT_LABELS.followUpDate}
           </span>
-          <span className={styles.date}>{followUpDate}</span>
+          <span className={styles.date}>
+            {formatDate(followUpDate, DateFormats.DD_MMM__YYYY)}
+          </span>
         </div>
         <div className={styles.email}>
           <IconText
             icon={<IconEmail color={Colors.ASHGRO_GOLD} size={20} />}
-            text={contactInfo.email}
+            text={email}
             className={styles.mail}
           />
           <IconText
             icon={<IconEmail color={Colors.ASHGRO_GOLD} size={20} />}
-            text={contactInfo.phone}
+            text={getPhoneNumber(countryCode, contactNumber)}
             className={styles.phone}
           />
         </div>

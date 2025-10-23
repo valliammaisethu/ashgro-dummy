@@ -7,46 +7,72 @@ import { IconDelete, IconEdit } from "obra-icons-react";
 import ProspectInfo from "./components/ProspectInfo";
 import DetailSection from "./components/DetailSection";
 import ActivitySection from "./components/ActivitySection";
-import { mockProspectData, mockActivities } from "./mockData";
-import { PROSPECT_LABELS } from "./constants";
+import { PROSPECT_LABELS, DetailSectionType } from "./constants";
+import { ProspectsService } from "src/services/ProspectsService/prospects.service";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import ConditionalRender from "src/shared/components/ConditionalRender";
+import { ProspectData } from "src/models/viewProspect.model";
 
 const IndividualProspect = () => {
+  const { viewProspect } = ProspectsService();
+  const { id = "" } = useParams();
+  const {
+    data = new ProspectData(),
+    isPending,
+    isSuccess,
+  } = useQuery(viewProspect(id));
+
   return (
     <div className={styles.individualProspect}>
       <Header />
-      <Card className={styles.card}>
-        <div className={styles.leftSide}>
-          <div className={styles.header}>
-            <Button className={styles.editButton}>
-              <IconEdit strokeWidth={1.5} />
-            </Button>
-            <Button className={styles.deleteButton}>
-              <IconDelete strokeWidth={1.5} />
-            </Button>
-          </div>
-          <div className={styles.content}>
-            <ProspectInfo
-              name={mockProspectData.name}
-              imageUrl={mockProspectData.imageUrl}
-              followUpDate={mockProspectData.followUpDate}
-              contactInfo={mockProspectData.contactInfo}
-            />
-            <div className={styles.bottom}>
-              <DetailSection
-                title={PROSPECT_LABELS.leadDetails}
-                items={mockProspectData.leadDetails}
+      <ConditionalRender
+        isPending={isPending}
+        isSuccess={isSuccess}
+        records={[data.prospect]}
+      >
+        <Card className={styles.card}>
+          <div className={styles.leftSide}>
+            <div className={styles.header}>
+              <Button
+                icon={<IconEdit strokeWidth={1.5} />}
+                className={styles.editButton}
               />
-              <DetailSection
-                title={PROSPECT_LABELS.feesAndDues}
-                items={mockProspectData.feesAndDues}
+              <Button
+                icon={<IconDelete strokeWidth={1.5} />}
+                className={styles.deleteButton}
               />
             </div>
+            <div className={styles.content}>
+              <ProspectInfo data={data.prospect} />
+              <div className={styles.bottom}>
+                <DetailSection
+                  title={PROSPECT_LABELS.leadDetails}
+                  data={data.prospect}
+                  type={DetailSectionType.LEAD_DETAILS}
+                />
+                <DetailSection
+                  title={PROSPECT_LABELS.feesAndDues}
+                  data={data.prospect}
+                  type={DetailSectionType.FEES_AND_DUES}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-        <div className={styles.rightSide}>
-          <ActivitySection activities={mockActivities} activityCount={12} />
-        </div>
-      </Card>
+          <div className={styles.rightSide}>
+            <ConditionalRender
+              records={data.prospect.activityDetails}
+              isPending={isPending}
+              isSuccess={isSuccess}
+            >
+              <ActivitySection
+                activities={data.prospect.activityDetails}
+                activityCount={data.prospect.activityDetails.length}
+              />
+            </ConditionalRender>
+          </div>
+        </Card>
+      </ConditionalRender>
     </div>
   );
 };

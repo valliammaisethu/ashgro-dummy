@@ -3,13 +3,15 @@ import { IconAdd, IconMessage } from "obra-icons-react";
 
 import Card from "src/shared/components/Card";
 import Button from "src/shared/components/Button";
-import { ActivityData } from "../types";
 import { headerConstants, PROSPECT_LABELS } from "../constants";
 
 import styles from "../individualProspect.module.scss";
+import { ActivityDetails } from "src/models/viewProspect.model";
+import { formatDate } from "src/shared/utils/dateUtils";
+import { DateFormats } from "src/enums/dateFormats.enum";
 
 interface ActivitySectionProps {
-  activities: ActivityData[];
+  activities: ActivityDetails[];
   activityCount: number;
 }
 
@@ -40,10 +42,12 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
       {activities?.map((activity) => (
         <Card key={activity.id} className={styles.activityCard}>
           <div className={styles.titleContainer}>
-            <div className={styles.title}>{activity.title}</div>
-            <div className={styles.date}>{activity.date}</div>
+            <div className={styles.title}>{activity.activityType}</div>
+            <div className={styles.date}>
+              {formatDate(activity.createdAt, DateFormats.HH_MM_A__DD_MMM_YYYY)}
+            </div>
           </div>
-          <div className={styles.content}>{activity.content}</div>
+          <div className={styles.content}>{activity.description}</div>
         </Card>
       ))}
     </div>

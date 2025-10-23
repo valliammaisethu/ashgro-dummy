@@ -1,10 +1,5 @@
-import React from "react";
-
 import { passwordAsterisk } from "src/constants/sharedComponents";
-import {
-  HandlePasswordChangeParams,
-  PasswordState,
-} from "src/shared/types/sharedComponents.type";
+import { HandlePasswordChangeParams } from "src/shared/types/sharedComponents.type";
 
 export const insertCharactersAt = (
   text: string,
@@ -24,25 +19,6 @@ export const deleteCharactersAt = (
   const before = text.substring(0, position);
   const after = text.substring(position + count);
   return before + after;
-};
-
-export const updatePasswordState = ({
-  updatedValue,
-  passwordState,
-  setPasswordState,
-  onChange,
-}: {
-  updatedValue: string;
-  passwordState: PasswordState;
-  setPasswordState: React.Dispatch<React.SetStateAction<PasswordState>>;
-  onChange: (value: string) => void;
-}) => {
-  setPasswordState({
-    ...passwordState,
-    realValue: updatedValue,
-    maskedValue: passwordAsterisk.repeat(updatedValue.length),
-  });
-  onChange(updatedValue);
 };
 
 export const handlePasswordChange = ({
@@ -79,10 +55,10 @@ export const handlePasswordChange = ({
     );
   }
 
-  updatePasswordState({
-    updatedValue: updatedRealValue,
-    passwordState,
-    setPasswordState,
-    onChange,
+  setPasswordState({
+    ...passwordState,
+    realValue: updatedRealValue,
+    maskedValue: passwordAsterisk.repeat(updatedRealValue.length),
   });
+  onChange(updatedRealValue);
 };

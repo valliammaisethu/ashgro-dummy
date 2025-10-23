@@ -7,4 +7,5 @@ export enum MutationKeys {
 
 export enum QueryKeys {
   GET_PROSPECTS = "getProspects",
+  GET_SINGLE_PROSPECT = "getSingleProspect",
 }
