@@ -92,8 +92,8 @@ const ProspectsListing = () => {
           </div>
           <ConditionalRender
             records={data?.data?.prospects}
-            isFetched={isSuccess}
-            isFetching={isPending}
+            isPending={isPending}
+            isSuccess={isSuccess}
           >
             <div className={styles.tableBody}>
               {data?.data?.prospects?.filter(Boolean).map((prospect) => (
