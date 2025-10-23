@@ -1,7 +1,7 @@
 revolte:
   version: '1.0'
   project: Ashgrow
-  appName: ashgrow-admin-web
+  appName: ashgro-admin-web
   env:
     staging:
       branch: staging
@@ -54,3 +54,4 @@ revolte:
             errorPage: error.html
             variables:
               BASE_URL: /api/v1
+              VITE_API_BASE_URL: https://environmental-tan-urial.rootquotient.revolte.io/api/v1
