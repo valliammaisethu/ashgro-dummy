@@ -19,6 +19,7 @@ const PhoneNumberField = ({
   phoneCodeName,
   name,
   label,
+  required = false,
   ...props
 }: PhoneNumberFieldProps) => {
   const { watch, setValue } = useFormContext();
@@ -47,9 +48,11 @@ const PhoneNumberField = ({
 
   return (
     <div className={styles.wrapper}>
-      <Label className={styles.label} htmlFor={name}>
-        {label}
-      </Label>
+      {label && (
+        <Label className={styles.label} htmlFor={name} required={required}>
+          {label}
+        </Label>
+      )}
       <div className={styles.inputWrapper}>
         <div className={styles.dropDownWrapper}>
           <DropdownField.RHF

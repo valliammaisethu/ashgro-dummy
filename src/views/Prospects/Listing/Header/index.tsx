@@ -7,7 +7,11 @@ import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
 
 import styles from "../listing.module.scss";
 
-const Header = () => {
+interface HeaderProps {
+  onAddProspect: () => void;
+}
+
+const Header = ({ onAddProspect }: HeaderProps) => {
   return (
     <div className={styles.header}>
       <SearchField
@@ -33,6 +37,7 @@ const Header = () => {
             className={styles.addProspectButton}
             type={ButtonTypes.SECONDARY}
             icon={<IconUserAdd size={20} />}
+            onClick={onAddProspect}
           >
             {Buttons.ADD_PROSPECT}
           </Button>

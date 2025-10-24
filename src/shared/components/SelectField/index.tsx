@@ -22,6 +22,7 @@ const SelectField = ({
   placeholder,
   showCheckboxes = false,
   options,
+  allowClear,
   ...props
 }: DropDownProps) => {
   const {
@@ -59,9 +60,9 @@ const SelectField = ({
   }, [showCheckboxes, options, field.value]);
 
   const getValue = () => {
-    if (!field.value) return "";
+    if (!field.value) return undefined;
     if (Array.isArray(field.value)) {
-      return field.value.length > 0 ? field.value : [];
+      return field.value.length > 0 ? field.value : undefined;
     }
     return field.value;
   };
@@ -82,11 +83,21 @@ const SelectField = ({
   };
 
   return (
-    <div>
-      <Label htmlFor={name}>{label}</Label>
+    <div className={styles.selectField}>
+      {label && (
+        <Label
+          className={styles.label}
+          htmlFor={name}
+          required={props.required}
+        >
+          {label}
+        </Label>
+      )}
       <div className={styles.selectFieldWrapper}>
         <Select
           {...selectProps}
+          placeholder={placeholder}
+          allowClear={allowClear}
           suffixIcon={<IconChevronDown size={20} strokeWidth={1.25} />}
         >
           {showCheckboxes && sortedOptions

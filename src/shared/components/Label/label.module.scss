@@ -7,4 +7,15 @@
   font-weight: 400;
   color: $ashgro-navy;
   line-height: 2rem;
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.asterisk {
+  color: $danger-color;
+  margin-left: 0.4rem;
+  font-weight: 600;
 }

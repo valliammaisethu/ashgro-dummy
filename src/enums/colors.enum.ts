@@ -6,4 +6,6 @@ export enum Colors {
   ASHGRO_GOLD = "#c5a25d",
   TICK_COLOR = "#599F07",
   SEARCH_ICON_COLOR = "#B5AA96",
+  MODAL_CLOSE_ICON = "#9A917B",
+  ASHGRO_NAVY = "#0C2340",
 }

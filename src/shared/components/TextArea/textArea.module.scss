@@ -1,0 +1,7 @@
+@use "src/styles/variables" as *;
+
+.textAreaWrapper {
+  display: flex;
+  gap: 0.6rem;
+  flex-flow: column nowrap;
+}

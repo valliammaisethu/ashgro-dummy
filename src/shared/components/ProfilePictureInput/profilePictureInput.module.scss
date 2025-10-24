@@ -1,0 +1,95 @@
+@import "src/styles/variables";
+
+.title {
+  font-size: 1.6rem;
+  font-family: $font-secondary;
+  color: $add-icon-bg;
+  text-align: center;
+
+  .asterisk {
+    color: $danger-color;
+    margin-left: 0.4rem;
+    font-weight: 600;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.imageWrapper {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &.withBorder {
+    border: 3px solid $ashgro-gold;
+    cursor: default;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &.loading {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.loaderOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(247, 244, 237, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.profileImage {
+  width: 8.8rem;
+  height: 8.8rem;
+  object-fit: cover;
+}
+
+.actions {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.actionButton {
+  width: 5.6rem;
+  height: 5.6rem;
+  border-radius: 50%;
+  border: none;
+  background-color: $ashgro-cream;
+  color: $ashgro-grey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: darken($ashgro-cream, 5%);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}

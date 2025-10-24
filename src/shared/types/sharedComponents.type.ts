@@ -13,6 +13,7 @@ import {
   Radio,
   SelectProps,
   SwitchProps,
+  ModalProps as AntdModalProps,
 } from "antd";
 
 import { ButtonSize } from "antd/es/button";
@@ -27,6 +28,7 @@ export interface PhoneNumberFieldProps extends InputProps {
   name: string;
   phoneCodeName: string;
   label?: string;
+  required?: boolean;
 }
 
 export interface NumberIncrementerProps {
@@ -170,6 +172,7 @@ export interface DropDownProps extends SelectProps {
   enableResponsiveTags?: boolean;
   label?: string;
   showCheckboxes?: boolean;
+  required?: boolean;
 }
 
 export interface PasswordFieldProps extends InputProps {
@@ -192,4 +195,20 @@ export interface HandlePasswordChangeParams {
 export interface StatusTagProps {
   label: string;
   color: string;
+}
+
+export interface ModalProps extends AntdModalProps {
+  children?: React.ReactNode;
+  closeModal: () => void;
+  handleOk?: () => void;
+  visible: boolean;
+  width?: number;
+  title?: string;
+  footer?: JSX.Element[];
+  confirmLoading?: boolean;
+  okText?: string;
+  cancelText?: string;
+  onCancel?: () => void;
+  okButtonHtmlType?: HtmlButtonType;
+  okButtonType?: ButtonTypes;
 }

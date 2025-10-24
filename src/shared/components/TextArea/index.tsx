@@ -1,27 +1,25 @@
-import React, { FC, ReactNode } from "react";
-import { Input, InputProps } from "antd";
+import React, { FC } from "react";
+import { Input } from "antd";
+import { TextAreaProps } from "antd/es/input";
 import { useFormContext, useController, FieldValues } from "react-hook-form";
 
-import { INPUT_TYPE } from "src/enums/inputType";
 import { InputStatus } from "src/enums/inputStatus.enum";
 import Label from "../Label";
 import Error from "../Error";
 
-import styles from "./inputField.module.scss";
+import styles from "./textArea.module.scss";
 
-interface InputFieldProps extends InputProps {
+const { TextArea: AntTextArea } = Input;
+
+interface TextAreaFieldProps extends TextAreaProps {
   name: string;
   label?: string;
-  type?: INPUT_TYPE;
-  suffix?: ReactNode;
   required?: boolean;
 }
 
-const InputField: FC<InputFieldProps> = ({
+const TextArea: FC<TextAreaFieldProps> = ({
   name,
   label,
-  type = INPUT_TYPE.TEXT,
-  suffix,
   required = false,
   ...rest
 }) => {
@@ -32,20 +30,18 @@ const InputField: FC<InputFieldProps> = ({
   } = useController({ name, control });
 
   return (
-    <div className={styles.inputWrapper}>
+    <div className={styles.textAreaWrapper}>
       {label && (
         <Label htmlFor={name} required={required}>
           {label}
         </Label>
       )}
-      <Input
+      <AntTextArea
         id={name}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
         {...rest}
-        type={type}
-        suffix={suffix}
         status={fieldState.error ? InputStatus.ERROR : undefined}
       />
 
@@ -54,4 +50,4 @@ const InputField: FC<InputFieldProps> = ({
   );
 };
 
-export default InputField;
+export default TextArea;
