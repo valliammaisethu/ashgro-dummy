@@ -21,6 +21,9 @@ import useDrawer from "src/shared/hooks/useDrawer";
 
 import styles from "./listing.module.scss";
 import AddProspect from "../AddProspect";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { UserData } from "src/models/user.model";
 
 const ProspectsListing = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -34,7 +37,8 @@ const ProspectsListing = () => {
     },
     [prospects],
   );
-
+  const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
+  const clubId = user?.clubId;
   const handleSelectOne = useCallback((id: string, checked: boolean) => {
     setSelectedIds((prev) => toggleSingleSelection(id, checked, prev));
   }, []);
@@ -70,7 +74,11 @@ const ProspectsListing = () => {
     [prospects, selectedIds],
   );
 
-  const { data, isPending, isSuccess } = useQuery(getProspects());
+  const { data, isPending, isSuccess } = useQuery(
+    getProspects({
+      clubId: clubId,
+    }),
+  );
 
   const navigateToProspect = (id: string) => () =>
     navigateToIndividualProspect(id);

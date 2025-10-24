@@ -11,5 +11,5 @@ export class QueryParams {
   limit?: number;
 
   @serializable
-  clubId?: number;
+  clubId?: string;
 }
