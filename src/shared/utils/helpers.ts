@@ -32,3 +32,51 @@ export const formatCurrency = (
 export const uploadHeaders = (file?: RcFile) => ({
   "Content-Type": file?.type || CONTENT_TYPES.OCTET_STREAM,
 });
+
+export const mapToSelectOptionsDynamic = <T extends { id?: string }>(
+  items?: T[],
+) => {
+  if (!Array.isArray(items)) return [];
+
+  return items
+    .filter((item) => item.id)
+    .map((item) => {
+      const labelKey = (Object.keys(item) as Array<keyof T>).find(
+        (key) => key !== "id",
+      );
+
+      return {
+        value: item.id!,
+        label: labelKey ? String(item[labelKey]) : "",
+      };
+    });
+};
+
+export const cleanObject = (obj: any): any => {
+  if (Array.isArray(obj)) {
+    return obj
+      .map(cleanObject)
+      .filter(
+        (v) =>
+          v != null &&
+          v !== "" &&
+          !(typeof v === "object" && Object.keys(v).length === 0),
+      );
+  }
+
+  if (obj && typeof obj === "object") {
+    return Object.entries(obj).reduce((acc, [key, value]) => {
+      const cleaned = cleanObject(value);
+      if (
+        cleaned != null &&
+        cleaned !== "" &&
+        !(typeof cleaned === "object" && Object.keys(cleaned).length === 0)
+      ) {
+        acc[key] = cleaned;
+      }
+      return acc;
+    }, {} as any);
+  }
+
+  return obj;
+};

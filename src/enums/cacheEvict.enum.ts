@@ -5,6 +5,7 @@ export enum MutationKeys {
   LOGOUT = "logout",
   ATTACHMENT_UPLOAD = "attachmentUpload",
   ATTACHMENT_DELETE = "attachmentDelete",
+  ADD_PROSPECT = "addProspect",
 }
 
 export enum QueryKeys {

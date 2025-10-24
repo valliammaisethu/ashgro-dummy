@@ -125,7 +125,7 @@ export const defaultSearchPlaceholder = "Search by name";
 export const defaultFilterPlaceholder = "Filter";
 export const noDataFound = "No data found";
 export const USPhoneCode = "+1";
-
+export const dollarSymbol = "$";
 export const logoutMessages = {
   title: "Logged Out!",
   description: "You have been logged out successfully.",

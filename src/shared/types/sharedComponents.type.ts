@@ -24,6 +24,7 @@ import { tooltipPosition } from "src/enums/tooltipPosition";
 import { BaseOptionType } from "antd/es/select";
 import { DefaultOptionType } from "antd/es/cascader";
 import { Trigger } from "src/enums/trigger.enum";
+import { INPUT_TYPE } from "src/enums/inputType";
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
   phoneCodeName: string;
@@ -138,6 +139,15 @@ export interface SearchFieldProps {
   onFilter?: () => void;
   placeholder?: string;
   className?: string;
+  debounceTime?: number;
+}
+
+export interface InputFieldProps extends InputProps {
+  name: string;
+  label?: string;
+  type?: INPUT_TYPE;
+  suffix?: ReactNode;
+  required?: boolean;
 }
 
 export interface ProspectData {

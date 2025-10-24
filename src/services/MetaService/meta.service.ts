@@ -17,20 +17,24 @@ import { UserData } from "src/models/user.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 
-const { GET_ACTIVITY_TYPES, GET_MEMBERSHIP_CATEGORIES, GET_LEAD_SOURCES } =
-  ApiRoutes;
+const {
+  GET_ACTIVITY_TYPES,
+  GET_MEMBERSHIP_CATEGORIES,
+  GET_LEAD_SOURCES,
+  GET_LEAD_STATUSES,
+} = ApiRoutes;
 const {
   GET_ACTIVITY_TYPES: GET_ACTIVITY_TYPES_KEY,
   GET_MEMBERSHIP_CATEGORIES: GET_MEMBERSHIP_CATEGORIES_KEY,
   GET_LEAD_SOURCES: GET_LEAD_SOURCES_KEY,
   GET_LEAD_STATUS: GET_LEAD_STATUS_KEY,
 } = QueryKeys;
-const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
-const clubId = user?.clubId;
 
 export const MetaService = () => {
+  const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
+  const clubId = user?.clubId;
   const getLeadSources = (
-    params?: LeadSourceParams,
+    params: LeadSourceParams = new LeadSourceParams(),
   ): UseQueryOptions<LeadSourcesData, ResponseModel, LeadSourcesData> => {
     return {
       queryKey: [GET_LEAD_SOURCES_KEY, clubId],
@@ -48,13 +52,13 @@ export const MetaService = () => {
     };
   };
   const getLeadStatuses = (
-    params?: LeadStatusParams,
+    params: LeadStatusParams = new LeadStatusParams(),
   ): UseQueryOptions<LeadStatusesData, ResponseModel, LeadStatusesData> => {
     return {
       queryKey: [GET_LEAD_STATUS_KEY, clubId],
       queryFn: async () => {
         const response = await axiosInstance.get(
-          generatePath(GET_LEAD_SOURCES, { id: clubId }),
+          generatePath(GET_LEAD_STATUSES, { id: clubId }),
           {
             params: serialize(LeadStatusParams, params),
           },
