@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "./Header";
 import styles from "./individualProspect.module.scss";
 import Card from "src/shared/components/Card";
@@ -13,6 +13,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import { ProspectData } from "src/models/viewProspect.model";
+import useDrawer from "src/shared/hooks/useDrawer";
+import AddProspect from "../AddProspect";
+import { MetaService } from "src/services/MetaService/meta.service";
+import { Select } from "antd";
+import StatusTag from "../Listing/Atoms/StatusTag";
 
 const IndividualProspect = () => {
   const { viewProspect } = ProspectsService();
@@ -21,7 +26,21 @@ const IndividualProspect = () => {
     data = new ProspectData(),
     isPending,
     isSuccess,
+    isFetching,
   } = useQuery(viewProspect(id));
+
+  const { getLeadStatuses } = MetaService();
+
+  const { data: leadStatusOptions } = useQuery(getLeadStatuses());
+
+  const [isEdit, setIsEdit] = useState(false);
+
+  const { visible, toggleVisibility } = useDrawer();
+
+  const handleEdit = () => {
+    setIsEdit(true);
+    toggleVisibility();
+  };
 
   return (
     <div className={styles.individualProspect}>
@@ -29,12 +48,26 @@ const IndividualProspect = () => {
       <ConditionalRender
         isPending={isPending}
         isSuccess={isSuccess}
+        isFetching={isFetching}
         records={[data.prospect]}
       >
         <Card className={styles.card}>
           <div className={styles.leftSide}>
             <div className={styles.header}>
+              <Select
+                value={data?.prospect?.leadStatus}
+                className={styles.statusSelect}
+              >
+                {leadStatusOptions?.leadStatuses?.map(
+                  ({ id, statusName = "" }) => (
+                    <Select.Option key={id} value={statusName}>
+                      <StatusTag label={statusName} />
+                    </Select.Option>
+                  ),
+                )}
+              </Select>
               <Button
+                onClick={handleEdit}
                 icon={<IconEdit strokeWidth={1.5} />}
                 className={styles.editButton}
               />
@@ -64,6 +97,7 @@ const IndividualProspect = () => {
               records={data.prospect.activityDetails}
               isPending={isPending}
               isSuccess={isSuccess}
+              className={styles.activitySection}
             >
               <ActivitySection
                 activities={data.prospect.activityDetails}
@@ -73,6 +107,12 @@ const IndividualProspect = () => {
           </div>
         </Card>
       </ConditionalRender>
+      <AddProspect
+        prospectData={data?.prospect}
+        isEdit={isEdit}
+        visible={visible}
+        onClose={toggleVisibility}
+      />
     </div>
   );
 };

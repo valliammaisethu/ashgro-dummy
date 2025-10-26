@@ -29,7 +29,7 @@ export class ProspectsList {
   firstName?: string;
 
   @serializable
-  endName?: string;
+  lastName?: string;
 
   @serializable
   email?: string;
@@ -76,7 +76,13 @@ export class ActivityDetails {
 
 export class Prospect {
   @serializable
+  id?: string;
+
+  @serializable
   clubId?: string;
+
+  @serializable
+  phoneCode?: string;
 
   @serializable
   firstName?: string;

@@ -8,6 +8,7 @@ import styles from "./conditionalRender.module.scss";
 
 interface ConditionalRenderProps<T> {
   isPending: boolean;
+  isFetching?: boolean;
   isSuccess: boolean;
   records?: T[];
   children: ReactNode;
@@ -29,18 +30,19 @@ const ConditionalRender = <T,>(props: ConditionalRenderProps<T>) => {
     showLoader = true,
     useSkeleton = false,
     skeletonProps,
+    isFetching,
   } = props;
 
   const isDataEmpty = isSuccess && records.length <= 0;
 
   const wrapperClass = className ?? styles.centerWrapper;
 
-  if (isPending) {
+  if ((isPending || isFetching) && showLoader) {
     if (useSkeleton) {
       return <Skeleton active {...skeletonProps} />;
     }
 
-    if (showLoader) {
+    if ((isPending || isFetching) && showLoader) {
       return (
         <div className={wrapperClass}>
           <Loader />

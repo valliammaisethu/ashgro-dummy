@@ -1,5 +1,6 @@
 export const ADD_PROSPECT_CONSTANTS = {
   MODAL_TITLE: "New Prospect",
+  EDIT_TITLE: "Edit Prospect",
   MODAL_WIDTH: 664,
 
   SECTION_TITLES: {
@@ -47,14 +48,14 @@ export const ADD_PROSPECT_CONSTANTS = {
     PROFILE_PICTURE: "prospect.attachmentId",
     FIRST_NAME: "prospect.firstName",
     LAST_NAME: "prospect.lastName",
-    LEAD_STATUS: "prospect.leadStatus",
+    LEAD_STATUS: "prospect.leadStatusId",
     FOLLOW_UP_DATE: "prospect.followUpDate",
     EMAIL_ADDRESS: "prospect.email",
     PHONE_NUMBER: "prospect.contactNumber",
     PHONE_CODE: "phoneCode",
     INQUIRY_DATE: "prospect.inquiryDate",
-    LEAD_SOURCE: "prospect.leadSource",
-    MEMBERSHIP_CATEGORY: "prospect.membershipCategory",
+    LEAD_SOURCE: "prospect.leadSourceId",
+    MEMBERSHIP_CATEGORY: "prospect.membershipCategoryId",
     MONTHLY_DUES: "prospect.monthlyDues",
     INITIATION_FEE: "prospect.initiationFee",
     ACTIVITY_DATE_TIME: "activityDetails.createdAt",

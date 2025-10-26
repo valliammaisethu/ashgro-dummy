@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import Modal from "src/shared/components/Modal";
 import styles from "./addProspect.module.scss";
 import { Col, Divider, Row } from "antd";
@@ -12,7 +12,6 @@ import { INPUT_TYPE } from "src/enums/inputType";
 import ProfilePictureInput from "src/shared/components/ProfilePictureInput";
 import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { ADD_PROSPECT_CONSTANTS, submitButtonKey } from "./constants";
-import { validationSchema } from "./validation";
 import { Justify } from "src/enums/align.enum";
 import { MetaService } from "src/services/MetaService/meta.service";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -25,9 +24,12 @@ import { ProspectsService } from "src/services/ProspectsService/prospects.servic
 import Button from "src/shared/components/Button";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import useForm from "src/shared/components/UseForm";
+import { ViewProspect } from "src/models/viewProspect.model";
+import { validationSchema } from "./validation";
 
 const {
   MODAL_TITLE,
+  EDIT_TITLE,
   MODAL_WIDTH,
   SECTION_TITLES,
   LABELS,
@@ -38,9 +40,16 @@ const {
 interface AddProspectProps {
   visible: boolean;
   onClose: () => void;
+  isEdit?: boolean;
+  prospectData?: ViewProspect;
 }
 
-const AddProspect = ({ visible, onClose }: AddProspectProps) => {
+const AddProspect = ({
+  visible,
+  onClose,
+  isEdit = false,
+  prospectData,
+}: AddProspectProps) => {
   const {
     getLeadSources,
     getLeadStatuses,
@@ -48,18 +57,27 @@ const AddProspect = ({ visible, onClose }: AddProspectProps) => {
     getActivityTypes,
   } = MetaService();
 
-  const { addProspect } = ProspectsService();
+  const { addProspect, editProspect } = ProspectsService();
 
   const { mutateAsync, isPending } = useMutation(addProspect());
+  const { mutateAsync: editMutateAsync, isPending: isEditPending } =
+    useMutation(editProspect());
   const { data: leadSources } = useQuery(getLeadSources());
   const { data: leadStatuses } = useQuery(getLeadStatuses());
   const { data: membershipCategories } = useQuery(getMembershipCategories());
   const { data: activityTypes } = useQuery(getActivityTypes());
 
-  const handleSubmit = async (values: FieldValues) =>
+  const handleSubmit = async (values: FieldValues) => {
+    if (isEdit) {
+      editMutateAsync(values, {
+        onSuccess: onClose,
+      });
+      return;
+    }
     mutateAsync(values, {
       onSuccess: onClose,
     });
+  };
 
   const methods = useForm({
     validationSchema,
@@ -76,8 +94,35 @@ const AddProspect = ({ visible, onClose }: AddProspectProps) => {
         FIELD_NAMES.ACTIVITY_DATE_TIME,
         new Date().toISOString(),
       );
+    } else {
+      methods.setValue(FIELD_NAMES.ACTIVITY_DATE_TIME, "");
     }
   }, [activityType, activityDescription]);
+
+  useEffect(() => {
+    if (prospectData) {
+      const { activityDetails, ...prospect } = prospectData;
+
+      methods.reset({
+        activityDetails: activityDetails?.[0] || {},
+        prospect: {
+          ...prospect,
+          phoneCode: prospect.countryCode,
+          membershipCategoryId: prospect.membershipCategory,
+          leadSourceId: prospect.leadSource,
+          leadStatusId: prospect.leadStatus,
+          followUpDate: formatDate(
+            prospect.followUpDate,
+            DateFormats.DD_MMM__YYYY,
+          ),
+          inquiryDate: formatDate(
+            prospect.inquiryDate,
+            DateFormats.DD_MMM__YYYY,
+          ),
+        },
+      });
+    }
+  }, [prospectData, methods]);
 
   return (
     <div>
@@ -85,7 +130,7 @@ const AddProspect = ({ visible, onClose }: AddProspectProps) => {
         cancelButtonProps={{
           className: "d-none",
         }}
-        title={MODAL_TITLE}
+        title={isEdit ? EDIT_TITLE : MODAL_TITLE}
         visible={visible}
         width={MODAL_WIDTH}
         okText={Buttons.ADD_PROSPECT}
@@ -209,58 +254,62 @@ const AddProspect = ({ visible, onClose }: AddProspectProps) => {
               />
             </Col>
           </Row>
-          <Divider />
-          <div className={styles.sectionTitle}>
-            {SECTION_TITLES.ACTIVITY_DETAILS}
-          </div>
-          <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
-            <Col span={12}>
-              <InputField
-                placeholder={PLACEHOLDERS.ACTIVITY_DATE_TIME}
-                label={LABELS.ACTIVITY_DATE_TIME}
-                value={formatDate(
-                  activityDateTime,
-                  DateFormats.HH_MM_A__DD_MMM_YYYY,
-                  true,
-                )}
-                name={FIELD_NAMES.ACTIVITY_DATE_TIME}
-                readOnly
-                suffix={
-                  <IconCalendarWait
-                    color={Colors.ASHGRO_NAVY}
-                    strokeWidth={1.25}
-                    size={16}
+          {!isEdit && (
+            <Fragment>
+              <Divider />
+              <div className={styles.sectionTitle}>
+                {SECTION_TITLES.ACTIVITY_DETAILS}
+              </div>
+              <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
+                <Col span={12}>
+                  <InputField
+                    placeholder={PLACEHOLDERS.ACTIVITY_DATE_TIME}
+                    label={LABELS.ACTIVITY_DATE_TIME}
+                    value={formatDate(
+                      activityDateTime,
+                      DateFormats.HH_MM_A__DD_MMM_YYYY,
+                      true,
+                    )}
+                    name={FIELD_NAMES.ACTIVITY_DATE_TIME}
+                    readOnly
+                    suffix={
+                      <IconCalendarWait
+                        color={Colors.ASHGRO_NAVY}
+                        strokeWidth={1.25}
+                        size={16}
+                      />
+                    }
                   />
-                }
-              />
-            </Col>
-            <Col span={12}>
-              <SelectField
-                placeholder={PLACEHOLDERS.ACTIVITY_TYPE}
-                label={LABELS.ACTIVITY_TYPE}
-                name={FIELD_NAMES.ACTIVITY_TYPE}
-                options={mapToSelectOptionsDynamic(
-                  activityTypes?.activityTypes,
-                )}
-              />
-            </Col>
-            <Col span={24}>
-              <TextArea
-                placeholder={PLACEHOLDERS.ACTIVITY_DESCRIPTION}
-                name={FIELD_NAMES.ACTIVITY_DESCRIPTION}
-                label={LABELS.ACTIVITY_DESCRIPTION}
-              />
-            </Col>
-          </Row>
+                </Col>
+                <Col span={12}>
+                  <SelectField
+                    placeholder={PLACEHOLDERS.ACTIVITY_TYPE}
+                    label={LABELS.ACTIVITY_TYPE}
+                    name={FIELD_NAMES.ACTIVITY_TYPE}
+                    options={mapToSelectOptionsDynamic(
+                      activityTypes?.activityTypes,
+                    )}
+                  />
+                </Col>
+                <Col span={24}>
+                  <TextArea
+                    placeholder={PLACEHOLDERS.ACTIVITY_DESCRIPTION}
+                    name={FIELD_NAMES.ACTIVITY_DESCRIPTION}
+                    label={LABELS.ACTIVITY_DESCRIPTION}
+                  />
+                </Col>
+              </Row>
+            </Fragment>
+          )}
           <div className={styles.modalFooter}>
             <Button
               key={submitButtonKey}
               type={ButtonTypes.DEFAULT}
               className={styles.okButton}
-              loading={isPending}
+              loading={isEdit ? isEditPending : isPending}
               htmlType={HtmlButtonType.SUBMIT}
             >
-              {Buttons.ADD_PROSPECT}
+              {isEdit ? Buttons.SAVE_CHANGES : Buttons.ADD_PROSPECT}
             </Button>
           </div>
         </Form>

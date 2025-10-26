@@ -6,8 +6,8 @@ import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
 import {
   ProspectFormData,
+  ProspectsListData,
   ProspectsListingParams,
-  ProspectsListResponse,
 } from "src/models/prospects.model";
 import { ResponseModel } from "src/models/response.model";
 import { ProspectData } from "src/models/viewProspect.model";
@@ -24,11 +24,7 @@ export const ProspectsService = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
   const getProspects = (
     params: ProspectsListingParams = new ProspectsListingParams(),
-  ): UseQueryOptions<
-    ProspectsListResponse,
-    ResponseModel,
-    ProspectsListResponse
-  > => ({
+  ): UseQueryOptions<ProspectsListData, ResponseModel, ProspectsListData> => ({
     queryKey: [GET_PROSPECTS, params],
     enabled: !!params.clubId,
     queryFn: async () => {
@@ -36,7 +32,7 @@ export const ProspectsService = () => {
         params: serialize(ProspectsListingParams, params),
       });
 
-      return deserialize(ProspectsListResponse, response?.data);
+      return deserialize(ProspectsListData, response?.data?.data);
     },
   });
 
@@ -51,7 +47,6 @@ export const ProspectsService = () => {
       return deserialize(ProspectData, response?.data?.data);
     },
     enabled: !!id,
-    initialData: new ProspectData(),
   });
 
   const addProspect = (): UseMutationOptions<
@@ -79,9 +74,34 @@ export const ProspectsService = () => {
     },
   });
 
+  const editProspect = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    ProspectFormData
+  > => ({
+    mutationKey: [ADD_PROSPECT],
+    mutationFn: async (data: ProspectFormData) => {
+      const response = await axiosInstance.put(
+        generatePath(GET_PROSPECT, { id: data?.prospect?.id }),
+        serialize(
+          ProspectFormData,
+          cleanObject({
+            prospect: { ...data.prospect, clubId: clubId },
+          }),
+        ),
+      );
+      return deserialize(ResponseModel, response?.data);
+    },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description);
+    },
+  });
+
   return {
     getProspects,
     viewProspect,
     addProspect,
+    editProspect,
   };
 };

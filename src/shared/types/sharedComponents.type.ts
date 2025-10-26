@@ -204,7 +204,7 @@ export interface HandlePasswordChangeParams {
 
 export interface StatusTagProps {
   label: string;
-  color: string;
+  color?: string;
 }
 
 export interface ModalProps extends AntdModalProps {
@@ -227,4 +227,13 @@ export interface ProfilePictureInputProps {
   name: string;
   label?: string;
   required?: boolean;
+}
+
+export interface AvatarWithFallbackProps {
+  src?: string;
+  name: string;
+  size?: number;
+  className?: string;
+  backgroundColor?: string;
+  textColor?: string;
 }

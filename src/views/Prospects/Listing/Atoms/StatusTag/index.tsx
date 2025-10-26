@@ -5,7 +5,7 @@ import { StatusTagProps } from "src/shared/types/sharedComponents.type";
 
 import styles from "../../listing.module.scss";
 
-const StatusTag: React.FC<StatusTagProps> = ({ label, color }) => {
+const StatusTag: React.FC<StatusTagProps> = ({ label, color = "" }) => {
   return (
     <span className={clsx(styles.statusTag, styles[color])}>
       <span className={styles.statusTagDot}></span>
