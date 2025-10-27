@@ -184,6 +184,12 @@
       padding: 2rem 2.4rem;
       border-radius: 1.6rem;
 
+      .activitySection {
+        display: flex;
+        margin: auto;
+        justify-content: center;
+      }
+
       @include flex-flow(column, wrap, normal);
       overflow-y: auto;
 
@@ -311,4 +317,50 @@
     font-weight: 400;
     font-family: $font-secondary;
   }
+}
+
+.statusSelect {
+  :global(.ant-select.ant-select.ant-select-open .ant-select-selector) {
+    border: none;
+    box-shadow: none;
+  }
+  &:global(.ant-select) {
+    width: 14rem;
+    height: 3.6rem;
+
+    :global(.ant-select-selector) {
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      background: transparent;
+
+      :global(.ant-select-selection-item) {
+        padding: 0;
+      }
+    }
+
+    &:hover :global(.ant-select-selector) {
+      border: none;
+    }
+
+    &:global(.ant-select-focused) :global(.ant-select-selector) {
+      border: none;
+      box-shadow: none;
+    }
+  }
+}
+
+.statusTag {
+  display: inline-flex;
+  align-items: center;
+  width: 14rem;
+  height: 3.6rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border-radius: 2.8rem;
+  padding-left: 1.5rem;
+  font-family: $font-secondary;
+  border: 1px solid transparent;
+  text-align: left;
+  gap: 0.5rem;
 }

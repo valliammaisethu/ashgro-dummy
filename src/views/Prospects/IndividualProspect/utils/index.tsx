@@ -21,15 +21,15 @@ export const getLeadDetails = (
   return [
     {
       title: detailTitles.inquiryDate,
-      value: formatDate(inquiryDate, DateFormats.DD_MMM__YYYY),
+      value: fillEmptyData(formatDate(inquiryDate, DateFormats.DD_MMM__YYYY)),
     },
     {
       title: detailTitles.leadSource,
-      value: toTitleCase(leadSource),
+      value: fillEmptyData(toTitleCase(leadSource)),
     },
     {
       title: detailTitles.membershipCategory,
-      value: toTitleCase(membershipCategory),
+      value: fillEmptyData(toTitleCase(membershipCategory)),
     },
   ];
 };

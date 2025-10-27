@@ -3,7 +3,6 @@ import { ProspectData } from "src/shared/types/sharedComponents.type";
 export interface LeadStatusOption {
   label: string;
   value: string;
-  color: string;
 }
 
 export const TABLE_HEADERS = {
@@ -12,15 +11,6 @@ export const TABLE_HEADERS = {
   LEAD_SOURCE: "Lead Source",
   LEAD_STATUS: "Lead Status",
 } as const;
-
-export const leadStatusOptions: LeadStatusOption[] = [
-  { label: "New lead", value: "new_lead", color: "blue" },
-  { label: "Unqualified", value: "unqualified", color: "default" },
-  { label: "Hot", value: "hot", color: "red" },
-  { label: "Warm", value: "warm", color: "orange" },
-  { label: "Closed Won", value: "closed_won", color: "green" },
-  { label: "Closed Lost", value: "closed_lost", color: "purple" },
-];
 
 export const mockProspects: ProspectData[] = [
   {

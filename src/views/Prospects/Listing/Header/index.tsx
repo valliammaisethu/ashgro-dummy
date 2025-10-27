@@ -9,13 +9,14 @@ import styles from "../listing.module.scss";
 
 interface HeaderProps {
   onAddProspect: () => void;
+  onSearch: (searchTerm: string) => void;
 }
 
-const Header = ({ onAddProspect }: HeaderProps) => {
+const Header = ({ onAddProspect, onSearch }: HeaderProps) => {
   return (
     <div className={styles.header}>
       <SearchField
-        onSearch={() => {}}
+        onSearch={onSearch}
         onFilter={() => {}}
         className={styles.searchField}
       />

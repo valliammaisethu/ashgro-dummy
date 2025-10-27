@@ -24,20 +24,33 @@ export const validationSchema = yup.object({
     lastName: yup.string().label(LABELS.LAST_NAME).required(lastName).max(50),
     email: yup.string().label(LABELS.EMAIL_ADDRESS).email().required().max(100),
     contactNumber: yup.string().max(10, phone),
+    phoneCode: yup.string(),
     monthlyDues: yup
       .string()
+      .transform((v) => (v === "" ? null : v))
+      .nullable()
       .test("non-negative", negativeNumber, (value) => {
         if (!value) return true;
         return parseFloat(value) >= 0;
       })
-      .matches(REGEX.TWO_DECIMALS, monthlyDues),
+      .matches(REGEX.TWO_DECIMALS, {
+        message: monthlyDues,
+        excludeEmptyString: true,
+      }),
+
     initiationFee: yup
       .string()
+      .transform((v) => (v === "" ? null : v))
+      .nullable()
       .test("non-negative", negativeNumber, (value) => {
         if (!value) return true;
         return parseFloat(value) >= 0;
       })
-      .matches(REGEX.TWO_DECIMALS, initiationFee),
+      .matches(REGEX.TWO_DECIMALS, {
+        message: initiationFee,
+        excludeEmptyString: true,
+      }),
+
     leadStatusId: yup.string(),
     followUpDate: yup.string(),
     inquiryDate: yup.string(),

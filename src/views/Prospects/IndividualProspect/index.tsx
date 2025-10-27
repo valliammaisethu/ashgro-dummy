@@ -1,22 +1,42 @@
-import React from "react";
+import React, { Fragment, useState } from "react";
+import { IconDelete, IconEdit } from "obra-icons-react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { Select } from "antd";
+
 import Header from "./Header";
-import styles from "./individualProspect.module.scss";
+import StatusTag from "../Listing/Atoms/StatusTag";
+import ProspectForm from "../ProspectForm";
 import Card from "src/shared/components/Card";
 import Button from "src/shared/components/Button";
-import { IconDelete, IconEdit } from "obra-icons-react";
 import ProspectInfo from "./components/ProspectInfo";
+import ConditionalRender from "src/shared/components/ConditionalRender";
 import DetailSection from "./components/DetailSection";
 import ActivitySection from "./components/ActivitySection";
 import { PROSPECT_LABELS, DetailSectionType } from "./constants";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-import ConditionalRender from "src/shared/components/ConditionalRender";
+import useDrawer from "src/shared/hooks/useDrawer";
+import { MetaService } from "src/services/MetaService/meta.service";
+
+import styles from "./individualProspect.module.scss";
 
 const IndividualProspect = () => {
   const { viewProspect } = ProspectsService();
   const { id = "" } = useParams();
-  const { data, isPending, isSuccess } = useQuery(viewProspect(id));
+  const { data, isPending, isSuccess, isFetching } = useQuery(viewProspect(id));
+
+  const { getLeadStatuses } = MetaService();
+
+  const { data: leadStatusOptions } = useQuery(getLeadStatuses());
+
+  const [isEdit, setIsEdit] = useState(false);
+
+  const { visible, toggleVisibility } = useDrawer();
+
+  const handleEdit = () => {
+    setIsEdit(true);
+    toggleVisibility();
+  };
 
   return (
     <div className={styles.individualProspect}>
@@ -24,12 +44,26 @@ const IndividualProspect = () => {
       <ConditionalRender
         isPending={isPending}
         isSuccess={isSuccess}
+        isFetching={isFetching}
         records={[data?.prospect]}
       >
         <Card className={styles.card}>
           <div className={styles.leftSide}>
             <div className={styles.header}>
+              <Select
+                value={data?.prospect?.leadStatus}
+                className={styles.statusSelect}
+              >
+                {leadStatusOptions?.leadStatuses?.map(
+                  ({ id, statusName = "" }) => (
+                    <Select.Option key={id} value={statusName}>
+                      <StatusTag label={statusName} />
+                    </Select.Option>
+                  ),
+                )}
+              </Select>
               <Button
+                onClick={handleEdit}
                 icon={<IconEdit strokeWidth={1.5} />}
                 className={styles.editButton}
               />
@@ -59,6 +93,7 @@ const IndividualProspect = () => {
               records={data?.prospect.activityDetails}
               isPending={isPending}
               isSuccess={isSuccess}
+              className={styles.activitySection}
             >
               <ActivitySection
                 activities={data?.prospect.activityDetails}
@@ -68,6 +103,16 @@ const IndividualProspect = () => {
           </div>
         </Card>
       </ConditionalRender>
+      {isEdit && !isFetching ? (
+        <ProspectForm
+          prospectData={data?.prospect}
+          isEdit={isEdit}
+          visible={visible}
+          onClose={toggleVisibility}
+        />
+      ) : (
+        <Fragment />
+      )}
     </div>
   );
 };
