@@ -17,6 +17,7 @@ import { PROSPECT_LABELS, DetailSectionType } from "./constants";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import useDrawer from "src/shared/hooks/useDrawer";
 import { MetaService } from "src/services/MetaService/meta.service";
+import DeleteModal from "../DeleteModal";
 
 import styles from "./individualProspect.module.scss";
 
@@ -32,6 +33,9 @@ const IndividualProspect = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   const { visible, toggleVisibility } = useDrawer();
+
+  const { visible: deleteModalVisible, toggleVisibility: toggleDeleteModal } =
+    useDrawer();
 
   const handleEdit = () => {
     setIsEdit(true);
@@ -68,6 +72,7 @@ const IndividualProspect = () => {
                 className={styles.editButton}
               />
               <Button
+                onClick={toggleDeleteModal}
                 icon={<IconDelete strokeWidth={1.5} />}
                 className={styles.deleteButton}
               />
@@ -113,6 +118,11 @@ const IndividualProspect = () => {
       ) : (
         <Fragment />
       )}
+      <DeleteModal
+        visible={deleteModalVisible}
+        toggleVisibility={toggleDeleteModal}
+        id={id}
+      />
     </div>
   );
 };

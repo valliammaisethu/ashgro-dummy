@@ -1,7 +1,9 @@
+import React, { Fragment, MouseEvent } from "react";
 import { CheckboxChangeEvent, Select } from "antd";
-import React, { Fragment } from "react";
+import { IconDelete, IconEdit } from "obra-icons-react";
 
 import { ProspectsList } from "src/models/prospects.model";
+import { LeadStatus } from "src/models/meta.model";
 import { formatDate } from "src/shared/utils/dateUtils";
 import { toTitleCase } from "src/shared/utils/parser";
 import { fillEmptyData, getFullName } from "src/shared/utils/helpers";
@@ -9,9 +11,10 @@ import AvatarFallback from "src/shared/components/AvatarFallback";
 import Checkbox from "src/shared/components/Checkbox";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import StatusTag from "../../Atoms/StatusTag";
+import { N_A } from "src/constants/sharedComponents";
+import { Colors } from "src/enums/colors.enum";
 
 import styles from "./prospectRow.module.scss";
-import { LeadStatus } from "src/models/meta.model";
 
 interface ProspectRowProps {
   prospect: ProspectsList;
@@ -19,6 +22,8 @@ interface ProspectRowProps {
   leadStatusOptions?: LeadStatus[];
   onSelectChange: (id: string, checked: boolean) => void;
   onClick: () => void;
+  onEditClick: (data: ProspectsList) => void;
+  onDeleteClick: (data: ProspectsList) => void;
 }
 
 const ProspectRow: React.FC<ProspectRowProps> = ({
@@ -27,11 +32,12 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   leadStatusOptions = [],
   onSelectChange,
   onClick,
+  onEditClick,
+  onDeleteClick,
 }) => {
   const {
     id = "",
     leadStatus,
-    attachmentId,
     firstName,
     lastName,
     email,
@@ -39,6 +45,7 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
     contactNumber,
     followUpDate,
     leadSource,
+    profilePictureUrl,
   } = prospect;
 
   const handleCheckboxChange = (e?: CheckboxChangeEvent) => {
@@ -47,6 +54,16 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   };
 
   const handleSelectClick = (e: React.MouseEvent) => e.stopPropagation();
+
+  const handleEditClick = (e: React.MouseEvent, data: ProspectsList) => {
+    e.stopPropagation();
+    onEditClick(data);
+  };
+
+  const handleDeleteClick = (e: MouseEvent, data: ProspectsList) => {
+    e.stopPropagation();
+    onDeleteClick(data);
+  };
 
   return (
     <div onClick={onClick} className={styles.tableRow}>
@@ -57,7 +74,7 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
       <div className={styles.prospectCol}>
         <div className={styles.prospectInfo}>
           <AvatarFallback
-            src={attachmentId}
+            src={profilePictureUrl}
             name={getFullName(firstName, lastName)}
             size={40}
             className={styles.avatar}
@@ -97,14 +114,26 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
           >
             {leadStatusOptions?.map(({ id, statusName = "" }) => (
               <Select.Option key={id} value={statusName}>
-                <StatusTag label={statusName} color={"red"} />
+                <StatusTag label={statusName} />
               </Select.Option>
             ))}
           </Select>
         </div>
       ) : (
-        "N/A"
+        <div className={styles.sourceColValue}>{N_A}</div>
       )}
+      <div className={styles.actions}>
+        <IconEdit
+          onClick={(e) => handleEditClick(e, prospect)}
+          size={20}
+          color={Colors.MODAL_CLOSE_ICON}
+        />
+        <IconDelete
+          onClick={(e) => handleDeleteClick(e, prospect)}
+          size={20}
+          color={Colors.MODAL_CLOSE_ICON}
+        />
+      </div>
     </div>
   );
 };

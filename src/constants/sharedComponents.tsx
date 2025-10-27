@@ -130,5 +130,5 @@ export const logoutMessages = {
   title: "Logged Out!",
   description: "You have been logged out successfully.",
 };
-
+export const N_A = "N/A";
 export const imageAccept = "image/*";

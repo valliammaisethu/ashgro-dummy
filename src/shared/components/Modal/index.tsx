@@ -23,11 +23,13 @@ const Modal: React.FC<ModalProps> = ({
   okButtonProps,
   okButtonHtmlType = HtmlButtonType.BUTTON,
   okButtonType = ButtonTypes.DEFAULT,
+  rootClassName,
 }: ModalProps) => {
   return (
     <div className={styles.modalContainer}>
       <CustomModal
         width={width}
+        rootClassName={rootClassName}
         footer={
           footer ? (
             footer
@@ -66,6 +68,7 @@ const Modal: React.FC<ModalProps> = ({
         onOk={handleOk ? handleOk : closeModal}
         onCancel={onCancel ?? closeModal}
         confirmLoading={confirmLoading}
+        destroyOnHidden
         closeIcon={
           <IconCircleClose color={Colors.MODAL_CLOSE_ICON} size={20} />
         }
