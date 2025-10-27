@@ -3,6 +3,7 @@ import React, {
   createContext,
   useMemo,
   useState,
+  useEffect,
   Dispatch,
   SetStateAction,
 } from "react";
@@ -15,7 +16,6 @@ export interface AuthState {
 }
 
 type SetAuthState = Dispatch<SetStateAction<AuthState>>;
-
 type AuthContentProps = [AuthState, SetAuthState];
 
 const initialValues: AuthState = {
@@ -35,16 +35,19 @@ const AuthContext = () => {
   const [auth, setAuth] = context;
 
   const setAuthenticated = (user?: UserData, token?: TokenData) => {
-    setAuth((auth) => ({
+    const newAuth = {
       ...auth,
       authenticated: true,
       user,
       token,
-    }));
+    };
+    setAuth(newAuth);
+    localStorage.setItem("auth", JSON.stringify(newAuth));
   };
 
   const resetAuthState = () => {
     setAuth(initialValues);
+    localStorage.removeItem("auth");
   };
 
   return {
@@ -55,7 +58,17 @@ const AuthContext = () => {
 };
 
 const AuthProvider = (ownProps: any) => {
-  const [auth, setAuth] = useState<AuthState>(initialValues);
+  const [auth, setAuth] = useState<AuthState>(() => {
+    const stored = localStorage.getItem("auth");
+    return stored ? JSON.parse(stored) : initialValues;
+  });
+
+  useEffect(() => {
+    if (auth.authenticated) {
+      localStorage.setItem("auth", JSON.stringify(auth));
+    }
+  }, [auth]);
+
   const value = useMemo(() => [auth, setAuth], [auth]);
   return <AuthContent.Provider value={value} {...ownProps} />;
 };
