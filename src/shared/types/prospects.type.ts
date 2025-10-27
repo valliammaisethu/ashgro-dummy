@@ -10,3 +10,13 @@ export interface AddProspectProps {
   isEdit?: boolean;
   prospectData?: ViewProspect;
 }
+
+export interface IndividualProspectHeaderProps {
+  onConvert: () => void;
+}
+
+export interface MemberConversionModalProps {
+  visible: boolean;
+  onClose: () => void;
+  memberName: string;
+}

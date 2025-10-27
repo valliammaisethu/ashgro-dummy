@@ -234,11 +234,13 @@
 
 .deleteModal {
   :global(.ant-modal .ant-modal-header) {
-    color: $dot-color;
-    font-weight: 700;
-    font-size: 2.2rem;
-    padding-bottom: 0;
-    padding-left: 2.6rem;
+    :global(.ant-modal-title) {
+      color: $ashgro-navy;
+      font-weight: 700;
+      font-size: 2.2rem;
+      padding-bottom: 0;
+      padding-left: 2rem;
+    }
 
     :global(.ant-divider) {
       display: none;

@@ -11,6 +11,7 @@ import {
 } from "../Listing/constants";
 
 import styles from "../Listing/Components/ProspectRow/prospectRow.module.scss";
+import { defaultModalWidth } from "src/constants/sharedComponents";
 
 interface DeleteModalProps {
   visible: boolean;
@@ -35,6 +36,8 @@ const DeleteModal = (props: DeleteModalProps) => {
       <Modal
         title={deleteProspectTitle}
         visible={visible}
+        width={defaultModalWidth}
+        centered
         closeModal={toggleVisibility}
         rootClassName={styles.deleteModal}
         footer={[

@@ -23,7 +23,7 @@ export const validationSchema = yup.object({
       .max(50),
     lastName: yup.string().label(LABELS.LAST_NAME).required(lastName).max(50),
     email: yup.string().label(LABELS.EMAIL_ADDRESS).email().required().max(100),
-    contactNumber: yup.string().max(10, phone),
+    contactNumber: yup.string().length(10, phone),
     phoneCode: yup.string(),
     monthlyDues: yup
       .string()
@@ -62,7 +62,7 @@ export const validationSchema = yup.object({
     .object({
       createdAt: yup.string(),
       activityTypeId: yup.string(),
-      description: yup.string(),
+      description: yup.string().max(300),
     })
     .test("activity-required-if-other-filled", function (value) {
       const { path, createError } = this;
