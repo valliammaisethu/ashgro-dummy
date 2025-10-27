@@ -8,4 +8,5 @@ export const ApiRoutes = {
   ATTACHMENTS_SPECIFIC: "/attachments/:id",
   ATTACHMENT_PRESIGNED_URL: "/attachments/get-presigned-url",
   PROSPECTS: "/prospects",
+  GET_PROSPECT: "/prospects/:id",
 };

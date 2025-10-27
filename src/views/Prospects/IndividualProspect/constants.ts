@@ -13,6 +13,11 @@ export const DETAIL_TITLES = {
   initiationFee: "Initiation Fee",
 };
 
+export enum DetailSectionType {
+  LEAD_DETAILS = "leadDetails",
+  FEES_AND_DUES = "feesAndDues",
+}
+
 export const PLACEHOLDER_DATA = {
   imageUrl:
     "https://i.pinimg.com/1200x/94/f6/a0/94f6a0c5f086c51cf042185aac29d555.jpg",
