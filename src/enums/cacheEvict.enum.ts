@@ -6,6 +6,7 @@ export enum MutationKeys {
   ATTACHMENT_UPLOAD = "attachmentUpload",
   ATTACHMENT_DELETE = "attachmentDelete",
   ADD_PROSPECT = "addProspect",
+  EDIT_PROSPECT = "editProspect",
 }
 
 export enum QueryKeys {

@@ -64,7 +64,7 @@ export const MetaService = () => {
           },
         );
 
-        return deserialize(LeadStatusesData, response?.data?.data);
+        return deserialize(LeadStatusesData, response?.data?.data) ?? [];
       },
       enabled: !!clubId,
     };

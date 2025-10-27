@@ -3,6 +3,7 @@ import { ApiRoutes } from "../routes/routeConstants/apiRoutes";
 import Notification from "../shared/components/Notification";
 import { NotificationTypes } from "../enums/notificationTypes";
 import { axiosInstanceErrors } from "src/constants/sharedComponents";
+import { NavigationRoutes } from "src/routes/routeConstants/appRoutes";
 
 const {
   networkError,
@@ -65,6 +66,7 @@ axiosInstance.interceptors.response.use(
         type: NotificationTypes.ERROR,
       });
       localStorage.removeItem("user");
+      window.location.href = NavigationRoutes.LOGIN;
       return Promise.reject(error);
     }
 
