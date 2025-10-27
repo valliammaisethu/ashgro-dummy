@@ -4,4 +4,5 @@ export enum INPUT_TYPE {
   TEXT = "text",
   NUMBER = "number",
   TEL = "tel",
+  FILE = "file",
 }

@@ -1,5 +1,7 @@
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { localStorageHelper } from "./localStorageHelper";
+import { RcFile } from "antd/es/upload";
+import { CONTENT_TYPES } from "src/enums/contentTypes.enum";
 
 export const clearAuthData = () => {
   localStorageHelper.removeItem(LocalStorageKeys.USER);
@@ -26,3 +28,7 @@ export const formatCurrency = (
 
   return `${currencySymbol}${formattedAmount}`;
 };
+
+export const uploadHeaders = (file?: RcFile) => ({
+  "Content-Type": file?.type || CONTENT_TYPES.OCTET_STREAM,
+});

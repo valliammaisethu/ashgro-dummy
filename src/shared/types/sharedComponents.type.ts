@@ -212,3 +212,9 @@ export interface ModalProps extends AntdModalProps {
   okButtonHtmlType?: HtmlButtonType;
   okButtonType?: ButtonTypes;
 }
+
+export interface ProfilePictureInputProps {
+  name: string;
+  label?: string;
+  required?: boolean;
+}

@@ -6,7 +6,6 @@ export const ApiRoutes = {
   RESET_PASSWORD: "/auth/resetPassword",
   ATTACHMENTS: "/attachments",
   ATTACHMENTS_SPECIFIC: "/attachments/:id",
-  ATTACHMENT_PRESIGNED_URL: "/attachments/get-presigned-url",
   PROSPECTS: "/prospects",
   GET_PROSPECT: "/prospects/:id",
 };
