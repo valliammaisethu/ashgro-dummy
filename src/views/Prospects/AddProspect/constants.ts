@@ -44,21 +44,47 @@ export const ADD_PROSPECT_CONSTANTS = {
   },
 
   FIELD_NAMES: {
-    PROFILE_PICTURE: "profilePicture",
-    FIRST_NAME: "firstName",
-    LAST_NAME: "lastName",
-    LEAD_STATUS: "leadStatus",
-    FOLLOW_UP_DATE: "followUpDate",
-    EMAIL_ADDRESS: "emailAddress",
-    PHONE_NUMBER: "phone",
+    PROFILE_PICTURE: "prospect.attachmentId",
+    FIRST_NAME: "prospect.firstName",
+    LAST_NAME: "prospect.lastName",
+    LEAD_STATUS: "prospect.leadStatus",
+    FOLLOW_UP_DATE: "prospect.followUpDate",
+    EMAIL_ADDRESS: "prospect.email",
+    PHONE_NUMBER: "prospect.contactNumber",
     PHONE_CODE: "phoneCode",
-    INQUIRY_DATE: "inquiryDate",
-    LEAD_SOURCE: "leadSource",
-    MEMBERSHIP_CATEGORY: "membershipCategory",
-    MONTHLY_DUES: "monthlyDues",
-    INITIATION_FEE: "initiationFee",
-    ACTIVITY_DATE_TIME: "activityDateTime",
-    ACTIVITY_TYPE: "activityType",
-    ACTIVITY_DESCRIPTION: "activityDescription",
-  },
+    INQUIRY_DATE: "prospect.inquiryDate",
+    LEAD_SOURCE: "prospect.leadSource",
+    MEMBERSHIP_CATEGORY: "prospect.membershipCategory",
+    MONTHLY_DUES: "prospect.monthlyDues",
+    INITIATION_FEE: "prospect.initiationFee",
+    ACTIVITY_DATE_TIME: "activityDetails.createdAt",
+    ACTIVITY_TYPE: "activityDetails.activityTypeId",
+    ACTIVITY_DESCRIPTION: "activityDetails.description",
+  } as const,
 };
+
+export const validationMessages = {
+  firstName: "First name is a required field!",
+  lastName: "Last name is a required field!",
+  leadStatus: "Lead status is required!",
+  followUpDate: "Follow-up date is required!",
+  emailAddress: "Email address is required!",
+  phone: "Phone number must be maximum of 10 digits!",
+  inquiryDate: "Inquiry date is required!",
+  leadSource: "Lead source is required!",
+  membershipCategory: "Membership category is required!",
+  monthlyDues: "Monthly dues should have atmost of 2 decimal digits!",
+  initiationFee: "Initiation Fees should have atmost of 2 decimal digits!",
+  activityDateTime: "Activity date & time is required!",
+  activityType: "Activity type is required!",
+  activityDescription: "Activity description is required!",
+  negativeNumber: "Value cannot be negative",
+};
+
+export const activityFields = [
+  ADD_PROSPECT_CONSTANTS.FIELD_NAMES.ACTIVITY_DATE_TIME,
+  ADD_PROSPECT_CONSTANTS.FIELD_NAMES.ACTIVITY_TYPE,
+  ADD_PROSPECT_CONSTANTS.FIELD_NAMES.ACTIVITY_DESCRIPTION,
+];
+
+export const submitButtonKey = "submitButton";

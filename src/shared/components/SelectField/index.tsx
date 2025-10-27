@@ -10,6 +10,7 @@ import Error from "../Error";
 import Label from "../Label";
 
 import styles from "./selectField.module.scss";
+import { InputStatus } from "src/enums/inputStatus.enum";
 
 const { Option } = Select;
 
@@ -97,7 +98,8 @@ const SelectField = ({
         <Select
           {...selectProps}
           placeholder={placeholder}
-          allowClear={allowClear}
+          status={error ? InputStatus.ERROR : undefined}
+          allowClear
           suffixIcon={<IconChevronDown size={20} strokeWidth={1.25} />}
         >
           {showCheckboxes && sortedOptions
@@ -116,7 +118,7 @@ const SelectField = ({
             : null}
         </Select>
       </div>
-      {<Error message={error?.message} />}
+      {<Error className={styles.selectFieldError} message={error?.message} />}
     </div>
   );
 };

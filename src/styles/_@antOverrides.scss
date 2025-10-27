@@ -109,14 +109,6 @@
   color: unset;
   border-color: unset;
 }
-.ant-input-affix-wrapper > input.ant-input:focus {
-  box-shadow: 0 0 0 1000px $ashgro-white inset !important;
-}
-.ant-input-status-error {
-  &.ant-input-affix-wrapper > input.ant-input:focus {
-    box-shadow: 0 0 0 1000px $danger-input inset !important;
-  }
-}
 
 .ant-input-outlined:hover {
   background-color: $input-background;
@@ -616,4 +608,15 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 }
 .ant-modal .ant-modal-footer {
   border-radius: 1.6rem;
+}
+
+.ant-input-affix-wrapper {
+  height: 4rem;
+  padding: 0 1.1rem;
+}
+.ant-select-outlined.ant-select-status-error:not(.ant-select-customize-input)
+  .ant-select-selector {
+  border: 1px solid $danger-border;
+  background-color: $danger-input;
+  box-shadow: 0px 1px 0.5px 0.05px rgba(29, 41, 61, 0.02);
 }

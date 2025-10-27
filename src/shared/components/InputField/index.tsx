@@ -6,6 +6,7 @@ import { INPUT_TYPE } from "src/enums/inputType";
 import { InputStatus } from "src/enums/inputStatus.enum";
 import Label from "../Label";
 import Error from "../Error";
+import { dollarSymbol } from "src/constants/sharedComponents";
 
 import styles from "./inputField.module.scss";
 
@@ -31,23 +32,27 @@ const InputField: FC<InputFieldProps> = ({
     fieldState,
   } = useController({ name, control });
 
+  const inputProps: InputProps = {
+    id: name,
+    value,
+    onChange,
+    onBlur,
+    ...rest,
+    status: fieldState.error ? InputStatus.ERROR : undefined,
+  };
+
+  if (type === INPUT_TYPE.CURRENCY) {
+    inputProps.type = INPUT_TYPE.NUMBER;
+    inputProps.prefix = dollarSymbol;
+  } else inputProps.type = type;
+
   return (
     <div className={styles.inputWrapper}>
       <Label htmlFor={name} required={required}>
         {label}
       </Label>
-      <Input
-        id={name}
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-        {...rest}
-        type={type}
-        suffix={suffix}
-        status={fieldState.error ? InputStatus.ERROR : undefined}
-      />
-
-      {fieldState.error && <Error message={fieldState.error.message} />}
+      <Input {...inputProps} suffix={suffix} />
+      <Error message={fieldState?.error?.message} />
     </div>
   );
 };

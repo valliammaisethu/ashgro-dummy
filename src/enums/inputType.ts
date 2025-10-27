@@ -5,4 +5,5 @@ export enum INPUT_TYPE {
   NUMBER = "number",
   TEL = "tel",
   FILE = "file",
+  CURRENCY = "currency",
 }

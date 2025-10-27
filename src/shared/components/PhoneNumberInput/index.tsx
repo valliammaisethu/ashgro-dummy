@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { AsYouType, CountryCode } from "libphonenumber-js";
 
@@ -11,9 +11,9 @@ import { PhoneNumberFieldProps } from "src/shared/types/sharedComponents.type";
 
 import InputField from "../InputField";
 import DropdownField from "../Dropdown";
+import Label from "../Label";
 
 import styles from "./phoneNumberInput.module.scss";
-import Label from "../Label";
 
 const PhoneNumberField = ({
   phoneCodeName,
@@ -22,15 +22,23 @@ const PhoneNumberField = ({
   required = false,
   ...props
 }: PhoneNumberFieldProps) => {
-  const { watch, setValue } = useFormContext();
+  const { watch, setValue } = useFormContext<{
+    [key: string]: string;
+  }>();
 
-  const { [phoneCodeName]: selectedIsoCode, [name]: phoneValue } = watch();
+  const selectedIsoCode = watch(phoneCodeName) || USPhoneCode;
+  const phoneValue = watch(name) || "";
 
-  const formatAndSetPhoneNumber = (input: string, selectedIsoCode?: string) => {
-    if (!selectedIsoCode) return;
+  useEffect(() => {
+    if (!watch(phoneCodeName))
+      setValue(phoneCodeName, USPhoneCode, { shouldValidate: true });
+  }, [phoneCodeName, setValue]);
+
+  const formatAndSetPhoneNumber = (input: string, countryCode?: string) => {
+    if (!countryCode) return;
 
     const raw = getDigitsOnly(input);
-    const formatted = new AsYouType(selectedIsoCode as CountryCode).input(raw);
+    const formatted = new AsYouType(countryCode as CountryCode).input(raw);
     setValue(name, formatted, { shouldValidate: true });
   };
 
@@ -38,13 +46,10 @@ const PhoneNumberField = ({
     formatAndSetPhoneNumber(e.target.value, selectedIsoCode);
   };
 
-  const [, setSearchText] = useState<string>("");
-
-  const handleOnSearch = (value: string) => setSearchText(value);
-
-  useEffect(() => {
-    formatAndSetPhoneNumber(phoneValue, selectedIsoCode);
-  }, [selectedIsoCode]);
+  const handleOnChange = (value: string) => {
+    setValue(phoneCodeName, value, { shouldValidate: true });
+    formatAndSetPhoneNumber(phoneValue, value);
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -62,14 +67,14 @@ const PhoneNumberField = ({
             showSearch
             defaultValue={USPhoneCode}
             filterOption={false}
-            onSearch={handleOnSearch}
+            onChange={handleOnChange}
           />
         </div>
         <InputField
           name={name}
           {...props}
           type={INPUT_TYPE.TEL}
-          value={phoneValue || ""}
+          value={phoneValue}
           onChange={handlePhoneChange}
           disabled={!selectedIsoCode}
           inputMode={INPUT_TYPE.TEL}

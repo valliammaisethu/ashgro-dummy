@@ -62,3 +62,63 @@ export class ProspectsListResponse extends ResponseModel {
   @serializable(object(ProspectsListData))
   data?: ProspectsListData;
 }
+
+export class ActivityDetails {
+  @serializable
+  createdAt?: string;
+
+  @serializable
+  activityTypeId?: string;
+
+  @serializable
+  description?: string;
+}
+
+export class Prospect {
+  @serializable
+  clubId?: string;
+
+  @serializable
+  firstName?: string;
+
+  @serializable
+  lastName?: string;
+
+  @serializable
+  email?: string;
+
+  @serializable
+  leadStatusId?: string;
+
+  @serializable
+  followUpDate?: string;
+
+  @serializable
+  contactNumber?: string;
+
+  @serializable
+  inquiryDate?: string;
+
+  @serializable
+  leadSourceId?: string;
+
+  @serializable
+  membershipCategoryId?: string;
+
+  @serializable
+  monthlyDues?: number;
+
+  @serializable
+  initiationFee?: number;
+
+  @serializable
+  attachmentId?: string;
+}
+
+export class ProspectFormData {
+  @serializable(object(Prospect))
+  prospect?: Prospect;
+
+  @serializable(object(ActivityDetails))
+  activityDetails?: ActivityDetails;
+}
