@@ -31,11 +31,9 @@ const TextArea: FC<TextAreaFieldProps> = ({
 
   return (
     <div className={styles.textAreaWrapper}>
-      {label && (
-        <Label htmlFor={name} required={required}>
-          {label}
-        </Label>
-      )}
+      <Label htmlFor={name} required={required}>
+        {label}
+      </Label>
       <AntTextArea
         id={name}
         value={value}
@@ -45,7 +43,7 @@ const TextArea: FC<TextAreaFieldProps> = ({
         status={fieldState.error ? InputStatus.ERROR : undefined}
       />
 
-      {fieldState.error && <Error message={fieldState.error.message} />}
+      <Error message={fieldState?.error?.message} />
     </div>
   );
 };

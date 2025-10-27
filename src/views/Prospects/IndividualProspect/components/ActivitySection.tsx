@@ -11,13 +11,13 @@ import { formatDate } from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
 
 interface ActivitySectionProps {
-  activities: ActivityDetails[];
-  activityCount: number;
+  activities?: ActivityDetails[];
+  activityCount?: number;
 }
 
 const ActivitySection: React.FC<ActivitySectionProps> = ({
-  activities,
-  activityCount,
+  activities = [],
+  activityCount = 0,
 }) => {
   return (
     <div className={styles.activityContainer}>
