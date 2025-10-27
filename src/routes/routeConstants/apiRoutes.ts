@@ -1,7 +1,16 @@
 export const ApiRoutes = {
   BASE_URL: import.meta.env.VITE_API_BASE_URL,
-  USER_LOGIN: "/login",
+  USER_LOGIN: "/auth/login",
+  USER_LOGOUT: "/auth/logout",
+  FORGOT_PASSWORD: "/auth/forgotPassword",
+  RESET_PASSWORD: "/auth/resetPassword",
   ATTACHMENTS: "/attachments",
   ATTACHMENTS_SPECIFIC: "/attachments/:id",
-  ATTACHMENT_PRESIGNED_URL: "/attachments/get-presigned-url",
+  PROSPECTS: "/prospects",
+  GET_PROSPECT: "/prospects/:id",
+
+  GET_ACTIVITY_TYPES: "/clubs/:id/activityTypes",
+  GET_MEMBERSHIP_CATEGORIES: "/clubs/:id/membershipCategories",
+  GET_LEAD_SOURCES: "/clubs/:id/leadSources",
+  GET_LEAD_STATUSES: "/clubs/:id/leadStatuses",
 };

@@ -1,12 +1,14 @@
+import { ReactNode } from "react";
+
 interface SingleRoute {
   path?: string;
-  component?: any;
+  component?: ReactNode;
   children?: SingleRoute[];
   index?: boolean;
 }
 
 export interface RouterProps {
   path: string;
-  component: any;
+  component: ReactNode;
   children?: SingleRoute[];
 }

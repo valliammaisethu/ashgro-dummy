@@ -1,0 +1,9 @@
+@import "src/styles/_helpers.scss";
+
+.datePickerWrapper {
+  @include flex-flow(column, wrap, normal);
+
+  .label {
+    padding-bottom: 0.4rem;
+  }
+}

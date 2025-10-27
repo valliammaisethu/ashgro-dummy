@@ -1,0 +1,75 @@
+@import "src/styles/variables";
+
+.wrapper {
+  height: 4rem;
+  border: 1px solid $incrementer-border;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 1.2rem;
+  background-color: $input-background;
+  width: 100%;
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .decrementer,
+  .incrementer {
+    padding: 0.6rem 2.1rem;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    background: $input-background;
+    border: none;
+
+    i::before {
+      color: $ashgro-black;
+      font-size: 2.4rem;
+    }
+
+    &.disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .value {
+    padding: 0.9rem 2.1rem;
+    color: $ashgro-black;
+    font-size: 1.4rem;
+  }
+
+  .decrementer {
+    &::after {
+      content: "";
+      width: 0.1rem;
+      height: 2.4rem;
+      background-color: $button-stroke;
+      position: absolute;
+      top: 0.7rem;
+      right: 0;
+    }
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .incrementer {
+    &::before {
+      content: "";
+      width: 0.1rem;
+      height: 2.4rem;
+      background-color: $button-stroke;
+      position: absolute;
+      top: 0.7rem;
+      left: 0;
+    }
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+}
+.decrementer[disabled] i::before,
+.incrementer[disabled] i::before {
+  cursor: not-allowed;
+}

@@ -1,0 +1,83 @@
+@import "src/styles/variables";
+@import "src/styles/_helpers.scss";
+
+.wrapper {
+  @include flex-container(normal, normal, column);
+
+  .label {
+    font-size: 1.2rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .dropDownWrapper {
+    :global(.ant-select) {
+      height: 4rem;
+    }
+    :global {
+      .ant-select:not(.ant-select-customize-input) {
+        .ant-select-selector {
+          border-right: none;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          position: relative;
+
+          &::after {
+            content: "";
+            position: absolute;
+            top: 1rem;
+            bottom: 1rem;
+            right: 1px;
+            width: 1px;
+            visibility: visible;
+          }
+        }
+      }
+    }
+
+    .dropDown {
+      min-width: 10.9rem;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 1rem;
+        bottom: 1rem;
+        right: 1px;
+        width: 1px;
+        background-color: $light-grey;
+        visibility: visible;
+      }
+    }
+  }
+
+  :global {
+    .ant-input {
+      border-left: none;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}
+
+.phoneCode {
+  @include flex-container(normal, center, row);
+  gap: 0.9rem;
+
+  .flag {
+    font-size: 1.6rem;
+  }
+}
+
+.codeError {
+  width: 10.9rem;
+}
+.inputWrapper {
+  @include flex-container(normal, normal, row);
+  width: 100%;
+
+  .phoneInput {
+    &:disabled {
+      background-color: $input-background;
+    }
+  }
+}

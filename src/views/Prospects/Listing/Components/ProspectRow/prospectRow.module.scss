@@ -1,0 +1,275 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.tableRow {
+  display: grid;
+  grid-template-columns: $table-grid-columns;
+  gap: $table-gap;
+  padding: $table-padding;
+  align-items: center;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  border-radius: 2rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.6rem;
+  background-color: $ashgro-white;
+
+  &:hover {
+    background-color: $table-row-hover;
+  }
+
+  .actions {
+    min-width: 4rem;
+    display: flex;
+    gap: 1.8rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover .actions {
+    opacity: 1;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+.checkboxCol {
+  display: flex;
+  align-items: center;
+}
+
+.prospectCol,
+.dateCol,
+.sourceCol,
+.statusCol {
+  display: flex;
+  align-items: center;
+}
+
+.prospectInfo {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.avatar {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.name {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: $ashgro-navy;
+  font-family: $font-secondary;
+}
+
+.contact {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: $ashgro-navy;
+  opacity: 0.6;
+  font-family: $font-secondary;
+  @include flex-container(normal, center, row, 1.2rem);
+
+  .email {
+    color: $ashgro-blue;
+    font-size: 1.4rem;
+    font-family: $font-secondary;
+  }
+  .phone {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    font-family: $font-secondary;
+  }
+  .dot {
+    color: $dot-color;
+    font-size: 2rem;
+  }
+}
+
+.statusTag {
+  display: inline-flex;
+  align-items: center;
+  width: 14rem;
+  height: 3.6rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border-radius: 2.8rem;
+  padding-left: 1.5rem;
+  font-family: $font-secondary;
+  border: 1px solid transparent;
+  text-align: left;
+  gap: 0.5rem;
+}
+
+.statusTag--blue {
+  background-color: $new-lead-tag-bg;
+  color: $ashgro-blue;
+}
+
+.statusTag--default {
+  background-color: $unqualified-lead-tag-bg;
+  color: $unqualified-lead-text;
+}
+
+.statusTag--red {
+  background-color: $hot-tag-bg;
+  color: $hot-text;
+}
+
+.statusTag--orange {
+  background-color: $warm-tag-bg;
+  color: $warm-text;
+}
+
+.statusTag--green {
+  background-color: $closed-won-tag;
+  color: $closed-won-tag-text;
+}
+
+.statusTag--purple {
+  background-color: $closed-tag-bg;
+  color: $closed-tag-text;
+}
+
+.statusSelect {
+  :global(.ant-select.ant-select.ant-select-open .ant-select-selector) {
+    border: none;
+    box-shadow: none;
+  }
+  &:global(.ant-select) {
+    width: 14rem;
+    height: 3.6rem;
+
+    :global(.ant-select-selector) {
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      background: transparent;
+
+      :global(.ant-select-selection-item) {
+        padding: 0;
+      }
+    }
+
+    &:hover :global(.ant-select-selector) {
+      border: none;
+    }
+
+    &:global(.ant-select-focused) :global(.ant-select-selector) {
+      border: none;
+      box-shadow: none;
+    }
+  }
+}
+
+:global(.ant-select-dropdown) {
+  :global(.ant-select-item-option) {
+    padding: 0.4rem 0.8rem;
+
+    .statusTag {
+      width: 100%;
+      height: auto;
+      min-height: 3.2rem;
+    }
+  }
+}
+.statusTagDot {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 2px solid;
+  background-color: transparent;
+}
+
+.statusTag--blue .statusTagDot {
+  border-color: rgba($new-lead-tag-bg, 0.3);
+  background-color: $ashgro-blue;
+}
+
+.statusTag--default .statusTagDot {
+  border-color: rgba($unqualified-lead-tag-bg, 0.3);
+  background-color: $unqualified-lead-text;
+}
+
+.statusTag--red .statusTagDot {
+  border-color: rgb($hot-tag-bg, 0.3);
+  background-color: $hot-text;
+}
+
+.statusTag--orange .statusTagDot {
+  border-color: rgb($warm-tag-bg, 0.3);
+  background-color: $warm-text;
+}
+
+.statusTag--green .statusTagDot {
+  border-color: rgb($closed-won-tag, 0.3);
+  background-color: $closed-won-tag-text;
+}
+
+.statusTag--purple .statusTagDot {
+  border-color: rgb($closed-tag-bg, 0.3);
+  background-color: $closed-tag-text;
+}
+
+.dateColValue,
+.sourceColValue {
+  color: $ashgro-navy;
+  font-weight: 600;
+  font-family: $font-secondary;
+  font-size: 1.4rem;
+}
+
+.deleteModal {
+  :global(.ant-modal .ant-modal-header) {
+    color: $dot-color;
+    font-weight: 700;
+    font-size: 2.2rem;
+    padding-bottom: 0;
+    padding-left: 2.6rem;
+
+    :global(.ant-divider) {
+      display: none;
+    }
+  }
+  :global(.ant-modal .ant-modal-body) {
+    padding-top: 1.6rem;
+    color: $ashgro-navy;
+    opacity: 0.65;
+  }
+  :global(.ant-modal .ant-modal-footer) {
+    border-top: 1px solid $footer-light-border;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .footer {
+    padding: 2.4rem 3.2rem;
+
+    .deleteButton {
+      background-color: $hot-text;
+      color: $ashgro-white;
+      font-size: 1.4rem;
+      font-family: $font-secondary;
+      height: 4.4rem;
+      border-radius: 3.2rem;
+
+      &:hover {
+        background-color: $hot-text;
+        color: $ashgro-white;
+      }
+    }
+  }
+}

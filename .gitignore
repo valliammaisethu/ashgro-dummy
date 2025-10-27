@@ -140,3 +140,10 @@ dist
 build/
 
 .vscode/
+
+# macOS system files
+.DS_Store
+
+.claude
+.DS_Store
+src/assets/.DS_Store

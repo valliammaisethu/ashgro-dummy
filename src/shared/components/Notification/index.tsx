@@ -1,27 +1,40 @@
 import { notification, message as MobileNotification } from "antd";
 import { ArgsProps } from "antd/lib/message";
+import clsx from "clsx";
 
-export interface INotification {
-  message: string;
-  description: string;
-  type: string;
-}
+import { Placement } from "src/enums/placement.enum";
+import { NotificationTypes } from "src/enums/notificationTypes";
+import { INotification } from "src/shared/types/sharedComponents.type";
 
-type notificationType = "success" | "error" | "warning" | "info" | "open";
+import styles from "./notification.module.scss";
 
 const Notification = ({
-  message,
+  title,
   description,
-  type,
-}: INotification): unknown => {
+  type = NotificationTypes.SUCCESS,
+  duration = 4.5,
+  placement = Placement.TOP,
+}: INotification): void => {
+  const combinedClass = clsx(
+    styles.customNotification,
+    styles[type],
+    description && styles.withDescription,
+  );
+
   if (window.innerWidth <= 768) {
-    return MobileNotification[type as notificationType]({
-      content: message,
+    MobileNotification[type]({
+      content: title,
+      className: combinedClass,
     } as ArgsProps);
+    return;
   }
-  return notification[type as notificationType]({
-    message,
+
+  notification[type]({
+    placement,
+    message: title,
     description,
+    duration,
+    className: combinedClass,
   });
 };
 

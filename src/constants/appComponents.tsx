@@ -5,6 +5,15 @@ export const AppComponentsConstants = {
     { label: "Apple", value: "Apple" },
     { label: "Pear", value: "Pear" },
     { label: "Orange", value: "Orange" },
+    { label: "Apple", value: "Apple2" },
+    { label: "Pear", value: "Pear2" },
+    { label: "Orange", value: "Orange2" },
+    { label: "Apple", value: "Apple3" },
+    { label: "Pear", value: "Pear3" },
+    { label: "Orange", value: "Orange3" },
+    { label: "Apple", value: "Apple4" },
+    { label: "Pear", value: "Pear4" },
+    { label: "Orange", value: "Orange4" },
   ],
   BREADCRUMB_PARAMS: [
     {
@@ -113,6 +122,42 @@ export const AppComponentsConstants = {
       },
       {
         key: "2",
+        name: "John",
+        age: 42,
+        address: "1 Up Town",
+      },
+      {
+        key: "3",
+        name: "John",
+        age: 42,
+        address: "1 Up Town",
+      },
+      {
+        key: "4",
+        name: "John",
+        age: 42,
+        address: "1 Up Town",
+      },
+      {
+        key: "5",
+        name: "John",
+        age: 42,
+        address: "1 Up Town",
+      },
+      {
+        key: "6",
+        name: "John",
+        age: 42,
+        address: "1 Up Town",
+      },
+      {
+        key: "7",
+        name: "John",
+        age: 42,
+        address: "1 Up Town",
+      },
+      {
+        key: "8",
         name: "John",
         age: 42,
         address: "1 Up Town",

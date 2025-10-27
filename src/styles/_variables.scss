@@ -1,49 +1,125 @@
+$font-primary: "Merriweather", "Open Sans", serif;
+$font-secondary: "Open Sans", sans-serif;
+
 /* Color palette */
-$primary-color: #0D494E;
-$secondary-color: #006FBA;
-$light-white: #FFFFFF40;
-$primary-light-color: #0D494E10;
-$primary-black: #4B4B4B;
-$dark-blue: #22509D;
+$primary-color: #0d494e;
+$secondary-color: #006fba;
+$light-white: #ffffff40;
+$primary-light-color: #0d494e10;
+$primary-black: #4b4b4b;
+$dark-blue: #22509d;
 $light-grey: #00000015;
-$dark-grey: #8898AA;
+$dark-grey: #8898aa;
 $success-color: green;
-$danger-color: #FE0000;
-$warning-color: #F3B21B;
-$body-bg: #F5F8FA;
-$table-bg: #F7FAFC;
-$input-bg: #F8FBFC;
+$danger-color: #ff3838;
+$warning-color: #f3b21b;
+$body-bg: #f5f8fa;
+$table-bg: #f7fafc;
+$input-bg: #f8fbfc;
+$input-border: #dadada;
+$search-field-placeholder: #f7f4ed;
+$search-field-border: #f7f4ed66;
+$search-input-color: #9f8f72;
+$search-border: #e7dcc3;
+$search-bg: #f2f0e9;
+$filter-icon: #9a917b;
+$gold-text: #ad9360;
+$table-grid-columns: 50px 1fr 150px 150px 150px 60px;
+$table-gap: 1.6rem;
+$table-padding: 1.6rem 2rem;
+$gold-bold: #ad936080;
+$footer-light-border: #0c23400f;
+$gradient-border: #e7dcc280;
+$dot-color: #0c234040;
+// App Colors
+$ashgro-navy: #0c2340;
+$ashgro-blue: #5278eb;
+$ashgro-gold: #c5a25d;
+$nav-text: #43330bcc;
+$nav-active-text: #bd8420;
+$activity-card: #faf9f5;
+$activity-title: #1b1b1b;
+$activity-content: #54575a;
+$activity-border: #f5f3eb;
+$add-icon-bg: #a8843d;
+$ashgro-title-gold: #81693f;
+$subdetails-title: #6e747c;
+$modal-footer-bg: #f8f7f3;
+$ashgro-title-gold: #81693f;
+$table-row-hover: #f9fafb;
+$nav-active-bg: linear-gradient(
+  270deg,
+  #eadbbd -12.5%,
+  #bd8420 53.12%,
+  #eadbbd 118.75%
+);
+$profile-bg-gradient: linear-gradient(
+  180deg,
+  rgba(197, 162, 93, 0) 35.71%,
+  #c5a25d 102.68%
+);
+$ashgro-black: #0f131c;
+$ashgro-input-border: #e5dbc5;
+$danger-input: #ffeaea;
+$danger-border: #ff9b9b;
+$ashgro-white: #ffffff;
+$ashgro-cream: #f7f4ed;
+$ashgro-grey: #5b6770;
+$ashgro-pale-gold: #daccb0;
+$ashgro-grey-1: #eef1f5;
+$ashgro-grey-2: #e6eaf1;
+$ashgro-grey-3: #d8d8d8;
+$ashgro-label: #253345;
+$disabled-text: #c1c8d1;
+$ashgro-light-gold: #fffaf0;
+$ashgro-light-grey: #f5f7f9;
+$ashgro-enabled-switch-bg: #ffffffbf;
+$ashgro-dark-grey: #929292;
+$danger-color: #ee3042;
+$warning-color: #f3b21b;
+$body-bg: #f5f8fa;
+$table-bg: #f7fafc;
+$input-bg: #f8fbfc;
+$input-border: #dadada;
+$notification-description: #ffffffb2;
+$correct-bg: #e7fcd0;
+$incorrect-bg: #ffdfdf;
+$club-name: #f0ede1;
+$club-name-text: #43330bb2;
 
 /* Component colors */
+$notification-success: #8bc34a;
+$notification-error: #ff3838;
+$notification-success-unfill: #d9d9d9;
 
 /* Input Field */
-$input-border-color: rgba(0, 0, 0, 0.164);
-$input-border-color-hover: $primary-color;
-$input-border-box-shadow: 0 0 0 2px rgba($color: $primary-color, $alpha: 0.2);
-$input-border-radius: 4px;
+$input-border-color: $input-border;
+$input-border-color-hover: $ashgro-black;
+$input-border-radius: 12px;
+$input-background: #f7f4ed;
 
 /* Default Button */
 $button-default-border-color: $primary-color;
 $button-default-bg-color: white;
 $button-default-text-color: $primary-color;
-$button-default-border-radius: 4px;
+$button-default-border-radius: 3.2rem;
 
 /* Primary Button */
 $button-primary-border-color: $primary-color;
 $button-primary-bg-color: $primary-color;
 $button-primary-text-color: white;
-$button-primary-border-radius: 4px;
+$button-primary-border-radius: 3.2rem;
 
 /* Checkbox */
-$checkbox-bg-color: $primary-color;
-$checkbox-hover-border-color: $primary-color;
+$checkbox-bg-color: $ashgro-navy;
+$checkbox-hover-border-color: $ashgro-navy;
 $checkbox-text-color: white;
 $checkbox-hover-text-color: $primary-color;
 
 /* Radio */
 $radio-border-color: rgb(202, 202, 202);
-$radio-checked-border-color: $primary-color;
-$radio-checked-bg-color: $primary-color;
+$radio-checked-border-color: $ashgro-navy;
+$radio-checked-bg-color: $ashgro-white;
 
 /* Switch */
 $switch-bg-color: $primary-color;
@@ -51,12 +127,47 @@ $switch-bg-color: $primary-color;
 /* Select */
 $select-border-color: rgb(202, 202, 202);
 $select-hover-border-color: $primary-color;
-$select-focus-box-shadow: 0 0 0 2px rgba($color: $primary-color, $alpha: 0.2);
+$select-tag-background: #e5dbc5;
+$select-tag-color: #0c2340;
+$select-focus-box-shadow: 0 0 0 2px
+  rgba(
+    $color: $primary-color,
+    $alpha: 0.2,
+  );
 
 /* Shadows */
-$primary-shadow: 0 8px 22px #0000001A;
-$secondary-shadow: 0px 3px 6px #2C28281C;
+$primary-shadow: 0 8px 22px #0000001a;
+$secondary-shadow: 0px 3px 6px #2c28281c;
 
 /* Spacer variables */
-$spacer-x : 1rem;
-$spacer-y : 1rem;
+$spacer-x: 1rem;
+$spacer-y: 1rem;
+
+// Borders
+$button-stroke: #d3d3d3;
+
+$new-lead-tag-bg: #eceeff;
+$unqualified-lead-tag-bg: #f0f0f0;
+$unqualified-lead-text: #6a6a6a;
+$hot-tag-bg: #ffe8e8;
+$hot-text: #ef2020;
+$closed-won-tag: #e0f5dc;
+$closed-won-tag-text: #2c861c;
+$warm-tag-bg: #ffefe4;
+$warm-text: #b8581c;
+$closed-tag-bg: #ffedf1;
+$closed-tag-text: #b84c7a;
+$incrementer-border: #e5dbc566;
+
+$notification-success-gradient: linear-gradient(
+  180deg,
+  #28b128 0%,
+  #114b11 100%
+);
+$notification-error-gradient: linear-gradient(180deg, #ef2020 0%, #891212 100%);
+$notification-warning-gradient: linear-gradient(
+  180deg,
+  #ed6d1d 0%,
+  #873e10 100%
+);
+$notification-info-gradient: linear-gradient(180deg, #1d74ed 0%, #104287 100%);

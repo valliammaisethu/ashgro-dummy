@@ -1,13 +1,30 @@
 export const NavigationRoutes = {
+  HOME: "/home",
+  APP_COMPONENTS: "/app-components",
   AUTH: "/auth",
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
+  FORGOT_PASSWORD: "/auth/forgot-password",
+  RESET_PASSWORD: "/auth/reset-password",
+  PROSPECTS_LISTING: "/home/prospects",
+  INDIVIDUAL_PROSPECT: "/home/prospects/:id",
 };
 
 export const AppRoutes = {
-  AUTH: "/auth/*",
-  REGISTER: "/register",
-  LOGIN: "/login",
-  APP_COMPONENTS: "/",
   HOME: "/home",
+  APP_COMPONENTS: "/app-components",
+
+  AUTH: "/auth/*",
+  LOGIN: "/login",
+  REGISTER: "/register",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD: "/reset-password",
+
+  DASHBOARD: "/home/dashboard",
+  PROSPECTS_LISTING: "/home/prospects",
+  INDIVIDUAL_PROSPECT: "/home/prospects/:id",
+  CALENDAR: "/home/calendar",
+  MEMBERS: "/home/members",
+  CLUB_STAFF: "/home/club-staff",
+  SETTINGS: "/home/settings",
 };

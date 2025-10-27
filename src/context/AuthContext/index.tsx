@@ -6,49 +6,54 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
-import { User } from "../../models/user.model";
+import { TokenData, UserData } from "src/models/user.model";
 
 export interface AuthState {
   authenticated?: boolean;
-  user?: User;
+  user?: UserData;
+  token?: TokenData;
 }
 
 type SetAuthState = Dispatch<SetStateAction<AuthState>>;
 
 type AuthContentProps = [AuthState, SetAuthState];
 
-// Define the default context state
 const initialValues: AuthState = {
   authenticated: false,
-  user: new User(),
+  user: new UserData(),
+  token: new TokenData(),
 };
 
-// Create the context
 const AuthContent: any = createContext({});
 
-// Create method to use context
 const AuthContext = () => {
   const context = useContext<AuthContentProps>(AuthContent);
+
   if (!context) {
     throw new Error(`useMeContext must be used within a MeContextProvider`);
   }
   const [auth, setAuth] = context;
 
-  const setAuthenticated = (user?: User) => {
+  const setAuthenticated = (user?: UserData, token?: TokenData) => {
     setAuth((auth) => ({
       ...auth,
       authenticated: true,
       user,
+      token,
     }));
+  };
+
+  const resetAuthState = () => {
+    setAuth(initialValues);
   };
 
   return {
     ...auth,
     setAuthenticated,
+    resetAuthState,
   };
 };
 
-// Create the context provider
 const AuthProvider = (ownProps: any) => {
   const [auth, setAuth] = useState<AuthState>(initialValues);
   const value = useMemo(() => [auth, setAuth], [auth]);

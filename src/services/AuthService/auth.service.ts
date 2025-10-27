@@ -1,56 +1,114 @@
-import axiosInstance from "../../interceptor/axiosInstance";
-import { deserialize } from "serializr";
-import { User } from "../../models/user.model";
-import Notification from "../../shared/components/Notification";
-import { NotificationTypes } from "../../enums/notificationTypes";
-import { useState } from "react";
-import { ApiRoutes } from "../../routes/routeConstants/apiRoutes";
-import { AuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { AppRoutes } from "../../routes/routeConstants/appRoutes";
+import { UseMutationOptions, useQueryClient } from "@tanstack/react-query";
+import { deserialize, serialize } from "serializr";
 
-const UserService = () => {
-  const navigate = useNavigate();
+import axiosInstance from "src/interceptor/axiosInstance";
+import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { MutationKeys } from "src/enums/cacheEvict.enum";
+import {
+  LoginRequest,
+  LoginResponse,
+  ResetPassword,
+} from "src/models/user.model";
+import { ResponseModel } from "src/models/response.model";
+import { AuthContext } from "src/context/AuthContext";
+import useRedirect from "src/shared/hooks/useRedirect";
+import { logoutMessages } from "src/constants/sharedComponents";
+import { renderNotification } from "src/shared/utils/renderNotification";
+import { clearAuthData } from "src/shared/utils/helpers";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 
-  const [error, setError] = useState<Error>();
+const { USER_LOGIN, FORGOT_PASSWORD, RESET_PASSWORD, USER_LOGOUT } = ApiRoutes;
+const {
+  LOGIN,
+  FORGOT_PASSWORD: FORGOT_PASSWORD_KEY,
+  RESET_PASSWORD: RESET_PASSWORD_KEY,
+  LOGOUT,
+} = MutationKeys;
 
-  const [loading, setLoading] = useState(false);
+const { title, description } = logoutMessages;
 
-  const { setAuthenticated } = AuthContext();
+export const AuthService = () => {
+  const { setAuthenticated, resetAuthState } = AuthContext();
+  const { navigateToProspects, navigateToLogin } = useRedirect();
+  const queryClient = useQueryClient();
 
-  const loginUser = (data: User) => {
-    setLoading(true);
-    return axiosInstance
-      .post(ApiRoutes.USER_LOGIN, data)
-      .then((response) => {
-        const user = deserialize(User, response.data["user"]);
-        Notification({
-          message: "Login",
-          description: "Logged in successfully",
-          type: NotificationTypes.SUCCESS,
-        });
-        setAuthenticated(user);
-        navigate(AppRoutes.HOME);
-      })
-      .catch((error) => {
-        Notification({
-          message: "Login failed",
-          description: "incorrect email or password",
-          type: NotificationTypes.ERROR,
-        });
-
-        setError(error);
-      })
-      .finally(() => {
-        setLoading(false);
+  const loginUser = (): UseMutationOptions<
+    LoginResponse,
+    ResponseModel,
+    LoginRequest
+  > => ({
+    mutationKey: [LOGIN],
+    mutationFn: async (user: LoginRequest) => {
+      const serializedData = serialize(LoginRequest, user);
+      const response = await axiosInstance.post(USER_LOGIN, {
+        user: serializedData,
       });
-  };
 
-  return {
-    error,
-    loading,
-    loginUser,
-  };
+      return deserialize(LoginResponse, response.data);
+    },
+    onSuccess: (response) => {
+      const { data, title, description } = response;
+      setAuthenticated(data?.user, response?.data?.token);
+      localStorageHelper.setItem(LocalStorageKeys.USER, response?.data?.user);
+      localStorageHelper.setItem(LocalStorageKeys.TOKEN, response?.data?.token);
+      navigateToProspects();
+      renderNotification(title, description);
+    },
+  });
+
+  const forgotPassword = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    LoginRequest
+  > => ({
+    mutationKey: [FORGOT_PASSWORD_KEY],
+    mutationFn: async (user: LoginRequest) => {
+      const serializedData = serialize(LoginRequest, user);
+      const response = await axiosInstance.post(FORGOT_PASSWORD, {
+        user: serializedData,
+      });
+      return deserialize(ResponseModel, response.data);
+    },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description);
+    },
+  });
+
+  const resetPassword = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    ResetPassword
+  > => ({
+    mutationKey: [RESET_PASSWORD_KEY],
+    mutationFn: async (user: ResetPassword) => {
+      const serializedData = serialize(ResetPassword, user);
+      const response = await axiosInstance.patch(RESET_PASSWORD, {
+        user: serializedData,
+      });
+      return deserialize(ResponseModel, response.data);
+    },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description);
+    },
+  });
+
+  const logout = () => ({
+    mutationKey: [LOGOUT],
+    mutationFn: async () => {
+      const response = await axiosInstance.delete(USER_LOGOUT);
+      return deserialize(LoginResponse, response.data);
+    },
+    onSuccess: () => {
+      renderNotification(title, description);
+      clearAuthData();
+      queryClient.clear();
+      resetAuthState();
+      navigateToLogin();
+    },
+  });
+
+  return { loginUser, forgotPassword, resetPassword, logout };
 };
-
-export default UserService;

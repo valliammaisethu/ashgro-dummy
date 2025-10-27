@@ -1,0 +1,71 @@
+@import "src/styles/_variables.scss";
+
+.selectField {
+  .label {
+    padding-bottom: 0.4rem;
+  }
+}
+
+.selectFieldWrapper {
+  position: relative;
+
+  :global {
+    .ant-select {
+      &::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 3.4rem;
+        background: $input-background;
+        pointer-events: none;
+        z-index: 1;
+        border: 1px solid $input-border;
+        border-left: 0;
+        border-radius: 0 1.2rem 1.2rem 0;
+      }
+    }
+    .ant-select-status-error {
+      &::after {
+        background: $danger-input;
+        pointer-events: none;
+        z-index: 1;
+        border: 1px solid $danger-border;
+        border-left: 0;
+        border-radius: 0 1.2rem 1.2rem 0;
+      }
+    }
+
+    .ant-select-selector {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-right: 6rem;
+    }
+
+    .ant-select-selection-overflow {
+      flex-wrap: nowrap;
+    }
+
+    .ant-select-selection-placeholder {
+      color: $ashgro-grey !important;
+      opacity: 0.6;
+      font-size: 1.2rem;
+      line-height: 1.3rem;
+    }
+
+    .ant-select-clear,
+    .ant-select-arrow {
+      z-index: 2;
+    }
+  }
+}
+
+.optionCheckbox {
+  margin-left: auto;
+  float: right;
+}
+
+.selectFieldError {
+  padding-top: 0.4rem;
+}

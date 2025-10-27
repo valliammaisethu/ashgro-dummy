@@ -1,28 +1,12 @@
-import React from "react";
-import { Modal as CustomModal } from "antd";
+import React, { Fragment } from "react";
+import { Modal as CustomModal, Divider } from "antd";
 import styles from "./Modal.module.scss";
+import { IconCircleClose } from "obra-icons-react";
+import { Colors } from "src/enums/colors.enum";
+import Button from "../Button";
+import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
+import { ModalProps } from "src/shared/types/sharedComponents.type";
 
-export interface ModalProps {
-  children?: React.ReactNode;
-  closeModal: () => void;
-  handleOk?: () => void;
-  visible: boolean;
-  width?: number;
-  title?: string;
-  footer?: JSX.Element[];
-  confirmLoading?: boolean;
-}
-
-/* Pass in the following props: 
-child component, 
-closeModal function,
-open/close state for the modal
-modal Title (optional)
-width (optional)
-footer (optional) - pass array of JSX.Element like buttons for the footer
-handleOk (optional) - pass an async function: to be used for executing async operationsw
-confirmLoading(optional) - Boolean value to set loading indicator for confirm button in a modal
-*/
 const Modal: React.FC<ModalProps> = ({
   children,
   closeModal,
@@ -31,18 +15,63 @@ const Modal: React.FC<ModalProps> = ({
   width,
   handleOk,
   footer,
+  cancelText = Buttons.CANCEL,
+  onCancel,
   confirmLoading,
+  okText = Buttons.OK,
+  cancelButtonProps,
+  okButtonProps,
+  okButtonHtmlType = HtmlButtonType.BUTTON,
+  okButtonType = ButtonTypes.DEFAULT,
+  rootClassName,
 }: ModalProps) => {
   return (
-    <div className={styles["modal-container"]}>
+    <div className={styles.modalContainer}>
       <CustomModal
-        width={width ?? width}
-        footer={footer ?? footer}
-        title={title ? title : ""}
-        visible={visible}
+        width={width}
+        rootClassName={rootClassName}
+        footer={
+          footer ? (
+            footer
+          ) : (
+            <div className={styles.modalFooter}>
+              <Button
+                {...cancelButtonProps}
+                type={ButtonTypes.PRIMARY}
+                loading={!!cancelButtonProps?.loading}
+                htmlType={HtmlButtonType.BUTTON}
+                onClick={onCancel ?? closeModal}
+              >
+                {cancelText}
+              </Button>
+
+              <Button
+                {...okButtonProps}
+                type={okButtonType}
+                className={styles.okButton}
+                loading={confirmLoading}
+                htmlType={okButtonHtmlType}
+                onClick={handleOk ?? closeModal}
+              >
+                {okText}
+              </Button>
+            </div>
+          )
+        }
+        title={
+          <Fragment>
+            {title}
+            <Divider className={styles.titleDivider} />
+          </Fragment>
+        }
+        open={visible}
         onOk={handleOk ? handleOk : closeModal}
-        onCancel={closeModal}
+        onCancel={onCancel ?? closeModal}
         confirmLoading={confirmLoading}
+        destroyOnHidden
+        closeIcon={
+          <IconCircleClose color={Colors.MODAL_CLOSE_ICON} size={20} />
+        }
       >
         {children}
       </CustomModal>

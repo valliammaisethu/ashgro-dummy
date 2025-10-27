@@ -1,14 +1,28 @@
 import axios from "axios";
 import { ApiRoutes } from "../routes/routeConstants/apiRoutes";
+import Notification from "../shared/components/Notification";
+import { NotificationTypes } from "../enums/notificationTypes";
+import { axiosInstanceErrors } from "src/constants/sharedComponents";
+import { NavigationRoutes } from "src/routes/routeConstants/appRoutes";
+
+const {
+  networkError,
+  forbidden,
+  unAuthorised,
+  notFound,
+  genericError,
+  failed,
+  serverError,
+} = axiosInstanceErrors;
 
 export const getHeaders = (): any => {
   let user;
-  if (localStorage.getItem("user")) {
-    user = JSON.parse(localStorage.getItem("user") || "");
+  if (localStorage.getItem("token")) {
+    user = JSON.parse(localStorage.getItem("token") || "");
   }
   const headers = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${user && user.adminAuthToken ? user.adminAuthToken : ""}`,
+    Authorization: `Bearer ${user && user.accessToken ? user.accessToken : ""}`,
   };
   return headers;
 };
@@ -33,7 +47,67 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     const { response } = error;
-    if (response.status === 401) return Promise.reject(error);
+
+    if (!response) {
+      Notification({
+        title: networkError.title,
+        description: networkError.description,
+        type: NotificationTypes.ERROR,
+      });
+      return Promise.reject(error);
+    }
+
+    const { status, data } = response;
+
+    if (status === 401) {
+      Notification({
+        title: unAuthorised.title,
+        description: unAuthorised.description,
+        type: NotificationTypes.ERROR,
+      });
+      localStorage.removeItem("user");
+      window.location.href = NavigationRoutes.LOGIN;
+      return Promise.reject(error);
+    }
+
+    const errorMessage = data?.message || data?.error || genericError;
+
+    switch (status) {
+      case 403:
+        Notification({
+          title: forbidden.title,
+          description: forbidden.description,
+          type: NotificationTypes.ERROR,
+        });
+        break;
+
+      case 404:
+        Notification({
+          title: notFound.title,
+          description: notFound.description,
+          type: NotificationTypes.ERROR,
+        });
+        break;
+
+      case 422:
+        Notification({
+          title: failed.title,
+          description: errorMessage,
+          type: NotificationTypes.ERROR,
+        });
+        break;
+
+      case 500:
+      default:
+        Notification({
+          title: serverError.title,
+          description: errorMessage,
+          type: NotificationTypes.ERROR,
+        });
+        break;
+    }
+
+    return Promise.reject(error);
   },
 );
 

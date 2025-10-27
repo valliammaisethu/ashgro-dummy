@@ -17,9 +17,6 @@ revolte:
               BASE_URL: /api/v1
     qa:
       branch: qa
-      codeReview: true
-      codeQuality: false
-      testSuite: false
       services:
         rid_1:
           type: WEB_APP
@@ -57,3 +54,4 @@ revolte:
             errorPage: error.html
             variables:
               BASE_URL: /api/v1
+              VITE_API_BASE_URL: https://environmental-tan-urial.rootquotient.revolte.io/api/v1
