@@ -30,7 +30,6 @@ revolte:
               VITE_API_BASE_URL: https://molecular-tan-reptile.rootquotient.revolte.io/api/v1
               VITE_SENTRY_DSN: >-
                 https://1bb6737846196ee5ea836f69fd5f3838@o4510104495587328.ingest.us.sentry.io/4510104497160192
-              VITE_UNDER_DEVELOPMENT: 'true'
     production:
       branch: main
       services:

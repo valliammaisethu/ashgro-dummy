@@ -5,8 +5,11 @@ import React, {
   useState,
   Dispatch,
   SetStateAction,
+  PropsWithChildren,
 } from "react";
-import { TokenData, UserData } from "src/models/user.model";
+import { UserData, TokenData } from "src/models/user.model";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 
 export interface AuthState {
   authenticated?: boolean;
@@ -16,35 +19,47 @@ export interface AuthState {
 
 type SetAuthState = Dispatch<SetStateAction<AuthState>>;
 
-type AuthContentProps = [AuthState, SetAuthState];
+const storedUser = localStorageHelper.getItem(LocalStorageKeys.USER);
+const storedToken = localStorageHelper.getItem(LocalStorageKeys.TOKEN);
 
 const initialValues: AuthState = {
-  authenticated: false,
-  user: new UserData(),
-  token: new TokenData(),
+  authenticated: !!storedToken,
+  user: storedUser || new UserData(),
+  token: storedToken || new TokenData(),
 };
 
-const AuthContent: any = createContext({});
+const AuthContent = createContext<[AuthState, SetAuthState] | undefined>(
+  undefined,
+);
 
 const AuthContext = () => {
-  const context = useContext<AuthContentProps>(AuthContent);
-
+  const context = useContext(AuthContent);
   if (!context) {
-    throw new Error(`useMeContext must be used within a MeContextProvider`);
+    throw new Error(`AuthContext must be used within an AuthProvider`);
   }
+
   const [auth, setAuth] = context;
 
   const setAuthenticated = (user?: UserData, token?: TokenData) => {
-    setAuth((auth) => ({
-      ...auth,
+    const newAuth = {
       authenticated: true,
       user,
       token,
-    }));
+    };
+    setAuth(newAuth);
+
+    localStorageHelper.setItem(LocalStorageKeys.USER, user);
+    localStorageHelper.setItem(LocalStorageKeys.TOKEN, token);
   };
 
   const resetAuthState = () => {
-    setAuth(initialValues);
+    setAuth({
+      authenticated: false,
+      user: new UserData(),
+      token: new TokenData(),
+    });
+    localStorageHelper.removeItem(LocalStorageKeys.USER);
+    localStorageHelper.removeItem(LocalStorageKeys.TOKEN);
   };
 
   return {
@@ -54,10 +69,18 @@ const AuthContext = () => {
   };
 };
 
-const AuthProvider = (ownProps: any) => {
-  const [auth, setAuth] = useState<AuthState>(initialValues);
-  const value = useMemo(() => [auth, setAuth], [auth]);
-  return <AuthContent.Provider value={value} {...ownProps} />;
+export const AuthProvider = ({
+  values = initialValues,
+  children,
+}: PropsWithChildren<{ values?: AuthState }>) => {
+  const [auth, setAuth] = useState<AuthState>(values);
+
+  const value = useMemo(
+    () => [auth, setAuth] as [AuthState, SetAuthState],
+    [auth],
+  );
+
+  return <AuthContent.Provider value={value}>{children}</AuthContent.Provider>;
 };
 
-export { AuthProvider, AuthContext };
+export { AuthContext };
