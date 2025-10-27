@@ -26,7 +26,7 @@ export class ViewProspect {
   firstName = "";
 
   @serializable
-  endName = "";
+  lastName = "";
 
   @serializable
   email = "";
@@ -36,6 +36,9 @@ export class ViewProspect {
 
   @serializable
   countryCode = "";
+
+  @serializable
+  phoneCode = "";
 
   @serializable
   leadStatus = "";
@@ -53,10 +56,10 @@ export class ViewProspect {
   membershipCategory = "";
 
   @serializable
-  monthlyDues = 0;
+  monthlyDues = "";
 
   @serializable
-  initiationFee = 0;
+  initiationFee = "";
 
   @serializable(list(object(ActivityDetails)))
   activityDetails: ActivityDetails[] = [];

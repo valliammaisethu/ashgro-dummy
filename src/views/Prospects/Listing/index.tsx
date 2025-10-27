@@ -1,12 +1,11 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { CheckboxChangeEvent } from "antd";
 import { useQuery } from "@tanstack/react-query";
 
-import { mockProspects, leadStatusOptions, TABLE_HEADERS } from "./constants";
+import { TABLE_HEADERS } from "./constants";
 import {
   toggleAllSelections,
   toggleSingleSelection,
-  updateProspectStatus,
   areAllProspectsSelected,
   areSomeProspectsSelected,
 } from "./helpers";
@@ -14,8 +13,6 @@ import Header from "./Header";
 import Checkbox from "src/shared/components/Checkbox";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import ProspectRow from "./Components/ProspectRow";
-import { ProspectData } from "src/shared/types/sharedComponents.type";
-import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import useRedirect from "src/shared/hooks/useRedirect";
 import useDrawer from "src/shared/hooks/useDrawer";
 
@@ -24,38 +21,35 @@ import AddProspect from "../AddProspect";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { UserData } from "src/models/user.model";
+import { ProspectsListingParams } from "src/models/prospects.model";
+import { MetaService } from "src/services/MetaService/meta.service";
+import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 
 const ProspectsListing = () => {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [prospects, setProspects] = useState<ProspectData[]>(mockProspects);
-  const { navigateToIndividualProspect } = useRedirect();
+  const [queryParams, setQueryParams] = useState<ProspectsListingParams>(
+    new ProspectsListingParams(),
+  );
   const { getProspects } = ProspectsService();
+  const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  const { getLeadStatuses } = MetaService();
+
+  const { data: leadStatusOptions } = useQuery(getLeadStatuses());
+  const { navigateToIndividualProspect } = useRedirect();
+
   const { visible, show, hide } = useDrawer();
   const handleSelectAll = useCallback(
     (checked: boolean) => {
-      setSelectedIds(toggleAllSelections(checked, prospects));
+      setSelectedIds(toggleAllSelections(checked, data?.prospects));
     },
-    [prospects],
+    [data?.prospects],
   );
   const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
   const clubId = user?.clubId;
   const handleSelectOne = useCallback((id: string, checked: boolean) => {
     setSelectedIds((prev) => toggleSingleSelection(id, checked, prev));
   }, []);
-
-  const handleStatusChange = useCallback(
-    (prospectId: string, newStatus: string) => {
-      setProspects((prevProspects) =>
-        updateProspectStatus(
-          prevProspects,
-          prospectId,
-          newStatus,
-          leadStatusOptions,
-        ),
-      );
-    },
-    [],
-  );
 
   const handleHeaderCheckboxChange = useCallback(
     (e?: CheckboxChangeEvent) => {
@@ -65,23 +59,27 @@ const ProspectsListing = () => {
   );
 
   const allSelected = useMemo(
-    () => areAllProspectsSelected(prospects, selectedIds),
-    [prospects, selectedIds],
+    () => areAllProspectsSelected(data?.prospects, selectedIds),
+    [data?.prospects, selectedIds],
   );
 
   const someSelected = useMemo(
-    () => areSomeProspectsSelected(prospects, selectedIds),
-    [prospects, selectedIds],
+    () => areSomeProspectsSelected(data?.prospects, selectedIds),
+    [data?.prospects, selectedIds],
   );
 
-  const { data, isPending, isSuccess } = useQuery(
-    getProspects({
-      clubId: clubId,
-    }),
-  );
+  useEffect(() => {
+    if (clubId && queryParams.clubId !== clubId) {
+      setQueryParams((prev) => ({ ...prev, clubId }));
+    }
+  }, [clubId]);
 
   const navigateToProspect = (id: string) => () =>
     navigateToIndividualProspect(id);
+
+  const handleSearch = useCallback((term: string) => {
+    setQueryParams((prev) => ({ ...prev, search: term }));
+  }, []);
 
   return (
     <div>
@@ -102,20 +100,19 @@ const ProspectsListing = () => {
             <div className={styles.statusCol}>{TABLE_HEADERS.LEAD_STATUS}</div>
           </div>
           <ConditionalRender
-            records={data?.data?.prospects}
+            records={data?.prospects}
             isPending={isPending}
             isSuccess={isSuccess}
           >
             <div className={styles.tableBody}>
-              {data?.data?.prospects?.filter(Boolean).map((prospect) => (
+              {data?.prospects?.filter(Boolean).map((prospect) => (
                 <ProspectRow
                   key={prospect.id}
                   onClick={navigateToProspect(prospect.id!)}
                   prospect={prospect}
                   isSelected={selectedIds.includes(prospect.id!)}
-                  leadStatusOptions={leadStatusOptions}
+                  leadStatusOptions={leadStatusOptions?.leadStatuses}
                   onSelectChange={handleSelectOne}
-                  onStatusChange={handleStatusChange}
                 />
               ))}
             </div>

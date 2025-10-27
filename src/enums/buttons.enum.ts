@@ -7,6 +7,7 @@ export enum Buttons {
   RESET_PASSWORD = "Reset Password",
   CANCEL = "Cancel",
   OK = "Ok",
+  SAVE_CHANGES = "Save Changes",
 }
 
 export enum HtmlButtonType {

@@ -8,16 +8,17 @@ export const clearAuthData = () => {
   localStorageHelper.removeItem(LocalStorageKeys.TOKEN);
 };
 
-export const fillEmptyData = (val?: string | number) => val || "N/A";
+export const fillEmptyData = (val?: string) => val || "N/A";
 
 export const getFullName = (firstName = "", lastName = ""): string =>
   `${firstName} ${lastName}`.trim();
 
 export const formatCurrency = (
-  amount: number | string = 0,
+  amount: number | string,
   currencySymbol: string = "$",
   showDecimals: boolean = false,
 ): string => {
+  if (!amount) return "N/A";
   const numAmount = Number(amount);
   const formattedAmount = showDecimals
     ? numAmount.toLocaleString("en-US", {
@@ -26,7 +27,7 @@ export const formatCurrency = (
       })
     : numAmount.toLocaleString("en-US");
 
-  return `${currencySymbol}${formattedAmount}`;
+  return `${currencySymbol} ${formattedAmount}`;
 };
 
 export const uploadHeaders = (file?: RcFile) => ({

@@ -1,5 +1,5 @@
 import React from "react";
-import { IconEmail } from "obra-icons-react";
+import { IconCall, IconEmail } from "obra-icons-react";
 
 import { Colors } from "src/enums/colors.enum";
 import { PROSPECT_LABELS } from "../constants";
@@ -11,32 +11,40 @@ import { getFullName } from "src/shared/utils/helpers";
 import { formatDate } from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { getPhoneNumber } from "../utils";
+import { AttachmentService } from "src/services/AttachmentService/attachment.service";
+import { useQuery } from "@tanstack/react-query";
 
 interface ProspectInfoProps {
-  imageUrl?: string;
   data?: ViewProspect;
 }
 
 const ProspectInfo: React.FC<ProspectInfoProps> = ({
-  imageUrl,
   data: prospect = new ViewProspect(),
 }) => {
   const {
     firstName,
-    endName,
+    lastName,
     followUpDate,
     contactNumber,
     countryCode,
     email,
+    attachmentId,
   } = prospect;
+
+  const { getAttachmentPreview } = AttachmentService();
+
+  const { data: attachmentPreview } = useQuery({
+    ...getAttachmentPreview(attachmentId),
+    enabled: !!attachmentId,
+  });
 
   return (
     <div className={styles.top}>
       <div className={styles.left}>
-        <img src={imageUrl} className={styles.prospectImage} />
+        <img src={attachmentPreview} className={styles.prospectImage} />
       </div>
       <div className={styles.right}>
-        <div className={styles.name}>{getFullName(firstName, endName)}</div>
+        <div className={styles.name}>{getFullName(firstName, lastName)}</div>
         <div className={styles.details}>
           <span className={styles.dateTitle}>
             {PROSPECT_LABELS.followUpDate}
@@ -51,11 +59,13 @@ const ProspectInfo: React.FC<ProspectInfoProps> = ({
             text={email}
             className={styles.mail}
           />
-          <IconText
-            icon={<IconEmail color={Colors.ASHGRO_GOLD} size={20} />}
-            text={getPhoneNumber(countryCode, contactNumber)}
-            className={styles.phone}
-          />
+          {contactNumber && (
+            <IconText
+              icon={<IconCall color={Colors.ASHGRO_GOLD} size={20} />}
+              text={getPhoneNumber(countryCode, contactNumber)}
+              className={styles.phone}
+            />
+          )}
         </div>
       </div>
     </div>
