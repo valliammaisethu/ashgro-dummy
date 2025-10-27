@@ -26,8 +26,6 @@ export const ProspectsService = () => {
     queryFn: async () => {
       const response = await axiosInstance.get(PROSPECTS, {
         params: serialize(ProspectsListingParams, params),
-        baseURL:
-          "https://36f579db-f8e8-4d2f-b1a2-64dfffa23c49.mock.pstmn.io/api/v1",
       });
 
       return deserialize(ProspectsListResponse, response?.data);
@@ -41,15 +39,12 @@ export const ProspectsService = () => {
     queryFn: async () => {
       const response = await axiosInstance.get(
         generatePath(GET_PROSPECT, { id }),
-        {
-          baseURL:
-            "https://36f579db-f8e8-4d2f-b1a2-64dfffa23c49.mock.pstmn.io/api/v1",
-        },
       );
-      return deserialize(ProspectData, response?.data?.data);
+      return (
+        deserialize(ProspectData, response?.data?.data) ?? new ProspectData()
+      );
     },
     enabled: !!id,
-    initialData: new ProspectData(),
   });
 
   return {

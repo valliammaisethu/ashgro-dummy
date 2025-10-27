@@ -18,6 +18,7 @@ const Label: FC<LabelProps> = ({
   className,
   disabled = false,
 }) => {
+  if (!children) return null;
   return (
     <label
       htmlFor={htmlFor}
