@@ -34,7 +34,7 @@
   "scripts": {
     "start": "vite",
     "start:staging": "vite --mode staging",
-    "build": "tsc && vite build",
+    "build": "tsc && NODE_OPTIONS='--max-old-space-size=2048' vite build",
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage",
