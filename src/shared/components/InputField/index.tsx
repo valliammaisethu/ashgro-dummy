@@ -48,15 +48,11 @@ const InputField: FC<InputFieldProps> = ({
 
   return (
     <div className={styles.inputWrapper}>
-      {label && (
-        <Label htmlFor={name} required={required}>
-          {label}
-        </Label>
-      )}
-
+      <Label htmlFor={name} required={required}>
+        {label}
+      </Label>
       <Input {...inputProps} suffix={suffix} />
-
-      {fieldState.error && <Error message={fieldState.error.message} />}
+      <Error message={fieldState?.error?.message} />
     </div>
   );
 };

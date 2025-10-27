@@ -48,10 +48,11 @@ export const ProspectsService = () => {
       const response = await axiosInstance.get(
         generatePath(GET_PROSPECT, { id }),
       );
-      return deserialize(ProspectData, response?.data?.data);
+      return (
+        deserialize(ProspectData, response?.data?.data) ?? new ProspectData()
+      );
     },
     enabled: !!id,
-    initialData: new ProspectData(),
   });
 
   const addProspect = (): UseMutationOptions<

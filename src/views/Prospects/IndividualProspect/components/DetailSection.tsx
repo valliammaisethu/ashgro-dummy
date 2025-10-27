@@ -10,11 +10,15 @@ import styles from "../individualProspect.module.scss";
 
 interface DetailSectionProps {
   title: string;
-  data: ViewProspect;
+  data?: ViewProspect;
   type: DetailSectionType;
 }
 
-const DetailSection: React.FC<DetailSectionProps> = ({ title, data, type }) => {
+const DetailSection: React.FC<DetailSectionProps> = ({
+  title,
+  data = new ViewProspect(),
+  type,
+}) => {
   const items: DetailItemType[] =
     type === DetailSectionType.LEAD_DETAILS
       ? getLeadDetails(

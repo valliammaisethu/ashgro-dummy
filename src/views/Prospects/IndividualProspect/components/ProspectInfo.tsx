@@ -14,12 +14,12 @@ import { getPhoneNumber } from "../utils";
 
 interface ProspectInfoProps {
   imageUrl?: string;
-  data: ViewProspect;
+  data?: ViewProspect;
 }
 
 const ProspectInfo: React.FC<ProspectInfoProps> = ({
   imageUrl,
-  data: prospect,
+  data: prospect = new ViewProspect(),
 }) => {
   const {
     firstName,
