@@ -8,6 +8,7 @@ import Error from "../Error";
 import styles from "./datePicker.module.scss";
 import { IconCalendarDates } from "obra-icons-react";
 import { Colors } from "src/enums/colors.enum";
+import { DateFormats } from "src/enums/dateFormats.enum";
 
 interface DatePickerFieldProps extends Omit<DatePickerProps, "name" | "value"> {
   name: string;
@@ -19,7 +20,7 @@ interface DatePickerFieldProps extends Omit<DatePickerProps, "name" | "value"> {
 const DatePicker: FC<DatePickerFieldProps> = ({
   name,
   label,
-  format = "YYYY-MM-DD",
+  format = DateFormats.DD_MMM__YYYY,
   placeholder,
   required = false,
   ...rest
@@ -41,11 +42,9 @@ const DatePicker: FC<DatePickerFieldProps> = ({
 
   return (
     <div className={styles.datePickerWrapper}>
-      {label && (
-        <Label className={styles.label} htmlFor={name} required={required}>
-          {label}
-        </Label>
-      )}
+      <Label className={styles.label} htmlFor={name} required={required}>
+        {label}
+      </Label>
       <AntdDatePicker
         id={name}
         value={dateValue}
@@ -64,7 +63,7 @@ const DatePicker: FC<DatePickerFieldProps> = ({
         className={styles.datePicker}
         status={fieldState.error ? InputStatus.ERROR : undefined}
       />
-      {fieldState.error && <Error message={fieldState.error.message} />}
+      <Error message={fieldState?.error?.message} />
     </div>
   );
 };
