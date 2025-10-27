@@ -17,6 +17,7 @@ import AddProspect from "../AddProspect";
 import { MetaService } from "src/services/MetaService/meta.service";
 import { Select } from "antd";
 import StatusTag from "../Listing/Atoms/StatusTag";
+import DeleteModal from "../DeleteModal";
 
 const IndividualProspect = () => {
   const { viewProspect } = ProspectsService();
@@ -30,6 +31,9 @@ const IndividualProspect = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   const { visible, toggleVisibility } = useDrawer();
+
+  const { visible: deleteModalVisible, toggleVisibility: toggleDeleteModal } =
+    useDrawer();
 
   const handleEdit = () => {
     setIsEdit(true);
@@ -66,6 +70,7 @@ const IndividualProspect = () => {
                 className={styles.editButton}
               />
               <Button
+                onClick={toggleDeleteModal}
                 icon={<IconDelete strokeWidth={1.5} />}
                 className={styles.deleteButton}
               />
@@ -106,6 +111,11 @@ const IndividualProspect = () => {
         isEdit={isEdit}
         visible={visible}
         onClose={toggleVisibility}
+      />
+      <DeleteModal
+        visible={deleteModalVisible}
+        toggleVisibility={toggleDeleteModal}
+        id={id}
       />
     </div>
   );

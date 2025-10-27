@@ -107,7 +107,6 @@ const AddProspect = ({
         activityDetails: activityDetails?.[0] || {},
         prospect: {
           ...prospect,
-          phoneCode: prospect.countryCode,
           membershipCategoryId: prospect.membershipCategory,
           leadSourceId: prospect.leadSource,
           leadStatusId: prospect.leadStatus,

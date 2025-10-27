@@ -24,10 +24,11 @@ $search-border: #e7dcc3;
 $search-bg: #f2f0e9;
 $filter-icon: #9a917b;
 $gold-text: #ad9360;
-$table-grid-columns: 50px 1fr 200px 200px 200px;
+$table-grid-columns: 50px 1fr 180px 180px 180px 60px;
 $table-gap: 1.6rem;
 $table-padding: 1.6rem 2rem;
 $gold-bold: #ad936080;
+$footer-light-border: #0c23400f;
 $gradient-border: #e7dcc280;
 $dot-color: #0c234040;
 // App Colors
@@ -45,6 +46,7 @@ $ashgro-title-gold: #81693f;
 $subdetails-title: #6e747c;
 $modal-footer-bg: #f8f7f3;
 $ashgro-title-gold: #81693f;
+$table-row-hover: #f9fafb;
 $nav-active-bg: linear-gradient(
   270deg,
   #eadbbd -12.5%,

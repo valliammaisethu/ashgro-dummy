@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { CheckboxChangeEvent } from "antd";
 import { useQuery } from "@tanstack/react-query";
 
-import { TABLE_HEADERS } from "./constants";
+import { PageListingDirections, TABLE_HEADERS } from "./constants";
 import {
   toggleAllSelections,
   toggleSingleSelection,
@@ -21,24 +21,41 @@ import AddProspect from "../AddProspect";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { UserData } from "src/models/user.model";
-import { ProspectsListingParams } from "src/models/prospects.model";
+import {
+  ProspectsList,
+  ProspectsListingParams,
+} from "src/models/prospects.model";
 import { MetaService } from "src/services/MetaService/meta.service";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
+import DeleteModal from "../DeleteModal";
+import Button from "src/shared/components/Button";
+import { IconChevronLeft, IconChevronRight } from "obra-icons-react";
 
 const ProspectsListing = () => {
   const [queryParams, setQueryParams] = useState<ProspectsListingParams>(
     new ProspectsListingParams(),
   );
-  const { getProspects } = ProspectsService();
+  const { getProspects, viewProspect } = ProspectsService();
   const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
+
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isEdit, setIsEdit] = useState({
+    state: false,
+    id: "",
+  });
+  const { data: isEditData } = useQuery({
+    ...viewProspect(isEdit?.id),
+    enabled: !!isEdit?.id,
+  });
 
   const { getLeadStatuses } = MetaService();
 
   const { data: leadStatusOptions } = useQuery(getLeadStatuses());
   const { navigateToIndividualProspect } = useRedirect();
 
-  const { visible, show, hide } = useDrawer();
+  const { visible, show, toggleVisibility } = useDrawer();
+  const { visible: deleteModalVisible, toggleVisibility: toggleDeleteModal } =
+    useDrawer();
   const handleSelectAll = useCallback(
     (checked: boolean) => {
       setSelectedIds(toggleAllSelections(checked, data?.prospects));
@@ -81,6 +98,46 @@ const ProspectsListing = () => {
     setQueryParams((prev) => ({ ...prev, search: term }));
   }, []);
 
+  const handleOnEdit = useCallback((prospect: ProspectsList) => {
+    setIsEdit({
+      state: true,
+      id: prospect.id!,
+    });
+    toggleVisibility();
+  }, []);
+
+  const handleOnDelete = (prospect: ProspectsList) => {
+    setIsEdit({
+      state: false,
+      id: prospect.id!,
+    });
+    toggleDeleteModal();
+  };
+
+  const handlePageChange = useCallback(
+    (direction: PageListingDirections) => {
+      setQueryParams((prev) => {
+        const currentPage = prev.page || 1;
+        const totalPages = data?.pagination?.overallPages || 1;
+
+        let newPage = currentPage;
+
+        if (direction === PageListingDirections.PREV && currentPage > 1)
+          newPage = currentPage - 1;
+        else if (
+          direction === PageListingDirections.NEXT &&
+          currentPage < totalPages
+        )
+          newPage = currentPage + 1;
+
+        if (newPage === currentPage) return prev;
+
+        return { ...prev, page: newPage };
+      });
+    },
+    [data?.pagination?.overallPages],
+  );
+
   return (
     <div>
       <Header onSearch={handleSearch} onAddProspect={show} />
@@ -113,13 +170,50 @@ const ProspectsListing = () => {
                   isSelected={selectedIds.includes(prospect.id!)}
                   leadStatusOptions={leadStatusOptions?.leadStatuses}
                   onSelectChange={handleSelectOne}
+                  onEditClick={handleOnEdit}
+                  onDeleteClick={handleOnDelete}
                 />
               ))}
+            </div>
+            <div className={styles.paginationContainer}>
+              <Button
+                disabled={data?.pagination?.currentPage === 1}
+                onClick={() => handlePageChange(PageListingDirections.PREV)}
+                icon={<IconChevronLeft size={20} />}
+              ></Button>
+              <div className={styles.textContainer}>
+                Page
+                <span className={styles.active}>
+                  {data?.pagination?.currentPage ?? queryParams.page ?? 1}
+                </span>
+                of
+                <span className={styles.end}>
+                  {data?.pagination?.overallPages ?? 1}
+                </span>
+              </div>
+              <Button
+                onClick={() => handlePageChange(PageListingDirections.NEXT)}
+                disabled={
+                  data?.pagination?.currentPage ===
+                  data?.pagination?.overallPages
+                }
+                icon={<IconChevronRight size={20} />}
+              ></Button>
             </div>
           </ConditionalRender>
         </div>
       </div>
-      <AddProspect visible={visible} onClose={hide} />
+      <AddProspect
+        prospectData={isEditData?.prospect}
+        isEdit={isEdit?.state}
+        visible={visible}
+        onClose={toggleVisibility}
+      />
+      <DeleteModal
+        visible={deleteModalVisible}
+        toggleVisibility={toggleDeleteModal}
+        id={isEdit?.id}
+      />
     </div>
   );
 };

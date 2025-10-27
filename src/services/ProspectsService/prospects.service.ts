@@ -3,6 +3,7 @@ import { generatePath } from "react-router-dom";
 import { deserialize, serialize } from "serializr";
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { NotificationTypes } from "src/enums/notificationTypes";
 import axiosInstance from "src/interceptor/axiosInstance";
 import {
   ProspectFormData,
@@ -100,10 +101,29 @@ export const ProspectsService = () => {
     },
   });
 
+  const deleteProspect = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    string
+  > => ({
+    mutationKey: [ADD_PROSPECT],
+    mutationFn: async (id: string) => {
+      const response = await axiosInstance.delete(
+        generatePath(GET_PROSPECT, { id }),
+      );
+      return deserialize(ResponseModel, response?.data);
+    },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description, NotificationTypes.ERROR);
+    },
+  });
+
   return {
     getProspects,
     viewProspect,
     addProspect,
     editProspect,
+    deleteProspect,
   };
 };

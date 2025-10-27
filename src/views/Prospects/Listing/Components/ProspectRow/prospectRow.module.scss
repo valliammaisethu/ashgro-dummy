@@ -8,13 +8,27 @@
   padding: $table-padding;
   align-items: center;
   transition: background-color 0.2s;
-  border: 1px solid;
-  border-image-source: linear-gradient(
-    151.49deg,
-    rgba(246, 239, 222, 0.5) 0%,
-    rgba(216, 201, 167, 0.5) 100%
-  );
-  border-image-slice: 1;
+  cursor: pointer;
+  border-radius: 2rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.6rem;
+  background-color: $ashgro-white;
+
+  &:hover {
+    background-color: $table-row-hover;
+  }
+
+  .actions {
+    min-width: 4rem;
+    display: flex;
+    gap: 1.8rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover .actions {
+    opacity: 1;
+  }
 
   &:last-child {
     border-bottom: none;
@@ -216,4 +230,46 @@
   font-weight: 600;
   font-family: $font-secondary;
   font-size: 1.4rem;
+}
+
+.deleteModal {
+  :global(.ant-modal .ant-modal-header) {
+    color: $dot-color;
+    font-weight: 700;
+    font-size: 2.2rem;
+    padding-bottom: 0;
+    padding-left: 2.6rem;
+
+    :global(.ant-divider) {
+      display: none;
+    }
+  }
+  :global(.ant-modal .ant-modal-body) {
+    padding-top: 1.6rem;
+    color: $ashgro-navy;
+    opacity: 0.65;
+  }
+  :global(.ant-modal .ant-modal-footer) {
+    border-top: 1px solid $footer-light-border;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .footer {
+    padding: 2.4rem 3.2rem;
+
+    .deleteButton {
+      background-color: $hot-text;
+      color: $ashgro-white;
+      font-size: 1.4rem;
+      font-family: $font-secondary;
+      height: 4.4rem;
+      border-radius: 3.2rem;
+
+      &:hover {
+        background-color: $hot-text;
+        color: $ashgro-white;
+      }
+    }
+  }
 }

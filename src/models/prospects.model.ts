@@ -26,6 +26,9 @@ export class ProspectsList {
   attachmentId?: string;
 
   @serializable
+  profilePictureUrl?: string;
+
+  @serializable
   firstName?: string;
 
   @serializable

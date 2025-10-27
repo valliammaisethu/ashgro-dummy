@@ -15,9 +15,10 @@
 }
 
 .modalFooter {
-  background-color: $modal-footer-bg;
   min-height: 7.6rem;
   border-radius: 1.6rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   display: flex;
   align-items: center;
   gap: 2rem;
