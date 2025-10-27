@@ -2,6 +2,7 @@
   "name": "ashgrow-super-admin-web",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
     "@sentry/browser": "^9.22.0",

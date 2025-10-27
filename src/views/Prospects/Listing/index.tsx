@@ -14,11 +14,9 @@ import Header from "./Header";
 import Checkbox from "src/shared/components/Checkbox";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import ProspectRow from "./Components/ProspectRow";
+import ProspectForm from "../ProspectForm";
 import useRedirect from "src/shared/hooks/useRedirect";
 import useDrawer from "src/shared/hooks/useDrawer";
-
-import styles from "./listing.module.scss";
-import AddProspect from "../AddProspect";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { UserData } from "src/models/user.model";
@@ -30,6 +28,8 @@ import { MetaService } from "src/services/MetaService/meta.service";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import DeleteModal from "../DeleteModal";
 import Button from "src/shared/components/Button";
+
+import styles from "./listing.module.scss";
 
 const ProspectsListing = () => {
   const [queryParams, setQueryParams] = useState<ProspectsListingParams>(
@@ -203,16 +203,16 @@ const ProspectsListing = () => {
           </ConditionalRender>
         </div>
       </div>
-      <AddProspect
-        prospectData={isEditData?.prospect}
-        isEdit={isEdit?.state}
-        visible={visible}
-        onClose={toggleVisibility}
-      />
       <DeleteModal
         visible={deleteModalVisible}
         toggleVisibility={toggleDeleteModal}
         id={isEdit?.id}
+      />
+      <ProspectForm
+        prospectData={isEditData?.prospect}
+        isEdit={isEdit?.state}
+        visible={visible}
+        onClose={toggleVisibility}
       />
     </div>
   );

@@ -134,23 +134,6 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
           color={Colors.MODAL_CLOSE_ICON}
         />
       </div>
-      {leadStatus ? (
-        <div className={styles.statusCol}>
-          <Select
-            value={leadStatus}
-            className={styles.statusSelect}
-            onClick={handleSelectClick}
-          >
-            {leadStatusOptions?.map(({ id, statusName = "" }) => (
-              <Select.Option key={id} value={statusName}>
-                <StatusTag label={statusName} color={"red"} />
-              </Select.Option>
-            ))}
-          </Select>
-        </div>
-      ) : (
-        "N/A"
-      )}
     </div>
   );
 };
