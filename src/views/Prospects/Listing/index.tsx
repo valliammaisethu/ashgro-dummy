@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { CheckboxChangeEvent } from "antd";
 import { useQuery } from "@tanstack/react-query";
+import { IconChevronLeft, IconChevronRight } from "obra-icons-react";
 
 import { PageListingDirections, TABLE_HEADERS } from "./constants";
 import {
@@ -29,7 +30,6 @@ import { MetaService } from "src/services/MetaService/meta.service";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import DeleteModal from "../DeleteModal";
 import Button from "src/shared/components/Button";
-import { IconChevronLeft, IconChevronRight } from "obra-icons-react";
 
 const ProspectsListing = () => {
   const [queryParams, setQueryParams] = useState<ProspectsListingParams>(

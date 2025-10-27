@@ -1,5 +1,6 @@
 import React, { Fragment, MouseEvent } from "react";
 import { CheckboxChangeEvent, Select } from "antd";
+import { IconDelete, IconEdit } from "obra-icons-react";
 
 import { ProspectsList } from "src/models/prospects.model";
 import { LeadStatus } from "src/models/meta.model";
@@ -10,11 +11,10 @@ import AvatarFallback from "src/shared/components/AvatarFallback";
 import Checkbox from "src/shared/components/Checkbox";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import StatusTag from "../../Atoms/StatusTag";
+import { N_A } from "src/constants/sharedComponents";
+import { Colors } from "src/enums/colors.enum";
 
 import styles from "./prospectRow.module.scss";
-import { N_A } from "src/constants/sharedComponents";
-import { IconDelete, IconEdit } from "obra-icons-react";
-import { Colors } from "src/enums/colors.enum";
 
 interface ProspectRowProps {
   prospect: ProspectsList;
@@ -38,7 +38,6 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   const {
     id = "",
     leadStatus,
-    attachmentId,
     firstName,
     lastName,
     email,
@@ -135,6 +134,23 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
           color={Colors.MODAL_CLOSE_ICON}
         />
       </div>
+      {leadStatus ? (
+        <div className={styles.statusCol}>
+          <Select
+            value={leadStatus}
+            className={styles.statusSelect}
+            onClick={handleSelectClick}
+          >
+            {leadStatusOptions?.map(({ id, statusName = "" }) => (
+              <Select.Option key={id} value={statusName}>
+                <StatusTag label={statusName} color={"red"} />
+              </Select.Option>
+            ))}
+          </Select>
+        </div>
+      ) : (
+        "N/A"
+      )}
     </div>
   );
 };
