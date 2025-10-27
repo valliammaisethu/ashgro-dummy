@@ -17,14 +17,17 @@ import ProspectRow from "./Components/ProspectRow";
 import { ProspectData } from "src/shared/types/sharedComponents.type";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import useRedirect from "src/shared/hooks/useRedirect";
+import useDrawer from "src/shared/hooks/useDrawer";
 
 import styles from "./listing.module.scss";
+import AddProspect from "../AddProspect";
 
 const ProspectsListing = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [prospects, setProspects] = useState<ProspectData[]>(mockProspects);
   const { navigateToIndividualProspect } = useRedirect();
   const { getProspects } = ProspectsService();
+  const { visible, show, hide } = useDrawer();
   const handleSelectAll = useCallback(
     (checked: boolean) => {
       setSelectedIds(toggleAllSelections(checked, prospects));
@@ -74,7 +77,7 @@ const ProspectsListing = () => {
 
   return (
     <div>
-      <Header />
+      <Header onAddProspect={show} />
       <div className={styles.prospectList}>
         <div className={styles.tableContainer}>
           <div className={styles.tableHeader}>
@@ -111,6 +114,7 @@ const ProspectsListing = () => {
           </ConditionalRender>
         </div>
       </div>
+      <AddProspect visible={visible} onClose={hide} />
     </div>
   );
 };

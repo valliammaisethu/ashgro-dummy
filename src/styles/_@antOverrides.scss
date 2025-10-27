@@ -493,6 +493,13 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 }
 .ant-select-single .ant-select-selector .ant-select-selection-item {
   line-height: 1.3rem;
+  font-size: 1.2rem;
+}
+.ant-select-selection-placeholder {
+  color: $ashgro-grey !important;
+  opacity: 0.6;
+  font-size: 1.2rem;
+  line-height: 1.3rem;
 }
 .ant-btn:not(:disabled):focus-visible {
   outline: none;
@@ -517,4 +524,96 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   .ant-notification-notice-with-icon
   .ant-notification-notice-description {
   margin-inline-start: 1.6rem;
+}
+.ant-modal .ant-modal-content {
+  border-radius: 1.6rem;
+}
+.ant-modal-title {
+  font-weight: 700;
+  font-size: 2rem;
+  color: $ashgro-navy;
+  font-family: $font-primary;
+}
+
+.ant-modal .ant-modal-close:hover {
+  background: none;
+}
+.ant-modal .ant-modal-body {
+  padding: 2.4rem;
+  max-height: calc(100vh - 30rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* Custom scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 0.6rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $ashgro-grey-3;
+    border-radius: 0.3rem;
+
+    &:hover {
+      background: darken($ashgro-grey-3, 10%);
+    }
+  }
+}
+.ant-modal .ant-modal-content {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.ant-modal .ant-modal-header {
+  border-radius: 1.6rem;
+  padding: 2.4rem 1.6rem;
+  flex-shrink: 0;
+}
+.ant-modal .ant-modal-footer {
+  flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  background-color: $ashgro-white;
+  z-index: 10;
+}
+.ant-picker-outlined {
+  border-color: $incrementer-border;
+  background-color: $input-background;
+}
+.ant-picker-outlined:hover {
+  border-color: $incrementer-border;
+}
+.ant-select-single,
+.ant-picker {
+  height: 4rem;
+}
+.ant-picker {
+  border-radius: 1.2rem;
+}
+.ant-picker-outlined:focus-within {
+  border-color: $input-border;
+}
+.ant-input {
+  font-size: 1.2rem;
+}
+.ant-picker .ant-picker-input > input {
+  font-size: 1.2rem;
+}
+.ant-picker-outlined:hover {
+  background-color: $ashgro-cream;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.08);
+}
+.ant-select:hover {
+  .ant-select-selector {
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.08);
+  }
+}
+.ant-modal .ant-modal-header {
+  margin-bottom: 0;
+}
+.ant-modal .ant-modal-footer {
+  border-radius: 1.6rem;
 }

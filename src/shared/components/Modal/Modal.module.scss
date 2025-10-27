@@ -1,3 +1,41 @@
 @import "src/styles/variables";
 .modal-container {
 }
+.closeIcon {
+  height: 2rem;
+  width: 2rem;
+  background-color: transparent;
+  border: 1.25px solid $filter-icon;
+  border-radius: 50%;
+}
+.titleDivider {
+  &:global(.ant-divider-horizontal) {
+    position: absolute;
+    left: 0;
+  }
+}
+
+.modalFooter {
+  background-color: $modal-footer-bg;
+  min-height: 7.6rem;
+  border-radius: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  justify-content: flex-end;
+  padding: 1.6rem 3.2rem;
+
+  .okButton {
+    background-color: $ashgro-navy;
+    color: $ashgro-white;
+    border-radius: 3.6rem;
+    padding: 1.2rem 1.6rem;
+    width: 14.4rem;
+    height: 4.4rem;
+
+    &:hover {
+      background-color: $ashgro-navy !important;
+      color: $ashgro-white !important;
+    }
+  }
+}
