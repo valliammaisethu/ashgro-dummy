@@ -2,8 +2,9 @@ import { list, object, primitive, serializable } from "serializr";
 
 import { ResponseModel } from "./response.model";
 import { Pagination } from "./pagination.model";
+import { QueryParams } from "./queryParams.model";
 
-export class ProspectsListingParams {
+export class ProspectsListingParams extends QueryParams {
   @serializable(list(primitive()))
   leadStatusIds?: string[];
 
