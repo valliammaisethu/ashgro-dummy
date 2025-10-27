@@ -1,22 +1,24 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
+import { IconDelete, IconEdit } from "obra-icons-react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { Select } from "antd";
+
 import Header from "./Header";
-import styles from "./individualProspect.module.scss";
+import StatusTag from "../Listing/Atoms/StatusTag";
+import ProspectForm from "../ProspectForm";
 import Card from "src/shared/components/Card";
 import Button from "src/shared/components/Button";
-import { IconDelete, IconEdit } from "obra-icons-react";
 import ProspectInfo from "./components/ProspectInfo";
+import ConditionalRender from "src/shared/components/ConditionalRender";
 import DetailSection from "./components/DetailSection";
 import ActivitySection from "./components/ActivitySection";
 import { PROSPECT_LABELS, DetailSectionType } from "./constants";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-import ConditionalRender from "src/shared/components/ConditionalRender";
 import useDrawer from "src/shared/hooks/useDrawer";
-import AddProspect from "../AddProspect";
 import { MetaService } from "src/services/MetaService/meta.service";
-import { Select } from "antd";
-import StatusTag from "../Listing/Atoms/StatusTag";
+
+import styles from "./individualProspect.module.scss";
 
 const IndividualProspect = () => {
   const { viewProspect } = ProspectsService();
@@ -101,12 +103,16 @@ const IndividualProspect = () => {
           </div>
         </Card>
       </ConditionalRender>
-      <AddProspect
-        prospectData={data?.prospect}
-        isEdit={isEdit}
-        visible={visible}
-        onClose={toggleVisibility}
-      />
+      {isEdit && !isFetching ? (
+        <ProspectForm
+          prospectData={data?.prospect}
+          isEdit={isEdit}
+          visible={visible}
+          onClose={toggleVisibility}
+        />
+      ) : (
+        <Fragment />
+      )}
     </div>
   );
 };

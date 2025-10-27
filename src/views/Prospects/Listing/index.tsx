@@ -13,17 +13,17 @@ import Header from "./Header";
 import Checkbox from "src/shared/components/Checkbox";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import ProspectRow from "./Components/ProspectRow";
+import ProspectForm from "../ProspectForm";
 import useRedirect from "src/shared/hooks/useRedirect";
 import useDrawer from "src/shared/hooks/useDrawer";
-
-import styles from "./listing.module.scss";
-import AddProspect from "../AddProspect";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { UserData } from "src/models/user.model";
 import { ProspectsListingParams } from "src/models/prospects.model";
 import { MetaService } from "src/services/MetaService/meta.service";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
+
+import styles from "./listing.module.scss";
 
 const ProspectsListing = () => {
   const [queryParams, setQueryParams] = useState<ProspectsListingParams>(
@@ -119,7 +119,7 @@ const ProspectsListing = () => {
           </ConditionalRender>
         </div>
       </div>
-      <AddProspect visible={visible} onClose={hide} />
+      <ProspectForm visible={visible} onClose={hide} />
     </div>
   );
 };
