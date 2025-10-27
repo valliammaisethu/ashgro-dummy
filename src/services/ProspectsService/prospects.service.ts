@@ -18,8 +18,13 @@ import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
 const { GET_PROSPECTS, GET_SINGLE_PROSPECT } = QueryKeys;
-const { PROSPECTS, GET_PROSPECT } = ApiRoutes;
-const { ADD_PROSPECT } = MutationKeys;
+const {
+  PROSPECTS,
+  GET_PROSPECT,
+  CONVERT_TO_MEMBER: CONVERT_TO_MEMBER_ROUTE,
+} = ApiRoutes;
+const { ADD_PROSPECT, EDIT_PROSPECT, DELETE_PROSPECT, CONVERT_TO_MEMBER } =
+  MutationKeys;
 
 export const ProspectsService = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
@@ -82,7 +87,7 @@ export const ProspectsService = () => {
     ResponseModel,
     ProspectFormData
   > => ({
-    mutationKey: [ADD_PROSPECT],
+    mutationKey: [EDIT_PROSPECT],
     mutationFn: async (data: ProspectFormData) => {
       const response = await axiosInstance.put(
         generatePath(GET_PROSPECT, { id: data?.prospect?.id }),
@@ -106,7 +111,7 @@ export const ProspectsService = () => {
     ResponseModel,
     string
   > => ({
-    mutationKey: [ADD_PROSPECT],
+    mutationKey: [DELETE_PROSPECT],
     mutationFn: async (id: string) => {
       const response = await axiosInstance.delete(
         generatePath(GET_PROSPECT, { id }),
@@ -119,11 +124,30 @@ export const ProspectsService = () => {
     },
   });
 
+  const convertToMember = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    string
+  > => ({
+    mutationKey: [CONVERT_TO_MEMBER],
+    mutationFn: async (id: string) => {
+      const response = await axiosInstance.delete(
+        generatePath(CONVERT_TO_MEMBER_ROUTE, { id }),
+      );
+      return deserialize(ResponseModel, response?.data);
+    },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description, NotificationTypes.SUCCESS);
+    },
+  });
+
   return {
     getProspects,
     viewProspect,
     addProspect,
     editProspect,
     deleteProspect,
+    convertToMember,
   };
 };

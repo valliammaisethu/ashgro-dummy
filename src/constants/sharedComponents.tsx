@@ -112,13 +112,13 @@ export const axiosInstanceErrors = {
   },
   failed: {
     title: "Operation Failed!",
-    description: "Something went wrong. Please try again later.",
+    description: "An unknown error occured. Please try again later.",
   },
   serverError: {
     title: "Server Error!",
-    description: "Something went wrong. Please try again later.",
+    description: "An unknown error occured. Please try again later.",
   },
-  genericError: "Something went wrong. Please try again later.",
+  genericError: "An unknown error occured. Please try again later.",
 };
 
 export const defaultSearchPlaceholder = "Search by name";
@@ -132,3 +132,17 @@ export const logoutMessages = {
 };
 export const N_A = "N/A";
 export const imageAccept = "image/*";
+
+export const profileMaxSize = 5 * 1024 * 1024;
+
+export const profileMaxSizeTitle = "The image size should not exceed 5 MB";
+
+export const profileImageType = "Only PNG, JPG, and JPEG formats are allowed";
+
+export const profileImageAllowedTypes = [
+  "image/png",
+  "image/jpeg",
+  "image/jpg",
+];
+
+export const defaultModalWidth = 664;
