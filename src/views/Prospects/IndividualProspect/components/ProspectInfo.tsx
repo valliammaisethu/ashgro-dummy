@@ -15,10 +15,12 @@ import { AttachmentService } from "src/services/AttachmentService/attachment.ser
 import { useQuery } from "@tanstack/react-query";
 
 interface ProspectInfoProps {
-  data: ViewProspect;
+  data?: ViewProspect;
 }
 
-const ProspectInfo: React.FC<ProspectInfoProps> = ({ data: prospect }) => {
+const ProspectInfo: React.FC<ProspectInfoProps> = ({
+  data: prospect = new ViewProspect(),
+}) => {
   const {
     firstName,
     lastName,

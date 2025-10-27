@@ -12,7 +12,6 @@ import { ProspectsService } from "src/services/ProspectsService/prospects.servic
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import ConditionalRender from "src/shared/components/ConditionalRender";
-import { ProspectData } from "src/models/viewProspect.model";
 import useDrawer from "src/shared/hooks/useDrawer";
 import AddProspect from "../AddProspect";
 import { MetaService } from "src/services/MetaService/meta.service";
@@ -22,12 +21,7 @@ import StatusTag from "../Listing/Atoms/StatusTag";
 const IndividualProspect = () => {
   const { viewProspect } = ProspectsService();
   const { id = "" } = useParams();
-  const {
-    data = new ProspectData(),
-    isPending,
-    isSuccess,
-    isFetching,
-  } = useQuery(viewProspect(id));
+  const { data, isPending, isSuccess, isFetching } = useQuery(viewProspect(id));
 
   const { getLeadStatuses } = MetaService();
 
@@ -49,7 +43,7 @@ const IndividualProspect = () => {
         isPending={isPending}
         isSuccess={isSuccess}
         isFetching={isFetching}
-        records={[data.prospect]}
+        records={[data?.prospect]}
       >
         <Card className={styles.card}>
           <div className={styles.leftSide}>
@@ -77,16 +71,16 @@ const IndividualProspect = () => {
               />
             </div>
             <div className={styles.content}>
-              <ProspectInfo data={data.prospect} />
+              <ProspectInfo data={data?.prospect} />
               <div className={styles.bottom}>
                 <DetailSection
                   title={PROSPECT_LABELS.leadDetails}
-                  data={data.prospect}
+                  data={data?.prospect}
                   type={DetailSectionType.LEAD_DETAILS}
                 />
                 <DetailSection
                   title={PROSPECT_LABELS.feesAndDues}
-                  data={data.prospect}
+                  data={data?.prospect}
                   type={DetailSectionType.FEES_AND_DUES}
                 />
               </div>
@@ -94,14 +88,14 @@ const IndividualProspect = () => {
           </div>
           <div className={styles.rightSide}>
             <ConditionalRender
-              records={data.prospect.activityDetails}
+              records={data?.prospect.activityDetails}
               isPending={isPending}
               isSuccess={isSuccess}
               className={styles.activitySection}
             >
               <ActivitySection
-                activities={data.prospect.activityDetails}
-                activityCount={data.prospect.activityDetails.length}
+                activities={data?.prospect.activityDetails}
+                activityCount={data?.prospect.activityDetails.length}
               />
             </ConditionalRender>
           </div>
