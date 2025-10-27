@@ -18,6 +18,7 @@
     "moduleResolution": "bundler",
     "strict": true,
     "jsx": "react",
+    "outDir": "./build",
     "baseUrl": ".",
     "paths": {
       "src/*": ["src/*"]
