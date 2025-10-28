@@ -12,7 +12,7 @@ const Drawer = (props: DrawerProps) => {
   const { footer, onClose, ...rest } = props;
 
   const renderFooter = () => {
-    if (footer === null) return null;
+    if (footer === null || !footer) return null;
     if (footer !== undefined) return footer;
 
     return (

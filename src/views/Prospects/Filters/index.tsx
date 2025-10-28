@@ -70,7 +70,6 @@ const Filters = (props: ProspectFilterProps) => {
       open={visible}
       closable
       onClose={toggleVisibility}
-      footer={null}
     >
       <div className={styles.body}>
         <Form onSubmit={handleSubmit} methods={methods}>
