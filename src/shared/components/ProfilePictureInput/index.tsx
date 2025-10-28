@@ -10,6 +10,7 @@ import { RcFile } from "antd/es/upload";
 import logo from "src/assets/images/profilePicture.webp";
 import {
   imageAccept,
+  imageUploadFailed,
   profileImageAllowedTypes,
   profileImageType,
   profileMaxSize,
@@ -92,13 +93,6 @@ const ProfilePictureInput = ({
     }
 
     setIsLoading(true);
-    let uploadedAttachmentId: string | null = null;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
 
     try {
       const attachmentPayload: AttachmentPayload = {
@@ -109,24 +103,23 @@ const ProfilePictureInput = ({
       const result = await uploadFile.mutateAsync(attachmentPayload);
 
       if (result?.id) {
-        uploadedAttachmentId = result.id;
         setAttachmentId(result.id);
         field.onChange(result.id);
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
       }
     } catch (error) {
-      if (error instanceof S3UploadError)
-        uploadedAttachmentId = error.attachmentId;
-
-      if (uploadedAttachmentId) {
-        try {
-          await deleteFile.mutateAsync(uploadedAttachmentId);
-        } catch {
-          return;
-        }
+      if (error instanceof S3UploadError && error.attachmentId) {
+        await deleteFile.mutateAsync(error.attachmentId);
       }
 
       setPreview(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
+      renderNotification(imageUploadFailed, "", NotificationTypes.ERROR);
     } finally {
       setIsLoading(false);
     }

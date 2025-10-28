@@ -24,8 +24,6 @@ interface DateRangePickerFieldProps {
 
 const DateRangePickerField: React.FC<DateRangePickerFieldProps> = ({
   name,
-  label = "Date Range",
-  required = false,
   fromLabel = "From",
   toLabel = "To",
   format = DateFormats.DD_MMM_YYYY,
@@ -41,7 +39,7 @@ const DateRangePickerField: React.FC<DateRangePickerFieldProps> = ({
     control,
   });
 
-  const rangeValue =
+  const rangeValue: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null =
     value && Array.isArray(value) && value.length === 2
       ? [dayjs(value[0], format, true), dayjs(value[1], format, true)]
       : [null, null];
@@ -67,7 +65,7 @@ const DateRangePickerField: React.FC<DateRangePickerFieldProps> = ({
       <RangePicker
         id={name}
         rootClassName={styles.rangePickerComponent}
-        value={rangeValue as any}
+        value={rangeValue}
         onChange={handleChange}
         onBlur={onBlur}
         format={format}

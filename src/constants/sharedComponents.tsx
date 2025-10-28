@@ -139,6 +139,8 @@ export const profileMaxSizeTitle = "The image size should not exceed 5 MB";
 
 export const profileImageType = "Only PNG, JPG, and JPEG formats are allowed";
 
+export const imageUploadFailed = "Failed to upload image";
+
 export const profileImageAllowedTypes = [
   "image/png",
   "image/jpeg",

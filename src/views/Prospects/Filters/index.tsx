@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FieldValues } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 
@@ -24,7 +24,7 @@ const Filters = (props: ProspectFilterProps) => {
   const { data: leadSources } = useQuery(getLeadSources());
 
   const methods = useForm({
-    defaultValues: {
+    values: {
       [fields.followUpDateRange]:
         defaultValues?.[fields.followUpDateRange] || [],
       [fields.leadStatus]: defaultValues?.[fields.leadStatus] || [],
@@ -34,34 +34,20 @@ const Filters = (props: ProspectFilterProps) => {
 
   const { watch, setValue, reset } = methods;
 
-  useEffect(() => {
-    if (visible) {
-      reset({
-        [fields.followUpDateRange]:
-          defaultValues?.[fields.followUpDateRange] || [],
-        [fields.leadStatus]: defaultValues?.[fields.leadStatus] || [],
-        [fields.leadSource]: defaultValues?.[fields.leadSource] || [],
-      });
-    }
-  }, [visible, defaultValues, reset]);
-
   const leadStatusWatch = watch(fields.leadStatus);
   const leadSourceWatch = watch(fields.leadSource);
 
   const handleClearLeadStatus = () => setValue(fields.leadStatus, []);
   const handleClearLeadSource = () => setValue(fields.leadSource, []);
 
-  const handleSubmit = (values: FieldValues) => {
-    onSubmit(values);
-  };
+  const handleSubmit = (values: FieldValues) => onSubmit(values);
 
-  const resetValues = () => {
+  const resetValues = () =>
     reset({
       [fields.followUpDateRange]: [],
       [fields.leadStatus]: [],
       [fields.leadSource]: [],
     });
-  };
 
   return (
     <Drawer
@@ -70,7 +56,6 @@ const Filters = (props: ProspectFilterProps) => {
       open={visible}
       closable
       onClose={toggleVisibility}
-      footer={null}
     >
       <div className={styles.body}>
         <Form onSubmit={handleSubmit} methods={methods}>

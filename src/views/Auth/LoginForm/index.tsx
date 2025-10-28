@@ -41,13 +41,7 @@ const LoginForm = () => {
 
   return (
     <div className={styles.loginFormContainer}>
-      <img
-        width={94}
-        height={98}
-        className={styles.loginLogo}
-        alt={imageAlts.loginLogo}
-        src={logo}
-      />
+      <img className={styles.loginLogo} alt={imageAlts.loginLogo} src={logo} />
       <div className={styles.container}>
         <h1 className={styles.title}>{loginFormConstants.title}</h1>
         <Form
