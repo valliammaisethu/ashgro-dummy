@@ -14,6 +14,7 @@ import {
   SelectProps,
   SwitchProps,
   ModalProps as AntdModalProps,
+  DrawerProps as AntdDrawerProps,
 } from "antd";
 
 import { ButtonSize } from "antd/es/button";
@@ -25,6 +26,7 @@ import { BaseOptionType } from "antd/es/select";
 import { DefaultOptionType } from "antd/es/cascader";
 import { Trigger } from "src/enums/trigger.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
+import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
   phoneCodeName: string;
@@ -140,6 +142,7 @@ export interface SearchFieldProps {
   placeholder?: string;
   className?: string;
   debounceTime?: number;
+  filtersActive?: boolean;
 }
 
 export interface InputFieldProps extends InputProps {
@@ -236,4 +239,18 @@ export interface AvatarWithFallbackProps {
   className?: string;
   backgroundColor?: string;
   textColor?: string;
+}
+
+export interface DrawerProps extends AntdDrawerProps {
+  title: ReactNode;
+  width?: number;
+  onClose: () => void;
+  open: boolean;
+  closeIcon?: ReactNode;
+  footer?: ReactNode;
+  size?: AntdDrawerProps["size"];
+  zIndex?: number;
+  children: JSX.Element;
+  placement?: DrawerPlacement;
+  subHeading?: string;
 }

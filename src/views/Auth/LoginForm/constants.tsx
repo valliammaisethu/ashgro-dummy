@@ -23,5 +23,5 @@ export const placeholders = {
 export const validationMessages = {
   email: "Please enter a valid email address!",
   password: "Password is required!",
-  requiredEmail: "E-mail is required!",
+  requiredEmail: "Email is required!",
 };

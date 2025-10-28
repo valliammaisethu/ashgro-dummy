@@ -9,6 +9,7 @@ import {
   toggleSingleSelection,
   areAllProspectsSelected,
   areSomeProspectsSelected,
+  areFiltersActive,
 } from "./helpers";
 import Header from "./Header";
 import Checkbox from "src/shared/components/Checkbox";
@@ -30,6 +31,8 @@ import DeleteModal from "../DeleteModal";
 import Button from "src/shared/components/Button";
 
 import styles from "./listing.module.scss";
+import Filters from "../Filters";
+import { FieldValues } from "react-hook-form";
 
 const ProspectsListing = () => {
   const [queryParams, setQueryParams] = useState<ProspectsListingParams>(
@@ -37,7 +40,6 @@ const ProspectsListing = () => {
   );
   const { getProspects, viewProspect } = ProspectsService();
   const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
-
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState({
     state: false,
@@ -55,6 +57,8 @@ const ProspectsListing = () => {
 
   const { visible, show, toggleVisibility } = useDrawer();
   const { visible: deleteModalVisible, toggleVisibility: toggleDeleteModal } =
+    useDrawer();
+  const { visible: drawerVisible, toggleVisibility: toggleDrawerVisibility } =
     useDrawer();
   const handleSelectAll = useCallback(
     (checked: boolean) => {
@@ -138,9 +142,29 @@ const ProspectsListing = () => {
     [data?.pagination?.overallPages],
   );
 
+  const handleApplyFilter = (filters: FieldValues) => {
+    setQueryParams((prev) => ({
+      ...prev,
+      ...filters,
+      followUpStartDate: filters.followUpDateRange?.[0],
+      followUpEndDate: filters.followUpDateRange?.[1],
+      page: 1,
+    }));
+    toggleDrawerVisibility();
+  };
+  const filtersActive = useMemo(
+    () => areFiltersActive(queryParams),
+    [queryParams],
+  );
+
   return (
     <div>
-      <Header onSearch={handleSearch} onAddProspect={show} />
+      <Header
+        onFilter={toggleDrawerVisibility}
+        onSearch={handleSearch}
+        onAddProspect={show}
+        filtersActive={filtersActive}
+      />
       <div className={styles.prospectList}>
         <div className={styles.tableContainer}>
           <div className={styles.tableHeader}>
@@ -213,6 +237,12 @@ const ProspectsListing = () => {
         isEdit={isEdit?.state}
         visible={visible}
         onClose={toggleVisibility}
+      />
+      <Filters
+        visible={drawerVisible}
+        toggleVisibility={toggleDrawerVisibility}
+        onSubmit={handleApplyFilter}
+        defaultValues={queryParams}
       />
     </div>
   );
