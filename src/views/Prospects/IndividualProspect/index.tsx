@@ -20,6 +20,8 @@ import { MetaService } from "src/services/MetaService/meta.service";
 import DeleteModal from "../DeleteModal";
 
 import styles from "./individualProspect.module.scss";
+import MemberConversionModal from "../MemberConversionModal";
+import { getFullName } from "src/shared/utils/helpers";
 
 const IndividualProspect = () => {
   const { viewProspect } = ProspectsService();
@@ -37,14 +39,21 @@ const IndividualProspect = () => {
   const { visible: deleteModalVisible, toggleVisibility: toggleDeleteModal } =
     useDrawer();
 
+  const {
+    visible: memberConversionModalVisible,
+    toggleVisibility: toggleMemberConversionModal,
+  } = useDrawer();
+
   const handleEdit = () => {
     setIsEdit(true);
     toggleVisibility();
   };
 
+  const handleConvertToMember = () => toggleMemberConversionModal();
+
   return (
     <div className={styles.individualProspect}>
-      <Header />
+      <Header onConvert={handleConvertToMember} />
       <ConditionalRender
         isPending={isPending}
         isSuccess={isSuccess}
@@ -118,6 +127,14 @@ const IndividualProspect = () => {
       ) : (
         <Fragment />
       )}
+      <MemberConversionModal
+        visible={memberConversionModalVisible}
+        onClose={toggleMemberConversionModal}
+        memberName={getFullName(
+          data?.prospect?.firstName,
+          data?.prospect?.lastName,
+        )}
+      />
       <DeleteModal
         visible={deleteModalVisible}
         toggleVisibility={toggleDeleteModal}

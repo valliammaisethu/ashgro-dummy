@@ -24,12 +24,14 @@ const Modal: React.FC<ModalProps> = ({
   okButtonHtmlType = HtmlButtonType.BUTTON,
   okButtonType = ButtonTypes.DEFAULT,
   rootClassName,
+  centered,
 }: ModalProps) => {
   return (
     <div className={styles.modalContainer}>
       <CustomModal
         width={width}
         rootClassName={rootClassName}
+        centered={centered}
         footer={
           footer ? (
             footer

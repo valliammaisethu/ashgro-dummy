@@ -8,6 +8,7 @@ export const ApiRoutes = {
   ATTACHMENTS_SPECIFIC: "/attachments/:id",
   PROSPECTS: "/prospects",
   GET_PROSPECT: "/prospects/:id",
+  CONVERT_TO_MEMBER: "/prospects/:id/convertToMember",
 
   GET_ACTIVITY_TYPES: "/clubs/:id/activityTypes",
   GET_MEMBERSHIP_CATEGORIES: "/clubs/:id/membershipCategories",
