@@ -10,8 +10,8 @@ export const TABLE_HEADERS = {
   LEAD_STATUS: "Lead Status",
 } as const;
 
-export const deleteProspectDescription =
-  "Are you sure you want to delete this Prospect?";
+export const deleteProspectDescription = (prospectName: string) =>
+  `Are you sure you want to permanently delete ${prospectName} to a member? This action is not reversible.`;
 
 export const deleteProspectTitle = "Delete Prospect?";
 

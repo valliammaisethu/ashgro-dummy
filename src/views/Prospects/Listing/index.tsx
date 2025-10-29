@@ -30,6 +30,7 @@ import DeleteModal from "../DeleteModal";
 import Button from "src/shared/components/Button";
 
 import styles from "./listing.module.scss";
+import { getFullName } from "src/shared/utils/helpers";
 
 const ProspectsListing = () => {
   const [queryParams, setQueryParams] = useState<ProspectsListingParams>(
@@ -41,11 +42,11 @@ const ProspectsListing = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState({
     state: false,
-    id: "",
+    prospect: new ProspectsList(),
   });
   const { data: isEditData } = useQuery({
-    ...viewProspect(isEdit?.id),
-    enabled: !!isEdit?.id,
+    ...viewProspect(isEdit?.prospect?.id),
+    enabled: !!isEdit?.prospect?.id,
   });
 
   const { getLeadStatuses } = MetaService();
@@ -57,7 +58,7 @@ const ProspectsListing = () => {
   const { visible: deleteModalVisible, toggleVisibility: toggleDeleteModal } =
     useDrawer();
   const handleSelectAll = useCallback(
-    (checked: boolean) => {
+    (checked = false) => {
       setSelectedIds(toggleAllSelections(checked, data?.prospects));
     },
     [data?.prospects],
@@ -70,7 +71,7 @@ const ProspectsListing = () => {
 
   const handleHeaderCheckboxChange = useCallback(
     (e?: CheckboxChangeEvent) => {
-      handleSelectAll(e?.target?.checked ?? false);
+      handleSelectAll(e?.target?.checked);
     },
     [handleSelectAll],
   );
@@ -101,7 +102,7 @@ const ProspectsListing = () => {
   const handleOnEdit = useCallback((prospect: ProspectsList) => {
     setIsEdit({
       state: true,
-      id: prospect.id!,
+      prospect: prospect,
     });
     toggleVisibility();
   }, []);
@@ -109,7 +110,7 @@ const ProspectsListing = () => {
   const handleOnDelete = (prospect: ProspectsList) => {
     setIsEdit({
       state: false,
-      id: prospect.id!,
+      prospect: prospect,
     });
     toggleDeleteModal();
   };
@@ -184,11 +185,11 @@ const ProspectsListing = () => {
               <div className={styles.textContainer}>
                 Page
                 <span className={styles.active}>
-                  {data?.pagination?.currentPage ?? queryParams.page ?? 1}
+                  {data?.pagination?.currentPage}
                 </span>
                 of
                 <span className={styles.end}>
-                  {data?.pagination?.overallPages ?? 1}
+                  {data?.pagination?.overallPages}
                 </span>
               </div>
               <Button
@@ -206,7 +207,11 @@ const ProspectsListing = () => {
       <DeleteModal
         visible={deleteModalVisible}
         toggleVisibility={toggleDeleteModal}
-        id={isEdit?.id}
+        id={isEdit?.prospect?.id ?? ""}
+        prospectName={getFullName(
+          isEdit?.prospect?.firstName,
+          isEdit?.prospect?.lastName,
+        )}
       />
       <ProspectForm
         prospectData={isEditData?.prospect}

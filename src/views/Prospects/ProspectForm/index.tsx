@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo } from "react";
 import { Col, Divider, Row } from "antd";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IconCalendarWait } from "obra-icons-react";
 import { FieldValues } from "react-hook-form";
 
@@ -18,6 +18,7 @@ import { INPUT_TYPE } from "src/enums/inputType";
 import { Justify } from "src/enums/align.enum";
 import { Colors } from "src/enums/colors.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
+import { QueryKeys } from "src/enums/cacheEvict.enum";
 import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { ADD_PROSPECT_CONSTANTS, submitButtonKey } from "./constants";
 import { MetaService } from "src/services/MetaService/meta.service";
@@ -51,7 +52,7 @@ const ProspectForm = ({
     getMembershipCategories,
     getActivityTypes,
   } = MetaService();
-
+  const queryClient = useQueryClient();
   const { addProspect, editProspect } = ProspectsService();
 
   const { mutateAsync, isPending } = useMutation(addProspect());
@@ -116,9 +117,24 @@ const ProspectForm = ({
     }
   };
 
+  const modalClose = () => {
+    methods.reset({});
+    onClose();
+  };
+
+  const handleFormSuccess = () => {
+    modalClose();
+    queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_PROSPECTS] });
+  };
+
   const handleSubmit = async (values: FieldValues) => {
     const mutationFn = isEdit ? editMutateAsync : mutateAsync;
-    await mutationFn(values, { onSuccess: onClose });
+    await mutationFn(values, {
+      onSuccess: () => {
+        methods.reset({});
+        handleFormSuccess();
+      },
+    });
   };
 
   return (
@@ -128,7 +144,18 @@ const ProspectForm = ({
       visible={visible}
       width={MODAL_WIDTH}
       okText={Buttons.ADD_PROSPECT}
-      closeModal={onClose}
+      closeModal={modalClose}
+      destroyOnClose
+      footer={[]}
+      rootClassName={styles.prospectFormModal}
+      styles={{
+        wrapper: {
+          top: 0,
+        },
+        content: {
+          height: 733,
+        },
+      }}
     >
       <Form methods={methods} onSubmit={handleSubmit}>
         <div className={styles.profileContainer}>
@@ -284,7 +311,7 @@ const ProspectForm = ({
                   options={mapToSelectOptionsDynamic(
                     activityTypes?.activityTypes,
                   )}
-                  onSelect={(value) => handleActivityTypeChange(value)}
+                  onChange={(value) => handleActivityTypeChange(value)}
                 />
               </Col>
               <Col span={24}>
@@ -292,6 +319,7 @@ const ProspectForm = ({
                   placeholder={PLACEHOLDERS.ACTIVITY_DESCRIPTION}
                   name={FIELD_NAMES.ACTIVITY_DESCRIPTION}
                   label={LABELS.ACTIVITY_DESCRIPTION}
+                  className={styles.activityDescriptionTextArea}
                   onChange={(e) =>
                     handleActivityDescriptionChange(e.target.value)
                   }

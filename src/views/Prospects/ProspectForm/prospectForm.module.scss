@@ -35,3 +35,14 @@
     }
   }
 }
+.prospectFormModal {
+  :global(.ant-modal) {
+    top: 2rem;
+  }
+}
+.activityDescriptionTextArea {
+  textArea {
+    height: 24rem;
+    margin-bottom: 6rem;
+  }
+}
