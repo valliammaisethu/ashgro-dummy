@@ -26,7 +26,9 @@ import { getFullName } from "src/shared/utils/helpers";
 const IndividualProspect = () => {
   const { viewProspect } = ProspectsService();
   const { id = "" } = useParams();
-  const { data, isPending, isSuccess, isFetching } = useQuery(viewProspect(id));
+  const { data, isPending, isSuccess, isFetching, refetch } = useQuery(
+    viewProspect(id),
+  );
 
   const { getLeadStatuses } = MetaService();
 
@@ -50,6 +52,8 @@ const IndividualProspect = () => {
   };
 
   const handleConvertToMember = () => toggleMemberConversionModal();
+
+  const handleRefetch = () => refetch();
 
   return (
     <div className={styles.individualProspect}>
@@ -103,17 +107,11 @@ const IndividualProspect = () => {
             </div>
           </div>
           <div className={styles.rightSide}>
-            <ConditionalRender
-              records={data?.prospect.activityDetails}
-              isPending={isPending}
-              isSuccess={isSuccess}
-              className={styles.activitySection}
-            >
-              <ActivitySection
-                activities={data?.prospect.activityDetails}
-                activityCount={data?.prospect.activityDetails.length}
-              />
-            </ConditionalRender>
+            <ActivitySection
+              activities={data?.prospect.activityDetails}
+              activityCount={data?.prospect.activityDetails.length}
+              handleRefetch={handleRefetch}
+            />
           </div>
         </Card>
       </ConditionalRender>

@@ -1,24 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { IconAdd, IconMessage } from "obra-icons-react";
 
 import Card from "src/shared/components/Card";
 import Button from "src/shared/components/Button";
 import { headerConstants, PROSPECT_LABELS } from "../constants";
-
-import styles from "../individualProspect.module.scss";
 import { ActivityDetails } from "src/models/viewProspect.model";
 import { formatDate } from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
+import AddActivity from "./Activity/AddActivity";
+
+import styles from "../individualProspect.module.scss";
 
 interface ActivitySectionProps {
   activities?: ActivityDetails[];
   activityCount?: number;
+  handleRefetch?: () => void;
 }
 
 const ActivitySection: React.FC<ActivitySectionProps> = ({
   activities = [],
   activityCount = 0,
+  handleRefetch,
 }) => {
+  const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
+
+  const handleToggleVisibility = () => setIsActivityModalOpen((prev) => !prev);
   return (
     <div className={styles.activityContainer}>
       <div className={styles.header}>
@@ -34,7 +40,7 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
           >
             <IconMessage />
           </Button>
-          <Button className={styles.addButton}>
+          <Button className={styles.addButton} onClick={handleToggleVisibility}>
             <IconAdd />
           </Button>
         </div>
@@ -50,6 +56,11 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
           <div className={styles.content}>{activity.description}</div>
         </Card>
       ))}
+      <AddActivity
+        onClose={handleToggleVisibility}
+        isOpen={isActivityModalOpen}
+        handleRefetch={handleRefetch}
+      />
     </div>
   );
 };
