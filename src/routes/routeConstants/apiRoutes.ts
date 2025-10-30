@@ -2,6 +2,7 @@ export const ApiRoutes = {
   BASE_URL: import.meta.env.VITE_API_BASE_URL,
   USER_LOGIN: "/auth/login",
   USER_LOGOUT: "/auth/logout",
+  REFRESH: "/auth/refresh",
   FORGOT_PASSWORD: "/auth/forgotPassword",
   RESET_PASSWORD: "/auth/resetPassword",
   ATTACHMENTS: "/attachments",
