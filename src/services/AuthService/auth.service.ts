@@ -3,7 +3,6 @@ import { deserialize, serialize } from "serializr";
 
 import axiosInstance from "src/interceptor/axiosInstance";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
-import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { MutationKeys } from "src/enums/cacheEvict.enum";
 import {
   LoginRequest,
@@ -15,8 +14,6 @@ import { AuthContext } from "src/context/AuthContext";
 import useRedirect from "src/shared/hooks/useRedirect";
 import { logoutMessages } from "src/constants/sharedComponents";
 import { renderNotification } from "src/shared/utils/renderNotification";
-import { clearAuthData } from "src/shared/utils/helpers";
-import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 
 const { USER_LOGIN, FORGOT_PASSWORD, RESET_PASSWORD, USER_LOGOUT } = ApiRoutes;
 const {
@@ -50,8 +47,6 @@ export const AuthService = () => {
     onSuccess: (response) => {
       const { data, title, description } = response;
       setAuthenticated(data?.user, response?.data?.token);
-      localStorageHelper.setItem(LocalStorageKeys.USER, response?.data?.user);
-      localStorageHelper.setItem(LocalStorageKeys.TOKEN, response?.data?.token);
       navigateToProspects();
       renderNotification(title, description);
     },
@@ -103,9 +98,8 @@ export const AuthService = () => {
     },
     onSuccess: () => {
       renderNotification(title, description);
-      clearAuthData();
-      queryClient.clear();
       resetAuthState();
+      queryClient.clear();
       navigateToLogin();
     },
   });
