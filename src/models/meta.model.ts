@@ -1,5 +1,4 @@
 import { alias, list, object, primitive, serializable } from "serializr";
-import { ResponseModel } from "./response.model";
 
 export class MobileCode {
   @serializable
@@ -47,6 +46,23 @@ export class LeadStatus {
   statusName?: string;
 }
 
+export class EmailTemplate {
+  @serializable
+  id?: string;
+
+  @serializable
+  title?: string;
+
+  @serializable
+  subject?: string;
+
+  @serializable
+  body?: string;
+
+  @serializable(list(primitive()))
+  attachmentIds?: string[];
+}
+
 export class LeadSourceParams {
   @serializable
   filter?: string;
@@ -82,22 +98,7 @@ export class LeadStatusesData {
   leadStatuses?: LeadStatus[];
 }
 
-export class MembershipCategoriesResponse extends ResponseModel {
-  @serializable(object(MembershipCategoriesData))
-  data?: MembershipCategoriesData;
-}
-
-export class LeadSourcesResponse extends ResponseModel {
-  @serializable(object(ActivityTypesData))
-  data?: LeadSourcesData;
-}
-
-export class LeadStatusesResponse extends ResponseModel {
-  @serializable(object(LeadStatusesData))
-  data?: LeadStatusesData;
-}
-
-export class ActivityTypesResponse extends ResponseModel {
-  @serializable(object(ActivityTypesData))
-  data?: ActivityTypesData;
+export class EmailTemplatesData {
+  @serializable(list(object(EmailTemplate)))
+  emailTemplates?: EmailTemplate[];
 }

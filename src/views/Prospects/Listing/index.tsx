@@ -33,6 +33,7 @@ import Button from "src/shared/components/Button";
 import styles from "./listing.module.scss";
 import Filters from "../Filters";
 import { FieldValues } from "react-hook-form";
+import TemplateModal from "src/views/Email/TemplateModal";
 
 const ProspectsListing = () => {
   const [queryParams, setQueryParams] = useState<ProspectsListingParams>(
@@ -52,7 +53,13 @@ const ProspectsListing = () => {
 
   const { getLeadStatuses } = MetaService();
 
-  const { data: leadStatusOptions } = useQuery(getLeadStatuses());
+  const { data: leadStatusesData } = useQuery(getLeadStatuses());
+
+  const leadStatusOptions = useMemo(
+    () => leadStatusesData?.leadStatuses,
+    [leadStatusesData],
+  );
+
   const { navigateToIndividualProspect } = useRedirect();
 
   const { visible, show, toggleVisibility } = useDrawer();
@@ -60,6 +67,10 @@ const ProspectsListing = () => {
     useDrawer();
   const { visible: drawerVisible, toggleVisibility: toggleDrawerVisibility } =
     useDrawer();
+  const {
+    visible: emailTemplateModalVisible,
+    toggleVisibility: toggleEmailTemplateModal,
+  } = useDrawer();
   const handleSelectAll = useCallback(
     (checked: boolean) => {
       setSelectedIds(toggleAllSelections(checked, data?.prospects));
@@ -164,6 +175,7 @@ const ProspectsListing = () => {
         onSearch={handleSearch}
         onAddProspect={show}
         filtersActive={filtersActive}
+        onBulkMail={toggleEmailTemplateModal}
       />
       <div className={styles.prospectList}>
         <div className={styles.tableContainer}>
@@ -192,7 +204,7 @@ const ProspectsListing = () => {
                   onClick={navigateToProspect(prospect.id!)}
                   prospect={prospect}
                   isSelected={selectedIds.includes(prospect.id!)}
-                  leadStatusOptions={leadStatusOptions?.leadStatuses}
+                  leadStatusOptions={leadStatusOptions}
                   onSelectChange={handleSelectOne}
                   onEditClick={handleOnEdit}
                   onDeleteClick={handleOnDelete}
@@ -243,6 +255,10 @@ const ProspectsListing = () => {
         toggleVisibility={toggleDrawerVisibility}
         onSubmit={handleApplyFilter}
         defaultValues={queryParams}
+      />
+      <TemplateModal
+        isOpen={emailTemplateModalVisible}
+        onClose={toggleEmailTemplateModal}
       />
     </div>
   );

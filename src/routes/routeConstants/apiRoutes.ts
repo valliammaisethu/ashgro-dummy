@@ -15,5 +15,6 @@ export const ApiRoutes = {
   GET_MEMBERSHIP_CATEGORIES: "/clubs/:id/membershipCategories",
   GET_LEAD_SOURCES: "/clubs/:id/leadSources",
   GET_LEAD_STATUSES: "/clubs/:id/leadStatuses",
+  GET_EMAIL_TEMPLATES: "/clubs/:id/emailTemplates",
   Add_ACTIVITY: "/prospects/:id/activity",
 };

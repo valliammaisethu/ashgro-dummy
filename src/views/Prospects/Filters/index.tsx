@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { FieldValues } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 
@@ -20,8 +20,24 @@ const Filters = (props: ProspectFilterProps) => {
   const { onSubmit, visible, toggleVisibility, defaultValues } = props;
   const { getLeadStatuses, getLeadSources } = MetaService();
 
-  const { data: leadStatuses } = useQuery(getLeadStatuses());
-  const { data: leadSources } = useQuery(getLeadSources());
+  const { data: leadStatusesData } = useQuery({
+    ...getLeadStatuses(),
+    enabled: visible,
+  });
+  const { data: leadSourcesData } = useQuery({
+    ...getLeadSources(),
+    enabled: visible,
+  });
+
+  const leadStatusOptions = useMemo(
+    () => mapToSelectOptionsDynamic(leadStatusesData?.leadStatuses),
+    [leadStatusesData],
+  );
+
+  const leadSourceOptions = useMemo(
+    () => mapToSelectOptionsDynamic(leadSourcesData?.leadSources),
+    [leadSourcesData],
+  );
 
   const methods = useForm({
     values: {
@@ -79,7 +95,7 @@ const Filters = (props: ProspectFilterProps) => {
               <SelectField
                 label={labels.leadStatus}
                 showCheckboxes
-                options={mapToSelectOptionsDynamic(leadStatuses?.leadStatuses)}
+                options={leadStatusOptions}
                 name={fields.leadStatus}
                 placeholder={placeholders.leadStatus}
               />
@@ -99,7 +115,7 @@ const Filters = (props: ProspectFilterProps) => {
               <SelectField
                 label={labels.leadSource}
                 showCheckboxes
-                options={mapToSelectOptionsDynamic(leadSources?.leadSources)}
+                options={leadSourceOptions}
                 name={fields.leadSource}
                 placeholder={placeholders.leadSource}
               />

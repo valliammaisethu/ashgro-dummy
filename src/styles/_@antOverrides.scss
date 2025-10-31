@@ -252,25 +252,19 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
     box-shadow: $select-focus-box-shadow;
   }
 }
-.ant-select-selector {
-  border-color: $select-border-color;
-  &:hover {
-    border-color: $select-hover-border-color;
-    height: 4rem;
-  }
 
-  .ant-select-selector {
-    border-color: $ashgro-input-border;
-    &:hover {
-      border-color: $ashgro-input-border;
-    }
+.ant-select-selector {
+  border-color: $incrementer-border;
+  &:hover {
+    border-color: $incrementer-border;
   }
 }
+
 .ant-select-outlined:not(.ant-select-disabled):not(
     .ant-select-customize-input
   ):not(.ant-pagination-size-changer):hover
   .ant-select-selector {
-  border-color: $ashgro-input-border;
+  border-color: $incrementer-border;
 }
 .ant-select-selector {
   background-color: $input-background;
@@ -288,7 +282,7 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   ):not(.ant-pagination-size-changer)
   .ant-select-selector {
   box-shadow: none;
-  border-color: $ashgro-input-border;
+  border-color: $incrementer-border;
 }
 .ant-select .ant-select-arrow {
   color: $ashgro-black;
@@ -314,6 +308,12 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   .ant-select-selection-item-remove {
   color: $select-tag-color;
   margin-inline-end: 0.5rem;
+}
+.ant-select-outlined:not(.ant-select-disabled):not(
+    .ant-select-customize-input
+  ):not(.ant-pagination-size-changer)
+  .ant-select-selector {
+  border-color: $incrementer-border;
 }
 
 .ant-select-item-option-state {
