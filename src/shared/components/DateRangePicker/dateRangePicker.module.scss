@@ -1,0 +1,62 @@
+@import "src/styles/_helpers";
+@import "src/styles/variables";
+
+.datePickerWrapper {
+  position: relative;
+}
+
+.toLabel {
+  position: absolute;
+  left: 52%;
+}
+
+.fromSuffix {
+  position: absolute;
+  left: 40%;
+  bottom: 8%;
+}
+
+.toSuffix {
+  position: absolute;
+  bottom: 8%;
+  right: 1.5rem;
+}
+
+.rangePickerComponent {
+  :global(.ant-picker-panel-container) {
+    border-radius: 1.6rem;
+  }
+  :global(.ant-picker-header-view) {
+    padding: 1rem;
+    padding-bottom: 0;
+    @include secondaryRegular;
+    font-size: 1.6rem;
+    color: $ashgro-navy;
+  }
+  :global(.ant-picker-header) {
+    border-bottom: 0;
+  }
+  :global(.ant-picker-content) {
+    tr {
+      th {
+        color: $range-picker-tr;
+        @include secondaryRegular;
+        font-size: 1.2rem;
+      }
+    }
+  }
+  :global(.ant-picker-cell-inner) {
+    color: $ashgro-navy;
+    @include secondaryRegular;
+    font-size: 1.4rem;
+  }
+  :global(
+    .ant-picker-dropdown
+      .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
+        .ant-picker-cell-disabled
+      )
+      .ant-picker-cell-inner
+  ) {
+    color: $ashgro-gold;
+  }
+}

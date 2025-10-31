@@ -10,15 +10,23 @@ import styles from "../listing.module.scss";
 interface HeaderProps {
   onAddProspect: () => void;
   onSearch: (searchTerm: string) => void;
+  onFilter: () => void;
+  filtersActive: boolean;
 }
 
-const Header = ({ onAddProspect, onSearch }: HeaderProps) => {
+const Header = ({
+  onAddProspect,
+  onSearch,
+  onFilter,
+  filtersActive,
+}: HeaderProps) => {
   return (
     <div className={styles.header}>
       <SearchField
         onSearch={onSearch}
-        onFilter={() => {}}
+        onFilter={onFilter}
         className={styles.searchField}
+        filtersActive={filtersActive}
       />
       <div className={styles.actions}>
         <Button

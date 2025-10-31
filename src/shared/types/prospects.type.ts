@@ -1,3 +1,4 @@
+import { FieldValues } from "react-hook-form";
 import { ViewProspect } from "src/models/viewProspect.model";
 
 export interface ProspectHeaderProps {
@@ -19,4 +20,10 @@ export interface MemberConversionModalProps {
   visible: boolean;
   onClose: () => void;
   memberName: string;
+}
+export interface ProspectFilterProps {
+  visible: boolean;
+  toggleVisibility: () => void;
+  onSubmit: (values: FieldValues) => void;
+  defaultValues: FieldValues;
 }

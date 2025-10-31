@@ -33,5 +33,19 @@
     padding: 1.4rem;
     border-radius: 1.4rem;
     cursor: pointer;
+    position: relative;
+
+    &.filtersActive {
+      &::after {
+        content: "";
+        position: absolute;
+        top: 1rem;
+        right: 0.6rem;
+        width: 0.8rem;
+        height: 0.8rem;
+        background-color: red;
+        border-radius: 50%;
+      }
+    }
   }
 }

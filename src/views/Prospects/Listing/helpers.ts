@@ -1,5 +1,8 @@
 import { LeadStatusOption } from "./constants";
-import { ProspectsList } from "src/models/prospects.model";
+import {
+  ProspectsList,
+  ProspectsListingParams,
+} from "src/models/prospects.model";
 
 export const getAllProspectIds = (prospects: ProspectsList[]): string[] =>
   prospects?.map((p) => p.id!);
@@ -34,3 +37,22 @@ export const areSomeProspectsSelected = (
   selectedIds: string[],
 ): boolean =>
   selectedIds.length > 0 && !areAllProspectsSelected(prospects, selectedIds);
+
+export const areFiltersActive = (
+  queryParams: ProspectsListingParams,
+): boolean => {
+  if (!queryParams) return false;
+
+  const hasDateRange =
+    !!queryParams.followUpStartDate || !!queryParams.followUpEndDate;
+
+  const hasLeadStatus =
+    Array.isArray(queryParams.leadStatusIds) &&
+    queryParams.leadStatusIds.length > 0;
+
+  const hasLeadSource =
+    Array.isArray(queryParams.leadSourcesIds) &&
+    queryParams.leadSourcesIds.length > 0;
+
+  return hasDateRange || hasLeadStatus || hasLeadSource;
+};

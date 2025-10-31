@@ -20,6 +20,7 @@ const SearchField = (props: SearchFieldProps) => {
     placeholder = defaultSearchPlaceholder,
     className,
     debounceTime = 500,
+    filtersActive = false,
   } = props;
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -50,7 +51,10 @@ const SearchField = (props: SearchFieldProps) => {
         {onFilter && (
           <div
             title={defaultFilterPlaceholder}
-            className={styles.filterContainer}
+            className={clsx(styles.filterContainer, {
+              [styles.filtersActive]: filtersActive,
+            })}
+            onClick={onFilter}
           >
             <IconFilterAlt size={20} />
           </div>
