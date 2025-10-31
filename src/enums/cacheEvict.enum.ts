@@ -9,6 +9,7 @@ export enum MutationKeys {
   EDIT_PROSPECT = "editProspect",
   DELETE_PROSPECT = "deleteProspect",
   CONVERT_TO_MEMBER = "convertToMember",
+  ADD_ACTIVITY = "addActivity",
 }
 
 export enum QueryKeys {

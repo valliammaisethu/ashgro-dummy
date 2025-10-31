@@ -2,6 +2,7 @@ export const ApiRoutes = {
   BASE_URL: import.meta.env.VITE_API_BASE_URL,
   USER_LOGIN: "/auth/login",
   USER_LOGOUT: "/auth/logout",
+  REFRESH: "/auth/refresh",
   FORGOT_PASSWORD: "/auth/forgotPassword",
   RESET_PASSWORD: "/auth/resetPassword",
   ATTACHMENTS: "/attachments",
@@ -15,4 +16,5 @@ export const ApiRoutes = {
   GET_LEAD_SOURCES: "/clubs/:id/leadSources",
   GET_LEAD_STATUSES: "/clubs/:id/leadStatuses",
   GET_EMAIL_TEMPLATES: "/clubs/:id/emailTemplates",
+  Add_ACTIVITY: "/prospects/:id/activity",
 };
