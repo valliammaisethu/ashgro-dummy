@@ -14,6 +14,8 @@ export enum Buttons {
   APPLY_FILTERS = "Apply Filters",
   CLEAR_FILTERS = "Clear Filters",
   CLEAR = "Clear",
+  NEXT = "Next",
+  NEW_EMAIL = "New Email",
 }
 
 export enum HtmlButtonType {

@@ -22,6 +22,7 @@
         pointer-events: none;
         z-index: 1;
         border: 1px solid $input-border;
+        border-color: $incrementer-border;
         border-left: 0;
         border-radius: 0 1.2rem 1.2rem 0;
       }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { FieldValues } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 
@@ -20,8 +20,17 @@ const Filters = (props: ProspectFilterProps) => {
   const { onSubmit, visible, toggleVisibility, defaultValues } = props;
   const { getLeadStatuses, getLeadSources } = MetaService();
 
-  const { data: leadStatuses } = useQuery(getLeadStatuses());
-  const { data: leadSources } = useQuery(getLeadSources());
+  const leadStatusesQuery = useMemo(
+    () => ({ ...getLeadStatuses(), enabled: visible }),
+    [visible],
+  );
+  const leadSourcesQuery = useMemo(
+    () => ({ ...getLeadSources(), enabled: visible }),
+    [visible],
+  );
+
+  const { data: leadStatuses } = useQuery(leadStatusesQuery);
+  const { data: leadSources } = useQuery(leadSourcesQuery);
 
   const methods = useForm({
     defaultValues: {

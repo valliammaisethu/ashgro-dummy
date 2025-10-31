@@ -19,4 +19,5 @@ export enum QueryKeys {
   GET_MEMBERSHIP_CATEGORIES = "getMembershipCategories",
   GET_LEAD_SOURCES = "getLeadSources",
   GET_LEAD_STATUS = "getLeadStatuses",
+  GET_EMAIL_TEMPLATES = "getEmailTemplates",
 }

@@ -57,10 +57,28 @@ const ProspectForm = ({
   const { mutateAsync, isPending } = useMutation(addProspect());
   const { mutateAsync: editMutateAsync, isPending: isEditPending } =
     useMutation(editProspect());
-  const { data: leadSources } = useQuery(getLeadSources());
-  const { data: leadStatuses } = useQuery(getLeadStatuses());
-  const { data: membershipCategories } = useQuery(getMembershipCategories());
-  const { data: activityTypes } = useQuery(getActivityTypes());
+
+  const leadSourcesQuery = useMemo(
+    () => ({ ...getLeadSources(), enabled: visible }),
+    [visible],
+  );
+  const leadStatusesQuery = useMemo(
+    () => ({ ...getLeadStatuses(), enabled: visible }),
+    [visible],
+  );
+  const membershipCategoriesQuery = useMemo(
+    () => ({ ...getMembershipCategories(), enabled: visible }),
+    [visible],
+  );
+  const activityTypesQuery = useMemo(
+    () => ({ ...getActivityTypes(), enabled: visible }),
+    [visible],
+  );
+
+  const { data: leadSources } = useQuery(leadSourcesQuery);
+  const { data: leadStatuses } = useQuery(leadStatusesQuery);
+  const { data: membershipCategories } = useQuery(membershipCategoriesQuery);
+  const { data: activityTypes } = useQuery(activityTypesQuery);
 
   const defaultValues = useMemo(() => {
     if (!prospectData) return {};
