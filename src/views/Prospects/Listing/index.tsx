@@ -53,9 +53,13 @@ const ProspectsListing = () => {
 
   const { getLeadStatuses } = MetaService();
 
-  const leadStatusesQuery = useMemo(() => getLeadStatuses(), []);
+  const { data: leadStatusesData } = useQuery(getLeadStatuses());
 
-  const { data: leadStatusOptions } = useQuery(leadStatusesQuery);
+  const leadStatusOptions = useMemo(
+    () => leadStatusesData?.leadStatuses,
+    [leadStatusesData],
+  );
+
   const { navigateToIndividualProspect } = useRedirect();
 
   const { visible, show, toggleVisibility } = useDrawer();
@@ -200,7 +204,7 @@ const ProspectsListing = () => {
                   onClick={navigateToProspect(prospect.id!)}
                   prospect={prospect}
                   isSelected={selectedIds.includes(prospect.id!)}
-                  leadStatusOptions={leadStatusOptions?.leadStatuses}
+                  leadStatusOptions={leadStatusOptions}
                   onSelectChange={handleSelectOne}
                   onEditClick={handleOnEdit}
                   onDeleteClick={handleOnDelete}

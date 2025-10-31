@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { FieldValues } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 
@@ -20,20 +20,27 @@ const Filters = (props: ProspectFilterProps) => {
   const { onSubmit, visible, toggleVisibility, defaultValues } = props;
   const { getLeadStatuses, getLeadSources } = MetaService();
 
-  const leadStatusesQuery = useMemo(
-    () => ({ ...getLeadStatuses(), enabled: visible }),
-    [visible],
-  );
-  const leadSourcesQuery = useMemo(
-    () => ({ ...getLeadSources(), enabled: visible }),
-    [visible],
+  const { data: leadStatusesData } = useQuery({
+    ...getLeadStatuses(),
+    enabled: visible,
+  });
+  const { data: leadSourcesData } = useQuery({
+    ...getLeadSources(),
+    enabled: visible,
+  });
+
+  const leadStatusOptions = useMemo(
+    () => mapToSelectOptionsDynamic(leadStatusesData?.leadStatuses),
+    [leadStatusesData],
   );
 
-  const { data: leadStatuses } = useQuery(leadStatusesQuery);
-  const { data: leadSources } = useQuery(leadSourcesQuery);
+  const leadSourceOptions = useMemo(
+    () => mapToSelectOptionsDynamic(leadSourcesData?.leadSources),
+    [leadSourcesData],
+  );
 
   const methods = useForm({
-    defaultValues: {
+    values: {
       [fields.followUpDateRange]:
         defaultValues?.[fields.followUpDateRange] || [],
       [fields.leadStatus]: defaultValues?.[fields.leadStatus] || [],
@@ -43,34 +50,20 @@ const Filters = (props: ProspectFilterProps) => {
 
   const { watch, setValue, reset } = methods;
 
-  useEffect(() => {
-    if (visible) {
-      reset({
-        [fields.followUpDateRange]:
-          defaultValues?.[fields.followUpDateRange] || [],
-        [fields.leadStatus]: defaultValues?.[fields.leadStatus] || [],
-        [fields.leadSource]: defaultValues?.[fields.leadSource] || [],
-      });
-    }
-  }, [visible, defaultValues, reset]);
-
   const leadStatusWatch = watch(fields.leadStatus);
   const leadSourceWatch = watch(fields.leadSource);
 
   const handleClearLeadStatus = () => setValue(fields.leadStatus, []);
   const handleClearLeadSource = () => setValue(fields.leadSource, []);
 
-  const handleSubmit = (values: FieldValues) => {
-    onSubmit(values);
-  };
+  const handleSubmit = (values: FieldValues) => onSubmit(values);
 
-  const resetValues = () => {
+  const resetValues = () =>
     reset({
       [fields.followUpDateRange]: [],
       [fields.leadStatus]: [],
       [fields.leadSource]: [],
     });
-  };
 
   return (
     <Drawer
@@ -102,7 +95,7 @@ const Filters = (props: ProspectFilterProps) => {
               <SelectField
                 label={labels.leadStatus}
                 showCheckboxes
-                options={mapToSelectOptionsDynamic(leadStatuses?.leadStatuses)}
+                options={leadStatusOptions}
                 name={fields.leadStatus}
                 placeholder={placeholders.leadStatus}
               />
@@ -122,7 +115,7 @@ const Filters = (props: ProspectFilterProps) => {
               <SelectField
                 label={labels.leadSource}
                 showCheckboxes
-                options={mapToSelectOptionsDynamic(leadSources?.leadSources)}
+                options={leadSourceOptions}
                 name={fields.leadSource}
                 placeholder={placeholders.leadSource}
               />
