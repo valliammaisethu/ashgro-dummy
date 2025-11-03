@@ -15,6 +15,7 @@ import { N_A } from "src/constants/sharedComponents";
 import { Colors } from "src/enums/colors.enum";
 
 import styles from "./prospectRow.module.scss";
+import { stopPropagation } from "src/shared/utils/eventUtils";
 
 interface ProspectRowProps {
   prospect: ProspectsList;
@@ -67,7 +68,7 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
 
   return (
     <div onClick={onClick} className={styles.tableRow}>
-      <div className={styles.checkboxCol}>
+      <div className={styles.checkboxCol} onClick={stopPropagation}>
         <Checkbox checked={isSelected} onChange={handleCheckboxChange} />
       </div>
 

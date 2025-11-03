@@ -8,13 +8,22 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/es/upload";
 
 import logo from "src/assets/images/profilePicture.webp";
-import { imageAccept } from "src/constants/sharedComponents";
+import {
+  imageAccept,
+  imageUploadFailed,
+  profileImageAllowedTypes,
+  profileImageType,
+  profileMaxSize,
+  profileMaxSizeTitle,
+} from "src/constants/sharedComponents";
 import { AttachmentService } from "src/services/AttachmentService/attachment.service";
 import { AttachmentPayload, S3UploadError } from "src/models/attachment.model";
 import { AttachmentTypes } from "src/enums/attachmentTypes.enum";
 import { HtmlButtonType } from "src/enums/buttons.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
+import { NotificationTypes } from "src/enums/notificationTypes";
 import { ProfilePictureInputProps } from "src/shared/types/sharedComponents.type";
+import { renderNotification } from "src/shared/utils/renderNotification";
 import { defaultPlaceholder } from "./constants";
 
 import styles from "./profilePictureInput.module.scss";
@@ -69,46 +78,50 @@ const ProfilePictureInput = ({
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
-    if (file) {
-      setIsLoading(true);
-      let uploadedAttachmentId: string | null = null;
+    if (!file) return;
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
+    if (file.size > profileMaxSize) {
+      renderNotification(profileMaxSizeTitle, "", NotificationTypes.ERROR);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    if (!profileImageAllowedTypes.includes(file.type)) {
+      renderNotification(profileImageType, "", NotificationTypes.ERROR);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const attachmentPayload: AttachmentPayload = {
+        file: file as RcFile,
+        attachmentType: AttachmentTypes.PROFILE_PIC,
       };
-      reader.readAsDataURL(file);
 
-      try {
-        const attachmentPayload: AttachmentPayload = {
-          file: file as RcFile,
-          attachmentType: AttachmentTypes.PROFILE_PIC,
+      const result = await uploadFile.mutateAsync(attachmentPayload);
+
+      if (result?.id) {
+        setAttachmentId(result.id);
+        field.onChange(result.id);
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result as string);
         };
-
-        const result = await uploadFile.mutateAsync(attachmentPayload);
-
-        if (result?.id) {
-          uploadedAttachmentId = result.id;
-          setAttachmentId(result.id);
-          field.onChange(result.id);
-        }
-      } catch (error) {
-        if (error instanceof S3UploadError)
-          uploadedAttachmentId = error.attachmentId;
-
-        if (uploadedAttachmentId) {
-          try {
-            await deleteFile.mutateAsync(uploadedAttachmentId);
-          } catch {
-            return;
-          }
-        }
-
-        setPreview(null);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-      } finally {
-        setIsLoading(false);
+        reader.readAsDataURL(file);
       }
+    } catch (error) {
+      if (error instanceof S3UploadError && error.attachmentId) {
+        await deleteFile.mutateAsync(error.attachmentId);
+      }
+
+      setPreview(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      renderNotification(imageUploadFailed, "", NotificationTypes.ERROR);
+    } finally {
+      setIsLoading(false);
     }
   };
 

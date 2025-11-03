@@ -57,10 +57,41 @@ const ProspectForm = ({
   const { mutateAsync, isPending } = useMutation(addProspect());
   const { mutateAsync: editMutateAsync, isPending: isEditPending } =
     useMutation(editProspect());
-  const { data: leadSources } = useQuery(getLeadSources());
-  const { data: leadStatuses } = useQuery(getLeadStatuses());
-  const { data: membershipCategories } = useQuery(getMembershipCategories());
-  const { data: activityTypes } = useQuery(getActivityTypes());
+
+  const { data: leadSourcesData } = useQuery({
+    ...getLeadSources(),
+    enabled: visible,
+  });
+  const { data: leadStatusesData } = useQuery({
+    ...getLeadStatuses(),
+    enabled: visible,
+  });
+  const { data: membershipCategoriesData } = useQuery({
+    ...getMembershipCategories(),
+    enabled: visible,
+  });
+  const { data: activityTypesData } = useQuery({
+    ...getActivityTypes(),
+    enabled: visible,
+  });
+
+  const leadSourceOptions = useMemo(
+    () => mapToSelectOptionsDynamic(leadSourcesData?.leadSources),
+    [leadSourcesData],
+  );
+  const leadStatusOptions = useMemo(
+    () => mapToSelectOptionsDynamic(leadStatusesData?.leadStatuses),
+    [leadStatusesData],
+  );
+  const membershipCategoryOptions = useMemo(
+    () =>
+      mapToSelectOptionsDynamic(membershipCategoriesData?.membershipCategories),
+    [membershipCategoriesData],
+  );
+  const activityTypeOptions = useMemo(
+    () => mapToSelectOptionsDynamic(activityTypesData?.activityTypes),
+    [activityTypesData],
+  );
 
   const defaultValues = useMemo(() => {
     if (!prospectData) return {};
@@ -162,7 +193,7 @@ const ProspectForm = ({
               placeholder={PLACEHOLDERS.LEAD_STATUS}
               label={LABELS.LEAD_STATUS}
               name={FIELD_NAMES.LEAD_STATUS}
-              options={mapToSelectOptionsDynamic(leadStatuses?.leadStatuses)}
+              options={leadStatusOptions}
             />
           </Col>
           <Col span={12}>
@@ -210,7 +241,7 @@ const ProspectForm = ({
               placeholder={PLACEHOLDERS.LEAD_SOURCE}
               label={LABELS.LEAD_SOURCE}
               name={FIELD_NAMES.LEAD_SOURCE}
-              options={mapToSelectOptionsDynamic(leadSources?.leadSources)}
+              options={leadSourceOptions}
             />
           </Col>
           <Col span={12}>
@@ -218,9 +249,7 @@ const ProspectForm = ({
               placeholder={PLACEHOLDERS.MEMBERSHIP_CATEGORY}
               label={LABELS.MEMBERSHIP_CATEGORY}
               name={FIELD_NAMES.MEMBERSHIP_CATEGORY}
-              options={mapToSelectOptionsDynamic(
-                membershipCategories?.membershipCategories,
-              )}
+              options={membershipCategoryOptions}
             />
           </Col>
         </Row>
@@ -281,9 +310,7 @@ const ProspectForm = ({
                   placeholder={PLACEHOLDERS.ACTIVITY_TYPE}
                   label={LABELS.ACTIVITY_TYPE}
                   name={FIELD_NAMES.ACTIVITY_TYPE}
-                  options={mapToSelectOptionsDynamic(
-                    activityTypes?.activityTypes,
-                  )}
+                  options={activityTypeOptions}
                   onSelect={(value) => handleActivityTypeChange(value)}
                 />
               </Col>

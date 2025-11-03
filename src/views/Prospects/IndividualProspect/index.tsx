@@ -20,11 +20,15 @@ import { MetaService } from "src/services/MetaService/meta.service";
 import DeleteModal from "../DeleteModal";
 
 import styles from "./individualProspect.module.scss";
+import MemberConversionModal from "../MemberConversionModal";
+import { getFullName } from "src/shared/utils/helpers";
 
 const IndividualProspect = () => {
   const { viewProspect } = ProspectsService();
   const { id = "" } = useParams();
-  const { data, isPending, isSuccess, isFetching } = useQuery(viewProspect(id));
+  const { data, isPending, isSuccess, isFetching, refetch } = useQuery(
+    viewProspect(id),
+  );
 
   const { getLeadStatuses } = MetaService();
 
@@ -37,14 +41,23 @@ const IndividualProspect = () => {
   const { visible: deleteModalVisible, toggleVisibility: toggleDeleteModal } =
     useDrawer();
 
+  const {
+    visible: memberConversionModalVisible,
+    toggleVisibility: toggleMemberConversionModal,
+  } = useDrawer();
+
   const handleEdit = () => {
     setIsEdit(true);
     toggleVisibility();
   };
 
+  const handleConvertToMember = () => toggleMemberConversionModal();
+
+  const handleRefetch = () => refetch();
+
   return (
     <div className={styles.individualProspect}>
-      <Header />
+      <Header onConvert={handleConvertToMember} />
       <ConditionalRender
         isPending={isPending}
         isSuccess={isSuccess}
@@ -94,17 +107,11 @@ const IndividualProspect = () => {
             </div>
           </div>
           <div className={styles.rightSide}>
-            <ConditionalRender
-              records={data?.prospect.activityDetails}
-              isPending={isPending}
-              isSuccess={isSuccess}
-              className={styles.activitySection}
-            >
-              <ActivitySection
-                activities={data?.prospect.activityDetails}
-                activityCount={data?.prospect.activityDetails.length}
-              />
-            </ConditionalRender>
+            <ActivitySection
+              activities={data?.prospect.activityDetails}
+              activityCount={data?.prospect.activityDetails.length}
+              handleRefetch={handleRefetch}
+            />
           </div>
         </Card>
       </ConditionalRender>
@@ -118,6 +125,14 @@ const IndividualProspect = () => {
       ) : (
         <Fragment />
       )}
+      <MemberConversionModal
+        visible={memberConversionModalVisible}
+        onClose={toggleMemberConversionModal}
+        memberName={getFullName(
+          data?.prospect?.firstName,
+          data?.prospect?.lastName,
+        )}
+      />
       <DeleteModal
         visible={deleteModalVisible}
         toggleVisibility={toggleDeleteModal}

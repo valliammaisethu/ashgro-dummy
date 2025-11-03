@@ -7,6 +7,9 @@ export enum MutationKeys {
   ATTACHMENT_DELETE = "attachmentDelete",
   ADD_PROSPECT = "addProspect",
   EDIT_PROSPECT = "editProspect",
+  DELETE_PROSPECT = "deleteProspect",
+  CONVERT_TO_MEMBER = "convertToMember",
+  ADD_ACTIVITY = "addActivity",
 }
 
 export enum QueryKeys {
@@ -17,4 +20,5 @@ export enum QueryKeys {
   GET_MEMBERSHIP_CATEGORIES = "getMembershipCategories",
   GET_LEAD_SOURCES = "getLeadSources",
   GET_LEAD_STATUS = "getLeadStatuses",
+  GET_EMAIL_TEMPLATES = "getEmailTemplates",
 }

@@ -192,3 +192,33 @@
   flex-flow: $direction $wrap;
   align-items: $align-items;
 }
+
+@mixin primaryRegular {
+  font-family: $font-primary;
+  font-weight: 400;
+}
+
+@mixin secondaryRegular {
+  font-family: $font-secondary;
+  font-weight: 400;
+}
+
+@mixin primaryBold {
+  font-family: $font-primary;
+  font-weight: 600;
+}
+
+@mixin primarySemiBold {
+  font-family: $font-primary;
+  font-weight: 500;
+}
+
+@mixin secondaryBold {
+  font-family: $font-secondary;
+  font-weight: 600;
+}
+
+@mixin secondarySemiBold {
+  font-family: $font-secondary;
+  font-weight: 500;
+}

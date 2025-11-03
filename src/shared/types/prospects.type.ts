@@ -1,7 +1,16 @@
+import { FieldValues } from "react-hook-form";
 import { ViewProspect } from "src/models/viewProspect.model";
 
 export interface ProspectHeaderProps {
   onEdit: () => void;
+}
+
+export interface ProspectListingHeaderProps {
+  onAddProspect: () => void;
+  onSearch: (searchTerm: string) => void;
+  onFilter: () => void;
+  filtersActive: boolean;
+  onBulkMail: () => void;
 }
 
 export interface AddProspectProps {
@@ -9,4 +18,20 @@ export interface AddProspectProps {
   onClose: () => void;
   isEdit?: boolean;
   prospectData?: ViewProspect;
+}
+
+export interface IndividualProspectHeaderProps {
+  onConvert: () => void;
+}
+
+export interface MemberConversionModalProps {
+  visible: boolean;
+  onClose: () => void;
+  memberName: string;
+}
+export interface ProspectFilterProps {
+  visible: boolean;
+  toggleVisibility: () => void;
+  onSubmit: (values: FieldValues) => void;
+  defaultValues: FieldValues;
 }

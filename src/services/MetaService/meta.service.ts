@@ -6,6 +6,7 @@ import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
 import {
   ActivityTypesData,
+  EmailTemplatesData,
   LeadSourceParams,
   LeadSourcesData,
   LeadStatusesData,
@@ -22,12 +23,14 @@ const {
   GET_MEMBERSHIP_CATEGORIES,
   GET_LEAD_SOURCES,
   GET_LEAD_STATUSES,
+  GET_EMAIL_TEMPLATES,
 } = ApiRoutes;
 const {
   GET_ACTIVITY_TYPES: GET_ACTIVITY_TYPES_KEY,
   GET_MEMBERSHIP_CATEGORIES: GET_MEMBERSHIP_CATEGORIES_KEY,
   GET_LEAD_SOURCES: GET_LEAD_SOURCES_KEY,
   GET_LEAD_STATUS: GET_LEAD_STATUS_KEY,
+  GET_EMAIL_TEMPLATES: GET_EMAIL_TEMPLATES_KEY,
 } = QueryKeys;
 
 export const MetaService = () => {
@@ -105,10 +108,25 @@ export const MetaService = () => {
     };
   };
 
+  const getEmailTemplates = (): UseQueryOptions<
+    EmailTemplatesData,
+    ResponseModel
+  > => ({
+    queryKey: [GET_EMAIL_TEMPLATES_KEY, clubId],
+    queryFn: async () => {
+      const response = await axiosInstance.get(
+        generatePath(GET_EMAIL_TEMPLATES, { id: clubId }),
+      );
+      return deserialize(EmailTemplatesData, response?.data?.data);
+    },
+    enabled: !!clubId,
+  });
+
   return {
     getActivityTypes,
     getMembershipCategories,
     getLeadSources,
     getLeadStatuses,
+    getEmailTemplates,
   };
 };

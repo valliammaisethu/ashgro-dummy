@@ -9,6 +9,13 @@ export enum Buttons {
   OK = "Ok",
   SAVE_CHANGES = "Save Changes",
   DELETE_PERMANENTLY = "Delete Permanently",
+  BACK = "Back",
+  YES_CONVERT = "Yes, Convert",
+  APPLY_FILTERS = "Apply Filters",
+  CLEAR_FILTERS = "Clear Filters",
+  CLEAR = "Clear",
+  NEXT = "Next",
+  NEW_EMAIL = "New Email",
 }
 
 export enum HtmlButtonType {

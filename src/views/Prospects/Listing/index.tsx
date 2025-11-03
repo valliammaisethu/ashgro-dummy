@@ -9,6 +9,7 @@ import {
   toggleSingleSelection,
   areAllProspectsSelected,
   areSomeProspectsSelected,
+  areFiltersActive,
 } from "./helpers";
 import Header from "./Header";
 import Checkbox from "src/shared/components/Checkbox";
@@ -30,6 +31,9 @@ import DeleteModal from "../DeleteModal";
 import Button from "src/shared/components/Button";
 
 import styles from "./listing.module.scss";
+import Filters from "../Filters";
+import { FieldValues } from "react-hook-form";
+import TemplateModal from "src/views/Email/TemplateModal";
 
 const ProspectsListing = () => {
   const [queryParams, setQueryParams] = useState<ProspectsListingParams>(
@@ -37,7 +41,6 @@ const ProspectsListing = () => {
   );
   const { getProspects, viewProspect } = ProspectsService();
   const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
-
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState({
     state: false,
@@ -50,12 +53,24 @@ const ProspectsListing = () => {
 
   const { getLeadStatuses } = MetaService();
 
-  const { data: leadStatusOptions } = useQuery(getLeadStatuses());
+  const { data: leadStatusesData } = useQuery(getLeadStatuses());
+
+  const leadStatusOptions = useMemo(
+    () => leadStatusesData?.leadStatuses,
+    [leadStatusesData],
+  );
+
   const { navigateToIndividualProspect } = useRedirect();
 
   const { visible, show, toggleVisibility } = useDrawer();
   const { visible: deleteModalVisible, toggleVisibility: toggleDeleteModal } =
     useDrawer();
+  const { visible: drawerVisible, toggleVisibility: toggleDrawerVisibility } =
+    useDrawer();
+  const {
+    visible: emailTemplateModalVisible,
+    toggleVisibility: toggleEmailTemplateModal,
+  } = useDrawer();
   const handleSelectAll = useCallback(
     (checked: boolean) => {
       setSelectedIds(toggleAllSelections(checked, data?.prospects));
@@ -138,9 +153,30 @@ const ProspectsListing = () => {
     [data?.pagination?.overallPages],
   );
 
+  const handleApplyFilter = (filters: FieldValues) => {
+    setQueryParams((prev) => ({
+      ...prev,
+      ...filters,
+      followUpStartDate: filters.followUpDateRange?.[0],
+      followUpEndDate: filters.followUpDateRange?.[1],
+      page: 1,
+    }));
+    toggleDrawerVisibility();
+  };
+  const filtersActive = useMemo(
+    () => areFiltersActive(queryParams),
+    [queryParams],
+  );
+
   return (
     <div>
-      <Header onSearch={handleSearch} onAddProspect={show} />
+      <Header
+        onFilter={toggleDrawerVisibility}
+        onSearch={handleSearch}
+        onAddProspect={show}
+        filtersActive={filtersActive}
+        onBulkMail={toggleEmailTemplateModal}
+      />
       <div className={styles.prospectList}>
         <div className={styles.tableContainer}>
           <div className={styles.tableHeader}>
@@ -168,7 +204,7 @@ const ProspectsListing = () => {
                   onClick={navigateToProspect(prospect.id!)}
                   prospect={prospect}
                   isSelected={selectedIds.includes(prospect.id!)}
-                  leadStatusOptions={leadStatusOptions?.leadStatuses}
+                  leadStatusOptions={leadStatusOptions}
                   onSelectChange={handleSelectOne}
                   onEditClick={handleOnEdit}
                   onDeleteClick={handleOnDelete}
@@ -213,6 +249,16 @@ const ProspectsListing = () => {
         isEdit={isEdit?.state}
         visible={visible}
         onClose={toggleVisibility}
+      />
+      <Filters
+        visible={drawerVisible}
+        toggleVisibility={toggleDrawerVisibility}
+        onSubmit={handleApplyFilter}
+        defaultValues={queryParams}
+      />
+      <TemplateModal
+        isOpen={emailTemplateModalVisible}
+        onClose={toggleEmailTemplateModal}
       />
     </div>
   );
