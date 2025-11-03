@@ -10,8 +10,15 @@ import { deserialize } from "serializr";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 
-const { networkError, forbidden, notFound, genericError, failed, serverError } =
-  axiosInstanceErrors;
+const {
+  networkError,
+  forbidden,
+  notFound,
+  genericError,
+  failed,
+  serverError,
+  genericErrorTitle,
+} = axiosInstanceErrors;
 
 let failedQueue: FailedQueueItem[] = [];
 let isRefreshing = false;
@@ -125,13 +132,13 @@ axiosInstance.interceptors.response.use(
         clearLocalStorage();
       }
     }
-
+    const errorTitle = data?.title || genericErrorTitle;
     const errorMessage = data?.message || data?.error || genericError;
 
     switch (status) {
       case 403:
         Notification({
-          title: forbidden.title,
+          title: errorTitle || forbidden.title,
           description: forbidden.description,
           type: NotificationTypes.ERROR,
         });
@@ -139,7 +146,7 @@ axiosInstance.interceptors.response.use(
 
       case 404:
         Notification({
-          title: notFound.title,
+          title: errorTitle || notFound.title,
           description: notFound.description,
           type: NotificationTypes.ERROR,
         });
@@ -147,7 +154,7 @@ axiosInstance.interceptors.response.use(
 
       case 422:
         Notification({
-          title: failed.title,
+          title: errorTitle || failed.title,
           description: errorMessage,
           type: NotificationTypes.ERROR,
         });
@@ -156,7 +163,7 @@ axiosInstance.interceptors.response.use(
       case 500:
       default:
         Notification({
-          title: serverError.title,
+          title: errorTitle || serverError.title,
           description: errorMessage,
           type: NotificationTypes.ERROR,
         });

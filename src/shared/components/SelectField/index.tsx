@@ -24,6 +24,7 @@ const SelectField = ({
   placeholder,
   showCheckboxes = false,
   options,
+  loading,
   allowClear,
   showClear = false,
   onClear,
@@ -107,6 +108,7 @@ const SelectField = ({
       <div className={styles.selectFieldWrapper}>
         <Select
           {...selectProps}
+          loading={loading}
           placeholder={placeholder}
           status={error ? InputStatus.ERROR : undefined}
           allowClear

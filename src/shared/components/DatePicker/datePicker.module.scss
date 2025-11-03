@@ -1,9 +1,20 @@
 @import "src/styles/_helpers.scss";
+@import "src/styles/variables";
 
 .datePickerWrapper {
   @include flex-flow(column, wrap, normal);
 
   .label {
     padding-bottom: 0.4rem;
+  }
+
+  :global(
+    .ant-picker-dropdown
+      .ant-picker-cell-in-view.ant-picker-cell-selected:not(
+        .ant-picker-cell-disabled
+      )
+      .ant-picker-cell-inner
+  ) {
+    background-color: $ashgro-gold;
   }
 }

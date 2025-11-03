@@ -1,5 +1,6 @@
-import React from "react";
-import Drawer from "src/shared/components/Drawer";
+import React, { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { FieldValues } from "react-hook-form";
 import {
   fields,
   labels,
@@ -7,26 +8,78 @@ import {
   placeholders,
 } from "./constants";
 import { MemberFiltersProps } from "src/shared/types/members.type";
-
-import styles from "./filters.module.scss";
-import Form from "src/shared/components/Form";
-import useForm from "src/shared/components/UseForm";
-import { FieldValues } from "react-hook-form";
-import DateRangePickerField from "src/shared/components/DateRangePicker";
 import { Buttons, HtmlButtonType } from "src/enums/buttons.enum";
+import { QueryParamKeys } from "src/enums/queryParams.enum";
+import Form from "src/shared/components/Form";
+import Drawer from "src/shared/components/Drawer";
+import useForm from "src/shared/components/UseForm";
+import DateRangePickerField from "src/shared/components/DateRangePicker";
 import SelectField from "src/shared/components/SelectField";
 import Button from "src/shared/components/Button";
+import { MetaService } from "src/services/MetaService/meta.service";
+import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
+
+import styles from "./filters.module.scss";
 
 const { title } = memberFiltersConstants;
 
 const MemberFilters = (props: MemberFiltersProps) => {
-  const { visible, toggleVisibility } = props;
+  const { visible, toggleVisibility, onSubmit, defaultValues } = props;
 
-  const methods = useForm({});
+  const methods = useForm({
+    values: {
+      [fields.followUpDateRange]:
+        defaultValues?.[fields.followUpDateRange] || [],
+      [fields.membershipCategoriesIds]:
+        defaultValues?.[fields.membershipCategoriesIds] || [],
+      [fields.membershipStatusIds]:
+        defaultValues?.[fields.membershipStatusIds] || [],
+      [fields.leadSource]: defaultValues?.[fields.leadSource] || [],
+    },
+  });
 
   const { watch, setValue, reset } = methods;
+  const { getLeadSources, getMembershipCategories, getMembershipStatuses } =
+    MetaService();
 
-  const handleSubmit = (values: FieldValues) => {};
+  const { data: leadSourcesData, isPending: leadSourcesPending } = useQuery({
+    ...getLeadSources(),
+    enabled: visible,
+  });
+
+  const {
+    data: membershipCategoriesData,
+    isPending: membershipCategoriesPending,
+  } = useQuery({
+    ...getMembershipCategories(),
+    enabled: visible,
+  });
+
+  const { data: membershipStatusesData, isPending: membershipStatusesPending } =
+    useQuery({
+      ...getMembershipStatuses({
+        filter: QueryParamKeys.FILTER,
+      }),
+      enabled: visible,
+    });
+
+  const membershipCategoriesOptions = useMemo(
+    () =>
+      mapToSelectOptionsDynamic(membershipCategoriesData?.membershipCategories),
+    [membershipCategoriesData],
+  );
+
+  const leadSourcesOptions = useMemo(
+    () => mapToSelectOptionsDynamic(leadSourcesData?.leadSources),
+    [leadSourcesData],
+  );
+
+  const membershipStatusOptions = useMemo(
+    () => mapToSelectOptionsDynamic(membershipStatusesData?.leadStatuses),
+    [membershipStatusesData],
+  );
+
+  const handleSubmit = (values: FieldValues) => onSubmit(values);
 
   const leadSourceWatch = watch(fields.leadSource);
   const membershipStatus = watch(fields.membershipStatusIds);
@@ -64,7 +117,9 @@ const MemberFilters = (props: MemberFiltersProps) => {
             <div className={styles.subContainer}>
               <SelectField
                 label={labels.membershipStatus}
-                options={[]}
+                options={membershipStatusOptions}
+                showCheckboxes
+                loading={membershipStatusesPending}
                 name={fields.membershipStatusIds}
                 placeholder={placeholders.membershipStatus}
                 showClear={membershipStatus?.length > 0}
@@ -78,7 +133,9 @@ const MemberFilters = (props: MemberFiltersProps) => {
             <div className={styles.subContainer}>
               <SelectField
                 label={labels.membershipType}
-                options={[]}
+                options={membershipCategoriesOptions}
+                showCheckboxes
+                loading={membershipCategoriesPending}
                 name={fields.membershipCategoriesIds}
                 placeholder={placeholders.membershipType}
                 showClear={membershipCategory?.length > 0}
@@ -93,7 +150,8 @@ const MemberFilters = (props: MemberFiltersProps) => {
               <SelectField
                 label={labels.leadSource}
                 showCheckboxes
-                options={[]}
+                options={leadSourcesOptions}
+                loading={leadSourcesPending}
                 name={fields.leadSource}
                 placeholder={placeholders.leadSource}
                 showClear={leadSourceWatch?.length > 0}
