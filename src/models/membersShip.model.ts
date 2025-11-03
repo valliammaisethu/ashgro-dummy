@@ -4,9 +4,6 @@ export class MemberShipStatus {
   @serializable
   id?: string;
 
-  @serializable
-  statusName?: string;
-
   @serializable(alias("statusName"))
   label?: string;
 
@@ -17,9 +14,6 @@ export class MemberShipStatus {
 export class MemberShipTypeStatus {
   @serializable
   id?: string;
-
-  @serializable
-  categoryName?: string;
 
   @serializable(alias("categoryName"))
   label?: string;

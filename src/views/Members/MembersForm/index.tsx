@@ -1,5 +1,5 @@
 import { Col, Divider, Row } from "antd";
-import React, { ChangeEvent, useMemo } from "react";
+import React, { ChangeEvent, useMemo, useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { IconCalendarWait } from "obra-icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -41,6 +41,8 @@ const {
 } = FORM_CONSTANTS;
 
 const MembersForm = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
   const methods = useForm({});
 
   const { memberShipStatuses, memberShipTypeStatuses } = MemberShipService();
@@ -61,11 +63,7 @@ const MembersForm = () => {
 
   const { data: activityTypesData } = useQuery(getActivityTypes());
 
-  const {
-    setValue,
-    watch,
-    formState: { errors },
-  } = methods;
+  const { setValue, watch, formState } = methods;
 
   const activityTypeOptions = useMemo(
     () => mapToSelectOptionsDynamic(activityTypesData?.activityTypes),
@@ -79,11 +77,10 @@ const MembersForm = () => {
 
     const description = methods.getValues(FIELD_NAMES.ACTIVITY_DESCRIPTION);
 
-    if (value || description) {
-      setValue(FIELD_NAMES.ACTIVITY_DATE_TIME, new Date().toISOString());
-    } else {
-      setValue(FIELD_NAMES.ACTIVITY_DATE_TIME, "");
-    }
+    setValue(
+      FIELD_NAMES.ACTIVITY_DATE_TIME,
+      value || description ? new Date().toISOString() : "",
+    );
   };
 
   const handleActivityDescriptionChange = (
@@ -94,26 +91,27 @@ const MembersForm = () => {
 
     const type = methods.getValues(FIELD_NAMES.ACTIVITY_TYPE);
 
-    if (type || value) {
-      setValue(FIELD_NAMES.ACTIVITY_DATE_TIME, new Date().toISOString());
-    } else {
-      setValue(FIELD_NAMES.ACTIVITY_DATE_TIME, "");
-    }
+    setValue(
+      FIELD_NAMES.ACTIVITY_DATE_TIME,
+      type || value ? new Date().toISOString() : "",
+    );
   };
 
   const handleSubmit = async (values: FieldValues) => {
     await addMemberMutate(values);
   };
 
+  const handleModalVisibility = () => setIsVisible((prev) => !prev);
+
   return (
     <div>
       <Modal
         cancelButtonProps={{ className: "d-none" }}
         title={MODAL_TITLE}
-        visible={true}
+        visible={isVisible}
         width={defaultModalWidth}
         okText={ADD_BTN_TXT}
-        closeModal={() => {}}
+        closeModal={handleModalVisibility}
       >
         <Form methods={methods} onSubmit={handleSubmit}>
           <div className={styles.profileContainer}>

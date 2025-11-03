@@ -4,9 +4,6 @@ export class LeadSources {
   @serializable
   id?: string;
 
-  @serializable
-  sourceName?: string;
-
   @serializable(alias("sourceName"))
   label?: string;
 

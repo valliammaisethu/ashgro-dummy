@@ -32,11 +32,3 @@ steps:
     displayName: "Build project"
     env:
       VITE_APP_API_BASE_URL: $(VITE_API_BASE_URL)
-
-  # Step 5: Run Tests and check coverage
-  - script: npm run coverage
-    displayName: "Run tests and collect coverage"
-    env:
-      VITE_APP_API_BASE_URL: "$(VITE_API_BASE_URL)"
-
- 

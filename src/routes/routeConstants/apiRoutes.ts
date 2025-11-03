@@ -21,4 +21,5 @@ export const ApiRoutes = {
   MEMBERSHIP_STATUS: "settings/:id/membershipStatuses",
   MEMBERSHIP_TYPE_STATUS: "settings/:id/membershipCategories",
   MEMBERS: "members",
+  STAFF_MEMBER_DETAILS: "/staffs/:id",
 };
