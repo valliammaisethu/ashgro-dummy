@@ -9,6 +9,10 @@ import { DateFormats } from "src/enums/dateFormats.enum";
 import { InputStatus } from "src/enums/inputStatus.enum";
 import { IconCalendarDates } from "obra-icons-react";
 import { Colors } from "src/enums/colors.enum";
+import {
+  datePickerFromPlaceholder,
+  datePickerToPlaceholder,
+} from "src/constants/sharedComponents";
 
 const { RangePicker } = DatePicker;
 
@@ -27,7 +31,7 @@ const DateRangePickerField: React.FC<DateRangePickerFieldProps> = ({
   fromLabel = "From",
   toLabel = "To",
   format = DateFormats.DD_MMM_YYYY,
-  placeholder = ["From", "To"],
+  placeholder = [datePickerFromPlaceholder, datePickerToPlaceholder],
 }) => {
   const { control } = useFormContext<FieldValues>();
 

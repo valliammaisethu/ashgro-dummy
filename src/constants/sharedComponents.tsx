@@ -148,3 +148,7 @@ export const profileImageAllowedTypes = [
 ];
 
 export const defaultModalWidth = 664;
+
+export const datePickerFromPlaceholder = "Enter from date";
+
+export const datePickerToPlaceholder = "Enter to date";

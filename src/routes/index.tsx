@@ -12,6 +12,7 @@ import AuthWrapper from "../views/Auth/AuthWrapper";
 import AppComponents from "../views/AppComponents";
 import ProspectsListing from "../views/Prospects/Listing";
 import IndividualProspect from "src/views/Prospects/IndividualProspect";
+import Members from "src/views/Members/Listing";
 
 const AppRouter = () => {
   const routes: RouterProps[] = [
@@ -27,23 +28,23 @@ const AppRouter = () => {
         },
         {
           path: AppRoutes.DASHBOARD,
-          component: <ProspectsListing />,
+          component: <></>,
         },
         {
           path: AppRoutes.CALENDAR,
-          component: <ProspectsListing />,
+          component: <></>,
         },
         {
           path: AppRoutes.MEMBERS,
-          component: <ProspectsListing />,
+          component: <Members />,
         },
         {
           path: AppRoutes.CLUB_STAFF,
-          component: <ProspectsListing />,
+          component: <></>,
         },
         {
           path: AppRoutes.SETTINGS,
-          component: <ProspectsListing />,
+          component: <></>,
         },
         {
           path: AppRoutes.INDIVIDUAL_PROSPECT,

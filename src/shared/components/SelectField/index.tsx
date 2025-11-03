@@ -11,6 +11,7 @@ import Label from "../Label";
 
 import styles from "./selectField.module.scss";
 import { InputStatus } from "src/enums/inputStatus.enum";
+import { Buttons } from "src/enums/buttons.enum";
 
 const { Option } = Select;
 
@@ -24,6 +25,8 @@ const SelectField = ({
   showCheckboxes = false,
   options,
   allowClear,
+  showClear = false,
+  onClear,
   ...props
 }: DropDownProps) => {
   const {
@@ -86,13 +89,20 @@ const SelectField = ({
   return (
     <div className={styles.selectField}>
       {label && (
-        <Label
-          className={styles.label}
-          htmlFor={name}
-          required={props.required}
-        >
-          {label}
-        </Label>
+        <div className={styles.labelContainer}>
+          <Label
+            className={styles.label}
+            htmlFor={name}
+            required={props.required}
+          >
+            {label}
+          </Label>
+          {showClear && onClear && (
+            <span onClick={onClear} className={styles.clearButton}>
+              {Buttons.CLEAR}
+            </span>
+          )}
+        </div>
       )}
       <div className={styles.selectFieldWrapper}>
         <Select
