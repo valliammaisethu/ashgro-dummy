@@ -13,6 +13,7 @@ import AppComponents from "../views/AppComponents";
 import ProspectsListing from "../views/Prospects/Listing";
 import IndividualProspect from "src/views/Prospects/IndividualProspect";
 import StaffMemberDetails from "src/views/StaffMembers/Details";
+import StaffMembersListing from "src/views/StaffMembers/Listing";
 
 const AppRouter = () => {
   const routes: RouterProps[] = [
@@ -28,23 +29,23 @@ const AppRouter = () => {
         },
         {
           path: AppRoutes.DASHBOARD,
-          component: <ProspectsListing />,
+          component: <></>,
         },
         {
           path: AppRoutes.CALENDAR,
-          component: <ProspectsListing />,
+          component: <></>,
         },
         {
           path: AppRoutes.MEMBERS,
-          component: <ProspectsListing />,
+          component: <></>,
         },
         {
           path: AppRoutes.CLUB_STAFF,
-          component: <ProspectsListing />,
+          component: <StaffMembersListing />,
         },
         {
           path: AppRoutes.SETTINGS,
-          component: <ProspectsListing />,
+          component: <></>,
         },
         {
           path: AppRoutes.INDIVIDUAL_PROSPECT,

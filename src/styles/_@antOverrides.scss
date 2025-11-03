@@ -492,7 +492,6 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   color: $ashgro-grey !important;
   opacity: 0.6;
   font-size: 1.2rem;
-  line-height: 1.3rem;
 }
 .ant-btn:not(:disabled):focus-visible {
   outline: none;
@@ -749,4 +748,11 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 }
 .ant-picker-range .ant-picker-clear {
   inset-inline-end: -0.7rem;
+}
+.ant-select-dropdown
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: transparent;
+}
+.rc-virtual-list-holder-inner {
+  gap: 1rem;
 }

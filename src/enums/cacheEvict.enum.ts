@@ -24,4 +24,5 @@ export enum QueryKeys {
   GET_LEAD_STATUS = "getLeadStatuses",
   GET_EMAIL_TEMPLATES = "getEmailTemplates",
   GET_STAFF_MEMBER_DETAILS = "staffMemberDetails",
+  GET_STAFF_DEPARTMENTS = "getStaffMembers",
 }

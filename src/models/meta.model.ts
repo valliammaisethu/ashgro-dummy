@@ -63,6 +63,13 @@ export class EmailTemplate {
   attachmentIds?: string[];
 }
 
+export class StaffDepartment {
+  @serializable
+  id?: string;
+
+  @serializable
+  name?: string;
+}
 export class LeadSourceParams {
   @serializable
   filter?: string;
@@ -101,4 +108,9 @@ export class LeadStatusesData {
 export class EmailTemplatesData {
   @serializable(list(object(EmailTemplate)))
   emailTemplates?: EmailTemplate[];
+}
+
+export class StaffDepartmentsData {
+  @serializable(list(object(StaffDepartment)))
+  staffDepartments?: StaffDepartment[];
 }

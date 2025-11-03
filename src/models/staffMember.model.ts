@@ -1,6 +1,7 @@
-import { serializable, object } from "serializr";
+import { serializable, object, list, primitive } from "serializr";
 import { ResponseModel } from "./response.model";
 import { FALL_BACKS } from "src/constants/common";
+import { QueryParams } from "./queryParams.model";
 
 const { NOT_AVAILABLE } = FALL_BACKS;
 
@@ -53,4 +54,9 @@ export class StaffData {
 export class StaffDataResponse extends ResponseModel {
   @serializable(object(StaffData))
   data = new StaffData();
+}
+
+export class StaffMembersListingParams extends QueryParams {
+  @serializable(list(primitive()))
+  departmentIds: string[] = [];
 }

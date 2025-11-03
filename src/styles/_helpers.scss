@@ -216,6 +216,7 @@
 @mixin secondaryBold {
   font-family: $font-secondary;
   font-weight: 600;
+  font-size: 1.4rem;
 }
 
 @mixin secondarySemiBold {
