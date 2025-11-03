@@ -14,7 +14,7 @@ interface ModalFooterProps {
   confirmLoading?: boolean;
   onCancel?: () => void;
   handleOk?: () => void;
-  closeModal: () => void;
+  closeModal?: () => void;
 }
 
 export const ModalFooter: React.FC<ModalFooterProps> = ({
@@ -29,6 +29,9 @@ export const ModalFooter: React.FC<ModalFooterProps> = ({
   handleOk,
   closeModal,
 }) => {
+  const handleCancel = onCancel ?? closeModal ?? (() => {});
+  const handleOkClick = handleOk ?? closeModal ?? (() => {});
+
   return (
     <div className={styles.modalFooter}>
       <Button
@@ -36,7 +39,7 @@ export const ModalFooter: React.FC<ModalFooterProps> = ({
         type={ButtonTypes.PRIMARY}
         loading={!!cancelButtonProps?.loading}
         htmlType={HtmlButtonType.BUTTON}
-        onClick={onCancel ?? closeModal}
+        onClick={handleCancel}
       >
         {cancelText}
       </Button>
@@ -47,7 +50,7 @@ export const ModalFooter: React.FC<ModalFooterProps> = ({
         className={styles.okButton}
         loading={confirmLoading}
         htmlType={okButtonHtmlType}
-        onClick={handleOk ?? closeModal}
+        onClick={handleOkClick}
       >
         {okText}
       </Button>

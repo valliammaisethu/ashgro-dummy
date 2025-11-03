@@ -15,6 +15,7 @@ import {
   SwitchProps,
   ModalProps as AntdModalProps,
   DrawerProps as AntdDrawerProps,
+  ButtonProps as AntdButtonProps,
 } from "antd";
 
 import { ButtonSize } from "antd/es/button";
@@ -105,7 +106,8 @@ export interface ButtonTooltipProps {
   arrowPointAtCenter?: boolean;
 }
 
-export interface ButtonProps {
+export interface ButtonProps
+  extends Omit<AntdButtonProps, "type" | "htmlType"> {
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   children?: ReactNode;
   htmlType?: HtmlButtonType;
@@ -214,7 +216,7 @@ export interface StatusTagProps {
 
 export interface ModalProps extends AntdModalProps {
   children?: React.ReactNode;
-  closeModal: () => void;
+  closeModal?: () => void;
   handleOk?: () => void;
   visible: boolean;
   width?: number;
