@@ -9,6 +9,7 @@ export const NavigationRoutes = {
   PROSPECTS_LISTING: "/home/prospects",
   INDIVIDUAL_PROSPECT: "/home/prospects/:id",
   STAFF_MEMBER_DETAILS: "/home/staff-member/:id",
+  MEMBER_DETAILS: "/home/member/:id",
 };
 
 export const AppRoutes = {
@@ -29,4 +30,5 @@ export const AppRoutes = {
   CLUB_STAFF: "/home/club-staff",
   SETTINGS: "/home/settings",
   STAFF_MEMBER_DETAILS: "/home/staff-member/:id",
+  MEMBER_DETAILS: "/home/member/:id",
 };

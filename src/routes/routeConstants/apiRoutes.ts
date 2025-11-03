@@ -19,4 +19,5 @@ export const ApiRoutes = {
   Add_ACTIVITY: "/prospects/:id/activity",
 
   STAFF_MEMBER_DETAILS: "/staffs/:id",
+  MEMBER_DETAILS: "/members/:id",
 };
