@@ -4,7 +4,7 @@ export const newEmailModalConstants = {
 };
 
 export const labels = {
-  recipients: "Recipient(s)",
+  to: "Recipient(s)",
   cc: "CC",
   bcc: "BCC",
   subject: "Subject",
@@ -13,7 +13,7 @@ export const labels = {
 };
 
 export const fields = {
-  recipients: "recipients",
+  to: "to",
   cc: "cc",
   bcc: "bcc",
   subject: "subject",
@@ -23,7 +23,7 @@ export const fields = {
 };
 
 export const placeholders = {
-  recipients: "Select recipients",
+  to: "Select recipients",
   cc: "Enter email address",
   bcc: "Enter email address",
   subject: "Enter subject here",

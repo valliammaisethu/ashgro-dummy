@@ -15,7 +15,7 @@ import { IndividualProspectHeaderProps } from "src/shared/types/prospects.type";
 import styles from "../individualProspect.module.scss";
 
 const Header = (props: IndividualProspectHeaderProps) => {
-  const { onConvert } = props;
+  const { onConvert, onEmail } = props;
   const { navigateToProspects } = useRedirect();
   return (
     <div className={styles.header}>
@@ -33,6 +33,7 @@ const Header = (props: IndividualProspectHeaderProps) => {
           <IconCalendarSelectedDate />
         </Button>
         <Button
+          onClick={onEmail}
           className={styles.emailButton}
           icon={<IconEmail strokeWidth={1.5} />}
           type={ButtonTypes.LINK}

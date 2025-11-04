@@ -22,6 +22,7 @@ export interface AddProspectProps {
 
 export interface IndividualProspectHeaderProps {
   onConvert: () => void;
+  onEmail: () => void;
 }
 
 export interface MemberConversionModalProps {
@@ -34,4 +35,10 @@ export interface ProspectFilterProps {
   toggleVisibility: () => void;
   onSubmit: (values: FieldValues) => void;
   defaultValues: FieldValues;
+}
+
+export interface SelectedProspect {
+  id: string;
+  email: string;
+  name: string;
 }

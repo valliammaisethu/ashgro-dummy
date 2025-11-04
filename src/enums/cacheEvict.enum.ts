@@ -14,6 +14,8 @@ export enum MutationKeys {
   ADD_MEMBER = "addMember",
   DELETE_STAFF_MEMBER = "deleteStaffMemeber",
   DELETE_RESOURCE = "deleteResource",
+
+  SEND_EMAIL = "sendEmail",
 }
 
 export enum QueryKeys {

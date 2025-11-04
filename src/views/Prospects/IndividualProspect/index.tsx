@@ -22,6 +22,8 @@ import DeleteModal from "../DeleteModal";
 import styles from "./individualProspect.module.scss";
 import MemberConversionModal from "../MemberConversionModal";
 import { getFullName } from "src/shared/utils/helpers";
+import NewEmailModal from "src/views/Email/NewEmailModal";
+import { SelectedEmailModel } from "src/models/email.model";
 
 const IndividualProspect = () => {
   const { viewProspect } = ProspectsService();
@@ -35,10 +37,16 @@ const IndividualProspect = () => {
   const { data: leadStatusOptions } = useQuery(getLeadStatuses());
 
   const [isEdit, setIsEdit] = useState(false);
+  const [selectedEmail, setSelectedEmail] = useState<SelectedEmailModel>(
+    new SelectedEmailModel(),
+  );
 
   const { visible, toggleVisibility } = useDrawer();
 
   const { visible: deleteModalVisible, toggleVisibility: toggleDeleteModal } =
+    useDrawer();
+
+  const { visible: emailModalVisible, toggleVisibility: toggleEmailModal } =
     useDrawer();
 
   const {
@@ -55,9 +63,18 @@ const IndividualProspect = () => {
 
   const handleRefetch = () => refetch();
 
+  const handleEmailModal = () => {
+    setSelectedEmail({
+      email: data?.prospect?.email,
+      id: String(data?.prospect?.id),
+      name: data?.prospect?.firstName,
+    });
+    toggleEmailModal();
+  };
+
   return (
     <div className={styles.individualProspect}>
-      <Header onConvert={handleConvertToMember} />
+      <Header onEmail={handleEmailModal} onConvert={handleConvertToMember} />
       <ConditionalRender
         isPending={isPending}
         isSuccess={isSuccess}
@@ -137,6 +154,11 @@ const IndividualProspect = () => {
         visible={deleteModalVisible}
         toggleVisibility={toggleDeleteModal}
         id={id}
+      />
+      <NewEmailModal
+        selectedEmails={[selectedEmail]}
+        isOpen={emailModalVisible}
+        onClose={toggleEmailModal}
       />
     </div>
   );
