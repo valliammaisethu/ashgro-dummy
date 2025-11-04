@@ -23,4 +23,6 @@ export const ApiRoutes = {
   MEMBERSHIP_TYPE_STATUS: "settings/:id/membershipCategories",
   MEMBERS: "members",
   STAFF_MEMBER_DETAILS: "/staffs/:id",
+  MEMBER_DETAILS: "/members/:id",
+  SEND_EMAIL: "/email",
 };

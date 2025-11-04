@@ -13,6 +13,7 @@ import ProspectsListing from "../views/Prospects/Listing";
 import IndividualProspect from "src/views/Prospects/IndividualProspect";
 import Members from "src/views/Members/Listing";
 import StaffMemberDetails from "src/views/StaffMembers/Details";
+import MemberDetails from "src/views/Members/Details";
 
 const AppRouter = () => {
   const routes: RouterProps[] = [
@@ -53,6 +54,11 @@ const AppRouter = () => {
         {
           path: AppRoutes.STAFF_MEMBER_DETAILS,
           component: <StaffMemberDetails />,
+        },
+
+        {
+          path: AppRoutes.MEMBER_DETAILS,
+          component: <MemberDetails />,
         },
       ],
     },

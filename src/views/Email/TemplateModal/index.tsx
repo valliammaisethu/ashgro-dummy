@@ -18,6 +18,7 @@ import {
 } from "./constants";
 
 import styles from "../email.module.scss";
+import useForm from "src/shared/components/UseForm";
 
 const TemplateModal = ({
   isOpen,
@@ -44,6 +45,11 @@ const TemplateModal = ({
     toggleEmailModal(EmailModalEnum.TEMPLATE);
   }, [toggleEmailModal]);
 
+  const methods = useForm({});
+
+  const { watch } = methods;
+  const emailTemplateWatch = watch(fields.emailTemplate);
+
   return (
     <Modal
       title={emailConstants.templateModalTitle}
@@ -56,7 +62,7 @@ const TemplateModal = ({
       rootClassName={styles.emailTemplateModal}
     >
       <div className={styles.modalBody}>
-        <Form>
+        <Form methods={methods}>
           <SelectField
             options={emailTemplateOptions}
             name={fields.emailTemplate}
@@ -78,6 +84,7 @@ const TemplateModal = ({
           onClick={handleNextClick}
           type={ButtonTypes.DEFAULT}
           className={styles.okButton}
+          disabled={!emailTemplateOptions.length || !emailTemplateWatch}
         >
           {Buttons.NEXT}
         </Button>

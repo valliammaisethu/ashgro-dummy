@@ -13,6 +13,9 @@ export enum MutationKeys {
 
   ADD_MEMBER = "addMember",
   DELETE_STAFF_MEMBER = "deleteStaffMemeber",
+  DELETE_RESOURCE = "deleteResource",
+
+  SEND_EMAIL = "sendEmail",
 }
 
 export enum QueryKeys {
@@ -29,4 +32,5 @@ export enum QueryKeys {
   GET_MEMBERSHIP_STATUS = "getMemberShipStatus",
   GET_MEMBERSHIP_TYPE_STATUS = "getMemberShipTypeStatus",
   GET_STAFF_MEMBER_DETAILS = "staffMemberDetails",
+  GET_MEMBER_DETAILS = "memberDetails",
 }

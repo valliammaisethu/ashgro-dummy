@@ -37,6 +37,7 @@ import TemplateModal from "src/views/Email/TemplateModal";
 import NewEmailModal from "src/views/Email/NewEmailModal";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import { QueryParamKeys } from "src/enums/queryParams.enum";
+import { SelectedProspect } from "src/shared/types/prospects.type";
 
 const ProspectsListing = () => {
   const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
@@ -45,7 +46,9 @@ const ProspectsListing = () => {
   const [queryParams, setQueryParams] = useState<ProspectsListingParams>(
     new ProspectsListingParams(),
   );
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [selectedProspects, setSelectedProspects] = useState<
+    SelectedProspect[]
+  >([]);
   const [isEdit, setIsEdit] = useState({
     state: false,
     id: "",
@@ -89,14 +92,19 @@ const ProspectsListing = () => {
 
   const handleSelectAll = useCallback(
     (checked: boolean) => {
-      setSelectedIds(toggleAllSelections(checked, data?.prospects));
+      setSelectedProspects(toggleAllSelections(checked, data?.prospects));
     },
     [data?.prospects],
   );
 
-  const handleSelectOne = useCallback((id: string, checked: boolean) => {
-    setSelectedIds((prev) => toggleSingleSelection(id, checked, prev));
-  }, []);
+  const handleSelectOne = useCallback(
+    (id: string, email: string, name: string, checked: boolean) => {
+      setSelectedProspects((prev) =>
+        toggleSingleSelection(id, email, name, checked, prev),
+      );
+    },
+    [],
+  );
 
   const handleHeaderCheckboxChange = useCallback(
     (e?: CheckboxChangeEvent) => {
@@ -106,13 +114,13 @@ const ProspectsListing = () => {
   );
 
   const allSelected = useMemo(
-    () => areAllProspectsSelected(data?.prospects, selectedIds),
-    [data?.prospects, selectedIds],
+    () => areAllProspectsSelected(data?.prospects, selectedProspects),
+    [data?.prospects, selectedProspects],
   );
 
   const someSelected = useMemo(
-    () => areSomeProspectsSelected(data?.prospects, selectedIds),
-    [data?.prospects, selectedIds],
+    () => areSomeProspectsSelected(data?.prospects, selectedProspects),
+    [data?.prospects, selectedProspects],
   );
 
   const filtersActive = useMemo(
@@ -225,9 +233,18 @@ const ProspectsListing = () => {
                   key={prospect.id}
                   onClick={navigateToProspect(prospect.id!)}
                   prospect={prospect}
-                  isSelected={selectedIds.includes(prospect.id!)}
+                  isSelected={selectedProspects.some(
+                    (p) => p.id === prospect.id,
+                  )}
                   leadStatusOptions={leadStatusOptions}
-                  onSelectChange={handleSelectOne}
+                  onSelectChange={(checked) =>
+                    handleSelectOne(
+                      prospect.id!,
+                      prospect.email!,
+                      prospect.firstName!,
+                      checked,
+                    )
+                  }
                   onEditClick={handleOnEdit}
                   onDeleteClick={handleOnDelete}
                 />
@@ -287,6 +304,7 @@ const ProspectsListing = () => {
         isOpen={newEmailModalVisible}
         onClose={toggleNewEmailModal}
         isTemplate={isEmailTemplate}
+        selectedEmails={selectedProspects}
       />
     </div>
   );

@@ -1,0 +1,76 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.card {
+  margin-top: 2rem;
+  gap: 2rem;
+  height: 100%;
+  overflow: hidden;
+}
+
+.editButton {
+  @include actionButton;
+}
+
+.leftSide {
+  padding: 0 2.4rem;
+
+  .profileContainer {
+    margin-top: 2.4rem;
+    padding: 1rem;
+
+    .fullName {
+      font-size: 3.2rem;
+      font-weight: 400;
+    }
+    .joinedDatelabel {
+      font-size: 1.4rem;
+      color: $ashgro-gold;
+      margin-right: 0.5rem;
+    }
+    .joinedDate {
+      font-size: 1.6rem;
+    }
+    .basicFooterInfo {
+      @include flex-container;
+      width: 40rem;
+    }
+  }
+
+  .membersDetails {
+    margin-top: 5.4rem;
+    @include flex-container("start", "start", column);
+    gap: 4rem;
+
+    .membersDetailsLabel {
+      color: $ashgro-gold;
+      font-size: 1.6rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+}
+
+.rightSide {
+  height: 66rem;
+  overflow-y: auto;
+  border: 1px solid $activity-border;
+  border-radius: 1.6rem;
+  padding: 2rem 2.4rem;
+}
+
+.footerDetails {
+  @include flex-container("start");
+
+  gap: 8.4rem;
+
+  .title {
+    color: $subdetails-title;
+    font-size: 1.3rem;
+  }
+
+  .description {
+    margin-top: 0.4rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+}
