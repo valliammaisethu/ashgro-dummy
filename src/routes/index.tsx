@@ -4,7 +4,6 @@ import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import AppLayout from "../shared/components/AppLayout";
 import Home from "../views/Home";
 import { TopBarProvider } from "../shared/contexts/TopBarContext";
-import isAuthenticated from "../shared/components/HOC/requireAuth";
 import NotFound from "../shared/components/FallbackPage";
 import { AppRoutes } from "./routeConstants/appRoutes";
 import { RouterProps } from "../shared/types/route.type";
@@ -20,7 +19,7 @@ const AppRouter = () => {
     { path: AppRoutes.APP_COMPONENTS, component: <AppComponents /> },
     {
       path: AppRoutes.HOME,
-      component: isAuthenticated(<AppLayout />),
+      component: <AppLayout />,
       children: [
         {
           path: AppRoutes.PROSPECTS_LISTING,
