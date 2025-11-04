@@ -20,6 +20,12 @@ export class ActivityType {
 
   @serializable
   type?: string;
+
+  @serializable(alias("sourceName"))
+  label?: string;
+
+  @serializable(alias("id"))
+  value?: string;
 }
 
 export class MembershipCategory {

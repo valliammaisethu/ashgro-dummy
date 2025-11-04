@@ -1,0 +1,72 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.header {
+  @include flex-container(space-between, center, row);
+}
+
+.actions {
+  @include flex-container(normal, center, row, 1.6rem);
+}
+
+.bulkUploadButton {
+  &:global(.ant-btn) {
+    border-color: $gold-bold;
+    color: $gold-text;
+    border-radius: 3.6rem;
+    background-color: transparent;
+    font-size: 1.4rem;
+    height: 4.4rem;
+    font-weight: 600;
+    font-family: $font-secondary;
+    @include flex-flow(row, wrap, center);
+
+    :global(.ant-btn-icon) {
+      padding-top: 0.3rem;
+    }
+
+    &:hover {
+      border-color: $gold-bold;
+      background-color: transparent;
+      color: $gold-text;
+    }
+  }
+}
+.bulkUploadButton:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
+  ):hover {
+  border-color: $gold-bold;
+  background-color: transparent;
+  color: $gold-text;
+}
+
+.addMemberButton {
+  &:global(.ant-btn) {
+    border-radius: 3.6rem;
+    font-size: 1.4rem;
+    height: 4.4rem;
+    font-weight: 600;
+    font-family: $font-secondary;
+    color: $ashgro-white;
+  }
+}
+
+.filterButton {
+  &:global(.ant-btn) {
+    background-color: $search-bg;
+    color: $filter-icon;
+    border: 1px solid $search-bg;
+    border-radius: 1.4rem;
+    height: 4.4rem;
+    width: 4.4rem;
+  }
+}
+
+.filterButton:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
+  ):hover {
+  background-color: $search-bg;
+  color: $filter-icon;
+  border: 1px solid $search-bg;
+  border-radius: 1.4rem;
+}

@@ -3,16 +3,17 @@ import { Select, Checkbox } from "antd";
 import { SelectProps } from "antd/lib";
 import { useController } from "react-hook-form";
 import { IconChevronDown, IconCircleClose } from "obra-icons-react";
+import clsx from "clsx";
 
 import { DropDownProps } from "src/shared/types/sharedComponents.type";
 import { SelectModes } from "src/enums/selectModes.enum";
+import { Colors } from "src/enums/colors.enum";
+import { Buttons } from "src/enums/buttons.enum";
+import { InputStatus } from "src/enums/inputStatus.enum";
 import Error from "../Error";
 import Label from "../Label";
 
 import styles from "./selectField.module.scss";
-import { InputStatus } from "src/enums/inputStatus.enum";
-import clsx from "clsx";
-import { Colors } from "src/enums/colors.enum";
 
 const { Option } = Select;
 
@@ -28,6 +29,8 @@ const SelectField = ({
   allowClear,
   showSelectedCount = false,
   className,
+  showClear = false,
+  onClear,
   ...props
 }: DropDownProps) => {
   const {
@@ -110,13 +113,20 @@ const SelectField = ({
   return (
     <div className={styles.selectField}>
       {label && (
-        <Label
-          className={styles.label}
-          htmlFor={name}
-          required={props.required}
-        >
-          {label}
-        </Label>
+        <div className={styles.labelContainer}>
+          <Label
+            className={styles.label}
+            htmlFor={name}
+            required={props.required}
+          >
+            {label}
+          </Label>
+          {showClear && onClear && (
+            <span onClick={onClear} className={styles.clearButton}>
+              {Buttons.CLEAR}
+            </span>
+          )}
+        </div>
       )}
       <div className={clsx(styles.selectFieldWrapper, className)}>
         <Select
