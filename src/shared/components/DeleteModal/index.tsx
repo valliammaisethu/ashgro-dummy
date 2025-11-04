@@ -13,10 +13,11 @@ interface DeleteModalProps {
   title?: string;
   description?: string;
   onDelete?: () => void | Promise<void>;
+  loading?: boolean;
 }
 
 const DeleteModal = (props: DeleteModalProps) => {
-  const { title, description, onDelete } = props;
+  const { title, description, onDelete, loading } = props;
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -40,10 +41,15 @@ const DeleteModal = (props: DeleteModalProps) => {
         centered
         handleOk={handleVisiblity}
         rootClassName={styles.deleteModal}
+        onCancel={handleVisiblity}
         maskClosable={false}
         footer={[
           <div className={styles.footer} key={Buttons.DELETE_PERMANENTLY}>
-            <Button onClick={handleDelete} className={styles.deleteButton}>
+            <Button
+              onClick={handleDelete}
+              className={styles.deleteButton}
+              loading={loading}
+            >
               {Buttons.DELETE_PERMANENTLY}
             </Button>
           </div>,
