@@ -28,6 +28,7 @@ import { DefaultOptionType } from "antd/es/cascader";
 import { Trigger } from "src/enums/trigger.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
+import { AttachmentTypes } from "src/enums/attachmentTypes.enum";
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
   phoneCodeName: string;
@@ -255,4 +256,24 @@ export interface DrawerProps extends AntdDrawerProps {
   children: JSX.Element;
   placement?: DrawerPlacement;
   subHeading?: string;
+}
+
+export interface UploadedFile {
+  id: string;
+  name: string;
+  size: number;
+}
+
+export interface FileUploadProps {
+  name: string;
+  maxFileSize?: number;
+  maxTotalSize?: number;
+  maxFileSizeText?: string;
+  buttonText?: string;
+  attachmentType?: AttachmentTypes;
+  accept?: string;
+  buttonClassName?: string;
+  containerClassName?: string;
+  maxFileSizeClassName?: string;
+  attachmentClassName?: string;
 }

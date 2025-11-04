@@ -13,3 +13,8 @@ export const labels = {
 export const placeholders = {
   emailTemplate: "Select a template",
 };
+
+export enum EmailModalEnum {
+  EMAIL = "email",
+  TEMPLATE = "template",
+}

@@ -34,26 +34,32 @@ import styles from "./listing.module.scss";
 import Filters from "../Filters";
 import { FieldValues } from "react-hook-form";
 import TemplateModal from "src/views/Email/TemplateModal";
+import NewEmailModal from "src/views/Email/NewEmailModal";
+import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 
 const ProspectsListing = () => {
+  const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
+  const clubId = user?.clubId;
+
   const [queryParams, setQueryParams] = useState<ProspectsListingParams>(
     new ProspectsListingParams(),
   );
-  const { getProspects, viewProspect } = ProspectsService();
-  const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isEdit, setIsEdit] = useState({
     state: false,
     id: "",
   });
+  const [isEmailTemplate, setIsEmailTemplate] = useState(false);
+
+  const { getProspects, viewProspect } = ProspectsService();
+  const { getLeadStatuses } = MetaService();
+
+  const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
+  const { data: leadStatusesData } = useQuery(getLeadStatuses());
   const { data: isEditData } = useQuery({
     ...viewProspect(isEdit?.id),
     enabled: !!isEdit?.id,
   });
-
-  const { getLeadStatuses } = MetaService();
-
-  const { data: leadStatusesData } = useQuery(getLeadStatuses());
 
   const leadStatusOptions = useMemo(
     () => leadStatusesData?.leadStatuses,
@@ -71,14 +77,18 @@ const ProspectsListing = () => {
     visible: emailTemplateModalVisible,
     toggleVisibility: toggleEmailTemplateModal,
   } = useDrawer();
+  const {
+    visible: newEmailModalVisible,
+    toggleVisibility: toggleNewEmailModal,
+  } = useDrawer();
+
   const handleSelectAll = useCallback(
     (checked: boolean) => {
       setSelectedIds(toggleAllSelections(checked, data?.prospects));
     },
     [data?.prospects],
   );
-  const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
-  const clubId = user?.clubId;
+
   const handleSelectOne = useCallback((id: string, checked: boolean) => {
     setSelectedIds((prev) => toggleSingleSelection(id, checked, prev));
   }, []);
@@ -100,11 +110,10 @@ const ProspectsListing = () => {
     [data?.prospects, selectedIds],
   );
 
-  useEffect(() => {
-    if (clubId && queryParams.clubId !== clubId) {
-      setQueryParams((prev) => ({ ...prev, clubId }));
-    }
-  }, [clubId]);
+  const filtersActive = useMemo(
+    () => areFiltersActive(queryParams),
+    [queryParams],
+  );
 
   const navigateToProspect = (id: string) => () =>
     navigateToIndividualProspect(id);
@@ -163,10 +172,18 @@ const ProspectsListing = () => {
     }));
     toggleDrawerVisibility();
   };
-  const filtersActive = useMemo(
-    () => areFiltersActive(queryParams),
-    [queryParams],
-  );
+
+  const handleEmailTemplateModal = (type: EmailModalEnum) => {
+    setIsEmailTemplate(type === EmailModalEnum.TEMPLATE ? false : true);
+    toggleEmailTemplateModal();
+    toggleNewEmailModal();
+  };
+
+  useEffect(() => {
+    if (clubId && queryParams.clubId !== clubId) {
+      setQueryParams((prev) => ({ ...prev, clubId }));
+    }
+  }, [clubId]);
 
   return (
     <div>
@@ -259,6 +276,12 @@ const ProspectsListing = () => {
       <TemplateModal
         isOpen={emailTemplateModalVisible}
         onClose={toggleEmailTemplateModal}
+        toggleEmailModal={handleEmailTemplateModal}
+      />
+      <NewEmailModal
+        isOpen={newEmailModalVisible}
+        onClose={toggleNewEmailModal}
+        isTemplate={isEmailTemplate}
       />
     </div>
   );
