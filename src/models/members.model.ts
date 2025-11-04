@@ -1,5 +1,23 @@
-import { object, serializable } from "serializr";
+import { list, object, primitive, serializable } from "serializr";
+import { QueryParams } from "./queryParams.model";
 import { ActivityDetails, Prospect } from "./prospects.model";
+
+export class MembersListingParams extends QueryParams {
+  @serializable(list(primitive()))
+  membershipStatusIds?: string[];
+
+  @serializable(list(primitive()))
+  membershipCategoriesIds?: string[];
+
+  @serializable(list(primitive()))
+  leadSourcesIds?: string[];
+
+  @serializable
+  joinedStartDate?: string;
+
+  @serializable
+  joinedEndDate?: string;
+}
 
 export class Member extends Prospect {
   @serializable

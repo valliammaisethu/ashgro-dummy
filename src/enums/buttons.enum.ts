@@ -16,6 +16,7 @@ export enum Buttons {
   CLEAR = "Clear",
   NEXT = "Next",
   NEW_EMAIL = "New Email",
+  ADD_MEMBER = "Add Member",
   SEND_EMAIL = "Send Email",
   UPLOAD_FILES = "Upload file(s)",
 }

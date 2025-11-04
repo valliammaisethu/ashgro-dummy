@@ -153,6 +153,9 @@ export const profileImageAllowedTypes = [
 
 export const defaultModalWidth = 664;
 
+export const datePickerFromPlaceholder = "Enter from date";
+
+export const datePickerToPlaceholder = "Enter to date";
 export const DEFAULT_MAX_FILE_SIZE = 25 * 1024 * 1024;
 export const DEFAULT_MAX_FILE_SIZE_PLACEHOLDER =
   "Attachments cannot exceed 25 MB in total. Please remove some files.";

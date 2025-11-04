@@ -1,8 +1,21 @@
 @import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
 
 .selectField {
-  .label {
+  .labelContainer {
+    @include flex-container(space-between, center, row);
     padding-bottom: 0.4rem;
+  }
+
+  .label {
+    padding-bottom: 0;
+  }
+
+  .clearButton {
+    color: $ashgro-grey;
+    cursor: pointer;
+    @include secondaryRegular;
+    font-size: 1.4rem;
   }
 }
 
