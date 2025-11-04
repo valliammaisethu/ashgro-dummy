@@ -40,7 +40,7 @@ const Filters = (props: ProspectFilterProps) => {
   );
 
   const methods = useForm({
-    values: {
+    defaultValues: {
       [fields.followUpDateRange]:
         defaultValues?.[fields.followUpDateRange] || [],
       [fields.leadStatus]: defaultValues?.[fields.leadStatus] || [],
@@ -55,6 +55,16 @@ const Filters = (props: ProspectFilterProps) => {
 
   const handleClearLeadStatus = () => setValue(fields.leadStatus, []);
   const handleClearLeadSource = () => setValue(fields.leadSource, []);
+
+  const handleClose = () => {
+    reset({
+      [fields.followUpDateRange]:
+        defaultValues?.[fields.followUpDateRange] || [],
+      [fields.leadStatus]: defaultValues?.[fields.leadStatus] || [],
+      [fields.leadSource]: defaultValues?.[fields.leadSource] || [],
+    });
+    toggleVisibility();
+  };
 
   const handleSubmit = (values: FieldValues) => onSubmit(values);
 
@@ -71,7 +81,7 @@ const Filters = (props: ProspectFilterProps) => {
       title={title}
       open={visible}
       closable
-      onClose={toggleVisibility}
+      onClose={handleClose}
     >
       <div className={styles.body}>
         <Form onSubmit={handleSubmit} methods={methods}>

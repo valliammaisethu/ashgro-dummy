@@ -4,7 +4,6 @@ import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import AppLayout from "../shared/components/AppLayout";
 import Home from "../views/Home";
 import { TopBarProvider } from "../shared/contexts/TopBarContext";
-import isAuthenticated from "../shared/components/HOC/requireAuth";
 import NotFound from "../shared/components/FallbackPage";
 import { AppRoutes } from "./routeConstants/appRoutes";
 import { RouterProps } from "../shared/types/route.type";
@@ -13,6 +12,7 @@ import AppComponents from "../views/AppComponents";
 import ProspectsListing from "../views/Prospects/Listing";
 import IndividualProspect from "src/views/Prospects/IndividualProspect";
 import Members from "src/views/Members/Listing";
+import StaffMemberDetails from "src/views/StaffMembers/Details";
 
 const AppRouter = () => {
   const routes: RouterProps[] = [
@@ -20,7 +20,7 @@ const AppRouter = () => {
     { path: AppRoutes.APP_COMPONENTS, component: <AppComponents /> },
     {
       path: AppRoutes.HOME,
-      component: isAuthenticated(<AppLayout />),
+      component: <AppLayout />,
       children: [
         {
           path: AppRoutes.PROSPECTS_LISTING,
@@ -49,6 +49,10 @@ const AppRouter = () => {
         {
           path: AppRoutes.INDIVIDUAL_PROSPECT,
           component: <IndividualProspect />,
+        },
+        {
+          path: AppRoutes.STAFF_MEMBER_DETAILS,
+          component: <StaffMemberDetails />,
         },
       ],
     },

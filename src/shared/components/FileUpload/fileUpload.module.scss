@@ -1,0 +1,56 @@
+@import "src/styles/variables";
+
+.uploadFileContainer {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.maxFileSize {
+  font-size: 1.4rem;
+  color: $ashgro-grey;
+}
+
+.totalSize {
+  font-weight: 600;
+  color: $ashgro-navy;
+}
+
+.attachment {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.2rem;
+  background-color: $ashgro-cream;
+  border-radius: 0.8rem;
+}
+
+.attachmentIcon {
+  display: flex;
+  align-items: center;
+}
+
+.fileName {
+  flex: 1;
+  font-size: 1.4rem;
+  color: $ashgro-navy;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.closeIcon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+.uploadedFiles {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}

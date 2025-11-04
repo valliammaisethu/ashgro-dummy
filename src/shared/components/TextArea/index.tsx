@@ -8,6 +8,7 @@ import Label from "../Label";
 import Error from "../Error";
 
 import styles from "./textArea.module.scss";
+import clsx from "clsx";
 
 const { TextArea: AntTextArea } = Input;
 
@@ -21,6 +22,7 @@ const TextArea: FC<TextAreaFieldProps> = ({
   name,
   label,
   required = false,
+  className,
   ...rest
 }) => {
   const { control } = useFormContext<FieldValues>();
@@ -30,7 +32,7 @@ const TextArea: FC<TextAreaFieldProps> = ({
   } = useController({ name, control });
 
   return (
-    <div className={styles.textAreaWrapper}>
+    <div className={clsx(styles.textAreaWrapper, className)}>
       <Label htmlFor={name} required={required}>
         {label}
       </Label>
