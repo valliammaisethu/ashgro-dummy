@@ -762,3 +762,13 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
     opacity: 0.5;
   }
 }
+
+.ant-notification
+  .ant-notification-notice-wrapper
+  .ant-notification-notice-close {
+  color: $ashgro-white;
+
+  &:hover {
+    color: $ashgro-white;
+  }
+}

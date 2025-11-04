@@ -6,4 +6,6 @@ export enum QueryParamKeys {
   SEARCH = "search",
   CLUB_ID = "clubId",
   FILTER = "filter",
+  PROSPECTS = "prospects",
+  MEMBERS = "members",
 }

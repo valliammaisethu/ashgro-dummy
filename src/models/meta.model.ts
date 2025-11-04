@@ -127,8 +127,3 @@ export class EmailTemplatesData {
   @serializable(list(object(EmailTemplate)))
   emailTemplates?: EmailTemplate[];
 }
-
-export class MembershipStatusData {
-  @serializable(list(object(MembershipStatus)))
-  leadStatuses?: MembershipStatus[];
-}

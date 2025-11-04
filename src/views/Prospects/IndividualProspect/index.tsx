@@ -22,6 +22,7 @@ import DeleteModal from "../DeleteModal";
 import styles from "./individualProspect.module.scss";
 import MemberConversionModal from "../MemberConversionModal";
 import { getFullName } from "src/shared/utils/helpers";
+import { QueryParamKeys } from "src/enums/queryParams.enum";
 
 const IndividualProspect = () => {
   const { viewProspect } = ProspectsService();
@@ -32,7 +33,11 @@ const IndividualProspect = () => {
 
   const { getLeadStatuses } = MetaService();
 
-  const { data: leadStatusOptions } = useQuery(getLeadStatuses());
+  const { data: leadStatusOptions } = useQuery(
+    getLeadStatuses({
+      filter: QueryParamKeys.PROSPECTS,
+    }),
+  );
 
   const [isEdit, setIsEdit] = useState(false);
 

@@ -36,6 +36,7 @@ import { FieldValues } from "react-hook-form";
 import TemplateModal from "src/views/Email/TemplateModal";
 import NewEmailModal from "src/views/Email/NewEmailModal";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
+import { QueryParamKeys } from "src/enums/queryParams.enum";
 
 const ProspectsListing = () => {
   const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
@@ -55,7 +56,11 @@ const ProspectsListing = () => {
   const { getLeadStatuses } = MetaService();
 
   const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
-  const { data: leadStatusesData } = useQuery(getLeadStatuses());
+  const { data: leadStatusesData } = useQuery(
+    getLeadStatuses({
+      filter: QueryParamKeys.PROSPECTS,
+    }),
+  );
   const { data: isEditData } = useQuery({
     ...viewProspect(isEdit?.id),
     enabled: !!isEdit?.id,

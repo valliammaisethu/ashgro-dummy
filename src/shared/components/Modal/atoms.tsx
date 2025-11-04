@@ -29,8 +29,8 @@ export const ModalFooter: React.FC<ModalFooterProps> = ({
   handleOk,
   closeModal,
 }) => {
-  const handleCancel = onCancel ?? closeModal ?? (() => {});
-  const handleOkClick = handleOk ?? closeModal ?? (() => {});
+  const handleCancel = onCancel ?? closeModal;
+  const handleOkClick = handleOk ?? closeModal;
 
   return (
     <div className={styles.modalFooter}>

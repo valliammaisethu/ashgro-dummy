@@ -43,7 +43,9 @@ const MemberFilters = (props: MemberFiltersProps) => {
     MetaService();
 
   const { data: leadSourcesData, isPending: leadSourcesPending } = useQuery({
-    ...getLeadSources(),
+    ...getLeadSources({
+      filter: QueryParamKeys.MEMBERS,
+    }),
     enabled: visible,
   });
 
@@ -58,7 +60,7 @@ const MemberFilters = (props: MemberFiltersProps) => {
   const { data: membershipStatusesData, isPending: membershipStatusesPending } =
     useQuery({
       ...getMembershipStatuses({
-        filter: QueryParamKeys.FILTER,
+        filter: QueryParamKeys.PROSPECTS,
       }),
       enabled: visible,
     });

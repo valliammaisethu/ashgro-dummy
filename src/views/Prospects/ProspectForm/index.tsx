@@ -28,6 +28,7 @@ import { AddProspectProps } from "src/shared/types/prospects.type";
 import { validationSchema } from "./validation";
 
 import styles from "./prospectForm.module.scss";
+import { QueryParamKeys } from "src/enums/queryParams.enum";
 
 const {
   MODAL_TITLE,
@@ -59,11 +60,15 @@ const ProspectForm = ({
     useMutation(editProspect());
 
   const { data: leadSourcesData } = useQuery({
-    ...getLeadSources(),
+    ...getLeadSources({
+      filter: QueryParamKeys.PROSPECTS,
+    }),
     enabled: visible,
   });
   const { data: leadStatusesData } = useQuery({
-    ...getLeadStatuses(),
+    ...getLeadStatuses({
+      filter: QueryParamKeys.PROSPECTS,
+    }),
     enabled: visible,
   });
   const { data: membershipCategoriesData } = useQuery({

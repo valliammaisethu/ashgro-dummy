@@ -12,7 +12,6 @@ import {
   LeadStatusesData,
   LeadStatusParams,
   MembershipCategoriesData,
-  MembershipStatusData,
   MembershipStatusParams,
 } from "src/models/meta.model";
 import { ResponseModel } from "src/models/response.model";
@@ -102,11 +101,11 @@ export const MetaService = () => {
     return {
       queryKey: [GET_MEMBERSHIP_CATEGORIES_KEY, clubId],
       queryFn: async () => {
-        const response = await axiosInstance.get(
+        const { data } = await axiosInstance.get(
           generatePath(GET_MEMBERSHIP_CATEGORIES, { id: clubId }),
         );
 
-        return deserialize(MembershipCategoriesData, response?.data?.data);
+        return deserialize(MembershipCategoriesData, data?.data);
       },
       enabled: !!clubId,
     };
@@ -114,22 +113,18 @@ export const MetaService = () => {
 
   const getMembershipStatuses = (
     params: MembershipStatusParams = new MembershipStatusParams(),
-  ): UseQueryOptions<
-    MembershipStatusData,
-    ResponseModel,
-    MembershipStatusData
-  > => {
+  ): UseQueryOptions<LeadStatusesData, ResponseModel, LeadStatusesData> => {
     return {
       queryKey: [GET_MEMBERSHIP_STATUSES_KEY, clubId],
       queryFn: async () => {
-        const response = await axiosInstance.get(
+        const { data } = await axiosInstance.get(
           generatePath(GET_MEMBERSHIP_STATUSES, { id: clubId }),
           {
             params: serialize(MembershipStatusParams, params),
           },
         );
 
-        return deserialize(MembershipStatusData, response?.data?.data);
+        return deserialize(LeadStatusesData, data?.data);
       },
       enabled: !!clubId,
     };
@@ -141,10 +136,10 @@ export const MetaService = () => {
   > => ({
     queryKey: [GET_EMAIL_TEMPLATES_KEY, clubId],
     queryFn: async () => {
-      const response = await axiosInstance.get(
+      const { data } = await axiosInstance.get(
         generatePath(GET_EMAIL_TEMPLATES, { id: clubId }),
       );
-      return deserialize(EmailTemplatesData, response?.data?.data);
+      return deserialize(EmailTemplatesData, data?.data);
     },
     enabled: !!clubId,
   });
