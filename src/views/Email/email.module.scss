@@ -59,3 +59,67 @@
     color: $gold-text !important;
   }
 }
+
+.emailBodyInput {
+  textArea {
+    min-height: 16rem;
+  }
+}
+
+.addEmailModal {
+  :global(.ant-modal) {
+    top: 2rem;
+  }
+}
+.uploadFilesButton {
+  &:global(.ant-btn-variant-outlined) {
+    border: 1px solid $gold-bold;
+    color: $gold-text;
+    @include secondaryRegular;
+    border-radius: 3.2rem;
+    height: 4rem;
+
+    &:not(:disabled):not(.ant-btn-disabled):hover {
+      border: 1px solid $gold-bold;
+      color: $gold-text;
+    }
+  }
+}
+
+.uploadFileContainer {
+  @include flex-flow(row, wrap, center);
+  gap: 2.4rem;
+}
+
+.maxFileSize {
+  color: $upload-text;
+  @include secondaryRegular;
+  font-size: 1.3rem;
+}
+.attachment {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
+  background-color: $ashgro-white;
+  min-height: 4.8rem;
+  border: 1px solid transparent;
+  border-radius: 1.6rem;
+  display: flex;
+  padding: 1.4rem;
+  gap: 0.6rem;
+  width: 29rem;
+}
+.attachmentIcon {
+  padding-left: 1.4rem;
+}
+.fileName {
+  @include secondaryRegular;
+  font-size: 1.3rem;
+  color: $ashgro-navy;
+  flex: 1;
+}
+.closeIcon {
+  padding-right: 1rem;
+}
+.fileUploadContainer {
+  @include flex-flow(column, wrap, normal);
+  gap: 2.4rem;
+}

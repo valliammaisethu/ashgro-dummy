@@ -1,18 +1,20 @@
 import React, { Fragment } from "react";
 import { Modal as CustomModal, Divider } from "antd";
-import styles from "./Modal.module.scss";
 import { IconCircleClose } from "obra-icons-react";
 import { Colors } from "src/enums/colors.enum";
 import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { ModalProps } from "src/shared/types/sharedComponents.type";
 import { ModalFooter } from "./atoms";
 
+import styles from "./Modal.module.scss";
+import { defaultModalWidth } from "src/constants/sharedComponents";
+
 const Modal: React.FC<ModalProps> = ({
   children,
   closeModal,
   visible,
   title,
-  width,
+  width = defaultModalWidth,
   handleOk,
   footer,
   cancelText = Buttons.CANCEL,
