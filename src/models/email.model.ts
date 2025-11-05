@@ -57,6 +57,7 @@ export class EmailTemplates {
   @serializable(alias("title"))
   label?: string;
 
-  @serializable(alias("id"))
-  value?: string;
+  get value(): string | undefined {
+    return this.id;
+  }
 }
