@@ -1,0 +1,132 @@
+import React from "react";
+import EmailTeamplates from "./EmailTeamplates";
+import Lead from "./Lead";
+import MembersShip from "./Membership";
+import StaffDepartment from "./StaffDepartment";
+
+export type MembershipSection = "memberShipType" | "memberShipStatus";
+export type LeadSection = "source" | "status";
+export type SettingFormModalModel = "add" | "edit" | null;
+
+export interface SettingItem {
+  id?: string;
+  label?: string;
+  value?: string;
+  name?: string;
+}
+
+export interface ModalState {
+  open: boolean;
+  mode: SettingFormModalModel;
+  item?: SettingItem;
+}
+
+export const settingsTabs = [
+  {
+    key: "lead",
+    label: "Lead",
+    children: <Lead />,
+  },
+  {
+    key: "membership",
+    label: "Membership",
+    children: <MembersShip />,
+  },
+  {
+    key: "emailTemplates",
+    label: "Email Templates",
+    children: <EmailTeamplates />,
+  },
+  {
+    key: "staffDepartment",
+    label: "Staff Department",
+    children: <StaffDepartment />,
+  },
+];
+
+export const leadTabs = [
+  { key: "source", label: "Lead Source" },
+  { key: "status", label: "Lead Status" },
+];
+
+export const memberShipTabs = [
+  { key: "memberShipType", label: "Membership Type" },
+  { key: "memberShipStatus", label: "Membership Status" },
+];
+
+export const LEAD_CONSTANTS = {
+  SOURCE: "Lead Source",
+  STATUS: "Lead Status",
+  LEAD_TYPE: "source",
+  FIELD_LABELS: {
+    source: "Name",
+    status: "Status",
+  },
+
+  PLACEHOLDER: {
+    source: "Enter Lead Name",
+    status: "Enter Lead Status",
+  },
+
+  MODAL_TITLE: {
+    add: {
+      source: "New Lead Source",
+      status: "New Lead Status",
+    },
+    edit: {
+      source: "Edit Lead Source",
+      status: "Edit Lead Status",
+    },
+  },
+
+  BUTTON_TEXT: {
+    add: "Add",
+    edit: "Update",
+  },
+  FIEL_NAME: "name",
+};
+
+export const MEMBERSHIP_CONSTANTS = {
+  TYPE: "MemberShip Type",
+  STATUS: "MemberShip Status",
+  MEMBERSHIP_TYPE: "memberShipStatus",
+  FIELD_LABELS: {
+    memberShipType: "Type",
+    memberShipStatus: "Status",
+  },
+
+  PLACEHOLDER: {
+    memberShipType: "Enter MemberShip Type",
+    memberShipStatus: "Enter MemberShip Status",
+  },
+
+  MODAL_TITLE: {
+    add: {
+      memberShipType: "New Lead Source",
+      memberShipStatus: "New Lead Status",
+    },
+    edit: {
+      memberShipType: "Edit Lead Source",
+      memberShipStatus: "Edit Lead Status",
+    },
+  },
+
+  BUTTON_TEXT: {
+    add: "Add",
+    edit: "Update",
+  },
+  FIEL_NAME: "name",
+};
+
+export const STAFF_MEMBERS_CONSTANTS = {
+  TITLE: "Staff Department",
+  TYPE: "staffDepartment",
+  PLACE_HOLDER: "Enter Staff Department",
+  EDIT_TITLE: "Edit Staff Department",
+  ADD_TITLE: "Add Staff Department",
+  BUTTON_TEXT: {
+    add: "Add",
+    edit: "Update",
+  },
+  FIEL_NAME: "name",
+};
