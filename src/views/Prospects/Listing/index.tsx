@@ -12,7 +12,6 @@ import {
   areFiltersActive,
 } from "./helpers";
 import Header from "./Header";
-import { SelectedProspect } from "src/shared/types/prospects.type";
 import Checkbox from "src/shared/components/Checkbox";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import ProspectRow from "./Components/ProspectRow";
@@ -27,8 +26,11 @@ import {
   ProspectsList,
   ProspectsListingParams,
 } from "src/models/prospects.model";
+import { EmailTemplate } from "src/models/meta.model";
 import { MetaService } from "src/services/MetaService/meta.service";
+import { SelectedProspect } from "src/shared/types/prospects.type";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
+import { EmailService } from "src/services/EmailService/email.service";
 import DeleteModal from "../DeleteModal";
 import Pagination from "src/shared/components/Pagination";
 import TemplateModal from "src/views/Email/TemplateModal";
@@ -52,10 +54,12 @@ const ProspectsListing = () => {
     state: false,
     id: "",
   });
-  const [isEmailTemplate, setIsEmailTemplate] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
+  const [isAllSelected, setIsAllSelected] = useState(false);
 
   const { getProspects, viewProspect } = ProspectsService();
   const { getLeadStatuses } = MetaService();
+  const { getProspectEmailRecipients } = EmailService();
 
   const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
   const { data: leadStatusesData } = useQuery(
@@ -66,6 +70,10 @@ const ProspectsListing = () => {
   const { data: isEditData } = useQuery({
     ...viewProspect(isEdit?.id),
     enabled: !!isEdit?.id,
+  });
+  const { data: emailRecipientsData } = useQuery({
+    ...getProspectEmailRecipients(queryParams),
+    enabled: isAllSelected,
   });
 
   const leadStatusOptions = useMemo(
@@ -92,6 +100,7 @@ const ProspectsListing = () => {
   const handleSelectAll = useCallback(
     (checked: boolean) => {
       setSelectedProspects(toggleAllSelections(checked, data?.prospects));
+      setIsAllSelected(checked);
     },
     [data?.prospects],
   );
@@ -101,6 +110,8 @@ const ProspectsListing = () => {
       setSelectedProspects((prev) =>
         toggleSingleSelection(id, email, name, checked, prev),
       );
+
+      if (!checked) setIsAllSelected(false);
     },
     [],
   );
@@ -126,6 +137,18 @@ const ProspectsListing = () => {
     () => areFiltersActive(queryParams),
     [queryParams],
   );
+
+  const emailRecipients = useMemo(() => {
+    if (isAllSelected && emailRecipientsData?.prospects) {
+      // Convert API recipients to SelectedEmailModel format
+      return emailRecipientsData.prospects.map((prospect) => ({
+        id: prospect.email || "",
+        email: prospect.email || "",
+        name: prospect.firstName || "",
+      }));
+    }
+    return selectedProspects;
+  }, [isAllSelected, emailRecipientsData, selectedProspects]);
 
   const navigateToProspect = (id: string) => () =>
     navigateToIndividualProspect(id);
@@ -165,11 +188,20 @@ const ProspectsListing = () => {
     toggleDrawerVisibility();
   };
 
-  const handleEmailTemplateModal = (type: EmailModalEnum) => {
-    setIsEmailTemplate(type === EmailModalEnum.TEMPLATE ? false : true);
+  const handleEmailTemplateModal = (
+    type: EmailModalEnum,
+    template?: EmailTemplate,
+  ) => {
+    setSelectedTemplate(type === EmailModalEnum.EMAIL ? undefined : template);
     toggleEmailTemplateModal();
     toggleNewEmailModal();
   };
+
+  const handleNewEmailModalClose = useCallback(() => {
+    setSelectedTemplate(undefined);
+    setIsAllSelected(false);
+    toggleNewEmailModal();
+  }, [toggleNewEmailModal]);
 
   useEffect(() => {
     if (clubId && queryParams.clubId !== clubId) {
@@ -185,6 +217,7 @@ const ProspectsListing = () => {
         onAddProspect={show}
         filtersActive={filtersActive}
         onBulkMail={toggleEmailTemplateModal}
+        selectedEmails={selectedProspects.length}
       />
       <div className={styles.prospectList}>
         <div className={styles.tableContainer}>
@@ -264,9 +297,9 @@ const ProspectsListing = () => {
       />
       <NewEmailModal
         isOpen={newEmailModalVisible}
-        onClose={toggleNewEmailModal}
-        isTemplate={isEmailTemplate}
-        selectedEmails={selectedProspects}
+        onClose={handleNewEmailModalClose}
+        selectedEmails={emailRecipients}
+        selectedTemplate={selectedTemplate}
       />
     </div>
   );

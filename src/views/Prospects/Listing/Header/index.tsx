@@ -14,6 +14,7 @@ const Header = ({
   onFilter,
   filtersActive,
   onBulkMail,
+  selectedEmails,
 }: ProspectListingHeaderProps) => {
   return (
     <div className={styles.header}>
@@ -33,6 +34,7 @@ const Header = ({
             onClick={onBulkMail}
             className={styles.bulkUploadButton}
             icon={<IconEmail size={20} />}
+            disabled={!selectedEmails}
           >
             {Buttons.BULK_MAIL}
           </Button>
