@@ -24,6 +24,7 @@ export const ApiRoutes = {
   MEMBERSHIP_TYPE_STATUS: "settings/:id/membershipCategories",
   MEMBERS: "members",
   STAFF_MEMBER_DETAILS: "/staffs/:id",
+  MEMBERS_LIST: "/members",
   MEMBER_DETAILS: "/members/:id",
   SEND_EMAIL: "/email",
   // TODO: Check with BE and avoid redundancy in api endpoint
@@ -43,4 +44,5 @@ export const ApiRoutes = {
   STAFF_MEMBERS_SETTINGS_LISTING: "/settings/:clubId/staffDepartments",
   STAFF_MEMBERS_SETTINGS: "/settings/:clubId/staffDepartment",
   UPDATE_STAFF_MEMBERS_SETTINGS: "settings/:clubId/staffDepartment/:id",
+  STAFF_MEMBERS: "/staffs",
 };
