@@ -18,8 +18,13 @@ import {
 } from "src/constants/sharedComponents";
 
 import styles from "./selectField.module.scss";
+import { renderNotification } from "src/shared/utils/renderNotification";
+import { invalidEmailMessages } from "src/constants/notificationMessages";
+import { NotificationTypes } from "src/enums/notificationTypes";
 
 const { Option } = Select;
+
+const { title, description } = invalidEmailMessages;
 
 const SelectField = ({
   name,
@@ -37,14 +42,19 @@ const SelectField = ({
   showClear = false,
   onClear,
   allowCustomOption = false,
+  validateCustomInput,
   ...props
-}: DropDownProps & { allowCustomOption?: boolean }) => {
+}: DropDownProps & {
+  allowCustomOption?: boolean;
+  validateCustomInput?: (value: string) => boolean;
+}) => {
   const {
     field,
     fieldState: { error },
   } = useController({ name });
 
   const [customOptions, setCustomOptions] = useState(options);
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     setCustomOptions((prev) => {
@@ -102,11 +112,21 @@ const SelectField = ({
     return field.value;
   };
 
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!allowCustomOption) return;
     const inputValue = e.currentTarget.value.trim();
 
     if (e.key === "Enter" && inputValue) {
+      if (validateCustomInput && !validateCustomInput(inputValue)) {
+        e.preventDefault();
+        renderNotification(title, description, NotificationTypes.ERROR);
+        return;
+      }
+
       const exists = customOptions.some(
         (opt) => String(opt.value).toLowerCase() === inputValue.toLowerCase(),
       );
@@ -122,6 +142,7 @@ const SelectField = ({
         }
       }
 
+      setSearchValue("");
       e.preventDefault();
     }
   };
@@ -133,6 +154,11 @@ const SelectField = ({
     onChange: handleOnChange,
     placeholder,
     onInputKeyDown: handleKeyDown,
+    notFoundContent: null,
+    ...(allowCustomOption && {
+      searchValue,
+      onSearch: handleSearch,
+    }),
     ...(!showCheckboxes && { options: sortedOptions }),
     ...(showCheckboxes && {
       mode: SelectModes.MULTIPLE,
