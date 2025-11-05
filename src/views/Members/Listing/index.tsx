@@ -20,6 +20,7 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import Actions from "src/shared/components/atoms/Table/Actions";
 import { SettingFormModalModel } from "src/views/Settings/constants";
 import { memberHeaders } from "../MembersForm/constants";
+import Pagination from "src/shared/components/Pagination";
 
 import styles from "./membersListing.module.scss";
 
@@ -82,6 +83,10 @@ const Members = () => {
 
   const handleNavigateToDetails = (id?: string) => () =>
     navigateToMemberDetails(id);
+
+  const handlePageChange = useCallback((newPage: number) => {
+    setQueryParams((prev) => ({ ...prev, page: newPage }));
+  }, []);
 
   const [modalState, setModalState] = useState<ModalState>({
     open: false,
@@ -161,6 +166,14 @@ const Members = () => {
                 );
               })}
             </div>
+            <Pagination
+              currentPage={
+                data?.pagination?.currentPage ?? queryParams.page ?? 1
+              }
+              totalPages={data?.pagination?.overallPages ?? 1}
+              onPageChange={handlePageChange}
+              hasData={!!data?.members && data.members.length > 0}
+            />
           </ConditionalRender>
         </div>
       </Form>

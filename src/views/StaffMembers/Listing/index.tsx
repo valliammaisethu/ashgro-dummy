@@ -1,18 +1,20 @@
 import React, { useCallback, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
 import Header from "./Header";
+import { staffMemberHeaders } from "../constants";
 import { StaffMembersListingParams } from "src/models/staffMember.model";
 import Form from "src/shared/components/Form";
+import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
+import ConditionalRender from "src/shared/components/ConditionalRender";
+import Profile from "src/shared/components/atoms/Table/Profile";
+import Pagination from "src/shared/components/Pagination";
+import { StaffMembersService } from "src/services/StaffMembersService/staffMembers.service";
 
 import styles from "./staffMemberListing.module.scss";
-import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
-import { staffMemberHeaders } from "../constants";
-import ConditionalRender from "src/shared/components/ConditionalRender";
-import { StaffMembersService } from "src/services/StaffMembersService/staffMembers.service";
-import { useQuery } from "@tanstack/react-query";
-import Profile from "src/shared/components/atoms/Table/Profile";
 
 const StaffMembersListing = () => {
-  const [, setQueryParams] = useState<StaffMembersListingParams>(
+  const [queryParams, setQueryParams] = useState<StaffMembersListingParams>(
     new StaffMembersListingParams(),
   );
   const handleSearch = useCallback((term: string) => {
@@ -22,9 +24,15 @@ const StaffMembersListing = () => {
   const handleFilter = (filters: Partial<StaffMembersListingParams>) =>
     setQueryParams((prev) => ({ ...prev, ...filters, page: 1 }));
 
+  const handlePageChange = useCallback((newPage: number) => {
+    setQueryParams((prev) => ({ ...prev, page: newPage }));
+  }, []);
+
   const { getStaffMembersList } = StaffMembersService();
 
-  const { data, isFetching, isSuccess } = useQuery(getStaffMembersList());
+  const { data, isFetching, isSuccess } = useQuery(
+    getStaffMembersList(queryParams),
+  );
 
   return (
     <div>
@@ -61,6 +69,14 @@ const StaffMembersListing = () => {
                 );
               })}
             </div>
+            <Pagination
+              currentPage={
+                data?.pagination?.currentPage ?? queryParams.page ?? 1
+              }
+              totalPages={data?.pagination?.overallPages ?? 1}
+              onPageChange={handlePageChange}
+              hasData={!!data?.staffs && data.staffs.length > 0}
+            />
           </ConditionalRender>
         </div>
       </Form>

@@ -3,4 +3,4 @@ export const staffMembersConstants = {
   field: "departmentIds",
 };
 
-export const staffMemberHeaders = ["Members", "Join Date", "Member Status"];
+export const staffMemberHeaders = ["Club Staff", "Department", "Title"];
