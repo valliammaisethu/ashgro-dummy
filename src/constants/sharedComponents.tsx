@@ -96,6 +96,7 @@ export const topBarItems = [
   },
 ];
 export const axiosInstanceErrors = {
+  genericErrorTitle: "Error!",
   networkError: {
     title: "Network Error!",
     description: "Please check your internet connection.",

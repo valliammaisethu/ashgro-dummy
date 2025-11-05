@@ -29,6 +29,7 @@ const SelectField = ({
   label,
   placeholder,
   showCheckboxes = false,
+  loading,
   options = [],
   allowClear,
   showSelectedCount = false,
@@ -172,6 +173,7 @@ const SelectField = ({
       <div className={clsx(styles.selectFieldWrapper, className)}>
         <Select
           {...selectProps}
+          loading={loading}
           placeholder={placeholder}
           status={error ? InputStatus.ERROR : undefined}
           allowClear={allowClear}

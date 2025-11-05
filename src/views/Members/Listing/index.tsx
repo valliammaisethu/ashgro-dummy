@@ -4,6 +4,7 @@ import useDrawer from "src/shared/hooks/useDrawer";
 import MemberFilters from "../Filters";
 import { MembersListingParams } from "src/models/members.model";
 import { areFiltersActive } from "../helpers";
+import { FieldValues } from "react-hook-form";
 
 const Members = () => {
   const [queryParams, setQueryParams] = useState<MembersListingParams>(
@@ -22,6 +23,21 @@ const Members = () => {
   const handleSearch = useCallback((term: string) => {
     setQueryParams((prev) => ({ ...prev, search: term }));
   }, []);
+
+  const handleApplyFilter = (filters: FieldValues) => {
+    setQueryParams((prev) => ({
+      ...prev,
+      ...filters,
+      joinedEndDate: filters.followUpDateRange?.[1],
+      joinedStartDate: filters.followUpDateRange?.[0],
+      leadSourcesIds: filters.leadSourceIds,
+      membershipCategoriesIds: filters.membershipCategoriesIds,
+      membershipStatusIds: filters.membershipStatusIds,
+      page: 1,
+    }));
+    toggleMemberFilters();
+  };
+
   return (
     <div>
       <Header
@@ -33,7 +49,7 @@ const Members = () => {
         toggleVisibility={toggleMemberFilters}
         visible={memberFiltersVisible}
         defaultValues={queryParams}
-        onSubmit={() => {}}
+        onSubmit={handleApplyFilter}
       />
     </div>
   );

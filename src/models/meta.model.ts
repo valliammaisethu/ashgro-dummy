@@ -52,6 +52,14 @@ export class LeadStatus {
   statusName?: string;
 }
 
+export class MembershipStatus {
+  @serializable
+  id?: string;
+
+  @serializable
+  statusName?: string;
+}
+
 export class EmailTemplate {
   @serializable
   id?: string;
@@ -90,6 +98,17 @@ export class LeadStatusParams {
 
   @serializable(list(primitive()))
   leadSourceIds?: string[];
+}
+
+export class MembershipStatusParams {
+  @serializable(list(primitive()))
+  leadSourceIds?: string[];
+
+  @serializable
+  filter?: string;
+
+  @serializable(list(primitive()))
+  membershipCategoryIds?: string[];
 }
 
 export class MembershipCategoriesData {

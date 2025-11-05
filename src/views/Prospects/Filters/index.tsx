@@ -15,17 +15,22 @@ import { Buttons, HtmlButtonType } from "src/enums/buttons.enum";
 import { ProspectFilterProps } from "src/shared/types/prospects.type";
 
 import styles from "./filters.module.scss";
+import { QueryParamKeys } from "src/enums/queryParams.enum";
 
 const Filters = (props: ProspectFilterProps) => {
   const { onSubmit, visible, toggleVisibility, defaultValues } = props;
   const { getLeadStatuses, getLeadSources } = MetaService();
 
   const { data: leadStatusesData } = useQuery({
-    ...getLeadStatuses(),
+    ...getLeadStatuses({
+      filter: QueryParamKeys.PROSPECTS,
+    }),
     enabled: visible,
   });
   const { data: leadSourcesData } = useQuery({
-    ...getLeadSources(),
+    ...getLeadSources({
+      filter: QueryParamKeys.PROSPECTS,
+    }),
     enabled: visible,
   });
 

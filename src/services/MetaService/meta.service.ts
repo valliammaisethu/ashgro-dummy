@@ -13,6 +13,7 @@ import {
   LeadStatusParams,
   MembershipCategoriesData,
   StaffDepartmentsData,
+  MembershipStatusParams,
 } from "src/models/meta.model";
 import { ResponseModel } from "src/models/response.model";
 import { UserData } from "src/models/user.model";
@@ -22,6 +23,7 @@ import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 const {
   GET_ACTIVITY_TYPES,
   GET_MEMBERSHIP_CATEGORIES,
+  GET_MEMBERSHIP_STATUSES,
   GET_LEAD_SOURCES,
   GET_LEAD_STATUSES,
   GET_EMAIL_TEMPLATES,
@@ -30,6 +32,7 @@ const {
 const {
   GET_ACTIVITY_TYPES: GET_ACTIVITY_TYPES_KEY,
   GET_MEMBERSHIP_CATEGORIES: GET_MEMBERSHIP_CATEGORIES_KEY,
+  GET_MEMBERSHIP_STATUSES: GET_MEMBERSHIP_STATUSES_KEY,
   GET_LEAD_SOURCES: GET_LEAD_SOURCES_KEY,
   GET_LEAD_STATUS: GET_LEAD_STATUS_KEY,
   GET_EMAIL_TEMPLATES: GET_EMAIL_TEMPLATES_KEY,
@@ -101,11 +104,30 @@ export const MetaService = () => {
     return {
       queryKey: [GET_MEMBERSHIP_CATEGORIES_KEY, clubId],
       queryFn: async () => {
-        const response = await axiosInstance.get(
+        const { data } = await axiosInstance.get(
           generatePath(GET_MEMBERSHIP_CATEGORIES, { id: clubId }),
         );
 
-        return deserialize(MembershipCategoriesData, response?.data?.data);
+        return deserialize(MembershipCategoriesData, data?.data);
+      },
+      enabled: !!clubId,
+    };
+  };
+
+  const getMembershipStatuses = (
+    params: MembershipStatusParams = new MembershipStatusParams(),
+  ): UseQueryOptions<LeadStatusesData, ResponseModel, LeadStatusesData> => {
+    return {
+      queryKey: [GET_MEMBERSHIP_STATUSES_KEY, clubId],
+      queryFn: async () => {
+        const { data } = await axiosInstance.get(
+          generatePath(GET_MEMBERSHIP_STATUSES, { id: clubId }),
+          {
+            params: serialize(MembershipStatusParams, params),
+          },
+        );
+
+        return deserialize(LeadStatusesData, data?.data);
       },
       enabled: !!clubId,
     };
@@ -117,10 +139,10 @@ export const MetaService = () => {
   > => ({
     queryKey: [GET_EMAIL_TEMPLATES_KEY, clubId],
     queryFn: async () => {
-      const response = await axiosInstance.get(
+      const { data } = await axiosInstance.get(
         generatePath(GET_EMAIL_TEMPLATES, { id: clubId }),
       );
-      return deserialize(EmailTemplatesData, response?.data?.data);
+      return deserialize(EmailTemplatesData, data?.data);
     },
     enabled: !!clubId,
   });
@@ -142,6 +164,7 @@ export const MetaService = () => {
   return {
     getActivityTypes,
     getMembershipCategories,
+    getMembershipStatuses,
     getLeadSources,
     getLeadStatuses,
     getEmailTemplates,
