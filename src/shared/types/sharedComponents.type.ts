@@ -191,6 +191,7 @@ export interface DropDownProps extends SelectProps {
   required?: boolean;
   showClear?: boolean;
   onClear?: () => void;
+  showSelectedCount?: boolean;
 }
 
 export interface PasswordFieldProps extends InputProps {

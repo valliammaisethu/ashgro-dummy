@@ -11,7 +11,7 @@ const AppLayout = () => {
   return (
     <div className={styles.appContainer}>
       {!hideTopBar && <TopBar />}
-      <main>
+      <main className={styles.mainContent}>
         <Outlet />
       </main>
     </div>

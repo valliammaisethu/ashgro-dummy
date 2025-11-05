@@ -62,10 +62,9 @@
     }
 
     .ant-select-selection-placeholder {
-      color: $ashgro-grey !important;
+      color: $ashgro-grey;
       opacity: 0.6;
       font-size: 1.2rem;
-      line-height: 1.3rem;
     }
 
     .ant-select-clear,
@@ -82,4 +81,51 @@
 
 .selectFieldError {
   padding-top: 0.4rem;
+}
+
+.countBadge {
+  color: $ashgro-navy;
+  background-color: $ashgro-input-border;
+  padding: 0.4rem 0.8rem;
+  border-radius: 1.6rem;
+  font-size: 1.2rem;
+  line-height: 2rem;
+  @include secondaryRegular;
+}
+
+.countBadgeDiv {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.placeholderText {
+  color: $filter-icon;
+  @include secondaryBold;
+  font-size: 1.4rem;
+}
+
+.clearSelectionText {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+  color: $ashgro-navy;
+  @include secondaryRegular;
+  font-size: 1.4rem;
+}
+
+.clearSelectionOption {
+  &:global(.ant-select-item) {
+    cursor: pointer;
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  &:global(.ant-select-item-option-disabled) {
+    cursor: pointer;
+    opacity: 1;
+    background-color: transparent;
+    pointer-events: all;
+  }
 }

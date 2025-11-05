@@ -32,5 +32,6 @@ export enum QueryKeys {
   GET_MEMBERSHIP_STATUS = "getMemberShipStatus",
   GET_MEMBERSHIP_TYPE_STATUS = "getMemberShipTypeStatus",
   GET_STAFF_MEMBER_DETAILS = "staffMemberDetails",
+  GET_STAFF_DEPARTMENTS = "getStaffMembers",
   GET_MEMBER_DETAILS = "memberDetails",
 }

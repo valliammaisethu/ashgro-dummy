@@ -2,16 +2,22 @@ import React, { MouseEvent, useMemo, useState, useEffect } from "react";
 import { Select, Checkbox } from "antd";
 import { SelectProps } from "antd/lib";
 import { useController } from "react-hook-form";
-import { IconChevronDown } from "obra-icons-react";
+import { IconChevronDown, IconCircleClose } from "obra-icons-react";
+import clsx from "clsx";
 
 import { DropDownProps } from "src/shared/types/sharedComponents.type";
 import { SelectModes } from "src/enums/selectModes.enum";
+import { Colors } from "src/enums/colors.enum";
+import { Buttons } from "src/enums/buttons.enum";
+import { InputStatus } from "src/enums/inputStatus.enum";
 import Error from "../Error";
 import Label from "../Label";
+import {
+  clearSelectionKey,
+  clearSelectionLabel,
+} from "src/constants/sharedComponents";
 
 import styles from "./selectField.module.scss";
-import { InputStatus } from "src/enums/inputStatus.enum";
-import { Buttons } from "src/enums/buttons.enum";
 
 const { Option } = Select;
 
@@ -26,6 +32,8 @@ const SelectField = ({
   loading,
   options = [],
   allowClear,
+  showSelectedCount = false,
+  className,
   showClear = false,
   onClear,
   allowCustomOption = false,
@@ -59,9 +67,19 @@ const SelectField = ({
     value,
     option,
   ) => {
-    field.onChange(value);
+    const filteredValue = Array.isArray(value)
+      ? value.filter((v) => v !== clearSelectionKey)
+      : value;
+
+    field.onChange(filteredValue);
     field.onBlur();
-    customOnChange?.(value, option);
+    customOnChange?.(filteredValue, option);
+  };
+
+  const handleClearSelection = () => {
+    field.onChange([]);
+    field.onBlur();
+    customOnChange?.([], undefined);
   };
 
   const sortedOptions = useMemo(() => {
@@ -121,6 +139,16 @@ const SelectField = ({
       optionLabelProp: "label",
       filterOption: false,
     }),
+    ...(showSelectedCount &&
+      showCheckboxes && {
+        maxTagCount: 0,
+        maxTagPlaceholder: (omittedValues) => (
+          <div className={styles.countBadgeDiv}>
+            <div className={styles.placeholderText}>{placeholder}</div>
+            <div className={styles.countBadge}>+{omittedValues.length}</div>
+          </div>
+        ),
+      }),
     ...props,
   };
 
@@ -142,8 +170,7 @@ const SelectField = ({
           )}
         </div>
       )}
-
-      <div className={styles.selectFieldWrapper}>
+      <div className={clsx(styles.selectFieldWrapper, className)}>
         <Select
           {...selectProps}
           loading={loading}
@@ -152,8 +179,32 @@ const SelectField = ({
           allowClear={allowClear}
           suffixIcon={<IconChevronDown size={20} strokeWidth={1.25} />}
         >
-          {showCheckboxes && sortedOptions
-            ? sortedOptions.map((opt) => (
+          {showCheckboxes && sortedOptions ? (
+            <>
+              {Array.isArray(field.value) && field.value.length > 0 && (
+                <Option
+                  key={clearSelectionKey}
+                  value={clearSelectionKey}
+                  className={styles.clearSelectionOption}
+                  disabled
+                >
+                  <div
+                    className={styles.clearSelectionText}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleClearSelection();
+                    }}
+                  >
+                    <span>{clearSelectionLabel}</span>
+                    <IconCircleClose
+                      strokeWidth={1.25}
+                      color={Colors.MODAL_CLOSE_ICON}
+                      size={24}
+                    />
+                  </div>
+                </Option>
+              )}
+              {sortedOptions?.map((opt) => (
                 <Option key={opt.value} value={opt.value} label={opt.label}>
                   <span>{opt.label}</span>
                   <Checkbox
@@ -164,8 +215,9 @@ const SelectField = ({
                     }
                   />
                 </Option>
-              ))
-            : null}
+              ))}
+            </>
+          ) : null}
         </Select>
       </div>
 

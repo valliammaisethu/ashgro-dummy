@@ -2,14 +2,14 @@ import { serializable } from "serializr";
 
 export class QueryParams {
   @serializable
-  search?: string;
+  search = "";
 
   @serializable
-  page?: number;
+  page = 1;
 
   @serializable
-  limit?: number;
+  limit = 10;
 
   @serializable
-  clubId?: string;
+  clubId = "";
 }

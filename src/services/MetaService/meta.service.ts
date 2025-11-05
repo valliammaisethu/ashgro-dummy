@@ -12,6 +12,7 @@ import {
   LeadStatusesData,
   LeadStatusParams,
   MembershipCategoriesData,
+  StaffDepartmentsData,
   MembershipStatusParams,
 } from "src/models/meta.model";
 import { ResponseModel } from "src/models/response.model";
@@ -26,6 +27,7 @@ const {
   GET_LEAD_SOURCES,
   GET_LEAD_STATUSES,
   GET_EMAIL_TEMPLATES,
+  GET_STAFF_DEPARTMENTS,
 } = ApiRoutes;
 const {
   GET_ACTIVITY_TYPES: GET_ACTIVITY_TYPES_KEY,
@@ -34,6 +36,7 @@ const {
   GET_LEAD_SOURCES: GET_LEAD_SOURCES_KEY,
   GET_LEAD_STATUS: GET_LEAD_STATUS_KEY,
   GET_EMAIL_TEMPLATES: GET_EMAIL_TEMPLATES_KEY,
+  GET_STAFF_DEPARTMENTS: GET_STAFF_DEPARTMENTS_KEY,
 } = QueryKeys;
 
 export const MetaService = () => {
@@ -144,6 +147,20 @@ export const MetaService = () => {
     enabled: !!clubId,
   });
 
+  const getStaffDepartments = (): UseQueryOptions<
+    StaffDepartmentsData,
+    ResponseModel
+  > => ({
+    queryKey: [GET_STAFF_DEPARTMENTS_KEY, clubId],
+    queryFn: async () => {
+      const response = await axiosInstance.get(
+        generatePath(GET_STAFF_DEPARTMENTS, { id: clubId }),
+      );
+      return deserialize(StaffDepartmentsData, response?.data?.data);
+    },
+    enabled: !!clubId,
+  });
+
   return {
     getActivityTypes,
     getMembershipCategories,
@@ -151,5 +168,6 @@ export const MetaService = () => {
     getLeadSources,
     getLeadStatuses,
     getEmailTemplates,
+    getStaffDepartments,
   };
 };

@@ -13,6 +13,7 @@ import ProspectsListing from "../views/Prospects/Listing";
 import IndividualProspect from "src/views/Prospects/IndividualProspect";
 import Members from "src/views/Members/Listing";
 import StaffMemberDetails from "src/views/StaffMembers/Details";
+import StaffMembersListing from "src/views/StaffMembers/Listing";
 import MemberDetails from "src/views/Members/Details";
 
 const AppRouter = () => {
@@ -41,7 +42,7 @@ const AppRouter = () => {
         },
         {
           path: AppRoutes.CLUB_STAFF,
-          component: <></>,
+          component: <StaffMembersListing />,
         },
         {
           path: AppRoutes.SETTINGS,
