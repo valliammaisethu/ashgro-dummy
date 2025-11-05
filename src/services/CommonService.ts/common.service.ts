@@ -1,5 +1,6 @@
 import { UseMutationOptions } from "@tanstack/react-query";
 import { deserialize } from "serializr";
+import { deleteMembersMessages } from "src/constants/notificationMessages";
 
 import { MutationKeys } from "src/enums/cacheEvict.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
@@ -20,8 +21,8 @@ export const CommonService = () => {
       const response = await axiosInstance.delete(path);
       return deserialize(ResponseModel, response?.data);
     },
-    onSuccess: (response) => {
-      const { title, description } = response;
+    onSuccess: () => {
+      const { title, description } = deleteMembersMessages;
       renderNotification(title, description, NotificationTypes.ERROR);
     },
   });

@@ -1,5 +1,5 @@
-import React from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, Col, Row } from "antd";
 import {
   IconEdit,
@@ -23,8 +23,12 @@ import ImageFrame from "src/shared/components/atoms/ImageFrame";
 import IconLabel from "src/shared/components/atoms/IconLabel";
 import { detailsConstants } from "./constants";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
+import useRedirect from "src/shared/hooks/useRedirect";
+import { QueryKeys } from "src/enums/cacheEvict.enum";
 
 import styles from "./details.module.scss";
+import { fallbackHandler } from "src/shared/utils/commonHelpers";
+import MembersForm from "../MembersForm";
 
 const {
   footer: {
@@ -40,22 +44,35 @@ const {
   memberDetailsLabel,
 } = detailsConstants;
 
+const { GET_MEMBERS } = QueryKeys;
+
 const Details = () => {
   const { id = "" } = useParams();
+  const [isEditForm, setIsEditForm] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { navigateToMembers } = useRedirect();
 
   const { deleteResource } = CommonService();
   const { MembersDetails } = MembersService();
 
-  const { data, isPending, isSuccess, isFetching } = useQuery(
+  const { data, isPending, isSuccess, isFetching, refetch } = useQuery(
     MembersDetails(id),
   );
 
   const { mutateAsync: deleteStaffMemberMutate } =
     useMutation(deleteResource());
 
-  const handlDelete = async () => {
+  const handleDelete = async () => {
     const path = generatePath(ApiRoutes.MEMBER_DETAILS, { id });
-    await deleteStaffMemberMutate(path);
+
+    await deleteStaffMemberMutate(path, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [GET_MEMBERS] });
+
+        navigateToMembers();
+      },
+    });
   };
 
   const memberDetails = [
@@ -68,10 +85,12 @@ const Details = () => {
     { label: MONTHLY_DUES, value: data?.monthlyDues },
     { label: INITIAL_FEE, value: data?.initiationFee },
   ];
+
+  const handleModalVisibility = () => setIsEditForm((prev) => !prev);
   return (
     <>
       <IndividualDetailsHeader
-        navigateBack={() => {}}
+        navigateBack={navigateToMembers}
         onEmailClick={() => {}}
       />
 
@@ -87,7 +106,7 @@ const Details = () => {
               <Row justify={Justify.END} gutter={[10, 0]}>
                 <Col>
                   <Button
-                    onClick={() => {}}
+                    onClick={handleModalVisibility}
                     icon={<IconEdit strokeWidth={1.5} />}
                     className={styles.editButton}
                   />
@@ -96,7 +115,7 @@ const Details = () => {
                   <DeleteModal
                     title={title}
                     description={getFullName(data?.firstName, data?.lastName)}
-                    onDelete={handlDelete}
+                    onDelete={handleDelete}
                   />
                 </Col>
               </Row>
@@ -112,7 +131,7 @@ const Details = () => {
                   <div>
                     <span className={styles.joinedDatelabel}>{joinedDate}</span>
                     <span className={styles.joinedDate}>
-                      {data?.joinedDate}
+                      {fallbackHandler(data?.joinedDate)}
                     </span>
                   </div>
                   <div className={styles.basicInfo}>
@@ -137,7 +156,9 @@ const Details = () => {
                     {memberDetails?.map(({ label, value }) => (
                       <div key={label}>
                         <p className={styles.title}>{label}</p>
-                        <p className={styles.description}>{value}</p>
+                        <p className={styles.description}>
+                          {fallbackHandler(value)}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -150,7 +171,9 @@ const Details = () => {
                     {feesAndDues?.map(({ label, value }) => (
                       <div key={label}>
                         <p className={styles.title}>{label}</p>
-                        <p className={styles.description}>{value}</p>
+                        <p className={styles.description}>
+                          $ {fallbackHandler(value, true)}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -158,10 +181,22 @@ const Details = () => {
               </div>
             </Col>
             <Col span={10} className={styles.rightSide}>
-              <ActivitySection />
+              <ActivitySection
+                activities={data?.activityDetails}
+                activityCount={data?.activityDetails?.length}
+                refetch={refetch}
+              />
             </Col>
           </Row>
         </Card>
+
+        {isEditForm && (
+          <MembersForm
+            isOpen={isEditForm}
+            handleModalVisibility={handleModalVisibility}
+            id={id}
+          />
+        )}
       </ConditionalRender>
     </>
   );

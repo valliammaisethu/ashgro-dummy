@@ -31,3 +31,8 @@
     height: 4.4rem;
   }
 }
+
+:global(.ant-modal-body) {
+  height: 50rem;
+  overflow-y: auto;
+}

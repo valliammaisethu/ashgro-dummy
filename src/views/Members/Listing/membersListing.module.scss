@@ -28,7 +28,6 @@
 
   .rowItem {
     width: 45rem;
-    padding-left: 5rem;
     align-items: flex-start;
     color: $ashgro-navy;
     font-weight: 600;
@@ -80,6 +79,12 @@
         padding-left: 0.5rem;
       }
     }
+  }
+
+  .listContainer {
+    background-color: $search-field-placeholder;
+    max-height: 50rem;
+    overflow-y: scroll;
   }
 
   .actionContainer {

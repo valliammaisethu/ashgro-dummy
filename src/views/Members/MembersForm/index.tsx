@@ -26,6 +26,7 @@ import { MemberShipService } from "src/services/SettingsService/memberShip.servi
 import { MembersService } from "src/services/MembersService/members.service";
 import { defaultModalWidth } from "src/constants/sharedComponents";
 import { findValueByLabel } from "src/shared/utils/commonHelpers";
+import { membersFormValidationSchema } from "./validationSchema";
 
 import styles from "./membersForm.module.scss";
 
@@ -49,7 +50,9 @@ const MembersForm = ({
   handleModalVisibility,
   id,
 }: MembersFormProps) => {
-  const methods = useForm({});
+  const methods = useForm({
+    validationSchema: membersFormValidationSchema,
+  });
 
   const { memberShipStatuses, memberShipTypeStatuses } = MemberShipService();
   const { leadSources } = LeadService();
@@ -78,7 +81,7 @@ const MembersForm = ({
     [activityTypesData],
   );
 
-  const activityDateTime = watch(FIELD_NAMES.ACTIVITY_DATE_TIME) ?? "";
+  const activityDateTime = watch(FIELD_NAMES.ACTIVITY_DATE_TIME) as string;
 
   const handleActivityTypeChange = (value: string) => {
     setValue(FIELD_NAMES.ACTIVITY_TYPE, value);
@@ -128,6 +131,7 @@ const MembersForm = ({
         leadSourcesOptions,
         data.leadSource,
       ),
+      activityDetails: undefined,
     };
   }, [
     data,
@@ -258,7 +262,7 @@ const MembersForm = ({
                 label={LABELS.RESIGNATION_DATE}
                 name={FIELD_NAMES.RESIGNATION_DATE}
                 disabledDate={disableFutureAndToday}
-                format={DateFormats.DD_MMM__YYYY}
+                format={id ? DateFormats.YYYY_MM_DD : DateFormats.DD_MMM__YYYY}
               />
             </Col>
           </Row>

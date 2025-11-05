@@ -4,10 +4,11 @@ import clsx from "clsx";
 import { Colors } from "src/enums/colors.enum";
 
 import styles from "./iconLabel.module.scss";
+import { fallbackHandler } from "src/shared/utils/commonHelpers";
 
 interface IconLabelProps {
   icon: React.ElementType;
-  label: string | React.ReactNode;
+  label?: string;
   color?: string;
   size?: number;
   className?: string;
@@ -29,7 +30,7 @@ const IconLabel: React.FC<IconLabelProps> = ({
       })}
     >
       <Icon color={color} size={size} />
-      {label}
+      {fallbackHandler(label)}
     </p>
   );
 };
