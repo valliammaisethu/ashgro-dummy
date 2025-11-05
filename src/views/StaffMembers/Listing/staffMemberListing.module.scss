@@ -6,23 +6,22 @@
 
   .rowContainer {
     display: grid;
-    grid-template-columns: 50% 25% 25%;
+    grid-template-columns: 50% 20% 25% 05%;
     align-items: center;
     padding: 2rem 3.2rem;
     background-color: $ashgro-white;
     margin-bottom: 0.6rem;
     cursor: pointer;
 
-    .actions {
-      min-width: 4rem;
-      @include flex-container;
-      gap: 1.8rem;
+    :global(.actions-icons) {
       opacity: 0;
       transition: opacity 0.2s ease;
     }
 
-    &:last-child {
-      border-bottom: none;
+    &:hover :global(.actions-icons) {
+      @include flex-container;
+      gap: 2rem;
+      opacity: 1;
     }
   }
 

@@ -11,6 +11,7 @@ export const NavigationRoutes = {
   STAFF_MEMBER_DETAILS: "/home/staff-member/:id",
   MEMBER_DETAILS: "/home/member/:id",
   STAFF_MEMBERS: "/home/members",
+  CLUB_STAFF: "/home/club-staff",
 };
 
 export const AppRoutes = {

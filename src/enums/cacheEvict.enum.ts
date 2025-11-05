@@ -23,6 +23,8 @@ export enum MutationKeys {
   DELETE_MEMBERS = "deleteMembers",
   DELETE_STAFF_DEPARTMENTS = "departmentStaffDepartment",
   DELETE_STAFF_MEMBER = "deleteStaffMemeber",
+  ADD_STAFF_MEMBER = "addStaffMember",
+  EDIT_STAFF_MEMBER = "editStaffMember",
 }
 
 export enum QueryKeys {
