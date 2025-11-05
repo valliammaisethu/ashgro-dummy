@@ -40,6 +40,8 @@ export enum QueryKeys {
   GET_STAFF_MEMBER_DETAILS = "staffMemberDetails",
   GET_STAFF_DEPARTMENTS = "getStaffMembers",
   GET_MEMBER_DETAILS = "memberDetails",
+  GET_PROSPECT_EMAIL_RECIPIENTS = "getProspectEmailRecipients",
+  GET_MEMBER_EMAIL_RECIPIENTS = "getMemberEmailRecipients",
   GET_LEAD_SOURCES_LIST = "getLeadSourcesList",
   GET_LEAD_STATUS_LIST = "getLeadStatusesList",
   GET_STAFF_MEMBERS_LIST = "getStaffMembersList",

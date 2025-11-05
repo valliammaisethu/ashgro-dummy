@@ -26,6 +26,8 @@ export const ApiRoutes = {
   STAFF_MEMBER_DETAILS: "/staffs/:id",
   MEMBER_DETAILS: "/members/:id",
   SEND_EMAIL: "/email",
+  PROSPECT_EMAIL_RECIPIENTS: "/prospects/recipients",
+  MEMBER_EMAIL_RECIPIENTS: "/members/recipients",
   // TODO: Check with BE and avoid redundancy in api endpoint
   LEAD_SOURCES_SETTINGS_LIST: "settings/:id/leadSources",
   LEAD_STATUS_SETTINGS_LIST: "settings/:id/leadStatuses",

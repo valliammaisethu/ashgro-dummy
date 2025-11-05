@@ -11,7 +11,17 @@ export const addEmailValidation = yup.object().shape({
     .required("Subject is required")
     .max(998, "Subject must be at most 998 characters")
     .label("Subject"),
-  emailBody: yup.string().required("Email body is required").max(1000000),
-  cc: yup.string().email().notRequired().label("CC"),
-  bcc: yup.string().email().notRequired().label("BCC"),
+  body: yup.string().required("Email body is required").max(1000000),
+  title: yup.string().notRequired().label("Title"),
+  cc: yup
+    .array()
+    .of(yup.string().email("Invalid email format"))
+    .notRequired()
+    .label("CC"),
+  bcc: yup
+    .array()
+    .of(yup.string().email("Invalid email format"))
+    .notRequired()
+    .label("BCC"),
+  clubId: yup.string().notRequired(),
 });
