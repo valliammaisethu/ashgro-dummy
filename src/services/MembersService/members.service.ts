@@ -21,7 +21,7 @@ import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
 const { MEMBERS, MEMBER_DETAILS, MEMBERS_LIST } = ApiRoutes;
-const { ADD_MEMBER, UPDATE_MEMBER_STATUS } = MutationKeys;
+const { ADD_MEMBER, UPDATE_MEMBER_STATUS, DELETE_RESOURCE } = MutationKeys;
 
 const { GET_MEMBER_DETAILS, GET_MEMBERS } = QueryKeys;
 
@@ -69,7 +69,6 @@ export const MembersService = () => {
     onSuccess: (response) => {
       const { title, description } = response;
       renderNotification(title, description);
-      renderNotification(title, description);
       queryClient.invalidateQueries({
         queryKey: [GET_MEMBERS, clubId],
       });
@@ -112,10 +111,41 @@ export const MembersService = () => {
       queryClient.invalidateQueries({ queryKey: [GET_MEMBERS, clubId] });
     },
   });
+
+  const updateMemberDetails = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    MemberFormData
+  > => ({
+    mutationKey: [ADD_MEMBER],
+    mutationFn: async (payload: MemberFormData) => {
+      const { activityDetails, ...rest } = payload;
+
+      const response = await axiosInstance.put(
+        generatePath(MEMBER_DETAILS, {
+          id: (payload as Record<string, unknown>)["id"],
+        }),
+        serialize(MemberFormData, {
+          member: { ...rest, clubId: clubId },
+          activityDetails,
+        }),
+      );
+      return deserialize(ResponseModel, response?.data);
+    },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description);
+      queryClient.invalidateQueries({
+        queryKey: [GET_MEMBERS, clubId],
+      });
+    },
+  });
+
   return {
     addMember,
     MembersDetails,
     getStaffMembersList,
     updateMemberStatus,
+    updateMemberDetails,
   };
 };

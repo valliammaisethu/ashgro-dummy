@@ -75,6 +75,9 @@ export class ActivityDetails {
 
   @serializable
   description?: string;
+
+  @serializable
+  activityType?: string;
 }
 
 export class Prospect {
