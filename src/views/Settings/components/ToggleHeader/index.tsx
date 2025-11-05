@@ -11,9 +11,9 @@ export interface ToggleHeaderOption<Key extends string = string> {
 }
 
 interface ToggleHeaderProps<Key extends string = string> {
-  options: ToggleHeaderOption<Key>[];
-  activeKey: Key;
-  onChange: (key: Key) => void;
+  options?: ToggleHeaderOption<Key>[];
+  activeKey?: Key;
+  onChange?: (key: Key) => void;
   onAdd?: () => void;
 }
 
@@ -23,12 +23,12 @@ const ToggleHeader = <Key extends string>({
   onChange,
   onAdd,
 }: ToggleHeaderProps<Key>) => {
-  const handleChange = (key: Key) => () => onChange(key);
+  const handleChange = (key: Key) => () => onChange?.(key);
 
   return (
     <div className={styles.headerRow}>
       <div className={styles.toggleGroup}>
-        {options.map((opt) => (
+        {options?.map((opt) => (
           <button
             key={opt.key}
             className={`${styles.toggleBtn} ${activeKey === opt.key ? styles.active : ""}`}

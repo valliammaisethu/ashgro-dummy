@@ -154,7 +154,11 @@ const FileUpload = ({
             className={attachmentClassName || styles.attachment}
           >
             <span className={styles.attachmentIcon}>
-              <IconAttachment strokeWidth={1.25} />
+              <IconAttachment
+                color={Colors.ASHGRO_GOLD}
+                size={18}
+                strokeWidth={1.25}
+              />
             </span>
             <span className={styles.fileName}>{file.name}</span>
             <span

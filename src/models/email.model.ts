@@ -1,4 +1,4 @@
-import { list, object, primitive, serializable } from "serializr";
+import { alias, list, object, primitive, serializable } from "serializr";
 
 export class EmailModel {
   @serializable
@@ -48,4 +48,15 @@ export class EmailRecipientsData {
 
   @serializable
   count = 0;
+}
+
+export class EmailTemplates {
+  @serializable
+  id?: string;
+
+  @serializable(alias("title"))
+  label?: string;
+
+  @serializable(alias("id"))
+  value?: string;
 }

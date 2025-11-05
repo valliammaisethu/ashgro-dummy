@@ -77,6 +77,40 @@ export class EmailTemplate {
   attachmentIds?: string[];
 }
 
+export class Attachment {
+  @serializable
+  id?: string;
+
+  @serializable
+  fileName?: string;
+
+  @serializable
+  s3Key?: string;
+
+  @serializable
+  contentType?: string;
+
+  @serializable
+  fileSize?: number;
+}
+
+export class EmailTemplateDetail {
+  @serializable
+  id?: string;
+
+  @serializable
+  title?: string;
+
+  @serializable
+  subject?: string;
+
+  @serializable
+  body?: string;
+
+  @serializable(list(object(Attachment)))
+  attachments?: Attachment[];
+}
+
 export class StaffDepartment {
   @serializable
   id?: string;
