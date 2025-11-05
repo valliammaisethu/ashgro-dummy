@@ -13,8 +13,8 @@ import {
   MemberDetails,
   MemberFormData,
   MembersListData,
+  MembersListingParams,
 } from "src/models/members.model";
-import { QueryParams } from "src/models/queryParams.model";
 import { ResponseModel } from "src/models/response.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
@@ -77,14 +77,14 @@ export const MembersService = () => {
   });
 
   const getStaffMembersList = (
-    params: QueryParams,
+    params: MembersListingParams = new MembersListingParams(),
   ): UseQueryOptions<MembersListData, ResponseModel, MembersListData> => ({
-    queryKey: [GET_MEMBERS, clubId],
+    queryKey: [GET_MEMBERS, clubId, params],
     queryFn: async () => {
       const updatedParams = { ...params, clubId };
 
       const response = await axiosInstance.get(MEMBERS_LIST, {
-        params: serialize(QueryParams, updatedParams),
+        params: serialize(MembersListingParams, updatedParams),
       });
 
       return deserialize(MembersListData, response?.data?.data);
