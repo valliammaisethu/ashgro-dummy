@@ -19,11 +19,13 @@ import useDrawer from "src/shared/hooks/useDrawer";
 import { MetaService } from "src/services/MetaService/meta.service";
 import DeleteModal from "../DeleteModal";
 
-import styles from "./individualProspect.module.scss";
 import MemberConversionModal from "../MemberConversionModal";
 import { getFullName } from "src/shared/utils/helpers";
+import { QueryParamKeys } from "src/enums/queryParams.enum";
 import NewEmailModal from "src/views/Email/NewEmailModal";
 import { SelectedEmailModel } from "src/models/email.model";
+
+import styles from "./individualProspect.module.scss";
 
 const IndividualProspect = () => {
   const { viewProspect } = ProspectsService();
@@ -34,7 +36,11 @@ const IndividualProspect = () => {
 
   const { getLeadStatuses } = MetaService();
 
-  const { data: leadStatusOptions } = useQuery(getLeadStatuses());
+  const { data: leadStatusOptions } = useQuery(
+    getLeadStatuses({
+      filter: QueryParamKeys.PROSPECTS,
+    }),
+  );
 
   const [isEdit, setIsEdit] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState<SelectedEmailModel>(

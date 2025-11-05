@@ -1,6 +1,7 @@
 import { UseMutationOptions, UseQueryOptions } from "@tanstack/react-query";
 import { generatePath } from "react-router-dom";
 import { deserialize, serialize } from "serializr";
+import { deleteProspectMessages } from "src/constants/notificationMessages";
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
@@ -43,7 +44,7 @@ export const ProspectsService = () => {
   });
 
   const viewProspect = (
-    id: string,
+    id = "",
   ): UseQueryOptions<ProspectData, ResponseModel, ProspectData> => ({
     queryKey: [GET_SINGLE_PROSPECT, id],
     queryFn: async () => {
@@ -113,13 +114,10 @@ export const ProspectsService = () => {
   > => ({
     mutationKey: [DELETE_PROSPECT],
     mutationFn: async (id: string) => {
-      const response = await axiosInstance.delete(
-        generatePath(GET_PROSPECT, { id }),
-      );
-      return deserialize(ResponseModel, response?.data);
+      return await axiosInstance.delete(generatePath(GET_PROSPECT, { id }));
     },
-    onSuccess: (response) => {
-      const { title, description } = response;
+    onSuccess: () => {
+      const { title, description } = deleteProspectMessages;
       renderNotification(title, description, NotificationTypes.ERROR);
     },
   });

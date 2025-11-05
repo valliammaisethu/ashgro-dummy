@@ -24,6 +24,7 @@ export enum QueryKeys {
   GET_ATTACHMENT_PREVIEW = "getAttachmentPreview",
   GET_ACTIVITY_TYPES = "getActivityTypes",
   GET_MEMBERSHIP_CATEGORIES = "getMembershipCategories",
+  GET_MEMBERSHIP_STATUSES = "getMembershipStatuses",
   GET_LEAD_SOURCES = "getLeadSources",
   GET_LEAD_STATUS = "getLeadStatuses",
   GET_EMAIL_TEMPLATES = "getEmailTemplates",
