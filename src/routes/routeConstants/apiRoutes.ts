@@ -26,4 +26,6 @@ export const ApiRoutes = {
   STAFF_MEMBER_DETAILS: "/staffs/:id",
   MEMBER_DETAILS: "/members/:id",
   SEND_EMAIL: "/email",
+  PROSPECT_EMAIL_RECIPIENTS: "/prospects/recipients",
+  MEMBER_EMAIL_RECIPIENTS: "/members/recipients",
 };

@@ -26,6 +26,9 @@ export class SendEmail {
 
   @serializable
   body?: string;
+
+  @serializable
+  clubId?: string;
 }
 
 export class SelectedEmailModel {
@@ -37,4 +40,12 @@ export class SelectedEmailModel {
 
   @serializable
   name?: string;
+}
+
+export class EmailRecipientsData {
+  @serializable(list(object(EmailModel)))
+  prospects?: EmailModel[];
+
+  @serializable
+  count = 0;
 }

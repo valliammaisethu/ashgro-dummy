@@ -14,4 +14,5 @@ export const addEmailValidation = yup.object().shape({
   emailBody: yup.string().required("Email body is required").max(1000000),
   cc: yup.string().email().notRequired().label("CC"),
   bcc: yup.string().email().notRequired().label("BCC"),
+  title: yup.string().notRequired().label("Title"),
 });
