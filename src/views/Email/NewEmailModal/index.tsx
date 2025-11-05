@@ -27,6 +27,7 @@ import { addEmailValidation } from "./validation";
 import { EmailService } from "src/services/EmailService/email.service";
 import { SelectedEmailModel } from "src/models/email.model";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { ValidateEmail } from "src/shared/utils/helpers";
 
 import styles from "../email.module.scss";
 
@@ -40,10 +41,11 @@ const NewEmailModal = (props: NewEmailModalProps) => {
     values: {
       to: selectedEmails.map((e) => e.email),
       subject: "",
-      emailBody: "",
-      cc: "",
-      bcc: "",
+      body: "",
       title: selectedTemplate?.title || "",
+      cc: [],
+      bcc: [],
+      clubId,
     },
   });
 
@@ -73,11 +75,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
 
     mutateAsync({
       ...values,
-      bcc: values.bcc ? [values.bcc] : [],
-      cc: values.cc ? [values.cc] : [],
-      body: values.emailBody,
       to: formattedRecipients,
-      clubId,
     });
   };
 
@@ -132,20 +130,29 @@ const NewEmailModal = (props: NewEmailModalProps) => {
                   }
                   placeholder={placeholders.to}
                   allowCustomOption
+                  validateCustomInput={ValidateEmail}
                 />
               </Col>
               <Col span={24}>
-                <InputField
+                <SelectField
                   placeholder={placeholders.cc}
                   name={fields.cc}
                   label={labels.cc}
+                  mode={SelectModes.MULTIPLE}
+                  options={[]}
+                  allowCustomOption
+                  validateCustomInput={ValidateEmail}
                 />
               </Col>
               <Col span={24}>
-                <InputField
+                <SelectField
                   placeholder={placeholders.bcc}
                   name={fields.bcc}
                   label={labels.bcc}
+                  mode={SelectModes.MULTIPLE}
+                  options={[]}
+                  allowCustomOption
+                  validateCustomInput={ValidateEmail}
                 />
               </Col>
               <Col span={24}>
@@ -159,7 +166,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
               <Col span={24}>
                 <TextArea
                   required
-                  name={fields.emailBody}
+                  name={fields.body}
                   label={labels.emailBody}
                   placeholder={placeholders.emailBody}
                   className={styles.emailBodyInput}

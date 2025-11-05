@@ -15,6 +15,7 @@ import Members from "src/views/Members/Listing";
 import StaffMemberDetails from "src/views/StaffMembers/Details";
 import StaffMembersListing from "src/views/StaffMembers/Listing";
 import MemberDetails from "src/views/Members/Details";
+import Settings from "src/views/Settings";
 
 const AppRouter = () => {
   const routes: RouterProps[] = [
@@ -46,7 +47,7 @@ const AppRouter = () => {
         },
         {
           path: AppRoutes.SETTINGS,
-          component: <></>,
+          component: <Settings />,
         },
         {
           path: AppRoutes.INDIVIDUAL_PROSPECT,
@@ -56,7 +57,6 @@ const AppRouter = () => {
           path: AppRoutes.STAFF_MEMBER_DETAILS,
           component: <StaffMemberDetails />,
         },
-
         {
           path: AppRoutes.MEMBER_DETAILS,
           component: <MemberDetails />,

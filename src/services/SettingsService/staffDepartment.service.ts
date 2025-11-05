@@ -5,34 +5,29 @@ import {
 } from "@tanstack/react-query";
 import { generatePath } from "react-router-dom";
 import { deserialize } from "serializr";
+
 import {
   getLeadPayload,
   getRequestConfig,
   OperationParams,
 } from "src/constants/apiConstants";
-
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
-import {
-  MemberShipStatus,
-  MemberShipTypeStatus,
-} from "src/models/membersShip.model";
+import { StaffMemberSettings } from "src/models/common.model";
 import { ResponseModel } from "src/models/response.model";
 import { UserData } from "src/models/user.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { renderNotification } from "src/shared/utils/renderNotification";
-import { MEMBERSHIP_CONSTANTS } from "src/views/Settings/constants";
 
-const { MEMBERSHIP_STATUS, MEMBERSHIP_TYPE_STATUS } = ApiRoutes;
+const { STAFF_MEMBERS_SETTINGS_LISTING } = ApiRoutes;
 
-const { GET_MEMBERSHIP_STATUS, GET_MEMBERSHIP_TYPE_STATUS } = QueryKeys;
+const { GET_STAFF_MEMBERS_LIST } = QueryKeys;
 
-const { MEMBERSHIP_OPERATIONS, DELETE_MEMBERS } = MutationKeys;
+const { MEMBERSHIP_OPERATIONS, DELETE_STAFF_DEPARTMENTS } = MutationKeys;
 
-export const MemberShipService = () => {
-  const { MEMBERSHIP_TYPE } = MEMBERSHIP_CONSTANTS;
+export const StaffDepartmentService = () => {
   const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
   const clubId = user?.clubId;
 
@@ -46,58 +41,32 @@ export const MemberShipService = () => {
     renderNotification(title, description);
 
     queryClient.invalidateQueries({
-      queryKey: [
-        type === MEMBERSHIP_TYPE
-          ? GET_MEMBERSHIP_STATUS
-          : GET_MEMBERSHIP_TYPE_STATUS,
-        clubId,
-      ],
+      queryKey: [GET_STAFF_MEMBERS_LIST, clubId],
     });
   };
 
-  const memberShipStatuses = (): UseQueryOptions<
-    MemberShipStatus[],
+  const staffMembersList = (): UseQueryOptions<
+    StaffMemberSettings[],
     ResponseModel,
-    MemberShipStatus[]
+    StaffMemberSettings[]
   > => {
     return {
-      queryKey: [GET_MEMBERSHIP_STATUS, clubId],
+      queryKey: [GET_STAFF_MEMBERS_LIST, clubId],
       queryFn: async () => {
         const response = await axiosInstance.get(
-          generatePath(MEMBERSHIP_STATUS, { id: clubId }),
+          generatePath(STAFF_MEMBERS_SETTINGS_LISTING, { clubId }),
         );
 
         return deserialize(
-          MemberShipStatus,
-          response?.data?.data?.membershipStatuses,
-        ) as MemberShipStatus[];
+          StaffMemberSettings,
+          response?.data?.data?.staffDepartments,
+        ) as unknown as StaffMemberSettings[];
       },
       enabled: !!clubId,
     };
   };
 
-  const memberShipTypeStatuses = (): UseQueryOptions<
-    MemberShipTypeStatus[],
-    ResponseModel,
-    MemberShipTypeStatus[]
-  > => {
-    return {
-      queryKey: [GET_MEMBERSHIP_TYPE_STATUS, clubId],
-      queryFn: async () => {
-        const response = await axiosInstance.get(
-          generatePath(MEMBERSHIP_TYPE_STATUS, { id: clubId }),
-        );
-
-        return deserialize(
-          MemberShipTypeStatus,
-          response?.data?.data?.membershipCategories,
-        ) as MemberShipTypeStatus[];
-      },
-      enabled: !!clubId,
-    };
-  };
-
-  const memberShipOperations = (): UseMutationOptions<
+  const staffDepartmentOperations = (): UseMutationOptions<
     ResponseModel,
     ResponseModel,
     OperationParams
@@ -119,12 +88,12 @@ export const MemberShipService = () => {
       handleSuccessRespone(title, description, type),
   });
 
-  const deleteMember = (): UseMutationOptions<
+  const deleteStaffDepartment = (): UseMutationOptions<
     ResponseModel,
     ResponseModel,
     OperationParams
   > => ({
-    mutationKey: [DELETE_MEMBERS],
+    mutationKey: [DELETE_STAFF_DEPARTMENTS],
     mutationFn: async ({ type, id }) => {
       const { endpoint } = getRequestConfig(type, !!id);
 
@@ -138,9 +107,8 @@ export const MemberShipService = () => {
     },
   });
   return {
-    memberShipStatuses,
-    memberShipTypeStatuses,
-    memberShipOperations,
-    deleteMember,
+    staffMembersList,
+    staffDepartmentOperations,
+    deleteStaffDepartment,
   };
 };
