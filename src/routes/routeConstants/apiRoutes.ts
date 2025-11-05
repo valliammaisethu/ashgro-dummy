@@ -13,8 +13,34 @@ export const ApiRoutes = {
 
   GET_ACTIVITY_TYPES: "/clubs/:id/activityTypes",
   GET_MEMBERSHIP_CATEGORIES: "/clubs/:id/membershipCategories",
+  GET_MEMBERSHIP_STATUSES: "/clubs/:id/membershipStatuses",
   GET_LEAD_SOURCES: "/clubs/:id/leadSources",
   GET_LEAD_STATUSES: "/clubs/:id/leadStatuses",
   GET_EMAIL_TEMPLATES: "/clubs/:id/emailTemplates",
   Add_ACTIVITY: "/prospects/:id/activity",
+  GET_STAFF_DEPARTMENTS: "/settings/:id/staffDepartments",
+
+  MEMBERSHIP_STATUS: "settings/:id/membershipStatuses",
+  MEMBERSHIP_TYPE_STATUS: "settings/:id/membershipCategories",
+  MEMBERS: "members",
+  STAFF_MEMBER_DETAILS: "/staffs/:id",
+  MEMBER_DETAILS: "/members/:id",
+  SEND_EMAIL: "/email",
+  // TODO: Check with BE and avoid redundancy in api endpoint
+  LEAD_SOURCES_SETTINGS_LIST: "settings/:id/leadSources",
+  LEAD_STATUS_SETTINGS_LIST: "settings/:id/leadStatuses",
+  LEAD_SOURCES_SETTINGS: "settings/:clubId/leadSource",
+  LEAD_STATUS_SETTINGS: "settings/:clubId/leadStatus",
+  UPDATE_LEAD_SOURCES_SETTINGS: "settings/:clubId/leadSource/:id",
+  UPDATE_LEAD_STATUS_SETTINGS: "/settings/:clubId/leadStatus/:id",
+
+  MEMBERSHIP_STATUS_SETTINGS: "settings/:clubId/membershipStatus",
+  MEMBERSHIP_TYPE_STATUS_SETTINGS: "settings/:clubId/membershipCategory",
+  UPDATE_MEMBERSHIP_STATUS_SETTINGS: "/settings/:clubId/membershipStatus/:id",
+  UPDATE_MEMBERSHIP_MEMBERSHIP_TYPE_SETTINGS:
+    "/settings/:clubId/membershipCategory/:id",
+
+  STAFF_MEMBERS_SETTINGS_LISTING: "/settings/:clubId/staffDepartments",
+  STAFF_MEMBERS_SETTINGS: "/settings/:clubId/staffDepartment",
+  UPDATE_STAFF_MEMBERS_SETTINGS: "settings/:clubId/staffDepartment/:id",
 };

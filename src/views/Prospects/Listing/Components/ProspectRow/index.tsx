@@ -21,7 +21,7 @@ interface ProspectRowProps {
   prospect: ProspectsList;
   isSelected: boolean;
   leadStatusOptions?: LeadStatus[];
-  onSelectChange: (id: string, checked: boolean) => void;
+  onSelectChange: (checked: boolean) => void;
   onClick: () => void;
   onEditClick: (data: ProspectsList) => void;
   onDeleteClick: (data: ProspectsList) => void;
@@ -37,7 +37,6 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   onDeleteClick,
 }) => {
   const {
-    id = "",
     leadStatus,
     firstName,
     lastName,
@@ -51,7 +50,7 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
 
   const handleCheckboxChange = (e?: CheckboxChangeEvent) => {
     e?.stopPropagation();
-    onSelectChange(id, e?.target?.checked ?? false);
+    onSelectChange(e?.target?.checked || false);
   };
 
   const handleSelectClick = (e: React.MouseEvent) => e.stopPropagation();

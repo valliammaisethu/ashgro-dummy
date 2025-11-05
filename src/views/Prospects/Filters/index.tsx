@@ -15,17 +15,22 @@ import { Buttons, HtmlButtonType } from "src/enums/buttons.enum";
 import { ProspectFilterProps } from "src/shared/types/prospects.type";
 
 import styles from "./filters.module.scss";
+import { QueryParamKeys } from "src/enums/queryParams.enum";
 
 const Filters = (props: ProspectFilterProps) => {
   const { onSubmit, visible, toggleVisibility, defaultValues } = props;
   const { getLeadStatuses, getLeadSources } = MetaService();
 
   const { data: leadStatusesData } = useQuery({
-    ...getLeadStatuses(),
+    ...getLeadStatuses({
+      filter: QueryParamKeys.PROSPECTS,
+    }),
     enabled: visible,
   });
   const { data: leadSourcesData } = useQuery({
-    ...getLeadSources(),
+    ...getLeadSources({
+      filter: QueryParamKeys.PROSPECTS,
+    }),
     enabled: visible,
   });
 
@@ -40,7 +45,7 @@ const Filters = (props: ProspectFilterProps) => {
   );
 
   const methods = useForm({
-    values: {
+    defaultValues: {
       [fields.followUpDateRange]:
         defaultValues?.[fields.followUpDateRange] || [],
       [fields.leadStatus]: defaultValues?.[fields.leadStatus] || [],
@@ -55,6 +60,16 @@ const Filters = (props: ProspectFilterProps) => {
 
   const handleClearLeadStatus = () => setValue(fields.leadStatus, []);
   const handleClearLeadSource = () => setValue(fields.leadSource, []);
+
+  const handleClose = () => {
+    reset({
+      [fields.followUpDateRange]:
+        defaultValues?.[fields.followUpDateRange] || [],
+      [fields.leadStatus]: defaultValues?.[fields.leadStatus] || [],
+      [fields.leadSource]: defaultValues?.[fields.leadSource] || [],
+    });
+    toggleVisibility();
+  };
 
   const handleSubmit = (values: FieldValues) => onSubmit(values);
 
@@ -71,7 +86,7 @@ const Filters = (props: ProspectFilterProps) => {
       title={title}
       open={visible}
       closable
-      onClose={toggleVisibility}
+      onClose={handleClose}
     >
       <div className={styles.body}>
         <Form onSubmit={handleSubmit} methods={methods}>

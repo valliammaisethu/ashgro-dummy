@@ -4,7 +4,6 @@ import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import AppLayout from "../shared/components/AppLayout";
 import Home from "../views/Home";
 import { TopBarProvider } from "../shared/contexts/TopBarContext";
-import isAuthenticated from "../shared/components/HOC/requireAuth";
 import NotFound from "../shared/components/FallbackPage";
 import { AppRoutes } from "./routeConstants/appRoutes";
 import { RouterProps } from "../shared/types/route.type";
@@ -12,6 +11,11 @@ import AuthWrapper from "../views/Auth/AuthWrapper";
 import AppComponents from "../views/AppComponents";
 import ProspectsListing from "../views/Prospects/Listing";
 import IndividualProspect from "src/views/Prospects/IndividualProspect";
+import Members from "src/views/Members/Listing";
+import StaffMemberDetails from "src/views/StaffMembers/Details";
+import StaffMembersListing from "src/views/StaffMembers/Listing";
+import MemberDetails from "src/views/Members/Details";
+import Settings from "src/views/Settings";
 
 const AppRouter = () => {
   const routes: RouterProps[] = [
@@ -19,7 +23,7 @@ const AppRouter = () => {
     { path: AppRoutes.APP_COMPONENTS, component: <AppComponents /> },
     {
       path: AppRoutes.HOME,
-      component: isAuthenticated(<AppLayout />),
+      component: <AppLayout />,
       children: [
         {
           path: AppRoutes.PROSPECTS_LISTING,
@@ -27,27 +31,35 @@ const AppRouter = () => {
         },
         {
           path: AppRoutes.DASHBOARD,
-          component: <ProspectsListing />,
+          component: <></>,
         },
         {
           path: AppRoutes.CALENDAR,
-          component: <ProspectsListing />,
+          component: <></>,
         },
         {
           path: AppRoutes.MEMBERS,
-          component: <ProspectsListing />,
+          component: <Members />,
         },
         {
           path: AppRoutes.CLUB_STAFF,
-          component: <ProspectsListing />,
+          component: <StaffMembersListing />,
         },
         {
           path: AppRoutes.SETTINGS,
-          component: <ProspectsListing />,
+          component: <Settings />,
         },
         {
           path: AppRoutes.INDIVIDUAL_PROSPECT,
           component: <IndividualProspect />,
+        },
+        {
+          path: AppRoutes.STAFF_MEMBER_DETAILS,
+          component: <StaffMemberDetails />,
+        },
+        {
+          path: AppRoutes.MEMBER_DETAILS,
+          component: <MemberDetails />,
         },
       ],
     },

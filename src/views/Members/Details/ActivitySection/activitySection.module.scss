@@ -1,0 +1,55 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.activityHeader {
+  @include flex-container;
+  margin-bottom: 1.4rem;
+
+  .activityCount {
+    font-size: 2rem;
+    font-weight: 400;
+  }
+
+  .addButton {
+    padding: 2rem 1rem;
+    border-radius: 1.6rem;
+    background-color: $search-bg;
+    color: $filter-icon;
+
+    &:hover {
+      background-color: $search-bg;
+      color: $filter-icon;
+    }
+  }
+
+  .addButton {
+    background-color: $add-icon-bg;
+    color: $ashgro-white;
+
+    &:hover {
+      background-color: $add-icon-bg;
+      color: $ashgro-white;
+    }
+  }
+}
+
+.activityCard {
+  background-color: $activity-card;
+  border-radius: 1.2rem;
+  margin-bottom: 1rem;
+  padding: 1.4rem 2.4rem;
+
+  .header {
+    @include flex-container;
+    margin-bottom: 1.2rem;
+
+    .activityType {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .createdAt {
+      color: $ashgro-title-gold;
+    }
+  }
+}

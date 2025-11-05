@@ -1,16 +1,23 @@
-import React, { MouseEvent, useMemo } from "react";
+import React, { MouseEvent, useMemo, useState, useEffect } from "react";
 import { Select, Checkbox } from "antd";
 import { SelectProps } from "antd/lib";
 import { useController } from "react-hook-form";
-import { IconChevronDown } from "obra-icons-react";
+import { IconChevronDown, IconCircleClose } from "obra-icons-react";
+import clsx from "clsx";
 
 import { DropDownProps } from "src/shared/types/sharedComponents.type";
 import { SelectModes } from "src/enums/selectModes.enum";
+import { Colors } from "src/enums/colors.enum";
+import { Buttons } from "src/enums/buttons.enum";
+import { InputStatus } from "src/enums/inputStatus.enum";
 import Error from "../Error";
 import Label from "../Label";
+import {
+  clearSelectionKey,
+  clearSelectionLabel,
+} from "src/constants/sharedComponents";
 
 import styles from "./selectField.module.scss";
-import { InputStatus } from "src/enums/inputStatus.enum";
 
 const { Option } = Select;
 
@@ -22,16 +29,34 @@ const SelectField = ({
   label,
   placeholder,
   showCheckboxes = false,
-  options,
+  loading,
+  options = [],
   allowClear,
+  showSelectedCount = false,
+  className,
+  showClear = false,
+  onClear,
+  allowCustomOption = false,
   ...props
-}: DropDownProps) => {
+}: DropDownProps & { allowCustomOption?: boolean }) => {
   const {
     field,
     fieldState: { error },
-  } = useController({
-    name,
-  });
+  } = useController({ name });
+
+  const [customOptions, setCustomOptions] = useState(options);
+
+  useEffect(() => {
+    setCustomOptions((prev) => {
+      const merged = [
+        ...options,
+        ...prev.filter(
+          (opt) => !options.some((def) => def.value === opt.value),
+        ),
+      ];
+      return merged;
+    });
+  }, [options]);
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     if (stopPropagation) e.stopPropagation();
@@ -42,15 +67,24 @@ const SelectField = ({
     value,
     option,
   ) => {
-    field.onChange(value);
+    const filteredValue = Array.isArray(value)
+      ? value.filter((v) => v !== clearSelectionKey)
+      : value;
+
+    field.onChange(filteredValue);
     field.onBlur();
-    customOnChange?.(value, option);
+    customOnChange?.(filteredValue, option);
+  };
+
+  const handleClearSelection = () => {
+    field.onChange([]);
+    field.onBlur();
+    customOnChange?.([], undefined);
   };
 
   const sortedOptions = useMemo(() => {
-    if (!showCheckboxes || !options) return options;
-
-    return [...options].sort((a, b) => {
+    if (!showCheckboxes || !customOptions) return customOptions;
+    return [...customOptions].sort((a, b) => {
       const aSelected =
         Array.isArray(field.value) && field.value?.includes(a.value);
       const bSelected =
@@ -58,7 +92,7 @@ const SelectField = ({
       if (aSelected === bSelected) return 0;
       return aSelected ? -1 : 1;
     });
-  }, [showCheckboxes, options, field.value]);
+  }, [showCheckboxes, customOptions, field.value]);
 
   const getValue = () => {
     if (!field.value) return undefined;
@@ -68,42 +102,109 @@ const SelectField = ({
     return field.value;
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!allowCustomOption) return;
+    const inputValue = e.currentTarget.value.trim();
+
+    if (e.key === "Enter" && inputValue) {
+      const exists = customOptions.some(
+        (opt) => String(opt.value).toLowerCase() === inputValue.toLowerCase(),
+      );
+
+      if (!exists) {
+        const newOption = { label: inputValue, value: inputValue };
+        setCustomOptions((prev) => [...prev, newOption]);
+
+        if (Array.isArray(field.value)) {
+          handleOnChange([...field.value, inputValue], newOption);
+        } else {
+          handleOnChange(inputValue, newOption);
+        }
+      }
+
+      e.preventDefault();
+    }
+  };
+
   const selectProps: SelectProps = {
     ...field,
     value: getValue(),
     onClick: handleClick,
     onChange: handleOnChange,
     placeholder,
-    ...(!showCheckboxes && { options }),
+    onInputKeyDown: handleKeyDown,
+    ...(!showCheckboxes && { options: sortedOptions }),
     ...(showCheckboxes && {
       mode: SelectModes.MULTIPLE,
       optionLabelProp: "label",
       filterOption: false,
     }),
+    ...(showSelectedCount &&
+      showCheckboxes && {
+        maxTagCount: 0,
+        maxTagPlaceholder: (omittedValues) => (
+          <div className={styles.countBadgeDiv}>
+            <div className={styles.placeholderText}>{placeholder}</div>
+            <div className={styles.countBadge}>+{omittedValues.length}</div>
+          </div>
+        ),
+      }),
     ...props,
   };
 
   return (
     <div className={styles.selectField}>
       {label && (
-        <Label
-          className={styles.label}
-          htmlFor={name}
-          required={props.required}
-        >
-          {label}
-        </Label>
+        <div className={styles.labelContainer}>
+          <Label
+            className={styles.label}
+            htmlFor={name}
+            required={props.required}
+          >
+            {label}
+          </Label>
+          {showClear && onClear && (
+            <span onClick={onClear} className={styles.clearButton}>
+              {Buttons.CLEAR}
+            </span>
+          )}
+        </div>
       )}
-      <div className={styles.selectFieldWrapper}>
+      <div className={clsx(styles.selectFieldWrapper, className)}>
         <Select
           {...selectProps}
+          loading={loading}
           placeholder={placeholder}
           status={error ? InputStatus.ERROR : undefined}
-          allowClear
+          allowClear={allowClear}
           suffixIcon={<IconChevronDown size={20} strokeWidth={1.25} />}
         >
-          {showCheckboxes && sortedOptions
-            ? sortedOptions?.map((opt) => (
+          {showCheckboxes && sortedOptions ? (
+            <>
+              {Array.isArray(field.value) && field.value.length > 0 && (
+                <Option
+                  key={clearSelectionKey}
+                  value={clearSelectionKey}
+                  className={styles.clearSelectionOption}
+                  disabled
+                >
+                  <div
+                    className={styles.clearSelectionText}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleClearSelection();
+                    }}
+                  >
+                    <span>{clearSelectionLabel}</span>
+                    <IconCircleClose
+                      strokeWidth={1.25}
+                      color={Colors.MODAL_CLOSE_ICON}
+                      size={24}
+                    />
+                  </div>
+                </Option>
+              )}
+              {sortedOptions?.map((opt) => (
                 <Option key={opt.value} value={opt.value} label={opt.label}>
                   <span>{opt.label}</span>
                   <Checkbox
@@ -114,10 +215,12 @@ const SelectField = ({
                     }
                   />
                 </Option>
-              ))
-            : null}
+              ))}
+            </>
+          ) : null}
         </Select>
       </div>
+
       {<Error className={styles.selectFieldError} message={error?.message} />}
     </div>
   );

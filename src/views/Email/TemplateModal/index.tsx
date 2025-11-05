@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import Modal from "src/shared/components/Modal";
@@ -9,11 +9,22 @@ import { EmailTemplateModalProps } from "src/shared/types/email.type";
 import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
 import { MetaService } from "src/services/MetaService/meta.service";
 import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
-import { emailConstants, fields, labels, placeholders } from "./constants";
+import {
+  emailConstants,
+  EmailModalEnum,
+  fields,
+  labels,
+  placeholders,
+} from "./constants";
 
 import styles from "../email.module.scss";
+import useForm from "src/shared/components/UseForm";
 
-const TemplateModal = ({ isOpen, onClose }: EmailTemplateModalProps) => {
+const TemplateModal = ({
+  isOpen,
+  onClose,
+  toggleEmailModal,
+}: EmailTemplateModalProps) => {
   const { getEmailTemplates } = MetaService();
 
   const { data: emailTemplatesData } = useQuery({
@@ -25,6 +36,19 @@ const TemplateModal = ({ isOpen, onClose }: EmailTemplateModalProps) => {
     () => mapToSelectOptionsDynamic(emailTemplatesData?.emailTemplates),
     [emailTemplatesData],
   );
+
+  const handleNewEmailClick = useCallback(() => {
+    toggleEmailModal(EmailModalEnum.EMAIL);
+  }, [toggleEmailModal]);
+
+  const handleNextClick = useCallback(() => {
+    toggleEmailModal(EmailModalEnum.TEMPLATE);
+  }, [toggleEmailModal]);
+
+  const methods = useForm({});
+
+  const { watch } = methods;
+  const emailTemplateWatch = watch(fields.emailTemplate);
 
   return (
     <Modal
@@ -38,7 +62,7 @@ const TemplateModal = ({ isOpen, onClose }: EmailTemplateModalProps) => {
       rootClassName={styles.emailTemplateModal}
     >
       <div className={styles.modalBody}>
-        <Form>
+        <Form methods={methods}>
           <SelectField
             options={emailTemplateOptions}
             name={fields.emailTemplate}
@@ -47,12 +71,21 @@ const TemplateModal = ({ isOpen, onClose }: EmailTemplateModalProps) => {
           />
         </Form>
         <div className={styles.or}>or</div>
-        <Button type={ButtonTypes.TEXT} className={styles.newEmailButton}>
+        <Button
+          onClick={handleNewEmailClick}
+          type={ButtonTypes.TEXT}
+          className={styles.newEmailButton}
+        >
           {Buttons.NEW_EMAIL}
         </Button>
       </div>
       <div className={styles.modalFooter}>
-        <Button type={ButtonTypes.DEFAULT} className={styles.okButton}>
+        <Button
+          onClick={handleNextClick}
+          type={ButtonTypes.DEFAULT}
+          className={styles.okButton}
+          disabled={!emailTemplateOptions.length || !emailTemplateWatch}
+        >
           {Buttons.NEXT}
         </Button>
       </div>

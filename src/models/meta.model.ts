@@ -20,6 +20,12 @@ export class ActivityType {
 
   @serializable
   type?: string;
+
+  @serializable(alias("sourceName"))
+  label?: string;
+
+  @serializable(alias("id"))
+  value?: string;
 }
 
 export class MembershipCategory {
@@ -46,6 +52,14 @@ export class LeadStatus {
   statusName?: string;
 }
 
+export class MembershipStatus {
+  @serializable
+  id?: string;
+
+  @serializable
+  statusName?: string;
+}
+
 export class EmailTemplate {
   @serializable
   id?: string;
@@ -63,6 +77,13 @@ export class EmailTemplate {
   attachmentIds?: string[];
 }
 
+export class StaffDepartment {
+  @serializable
+  id?: string;
+
+  @serializable
+  name?: string;
+}
 export class LeadSourceParams {
   @serializable
   filter?: string;
@@ -77,6 +98,17 @@ export class LeadStatusParams {
 
   @serializable(list(primitive()))
   leadSourceIds?: string[];
+}
+
+export class MembershipStatusParams {
+  @serializable(list(primitive()))
+  leadSourceIds?: string[];
+
+  @serializable
+  filter?: string;
+
+  @serializable(list(primitive()))
+  membershipCategoryIds?: string[];
 }
 
 export class MembershipCategoriesData {
@@ -101,4 +133,9 @@ export class LeadStatusesData {
 export class EmailTemplatesData {
   @serializable(list(object(EmailTemplate)))
   emailTemplates?: EmailTemplate[];
+}
+
+export class StaffDepartmentsData {
+  @serializable(list(object(StaffDepartment)))
+  staffDepartments?: StaffDepartment[];
 }

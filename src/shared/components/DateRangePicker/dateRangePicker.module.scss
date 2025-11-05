@@ -13,13 +13,29 @@
 .fromSuffix {
   position: absolute;
   left: 40%;
-  bottom: 8%;
+  bottom: 12%;
 }
 
 .toSuffix {
   position: absolute;
-  bottom: 8%;
+  bottom: 12%;
   right: 1.5rem;
+}
+
+.datePickerWrapper {
+  :global(.ant-picker-range) {
+    padding-left: 0;
+    padding-top: 1.4rem;
+  }
+
+  :global(.ant-picker-range.ant-picker-outlined) {
+    border: 0;
+    background-color: transparent;
+
+    &:hover {
+      box-shadow: none;
+    }
+  }
 }
 
 .rangePickerComponent {

@@ -1,18 +1,20 @@
 import React, { Fragment } from "react";
 import { Modal as CustomModal, Divider } from "antd";
-import styles from "./Modal.module.scss";
 import { IconCircleClose } from "obra-icons-react";
 import { Colors } from "src/enums/colors.enum";
-import Button from "../Button";
 import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { ModalProps } from "src/shared/types/sharedComponents.type";
+import { ModalFooter } from "./atoms";
+
+import styles from "./Modal.module.scss";
+import { defaultModalWidth } from "src/constants/sharedComponents";
 
 const Modal: React.FC<ModalProps> = ({
   children,
   closeModal,
   visible,
   title,
-  width,
+  width = defaultModalWidth,
   handleOk,
   footer,
   cancelText = Buttons.CANCEL,
@@ -25,39 +27,37 @@ const Modal: React.FC<ModalProps> = ({
   okButtonType = ButtonTypes.DEFAULT,
   rootClassName,
   centered,
+  styles: modalStyles,
+  destroyOnHidden,
+  destroyOnClose,
+  bodyStyle,
 }: ModalProps) => {
   return (
     <div className={styles.modalContainer}>
       <CustomModal
         width={width}
         rootClassName={rootClassName}
+        destroyOnHidden={destroyOnHidden}
+        destroyOnClose={destroyOnClose}
         centered={centered}
+        bodyStyle={bodyStyle}
+        styles={modalStyles}
         footer={
-          footer ? (
-            footer
+          footer === undefined ? (
+            <ModalFooter
+              cancelText={cancelText}
+              okText={okText}
+              cancelButtonProps={cancelButtonProps}
+              okButtonProps={okButtonProps}
+              okButtonType={okButtonType}
+              okButtonHtmlType={okButtonHtmlType}
+              confirmLoading={confirmLoading}
+              onCancel={onCancel}
+              handleOk={handleOk}
+              closeModal={closeModal}
+            />
           ) : (
-            <div className={styles.modalFooter}>
-              <Button
-                {...cancelButtonProps}
-                type={ButtonTypes.PRIMARY}
-                loading={!!cancelButtonProps?.loading}
-                htmlType={HtmlButtonType.BUTTON}
-                onClick={onCancel ?? closeModal}
-              >
-                {cancelText}
-              </Button>
-
-              <Button
-                {...okButtonProps}
-                type={okButtonType}
-                className={styles.okButton}
-                loading={confirmLoading}
-                htmlType={okButtonHtmlType}
-                onClick={handleOk ?? closeModal}
-              >
-                {okText}
-              </Button>
-            </div>
+            footer
           )
         }
         title={
@@ -70,7 +70,6 @@ const Modal: React.FC<ModalProps> = ({
         onOk={handleOk ? handleOk : closeModal}
         onCancel={onCancel ?? closeModal}
         confirmLoading={confirmLoading}
-        destroyOnHidden
         closeIcon={
           <IconCircleClose color={Colors.MODAL_CLOSE_ICON} size={20} />
         }

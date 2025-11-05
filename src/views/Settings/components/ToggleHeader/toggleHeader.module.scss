@@ -1,0 +1,36 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.headerRow {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.toggleGroup {
+  display: flex;
+  gap: 1rem;
+}
+
+.toggleBtn {
+  background: transparent;
+  border: none;
+  padding: 1.05rem 1.8rem;
+  border-radius: 1.6rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.active {
+  background: $ashgro-white;
+}
+
+.addButton {
+  border: none;
+  font-weight: 500;
+  padding: 0 1.8rem;
+  height: 4rem;
+}

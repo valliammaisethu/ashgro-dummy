@@ -492,7 +492,6 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   color: $ashgro-grey !important;
   opacity: 0.6;
   font-size: 1.2rem;
-  line-height: 1.3rem;
 }
 .ant-btn:not(:disabled):focus-visible {
   outline: none;
@@ -533,7 +532,6 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 }
 .ant-modal .ant-modal-body {
   padding: 2.4rem;
-  max-height: calc(100vh - 30rem);
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -656,18 +654,6 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   padding: 0;
   border: 0;
 }
-.ant-picker {
-  padding-left: 0;
-  padding-top: 1.4rem;
-}
-.ant-picker-range.ant-picker-outlined {
-  border: 0;
-  background-color: transparent;
-
-  &:hover {
-    box-shadow: none;
-  }
-}
 
 .ant-picker-input {
   background-color: $input-background;
@@ -702,9 +688,10 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   width: 3.5rem;
 }
 
-:where(.css-dev-only-do-not-override-1odpy5d).ant-picker-dropdown
-  .ant-picker-cell
-  .ant-picker-cell-inner {
+.ant-picker-outlined:focus-within {
+  background-color: $input-background;
+}
+.ant-picker-dropdown .ant-picker-cell .ant-picker-cell-inner {
   line-height: 3.5rem;
 }
 .ant-picker-dropdown .ant-picker-cell::before {
@@ -741,12 +728,53 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   .ant-picker-cell-inner::before {
   border-color: $ashgro-gold;
 }
-.ant-picker-header-super-prev-btn,
-.ant-picker-header-prev-btn,
-.ant-picker-header-next-btn,
-.ant-picker-header-super-next-btn {
-  margin-top: 0.8rem;
+.ant-picker-dropdown.ant-picker-dropdown-range {
+  .ant-picker-header-super-prev-btn,
+  .ant-picker-header-prev-btn,
+  .ant-picker-header-next-btn,
+  .ant-picker-header-super-next-btn {
+    margin-top: 0.8rem;
+  }
 }
 .ant-picker-range .ant-picker-clear {
   inset-inline-end: -0.7rem;
+}
+.ant-select-dropdown
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: transparent;
+}
+.rc-virtual-list-holder-inner {
+  gap: 1rem;
+}
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-selected:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner {
+  background-color: $ashgro-gold;
+}
+
+.ant-picker-dropdown .ant-picker-header-view > button:hover {
+  color: $ashgro-gold;
+}
+.ant-picker-now-btn {
+  color: $ashgro-gold;
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+
+  &:hover {
+    color: $ashgro-gold;
+    opacity: 0.5;
+  }
+}
+
+.ant-notification
+  .ant-notification-notice-wrapper
+  .ant-notification-notice-close {
+  color: $ashgro-white;
+
+  &:hover {
+    color: $ashgro-white;
+  }
 }

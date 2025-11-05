@@ -216,9 +216,27 @@
 @mixin secondaryBold {
   font-family: $font-secondary;
   font-weight: 600;
+  font-size: 1.4rem;
 }
 
 @mixin secondarySemiBold {
   font-family: $font-secondary;
   font-weight: 500;
+}
+
+// TODO: To check ant overrides configuration and remove !important
+@mixin actionButton {
+  background-color: $search-bg;
+  border-color: transparent;
+  color: $filter-icon;
+  padding: 2rem 1rem;
+  border-radius: 1.6rem;
+  width: 4.2rem !important;
+  height: 4.2rem;
+
+  &:hover {
+    background-color: $search-bg !important;
+    color: $filter-icon !important;
+    border-color: transparent !important;
+  }
 }

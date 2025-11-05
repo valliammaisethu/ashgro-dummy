@@ -1,0 +1,49 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.card {
+  flex: 0 0 calc(20% - 1.6rem);
+  background: $ashgro-white;
+  border-radius: 2rem;
+  padding: 3.2rem;
+  text-align: center;
+  position: relative;
+  transition: all 0.25s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: $settings-hover-bg;
+    color: $ashgro-white;
+
+    .cardActions {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.cardLabel {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.cardActions {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.editButton {
+  @include actionButton;
+}
+
+.deleteButton {
+  @include actionButton;
+}
