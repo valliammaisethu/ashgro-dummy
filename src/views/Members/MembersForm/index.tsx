@@ -1,5 +1,5 @@
 import { Col, Divider, Row } from "antd";
-import React, { ChangeEvent, useMemo, useState } from "react";
+import React, { ChangeEvent, useEffect, useMemo } from "react";
 import { FieldValues } from "react-hook-form";
 import { IconCalendarWait } from "obra-icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -21,15 +21,19 @@ import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
 import { MetaService } from "src/services/MetaService/meta.service";
 import { Colors } from "src/enums/colors.enum";
 import TextArea from "src/shared/components/TextArea";
-import Button from "src/shared/components/Button";
-import { submitButtonKey } from "src/views/Prospects/ProspectForm/constants";
-import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { LeadService } from "src/services/SettingsService/lead.service";
 import { MemberShipService } from "src/services/SettingsService/memberShip.service";
 import { MembersService } from "src/services/MembersService/members.service";
 import { defaultModalWidth } from "src/constants/sharedComponents";
+import { findValueByLabel } from "src/shared/utils/commonHelpers";
 
 import styles from "./membersForm.module.scss";
+
+interface MembersFormProps {
+  isOpen?: boolean;
+  handleModalVisibility?: () => void;
+  id?: string;
+}
 
 const {
   LABELS,
@@ -40,17 +44,21 @@ const {
   ADD_BTN_TXT,
 } = FORM_CONSTANTS;
 
-const MembersForm = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
+const MembersForm = ({
+  isOpen = false,
+  handleModalVisibility,
+  id,
+}: MembersFormProps) => {
   const methods = useForm({});
 
   const { memberShipStatuses, memberShipTypeStatuses } = MemberShipService();
   const { leadSources } = LeadService();
   const { getActivityTypes } = MetaService();
-  const { addMember } = MembersService();
+  const { addMember, MembersDetails } = MembersService();
 
   const { mutateAsync: addMemberMutate } = useMutation(addMember());
+
+  const { data } = useQuery(MembersDetails(id));
 
   const { data: leadSourcesOptions } = useQuery(leadSources());
 
@@ -63,7 +71,7 @@ const MembersForm = () => {
 
   const { data: activityTypesData } = useQuery(getActivityTypes());
 
-  const { setValue, watch, formState } = methods;
+  const { setValue, watch, handleSubmit } = methods;
 
   const activityTypeOptions = useMemo(
     () => mapToSelectOptionsDynamic(activityTypesData?.activityTypes),
@@ -97,23 +105,54 @@ const MembersForm = () => {
     );
   };
 
-  const handleSubmit = async (values: FieldValues) => {
+  const handleFormSubmit = async (values: FieldValues) => {
     await addMemberMutate(values);
+    // edit
+    handleModalVisibility?.();
   };
 
-  const handleModalVisibility = () => setIsVisible((prev) => !prev);
+  const formValues = useMemo(() => {
+    if (!data) return {};
+    // TODO: findValueByLabel and date format check with BE to send id and value both to avoid unnesaryfindValueByLabel
+    return {
+      ...data,
+      [FIELD_NAMES.MEMBER_STATUS]: findValueByLabel(
+        memberShipStatusesOptions,
+        data.membershipStatus,
+      ),
+      [FIELD_NAMES.MEMBERSHIP_TYPE]: findValueByLabel(
+        memberShipTypeStatusesOptions,
+        data.membershipCategory,
+      ),
+      [FIELD_NAMES.LEAD_SOURCE]: findValueByLabel(
+        leadSourcesOptions,
+        data.leadSource,
+      ),
+    };
+  }, [
+    data,
+    memberShipStatusesOptions,
+    memberShipTypeStatusesOptions,
+    leadSourcesOptions,
+  ]);
+
+  // TODO: Fix the form issue and remove useEffect here
+  useEffect(() => {
+    methods.reset(formValues);
+  }, [data]);
 
   return (
     <div>
       <Modal
         cancelButtonProps={{ className: "d-none" }}
         title={MODAL_TITLE}
-        visible={isVisible}
+        visible={isOpen}
         width={defaultModalWidth}
         okText={ADD_BTN_TXT}
         closeModal={handleModalVisibility}
+        handleOk={handleSubmit(handleFormSubmit)}
       >
-        <Form methods={methods} onSubmit={handleSubmit}>
+        <Form methods={methods}>
           <div className={styles.profileContainer}>
             <ProfilePictureInput
               name={FIELD_NAMES.PROFILE_PICTURE}
@@ -153,7 +192,7 @@ const MembersForm = () => {
                 placeholder={PLACEHOLDERS.JOIN_DATE}
                 label={LABELS.JOIN_DATE}
                 name={FIELD_NAMES.JOIN_DATE}
-                format={DateFormats.DD_MMM__YYYY}
+                format={id ? DateFormats.YYYY_MM_DD : DateFormats.DD_MMM__YYYY}
               />
             </Col>
             <Col span={12}>
@@ -179,7 +218,7 @@ const MembersForm = () => {
                 label={LABELS.BIRTH_DATE}
                 name={FIELD_NAMES.BIRTH_DATE}
                 disabledDate={disableFutureAndToday}
-                format={DateFormats.DD_MMM__YYYY}
+                format={id ? DateFormats.YYYY_MM_DD : DateFormats.DD_MMM__YYYY}
               />
             </Col>
             <Col span={24}>
@@ -292,18 +331,6 @@ const MembersForm = () => {
               />
             </Col>
           </Row>
-
-          <div className={styles.modalFooter}>
-            <Button
-              key={submitButtonKey}
-              type={ButtonTypes.DEFAULT}
-              className={styles.okButton}
-              loading={false}
-              htmlType={HtmlButtonType.SUBMIT}
-            >
-              Save changes
-            </Button>
-          </div>
         </Form>
       </Modal>
     </div>

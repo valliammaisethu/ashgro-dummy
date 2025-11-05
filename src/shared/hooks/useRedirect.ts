@@ -1,8 +1,14 @@
 import { generatePath, useNavigate } from "react-router-dom";
 import { NavigationRoutes } from "../../routes/routeConstants/appRoutes";
 
-const { HOME, LOGIN, FORGOT_PASSWORD, INDIVIDUAL_PROSPECT, PROSPECTS_LISTING } =
-  NavigationRoutes;
+const {
+  HOME,
+  LOGIN,
+  FORGOT_PASSWORD,
+  INDIVIDUAL_PROSPECT,
+  PROSPECTS_LISTING,
+  MEMBER_DETAILS,
+} = NavigationRoutes;
 
 const useRedirect = () => {
   const navigate = useNavigate();
@@ -18,12 +24,16 @@ const useRedirect = () => {
   const navigateToIndividualProspect = (id: string) =>
     navigate(generatePath(INDIVIDUAL_PROSPECT, { id }));
 
+  const navigateToMemberDetails = (id?: string) =>
+    navigate(generatePath(MEMBER_DETAILS, { id }));
+
   return {
     navigateToHome,
     navigateToLogin,
     navigateToForgotPassword,
     navigateToProspects,
     navigateToIndividualProspect,
+    navigateToMemberDetails,
   };
 };
 

@@ -1,6 +1,8 @@
 import { list, object, primitive, serializable } from "serializr";
 import { QueryParams } from "./queryParams.model";
 import { ActivityDetails, Prospect } from "./prospects.model";
+import { Pagination } from "./pagination.model";
+import { defaultCountryCode } from "src/constants/common";
 
 export class MembersListingParams extends QueryParams {
   @serializable(list(primitive()))
@@ -40,6 +42,15 @@ export class Member extends Prospect {
 
   @serializable
   resignationDate?: string;
+
+  @serializable
+  membershipStatusId?: string;
+
+  @serializable
+  membershipStatus?: string;
+
+  @serializable
+  countryCode?: string = defaultCountryCode;
 }
 
 export class MemberFormData {
@@ -51,6 +62,14 @@ export class MemberFormData {
 }
 
 export class MemberDetails extends Member {
-  @serializable(object(ActivityDetails))
-  activityDetails?: ActivityDetails;
+  @serializable(list(object(ActivityDetails)))
+  activityDetails?: ActivityDetails[];
+}
+
+export class MembersListData {
+  @serializable(list(object(Member)))
+  members?: Member[];
+
+  @serializable(object(Pagination))
+  pagination?: Pagination;
 }

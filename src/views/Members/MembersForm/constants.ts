@@ -72,3 +72,5 @@ export const FORM_CONSTANTS = {
     ACTIVITY_DESCRIPTION: "activityDetails.description",
   },
 };
+
+export const memberHeaders = ["Members", "Join Date", "Member Status"];
