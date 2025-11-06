@@ -1,8 +1,8 @@
 import React from "react";
-import EmailTeamplates from "./EmailTeamplates";
 import Lead from "./Lead";
 import MembersShip from "./Membership";
 import StaffDepartment from "./StaffDepartment";
+import EmailTemplates from "./EmailTemplates";
 
 export type MembershipSection = "memberShipType" | "memberShipStatus";
 export type LeadSection = "source" | "status";
@@ -35,7 +35,7 @@ export const settingsTabs = [
   {
     key: "emailTemplates",
     label: "Email Templates",
-    children: <EmailTeamplates />,
+    children: <EmailTemplates />,
   },
   {
     key: "staffDepartment",
@@ -129,4 +129,33 @@ export const STAFF_MEMBERS_CONSTANTS = {
     edit: "Update",
   },
   FIEL_NAME: "name",
+};
+
+export const EMAIL_TEMPLATE_CONSTANTS = {
+  TITLE: "New Email Template",
+  TYPE: "emailTemplate",
+  PLACE_HOLDER: "Select a template",
+  EDIT_TITLE: "Edit Email Template",
+  ADD_TITLE: "Add Email Template",
+  LABELS: {
+    TITLE: "Title",
+    SUBJECT: "Subject",
+    EMAIL_BODY: "Email Body",
+  },
+  PLACEHOLDERS: {
+    TITLE: "Enter Title",
+    SUBJECT: "Enter Subject",
+    EMAIL_BODY: "Enter Email Body",
+  },
+  FIELDS: {
+    TITLE: "title",
+    SUBJECT: "subject",
+    EMAIL_BODY: "body",
+    ATTACHMENT_IDS: "attachmentIds",
+  },
+  BUTTON_TEXT: {
+    ADD: "Add Template",
+    EDIT: "Update",
+  },
+  FIELD_NAME: "name",
 };
