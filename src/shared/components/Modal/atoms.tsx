@@ -48,7 +48,7 @@ export const ModalFooter: React.FC<ModalFooterProps> = ({
         {...okButtonProps}
         type={okButtonType}
         className={styles.okButton}
-        loading={confirmLoading}
+        loading={Boolean(okButtonProps?.loading) ?? confirmLoading}
         htmlType={okButtonHtmlType}
         onClick={handleOkClick}
       >

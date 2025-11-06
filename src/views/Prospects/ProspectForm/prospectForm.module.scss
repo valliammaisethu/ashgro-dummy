@@ -35,3 +35,18 @@
     }
   }
 }
+
+.prospectFormModal {
+  :global(.ant-modal) {
+    top: 2rem;
+  }
+
+  :global(.ant-select-dropdown) {
+    z-index: 1050 !important;
+  }
+}
+.activityDescBox {
+  textArea {
+    min-height: 24rem;
+  }
+}

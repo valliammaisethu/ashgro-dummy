@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo } from "react";
+import React, { useMemo } from "react";
 import { Col, Divider, Row } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { IconCalendarWait } from "obra-icons-react";
@@ -23,9 +23,14 @@ import { ADD_PROSPECT_CONSTANTS, submitButtonKey } from "./constants";
 import { MetaService } from "src/services/MetaService/meta.service";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
-import { disableFutureAndToday, formatDate } from "src/shared/utils/dateUtils";
+import {
+  convertDateToApiFormat,
+  disableFutureAndToday,
+  formatDate,
+} from "src/shared/utils/dateUtils";
 import { AddProspectProps } from "src/shared/types/prospects.type";
 import { validationSchema } from "./validation";
+import { getDigitsOnly } from "src/shared/utils/parser";
 
 import styles from "./prospectForm.module.scss";
 import { QueryParamKeys } from "src/enums/queryParams.enum";
@@ -153,8 +158,26 @@ const ProspectForm = ({
   };
 
   const handleSubmit = async (values: FieldValues) => {
+    const hasActivityDetails =
+      values.activityDetails?.activityTypeId ||
+      values.activityDetails?.description;
+
+    const payload = {
+      ...values,
+      prospect: {
+        ...values.prospect,
+        contactNumber: values.prospect?.contactNumber
+          ? getDigitsOnly(values.prospect.contactNumber)
+          : values.prospect?.contactNumber,
+        followUpDate: convertDateToApiFormat(values.prospect?.followUpDate),
+        inquiryDate: convertDateToApiFormat(values.prospect?.inquiryDate),
+      },
+      activityDetails:
+        isEdit || !hasActivityDetails ? undefined : values.activityDetails,
+    };
+
     const mutationFn = isEdit ? editMutateAsync : mutateAsync;
-    await mutationFn(values, { onSuccess: onClose });
+    await mutationFn(payload, { onSuccess: onClose });
   };
 
   return (
@@ -165,6 +188,13 @@ const ProspectForm = ({
       width={MODAL_WIDTH}
       okText={Buttons.ADD_PROSPECT}
       closeModal={onClose}
+      styles={{
+        content: {
+          height: 733,
+          width: 710,
+        },
+      }}
+      rootClassName={styles.prospectFormModal}
     >
       <Form methods={methods} onSubmit={handleSubmit}>
         <div className={styles.profileContainer}>
@@ -323,6 +353,7 @@ const ProspectForm = ({
                 <TextArea
                   placeholder={PLACEHOLDERS.ACTIVITY_DESCRIPTION}
                   name={FIELD_NAMES.ACTIVITY_DESCRIPTION}
+                  className={styles.activityDescBox}
                   label={LABELS.ACTIVITY_DESCRIPTION}
                   onChange={(e) =>
                     handleActivityDescriptionChange(e.target.value)

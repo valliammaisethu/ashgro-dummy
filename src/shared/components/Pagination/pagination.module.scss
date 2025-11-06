@@ -1,0 +1,37 @@
+@import "src/styles/variables";
+@import "src/styles/_helpers.scss";
+
+.paginationContainer {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  padding: 1.6rem 2.4rem;
+  @include flex-container(center, center, row, 2.4rem);
+
+  .textContainer {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    font-family: $font-secondary;
+    @include flex-flow(row, wrap, center);
+    gap: 1rem;
+
+    .active {
+      color: $ashgro-navy;
+      font-family: $font-secondary;
+      font-weight: 700;
+      font-size: 1.6rem;
+    }
+    .end {
+      padding-left: 0.5rem;
+    }
+  }
+}
+
+.prevButton,
+.nextButton {
+  height: 3.2rem;
+  width: 2.8rem;
+  border-radius: 0.8rem;
+}

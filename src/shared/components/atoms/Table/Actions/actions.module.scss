@@ -1,0 +1,17 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.actionContainer {
+  @include flex-container;
+  gap: 1.6rem;
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    opacity: 0;
+  }
+
+  &:hover .actions {
+    opacity: 1;
+  }
+}

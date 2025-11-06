@@ -100,6 +100,7 @@ const AddActivity = ({ isOpen, onClose, handleRefetch }: AddActivityProps) => {
                   placeholder={"Description"}
                   name={"description"}
                   label={"Activity Description"}
+                  className={styles.activityDescription}
                 />
               </Col>
             </Row>

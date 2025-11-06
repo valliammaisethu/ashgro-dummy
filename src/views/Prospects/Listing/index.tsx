@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { CheckboxChangeEvent } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { IconChevronLeft, IconChevronRight } from "obra-icons-react";
+import { FieldValues } from "react-hook-form";
 
-import { PageListingDirections, TABLE_HEADERS } from "./constants";
+import { TABLE_HEADERS } from "./constants";
 import {
   toggleAllSelections,
   toggleSingleSelection,
@@ -20,24 +20,25 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import useDrawer from "src/shared/hooks/useDrawer";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { QueryParamKeys } from "src/enums/queryParams.enum";
 import { UserData } from "src/models/user.model";
 import {
   ProspectsList,
   ProspectsListingParams,
 } from "src/models/prospects.model";
+import { EmailTemplate } from "src/models/meta.model";
 import { MetaService } from "src/services/MetaService/meta.service";
+import { SelectedProspect } from "src/shared/types/prospects.type";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
+import { EmailService } from "src/services/EmailService/email.service";
 import DeleteModal from "../DeleteModal";
-import Button from "src/shared/components/Button";
-
-import styles from "./listing.module.scss";
-import Filters from "../Filters";
-import { FieldValues } from "react-hook-form";
+import Pagination from "src/shared/components/Pagination";
 import TemplateModal from "src/views/Email/TemplateModal";
 import NewEmailModal from "src/views/Email/NewEmailModal";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
-import { QueryParamKeys } from "src/enums/queryParams.enum";
-import { SelectedProspect } from "src/shared/types/prospects.type";
+import Filters from "../Filters";
+
+import styles from "./listing.module.scss";
 
 const ProspectsListing = () => {
   const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
@@ -53,10 +54,12 @@ const ProspectsListing = () => {
     state: false,
     id: "",
   });
-  const [isEmailTemplate, setIsEmailTemplate] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
+  const [isAllSelected, setIsAllSelected] = useState(false);
 
   const { getProspects, viewProspect } = ProspectsService();
   const { getLeadStatuses } = MetaService();
+  const { getProspectEmailRecipients } = EmailService();
 
   const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
   const { data: leadStatusesData } = useQuery(
@@ -67,6 +70,10 @@ const ProspectsListing = () => {
   const { data: isEditData } = useQuery({
     ...viewProspect(isEdit?.id),
     enabled: !!isEdit?.id,
+  });
+  const { data: emailRecipientsData } = useQuery({
+    ...getProspectEmailRecipients(queryParams),
+    enabled: isAllSelected,
   });
 
   const leadStatusOptions = useMemo(
@@ -93,6 +100,7 @@ const ProspectsListing = () => {
   const handleSelectAll = useCallback(
     (checked: boolean) => {
       setSelectedProspects(toggleAllSelections(checked, data?.prospects));
+      setIsAllSelected(checked);
     },
     [data?.prospects],
   );
@@ -102,6 +110,8 @@ const ProspectsListing = () => {
       setSelectedProspects((prev) =>
         toggleSingleSelection(id, email, name, checked, prev),
       );
+
+      if (!checked) setIsAllSelected(false);
     },
     [],
   );
@@ -128,6 +138,18 @@ const ProspectsListing = () => {
     [queryParams],
   );
 
+  const emailRecipients = useMemo(() => {
+    if (isAllSelected && emailRecipientsData?.prospects) {
+      // Convert API recipients to SelectedEmailModel format
+      return emailRecipientsData.prospects.map((prospect) => ({
+        id: prospect.email || "",
+        email: prospect.email || "",
+        name: prospect.firstName || "",
+      }));
+    }
+    return selectedProspects;
+  }, [isAllSelected, emailRecipientsData, selectedProspects]);
+
   const navigateToProspect = (id: string) => () =>
     navigateToIndividualProspect(id);
 
@@ -151,29 +173,9 @@ const ProspectsListing = () => {
     toggleDeleteModal();
   };
 
-  const handlePageChange = useCallback(
-    (direction: PageListingDirections) => {
-      setQueryParams((prev) => {
-        const currentPage = prev.page || 1;
-        const totalPages = data?.pagination?.overallPages || 1;
-
-        let newPage = currentPage;
-
-        if (direction === PageListingDirections.PREV && currentPage > 1)
-          newPage = currentPage - 1;
-        else if (
-          direction === PageListingDirections.NEXT &&
-          currentPage < totalPages
-        )
-          newPage = currentPage + 1;
-
-        if (newPage === currentPage) return prev;
-
-        return { ...prev, page: newPage };
-      });
-    },
-    [data?.pagination?.overallPages],
-  );
+  const handlePageChange = useCallback((newPage: number) => {
+    setQueryParams((prev) => ({ ...prev, page: newPage }));
+  }, []);
 
   const handleApplyFilter = (filters: FieldValues) => {
     setQueryParams((prev) => ({
@@ -186,11 +188,20 @@ const ProspectsListing = () => {
     toggleDrawerVisibility();
   };
 
-  const handleEmailTemplateModal = (type: EmailModalEnum) => {
-    setIsEmailTemplate(type === EmailModalEnum.TEMPLATE ? false : true);
+  const handleEmailTemplateModal = (
+    type: EmailModalEnum,
+    template?: EmailTemplate,
+  ) => {
+    setSelectedTemplate(type === EmailModalEnum.EMAIL ? undefined : template);
     toggleEmailTemplateModal();
     toggleNewEmailModal();
   };
+
+  const handleNewEmailModalClose = useCallback(() => {
+    setSelectedTemplate(undefined);
+    setIsAllSelected(false);
+    toggleNewEmailModal();
+  }, [toggleNewEmailModal]);
 
   useEffect(() => {
     if (clubId && queryParams.clubId !== clubId) {
@@ -206,6 +217,7 @@ const ProspectsListing = () => {
         onAddProspect={show}
         filtersActive={filtersActive}
         onBulkMail={toggleEmailTemplateModal}
+        selectedEmails={selectedProspects.length}
       />
       <div className={styles.prospectList}>
         <div className={styles.tableContainer}>
@@ -250,31 +262,14 @@ const ProspectsListing = () => {
                 />
               ))}
             </div>
-            <div className={styles.paginationContainer}>
-              <Button
-                disabled={data?.pagination?.currentPage === 1}
-                onClick={() => handlePageChange(PageListingDirections.PREV)}
-                icon={<IconChevronLeft size={20} />}
-              ></Button>
-              <div className={styles.textContainer}>
-                Page
-                <span className={styles.active}>
-                  {data?.pagination?.currentPage ?? queryParams.page ?? 1}
-                </span>
-                of
-                <span className={styles.end}>
-                  {data?.pagination?.overallPages ?? 1}
-                </span>
-              </div>
-              <Button
-                onClick={() => handlePageChange(PageListingDirections.NEXT)}
-                disabled={
-                  data?.pagination?.currentPage ===
-                  data?.pagination?.overallPages
-                }
-                icon={<IconChevronRight size={20} />}
-              ></Button>
-            </div>
+            <Pagination
+              currentPage={
+                data?.pagination?.currentPage ?? queryParams.page ?? 1
+              }
+              totalPages={data?.pagination?.overallPages ?? 1}
+              onPageChange={handlePageChange}
+              hasData={!!data?.prospects && data.prospects.length > 0}
+            />
           </ConditionalRender>
         </div>
       </div>
@@ -302,9 +297,9 @@ const ProspectsListing = () => {
       />
       <NewEmailModal
         isOpen={newEmailModalVisible}
-        onClose={toggleNewEmailModal}
-        isTemplate={isEmailTemplate}
-        selectedEmails={selectedProspects}
+        onClose={handleNewEmailModalClose}
+        selectedEmails={emailRecipients}
+        selectedTemplate={selectedTemplate}
       />
     </div>
   );

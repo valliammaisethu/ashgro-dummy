@@ -1,4 +1,4 @@
-import { list, object, primitive, serializable } from "serializr";
+import { alias, list, object, primitive, serializable } from "serializr";
 
 export class EmailModel {
   @serializable
@@ -26,6 +26,9 @@ export class SendEmail {
 
   @serializable
   body?: string;
+
+  @serializable
+  clubId?: string;
 }
 
 export class SelectedEmailModel {
@@ -37,4 +40,24 @@ export class SelectedEmailModel {
 
   @serializable
   name?: string;
+}
+
+export class EmailRecipientsData {
+  @serializable(list(object(EmailModel)))
+  prospects?: EmailModel[];
+
+  @serializable
+  count = 0;
+}
+
+export class EmailTemplates {
+  @serializable
+  id?: string;
+
+  @serializable(alias("title"))
+  label?: string;
+
+  get value(): string | undefined {
+    return this.id;
+  }
 }

@@ -31,3 +31,26 @@
     height: 4.4rem;
   }
 }
+
+.membersForm {
+  :global(.ant-modal-body) {
+    height: 50rem;
+    overflow-y: auto;
+  }
+  :global(.ant-modal) {
+    top: 2rem;
+  }
+}
+
+// whenever delete is happening we are not able to getch api
+
+.addressBox {
+  textArea {
+    min-height: 8rem;
+  }
+}
+.activityDescription {
+  textArea {
+    min-height: 24rem;
+  }
+}

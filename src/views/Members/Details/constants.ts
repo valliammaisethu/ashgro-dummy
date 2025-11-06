@@ -11,4 +11,5 @@ export const detailsConstants = {
   memberDetailsLabel: "Member Details",
   feesAndDuesLabel: "Fees & Dues",
   activityCount: "Activity",
+  statusPlaceholder: "Select Membership Status",
 };

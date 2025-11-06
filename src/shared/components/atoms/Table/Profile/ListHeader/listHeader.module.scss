@@ -1,0 +1,19 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.headerRow {
+  display: grid;
+  grid-template-columns: 50% 25% 25%;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 3.2rem;
+  background-color: $ashgro-white;
+  border-radius: 20px 20px 0 0;
+  margin-bottom: 1rem;
+  .headerLabel {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: $ashgro-gold;
+    font-family: $font-secondary;
+  }
+}

@@ -4,6 +4,12 @@ export interface OperationParams {
   type: payloadType;
   name?: string;
   id?: string;
+  data?: {
+    title?: string;
+    subject?: string;
+    body?: string;
+    attachmentIds?: string[];
+  };
 }
 
 export type payloadType =
@@ -11,7 +17,8 @@ export type payloadType =
   | "status"
   | "memberShipType"
   | "memberShipStatus"
-  | "staffDepartment";
+  | "staffDepartment"
+  | "emailTemplate";
 
 const {
   LEAD_SOURCES_SETTINGS,
@@ -24,6 +31,8 @@ const {
   MEMBERSHIP_TYPE_STATUS_SETTINGS,
   STAFF_MEMBERS_SETTINGS,
   UPDATE_STAFF_MEMBERS_SETTINGS,
+  EMAIL_TEMPLATES_SETTINGS,
+  UPDATE_EMAIL_TEMPLATE_SETTINGS,
 } = ApiRoutes;
 
 export const LeadEndpoints = {
@@ -43,9 +52,30 @@ export const getLeadPayload = (type: payloadType, name: string = "") => {
     memberShipType: { categoryName: name },
     memberShipStatus: { statusName: name },
     staffDepartment: { name },
+    emailTemplate: { name },
   };
 
   return payloads[type];
+};
+
+export const getEmailTemplatePayload = (
+  type: payloadType,
+  data?: {
+    title?: string;
+    subject?: string;
+    body?: string;
+    attachmentIds?: string[];
+  },
+) => {
+  if (type === "emailTemplate" && data) {
+    return {
+      title: data.title,
+      subject: data.subject,
+      body: data.body,
+      attachmentIds: data.attachmentIds,
+    };
+  }
+  return {};
 };
 
 export const Endpoints = {
@@ -54,6 +84,7 @@ export const Endpoints = {
   memberShipType: MEMBERSHIP_TYPE_STATUS_SETTINGS,
   memberShipStatus: MEMBERSHIP_STATUS_SETTINGS,
   staffDepartment: STAFF_MEMBERS_SETTINGS,
+  emailTemplate: EMAIL_TEMPLATES_SETTINGS,
 };
 
 export const UpdateEndpoints = {
@@ -62,6 +93,7 @@ export const UpdateEndpoints = {
   memberShipType: UPDATE_MEMBERSHIP_MEMBERSHIP_TYPE_SETTINGS,
   memberShipStatus: UPDATE_MEMBERSHIP_STATUS_SETTINGS,
   staffDepartment: UPDATE_STAFF_MEMBERS_SETTINGS,
+  emailTemplate: UPDATE_EMAIL_TEMPLATE_SETTINGS,
 };
 
 export const getRequestConfig = (
