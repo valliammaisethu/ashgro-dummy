@@ -2,7 +2,7 @@ import { list, object, primitive, serializable } from "serializr";
 import { QueryParams } from "./queryParams.model";
 import { ActivityDetails, Prospect } from "./prospects.model";
 import { Pagination } from "./pagination.model";
-import { defaultCountryCode } from "src/constants/common";
+import { CountryCode } from "src/enums/countryCodes.enum";
 
 export class MembersListingParams extends QueryParams {
   @serializable(list(primitive()))
@@ -50,7 +50,7 @@ export class Member extends Prospect {
   membershipStatus?: string;
 
   @serializable
-  countryCode?: string = defaultCountryCode;
+  countryCode = CountryCode.USA;
 }
 
 export class MemberFormData {

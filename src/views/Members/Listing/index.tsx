@@ -23,6 +23,9 @@ import { memberHeaders } from "../MembersForm/constants";
 import Pagination from "src/shared/components/Pagination";
 
 import styles from "./membersListing.module.scss";
+import { fallbackHandler } from "src/shared/utils/commonHelpers";
+import DeleteModal from "../DeleteModal";
+import { VisibilityType } from "src/enums/visibilityType.enum";
 
 interface ModalState {
   open: boolean;
@@ -101,8 +104,10 @@ const Members = () => {
   };
 
   const handleEditClick = (member: Member) => {
-    handleModalVisibility("edit", member);
+    handleModalVisibility(VisibilityType.EDIT, member);
   };
+
+  const [deleteItem, setDeleteItem] = useState<Member | undefined>();
 
   return (
     <div>
@@ -110,7 +115,7 @@ const Members = () => {
         filtersActive={filtersActive}
         onFilter={toggleMemberFilters}
         onSearch={handleSearch}
-        onAddMember={() => handleModalVisibility("add")}
+        onAddMember={() => handleModalVisibility(VisibilityType.ADD)}
       />
       <MemberFilters
         toggleVisibility={toggleMemberFilters}
@@ -127,7 +132,7 @@ const Members = () => {
             isPending={isFetching}
             isSuccess={isSuccess}
           >
-            <div className={styles.body}>
+            <div className={styles.listContainer}>
               {data?.members?.map((item) => {
                 const selectedValue = memberShipStatusesOptions.find(
                   (opt) => opt.label === item.membershipStatus,
@@ -144,12 +149,18 @@ const Members = () => {
                       lastName={item.lastName}
                       email={item.email}
                       profilePictureUrl={item.profilePictureUrl}
-                      contactNumber={`${item?.countryCode} ${item?.contactNumber}`}
+                      contactNumber={
+                        item?.contactNumber
+                          ? `${item?.countryCode} ${item?.contactNumber}`
+                          : undefined
+                      }
                       showCheckbox
                     />
 
                     <div className={styles.rowItem}>
-                      {formatDate(item.joinedDate, DateFormats.DD_MMM__YYYY)}
+                      {fallbackHandler(
+                        formatDate(item.joinedDate, DateFormats.DD_MMM__YYYY),
+                      )}
                     </div>
 
                     <Actions
@@ -160,7 +171,7 @@ const Members = () => {
                         handleStatusChange(item.id, value)
                       }
                       onEditClick={() => handleEditClick(item)}
-                      onDeleteClick={() => {}}
+                      onDeleteClick={() => setDeleteItem(item)}
                     />
                   </div>
                 );
@@ -177,6 +188,14 @@ const Members = () => {
           </ConditionalRender>
         </div>
       </Form>
+
+      {
+        <DeleteModal
+          visible={!!deleteItem?.id}
+          toggleVisibility={() => setDeleteItem(undefined)}
+          member={deleteItem}
+        />
+      }
 
       {modalState.open && (
         <MembersForm

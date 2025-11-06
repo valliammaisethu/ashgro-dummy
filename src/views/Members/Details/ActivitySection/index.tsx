@@ -12,10 +12,12 @@ import styles from "./activitySection.module.scss";
 interface ActivitySectionProps {
   activityCount?: number;
   activities?: ActivityDetails[];
+  refetch?: () => void;
 }
 const ActivitySection = ({
   activityCount = 0,
   activities,
+  refetch,
 }: ActivitySectionProps) => {
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
 
@@ -40,7 +42,7 @@ const ActivitySection = ({
       <AddActivity
         onClose={handleToggleVisibility}
         isOpen={isActivityModalOpen}
-        handleRefetch={() => {}}
+        handleRefetch={refetch}
       />
     </div>
   );

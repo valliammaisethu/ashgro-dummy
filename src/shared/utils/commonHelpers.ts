@@ -17,3 +17,13 @@ export const findValueByLabel = (
   if (!targetLabel) return undefined;
   return options.find((opt) => opt.label === targetLabel)?.value;
 };
+
+export const fallbackHandler = (
+  value?: string | number | null,
+  isNumber = false,
+) => {
+  if (value == null) {
+    return isNumber ? 0 : "-";
+  }
+  return value;
+};

@@ -46,5 +46,10 @@ export const ApiRoutes = {
   STAFF_MEMBERS_SETTINGS_LISTING: "/settings/:clubId/staffDepartments",
   STAFF_MEMBERS_SETTINGS: "/settings/:clubId/staffDepartment",
   UPDATE_STAFF_MEMBERS_SETTINGS: "settings/:clubId/staffDepartment/:id",
+
+  EMAIL_TEMPLATES_SETTINGS_LIST: "/settings/:id/emailTemplates",
+  EMAIL_TEMPLATE_DETAIL: "/settings/:id/emailTemplate/:emailTemplateId",
+  EMAIL_TEMPLATES_SETTINGS: "/settings/:clubId/emailTemplate",
+  UPDATE_EMAIL_TEMPLATE_SETTINGS: "/settings/:clubId/emailTemplate/:id",
   STAFF_MEMBERS: "/staffs",
 };

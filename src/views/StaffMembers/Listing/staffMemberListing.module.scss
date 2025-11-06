@@ -6,7 +6,7 @@
 
   .rowContainer {
     display: grid;
-    grid-template-columns: 50% 25% 25%;
+    grid-template-columns: 50% 20% 25% 05%;
     align-items: center;
     padding: 2rem 3.2rem;
     background-color: $ashgro-white;
@@ -17,12 +17,21 @@
       min-width: 4rem;
       @include flex-container;
       gap: 1.8rem;
-      opacity: 0;
-      transition: opacity 0.2s ease;
+
+      :global(.actions-icons) {
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
     }
 
     &:last-child {
       border-bottom: none;
+    }
+
+    &:hover :global(.actions-icons) {
+      @include flex-container;
+      gap: 2rem;
+      opacity: 1;
     }
   }
 

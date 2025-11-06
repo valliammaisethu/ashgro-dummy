@@ -8,6 +8,9 @@ const {
   INDIVIDUAL_PROSPECT,
   PROSPECTS_LISTING,
   MEMBER_DETAILS,
+  STAFF_MEMBER_DETAILS,
+  CLUB_STAFF,
+  MEMBERS,
 } = NavigationRoutes;
 
 const useRedirect = () => {
@@ -27,6 +30,13 @@ const useRedirect = () => {
   const navigateToMemberDetails = (id?: string) =>
     navigate(generatePath(MEMBER_DETAILS, { id }));
 
+  const navigateToStaffMemberDetails = (id?: string) =>
+    navigate(generatePath(STAFF_MEMBER_DETAILS, { id }));
+
+  const navigateToStaffMemberList = () => navigate(generatePath(CLUB_STAFF));
+
+  const navigateToMembers = () => navigate(MEMBERS);
+
   return {
     navigateToHome,
     navigateToLogin,
@@ -34,6 +44,9 @@ const useRedirect = () => {
     navigateToProspects,
     navigateToIndividualProspect,
     navigateToMemberDetails,
+    navigateToStaffMemberDetails,
+    navigateToStaffMemberList,
+    navigateToMembers,
   };
 };
 

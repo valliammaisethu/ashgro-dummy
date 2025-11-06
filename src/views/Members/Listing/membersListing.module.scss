@@ -82,6 +82,12 @@
     }
   }
 
+  .listContainer {
+    background-color: $search-field-placeholder;
+    max-height: 50rem;
+    overflow-y: scroll;
+  }
+
   .actionContainer {
     @include flex-container;
   }
