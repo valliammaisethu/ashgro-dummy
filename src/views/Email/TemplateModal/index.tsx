@@ -5,6 +5,7 @@ import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
 import Form from "src/shared/components/Form";
 import SelectField from "src/shared/components/SelectField";
+import useForm from "src/shared/components/UseForm";
 import { EmailTemplateModalProps } from "src/shared/types/email.type";
 import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
 import { MetaService } from "src/services/MetaService/meta.service";
@@ -18,7 +19,6 @@ import {
 } from "./constants";
 
 import styles from "../email.module.scss";
-import useForm from "src/shared/components/UseForm";
 
 const TemplateModal = ({
   isOpen,
@@ -37,18 +37,21 @@ const TemplateModal = ({
     [emailTemplatesData],
   );
 
+  const methods = useForm({});
+
+  const { watch } = methods;
+  const emailTemplateWatch = watch(fields.emailTemplate);
+
   const handleNewEmailClick = useCallback(() => {
     toggleEmailModal(EmailModalEnum.EMAIL);
   }, [toggleEmailModal]);
 
   const handleNextClick = useCallback(() => {
-    toggleEmailModal(EmailModalEnum.TEMPLATE);
-  }, [toggleEmailModal]);
-
-  const methods = useForm({});
-
-  const { watch } = methods;
-  const emailTemplateWatch = watch(fields.emailTemplate);
+    const selectedTemplate = emailTemplatesData?.emailTemplates?.find(
+      (template) => template.id === emailTemplateWatch,
+    );
+    toggleEmailModal(EmailModalEnum.TEMPLATE, selectedTemplate);
+  }, [toggleEmailModal, emailTemplatesData, emailTemplateWatch]);
 
   return (
     <Modal

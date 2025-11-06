@@ -55,7 +55,6 @@ const Profile: React.FC<ProfileProps> = ({
             <p className={styles.email}>{email}</p>
             {contactNumber && (
               <div className={styles.contactNumber}>
-                <span className={styles.dot}>•</span>
                 <span className={styles.phone}>{contactNumber}</span>
               </div>
             )}
