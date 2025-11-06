@@ -69,9 +69,6 @@ const Members = () => {
       ...filters,
       joinedEndDate: filters.followUpDateRange?.[1],
       joinedStartDate: filters.followUpDateRange?.[0],
-      leadSourcesIds: filters.leadSourceIds,
-      membershipCategoriesIds: filters.membershipCategoriesIds,
-      membershipStatusIds: filters.membershipStatusIds,
       page: 1,
     }));
     toggleMemberFilters();

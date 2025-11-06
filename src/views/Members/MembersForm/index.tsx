@@ -62,8 +62,10 @@ const MembersForm = ({
   const { getActivityTypes } = MetaService();
   const { addMember, MembersDetails, updateMemberDetails } = MembersService();
 
-  const { mutateAsync: addMemberMutate } = useMutation(addMember());
-  const { mutateAsync: editMemberMutate } = useMutation(updateMemberDetails());
+  const { mutateAsync: addMemberMutate, isPending: isAddPending } =
+    useMutation(addMember());
+  const { mutateAsync: editMemberMutate, isPending: isEditPending } =
+    useMutation(updateMemberDetails());
 
   const { data, isFetching, refetch } = useQuery(MembersDetails(id));
 
@@ -165,6 +167,9 @@ const MembersForm = ({
         closeModal={handleFormVisibility}
         handleOk={handleSubmit(handleFormSubmit)}
         rootClassName={styles.membersForm}
+        okButtonProps={{
+          loading: id ? isEditPending : isAddPending,
+        }}
       >
         {!!id && isFetching ? (
           <Loader />
