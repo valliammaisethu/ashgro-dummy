@@ -1,9 +1,11 @@
 import React from "react";
 import { Select } from "antd";
 import { IconEdit, IconDelete } from "obra-icons-react";
+import clsx from "clsx";
 
 import { Colors } from "src/enums/colors.enum";
 import { stopPropagation } from "src/shared/utils/eventUtils";
+import { hoverActionBtnClass } from "./constants";
 
 import styles from "./actions.module.scss";
 
@@ -61,7 +63,7 @@ const Actions: React.FC<ActionsProps> = ({
         </div>
       )}
 
-      <div className={styles.actions}>
+      <div className={clsx(styles.actions, hoverActionBtnClass)}>
         {onEditClick && (
           <IconEdit
             onClick={handleEditClick}

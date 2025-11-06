@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IconLocationMarker,
   IconCall,
@@ -20,14 +20,19 @@ import { getFullName } from "src/shared/utils/helpers";
 import { Colors } from "src/enums/colors.enum";
 import DeleteModal from "src/shared/components/DeleteModal";
 import { footerLabels } from "./constants";
+import { Justify } from "src/enums/align.enum";
+import StaffMembersForm from "../StaffMembersForm";
+import useRedirect from "src/shared/hooks/useRedirect";
 
 import styles from "./details.module.scss";
-import { Justify } from "src/enums/align.enum";
 
 const { birthData, department, title, workAnniversary } = footerLabels;
 
 const Details = () => {
   const { id = "" } = useParams();
+  const [isEditForm, setIsEditForm] = useState(false);
+
+  const { navigateToStaffMemberList } = useRedirect();
 
   const { staffMembersDeatils, deleteStaffMember } = StaffMembersService();
 
@@ -37,11 +42,6 @@ const Details = () => {
 
   const { mutateAsync: deleteStaffMemberMutate } =
     useMutation(deleteStaffMember());
-
-  // TODO: To use useRedirect
-  // const handleNavigateBack = () => {};
-
-  const handlEdit = () => {};
 
   const handlDelete = async () => {
     await deleteStaffMemberMutate(id);
@@ -54,9 +54,11 @@ const Details = () => {
     { label: birthData, value: data?.birthDate },
   ];
 
+  const handleModalVisibility = () => setIsEditForm((prev) => !prev);
+
   return (
     <>
-      <IndividualDetailsHeader navigateBack={() => {}} />
+      <IndividualDetailsHeader navigateBack={navigateToStaffMemberList} />
 
       <ConditionalRender
         isPending={isPending}
@@ -68,7 +70,7 @@ const Details = () => {
           <Row justify={Justify.END} gutter={[10, 0]}>
             <Col>
               <Button
-                onClick={handlEdit}
+                onClick={handleModalVisibility}
                 icon={<IconEdit strokeWidth={1.5} />}
                 className={styles.editButton}
               />
@@ -119,6 +121,14 @@ const Details = () => {
             </div>
           </div>
         </Card>
+
+        {isEditForm && (
+          <StaffMembersForm
+            isOpen={isEditForm}
+            handleModalVisibility={handleModalVisibility}
+            id={id}
+          />
+        )}
       </ConditionalRender>
     </>
   );

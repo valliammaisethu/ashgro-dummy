@@ -1,6 +1,6 @@
 export const FORM_CONSTANTS = {
   ADD_TITLE: "New Member",
-  EDIT_TITLE: "Edit Prospect",
+  EDIT_TITLE: "Edit Member",
   ADD_BTN_TXT: "Add Member",
   EDIT_BTN_TXT: "Edit Member",
 

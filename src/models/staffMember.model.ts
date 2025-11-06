@@ -38,10 +38,13 @@ export class StaffMemberDetails {
   title = NOT_AVAILABLE;
 
   @serializable
-  birthDate = "";
+  birthDate?: string;
 
   @serializable
-  workAnniversaryDate = "";
+  workAnniversaryDate?: string;
+
+  @serializable
+  staffDepartmentId?: string;
 
   @serializable
   residentialAddress = NOT_AVAILABLE;
