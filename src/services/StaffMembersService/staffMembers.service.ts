@@ -1,20 +1,28 @@
 import { UseMutationOptions, UseQueryOptions } from "@tanstack/react-query";
 import { generatePath } from "react-router-dom";
-import { deserialize } from "serializr";
+import { deserialize, serialize } from "serializr";
 
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
 import axiosInstance from "src/interceptor/axiosInstance";
+import { QueryParams } from "src/models/queryParams.model";
 import { ResponseModel } from "src/models/response.model";
-import { StaffMemberDetails } from "src/models/staffMember.model";
+import {
+  StaffMemberDetails,
+  StaffMemberListData,
+} from "src/models/staffMember.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
-const { GET_STAFF_MEMBER_DETAILS } = QueryKeys;
-const { STAFF_MEMBER_DETAILS } = ApiRoutes;
+const { GET_STAFF_MEMBER_DETAILS, GET_STAFF_MEMBER_LIST } = QueryKeys;
+const { STAFF_MEMBER_DETAILS, STAFF_MEMBERS } = ApiRoutes;
 const { DELETE_STAFF_MEMBER } = MutationKeys;
 
 export const StaffMembersService = () => {
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
   const staffMembersDeatils = (
     id: string,
   ): UseQueryOptions<
@@ -50,8 +58,29 @@ export const StaffMembersService = () => {
     },
   });
 
+  const getStaffMembersList = (
+    params?: QueryParams,
+  ): UseQueryOptions<
+    StaffMemberListData,
+    ResponseModel,
+    StaffMemberListData
+  > => ({
+    queryKey: [GET_STAFF_MEMBER_LIST, clubId],
+    queryFn: async () => {
+      const updatedParams = { ...params, clubId };
+
+      const response = await axiosInstance.get(STAFF_MEMBERS, {
+        params: serialize(QueryParams, updatedParams),
+      });
+
+      return deserialize(StaffMemberListData, response?.data?.data);
+    },
+    enabled: !!clubId,
+  });
+
   return {
     staffMembersDeatils,
     deleteStaffMember,
+    getStaffMembersList,
   };
 };

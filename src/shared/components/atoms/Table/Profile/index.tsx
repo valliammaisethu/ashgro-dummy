@@ -53,10 +53,11 @@ const Profile: React.FC<ProfileProps> = ({
           <p className={styles.name}>{getFullName(firstName, lastName)}</p>
           <div className={styles.contactInfo}>
             <p className={styles.email}>{email}</p>
-            <div className={styles.contactNumber}>
-              <span className={styles.dot}>•</span>
-              <span className={styles.phone}>{contactNumber}</span>
-            </div>
+            {contactNumber && (
+              <div className={styles.contactNumber}>
+                <span className={styles.phone}>{contactNumber}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
