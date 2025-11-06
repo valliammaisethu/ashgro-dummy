@@ -1,4 +1,6 @@
 import React, { useCallback, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
 import Header from "./Header";
 import {
   StaffMemberDetails,
@@ -11,7 +13,6 @@ import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
 import { staffMemberHeaders } from "../constants";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import { StaffMembersService } from "src/services/StaffMembersService/staffMembers.service";
-import { useQuery } from "@tanstack/react-query";
 import Profile from "src/shared/components/atoms/Table/Profile";
 import Actions from "src/shared/components/atoms/Table/Actions";
 import useRedirect from "src/shared/hooks/useRedirect";
@@ -19,20 +20,15 @@ import { SettingFormModalModel } from "src/views/Settings/constants";
 import StaffMembersForm from "../StaffMembersForm";
 import DeleteModal from "../DeleteModal";
 import { VisibilityType } from "src/enums/visibilityType.enum";
-
+import Pagination from "src/shared/components/Pagination";
 interface ModalState {
   open: boolean;
   mode: SettingFormModalModel;
   item?: StaffMemberDetails;
 }
 
-interface DeleteModalState {
-  open: boolean;
-  item?: StaffMemberDetails;
-}
-
 const StaffMembersListing = () => {
-  const [, setQueryParams] = useState<StaffMembersListingParams>(
+  const [queryParams, setQueryParams] = useState<StaffMembersListingParams>(
     new StaffMembersListingParams(),
   );
   const handleSearch = useCallback((term: string) => {
@@ -47,9 +43,15 @@ const StaffMembersListing = () => {
   const handleFilter = (filters: Partial<StaffMembersListingParams>) =>
     setQueryParams((prev) => ({ ...prev, ...filters, page: 1 }));
 
+  const handlePageChange = useCallback((newPage: number) => {
+    setQueryParams((prev) => ({ ...prev, page: newPage }));
+  }, []);
+
   const { getStaffMembersList } = StaffMembersService();
 
-  const { data, isFetching, isSuccess } = useQuery(getStaffMembersList());
+  const { data, isFetching, isSuccess } = useQuery(
+    getStaffMembersList(queryParams),
+  );
 
   const handleNavigateToDetails = (id?: string) => () =>
     navigateToStaffMemberDetails(id);
@@ -113,6 +115,14 @@ const StaffMembersListing = () => {
                 );
               })}
             </div>
+            <Pagination
+              currentPage={
+                data?.pagination?.currentPage ?? queryParams.page ?? 1
+              }
+              totalPages={data?.pagination?.overallPages ?? 1}
+              onPageChange={handlePageChange}
+              hasData={!!data?.staffs && data.staffs.length > 0}
+            />
           </ConditionalRender>
         </div>
       </Form>

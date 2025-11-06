@@ -3,7 +3,7 @@ export const staffMembersConstants = {
   field: "departmentIds",
 };
 
-export const staffMemberHeaders = ["Clubb Staff", "Department", "Title"];
+export const staffMemberHeaders = ["Club Staff", "Department", "Title"];
 
 export const FORM_CONSTANTS = {
   ADD_TITLE: "New Staff",

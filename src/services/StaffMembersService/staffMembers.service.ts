@@ -10,11 +10,11 @@ import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
 import axiosInstance from "src/interceptor/axiosInstance";
-import { QueryParams } from "src/models/queryParams.model";
 import { ResponseModel } from "src/models/response.model";
 import {
   StaffMemberDetails,
   StaffMemberListData,
+  StaffMembersListingParams,
 } from "src/models/staffMember.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
@@ -68,26 +68,6 @@ export const StaffMembersService = () => {
     },
   });
 
-  const getStaffMembersList = (
-    params?: QueryParams,
-  ): UseQueryOptions<
-    StaffMemberListData,
-    ResponseModel,
-    StaffMemberListData
-  > => ({
-    queryKey: [GET_STAFF_MEMBER_LIST, clubId],
-    queryFn: async () => {
-      const updatedParams = { ...params, clubId };
-
-      const response = await axiosInstance.get(STAFF_MEMBERS, {
-        params: serialize(QueryParams, updatedParams),
-      });
-
-      return deserialize(StaffMemberListData, response?.data?.data);
-    },
-    enabled: !!clubId,
-  });
-
   const addStaffMember = (): UseMutationOptions<
     ResponseModel,
     ResponseModel,
@@ -133,6 +113,26 @@ export const StaffMembersService = () => {
         queryKey: [GET_STAFF_MEMBER_DETAILS, clubId],
       });
     },
+  });
+
+  const getStaffMembersList = (
+    params?: StaffMembersListingParams,
+  ): UseQueryOptions<
+    StaffMemberListData,
+    ResponseModel,
+    StaffMemberListData
+  > => ({
+    queryKey: [GET_STAFF_MEMBER_LIST, clubId, params],
+    queryFn: async () => {
+      const updatedParams = { ...params, clubId };
+
+      const response = await axiosInstance.get(STAFF_MEMBERS, {
+        params: serialize(StaffMembersListingParams, updatedParams),
+      });
+
+      return deserialize(StaffMemberListData, response?.data?.data);
+    },
+    enabled: !!clubId,
   });
 
   return {

@@ -19,9 +19,11 @@
     }
 
     &:hover :global(.actions-icons) {
-      @include flex-container;
-      gap: 2rem;
       opacity: 1;
+    }
+
+    &:last-child {
+      border-bottom: none;
     }
   }
 
