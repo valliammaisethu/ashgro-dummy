@@ -1,14 +1,22 @@
-import { UseMutationOptions } from "@tanstack/react-query";
+import { UseMutationOptions, UseQueryOptions } from "@tanstack/react-query";
 import { deserialize, serialize } from "serializr";
-import { MutationKeys } from "src/enums/cacheEvict.enum";
+import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
-import { SendEmail } from "src/models/email.model";
+import { EmailRecipientsData, SendEmail } from "src/models/email.model";
+import { MembersListingParams } from "src/models/members.model";
+import { ProspectsListingParams } from "src/models/prospects.model";
 import { ResponseModel } from "src/models/response.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
 const { SEND_EMAIL } = MutationKeys;
-const { SEND_EMAIL: SEND_EMAIL_ROUTE } = ApiRoutes;
+const { GET_PROSPECT_EMAIL_RECIPIENTS, GET_MEMBER_EMAIL_RECIPIENTS } =
+  QueryKeys;
+const {
+  SEND_EMAIL: SEND_EMAIL_ROUTE,
+  PROSPECT_EMAIL_RECIPIENTS,
+  MEMBER_EMAIL_RECIPIENTS,
+} = ApiRoutes;
 
 export const EmailService = () => {
   const sendEmail = (): UseMutationOptions<
@@ -31,7 +39,35 @@ export const EmailService = () => {
       renderNotification(title, description);
     },
   });
+
+  const getProspectEmailRecipients = (
+    params: ProspectsListingParams,
+  ): UseQueryOptions<EmailRecipientsData, ResponseModel> => ({
+    queryKey: [GET_PROSPECT_EMAIL_RECIPIENTS, params],
+    queryFn: async () => {
+      const serializedParams = serialize(ProspectsListingParams, params);
+      const { data } = await axiosInstance.get(PROSPECT_EMAIL_RECIPIENTS, {
+        params: serializedParams,
+      });
+      return deserialize(EmailRecipientsData, data?.data);
+    },
+  });
+
+  const getMemberEmailRecipients = (
+    params: MembersListingParams,
+  ): UseQueryOptions<EmailRecipientsData, ResponseModel> => ({
+    queryKey: [GET_MEMBER_EMAIL_RECIPIENTS, params],
+    queryFn: async () => {
+      const serializedParams = serialize(MembersListingParams, params);
+      const { data } = await axiosInstance.get(MEMBER_EMAIL_RECIPIENTS, {
+        params: serializedParams,
+      });
+      return deserialize(EmailRecipientsData, data?.data);
+    },
+  });
   return {
     sendEmail,
+    getProspectEmailRecipients,
+    getMemberEmailRecipients,
   };
 };

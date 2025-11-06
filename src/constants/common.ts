@@ -3,3 +3,5 @@ export const FALL_BACKS = {
 };
 
 export const defaultCountryCode = "+1";
+
+export const defaultAntdDropdownWidth = 200;

@@ -18,6 +18,7 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import { SettingFormModalModel } from "src/views/Settings/constants";
 import StaffMembersForm from "../StaffMembersForm";
 import DeleteModal from "../DeleteModal";
+import { VisibilityType } from "src/enums/visibilityType.enum";
 
 interface ModalState {
   open: boolean;
@@ -69,7 +70,7 @@ const StaffMembersListing = () => {
     <div>
       <Header
         onFilter={handleFilter}
-        onStaffAdd={() => handleModalVisibility("add")}
+        onStaffAdd={() => handleModalVisibility(VisibilityType.ADD)}
         onSearch={handleSearch}
       />
       <Form>
@@ -103,7 +104,9 @@ const StaffMembersListing = () => {
 
                     <Actions
                       showSelect={false}
-                      onEditClick={() => handleModalVisibility("edit", item)}
+                      onEditClick={() =>
+                        handleModalVisibility(VisibilityType.EDIT, item)
+                      }
                       onDeleteClick={() => setDeleteItem(item)}
                     />
                   </div>

@@ -17,7 +17,7 @@ export const fields = {
   cc: "cc",
   bcc: "bcc",
   subject: "subject",
-  emailBody: "emailBody",
+  body: "body",
   attachmentIds: "attachmentIds",
   title: "title",
 };

@@ -1,7 +1,8 @@
 export const FORM_CONSTANTS = {
-  MODAL_TITLE: "New Member",
-  EDIT_TITLE: "Edit Prospect",
+  ADD_TITLE: "New Member",
+  EDIT_TITLE: "Edit Member",
   ADD_BTN_TXT: "Add Member",
+  EDIT_BTN_TXT: "Edit Member",
 
   SECTION_TITLES: {
     MEMBER_DETAILS: "Member Details",

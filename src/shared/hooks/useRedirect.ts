@@ -10,6 +10,7 @@ const {
   MEMBER_DETAILS,
   STAFF_MEMBER_DETAILS,
   CLUB_STAFF,
+  MEMBERS,
 } = NavigationRoutes;
 
 const useRedirect = () => {
@@ -34,6 +35,8 @@ const useRedirect = () => {
 
   const navigateToStaffMemberList = () => navigate(generatePath(CLUB_STAFF));
 
+  const navigateToMembers = () => navigate(MEMBERS);
+
   return {
     navigateToHome,
     navigateToLogin,
@@ -43,6 +46,7 @@ const useRedirect = () => {
     navigateToMemberDetails,
     navigateToStaffMemberDetails,
     navigateToStaffMemberList,
+    navigateToMembers,
   };
 };
 

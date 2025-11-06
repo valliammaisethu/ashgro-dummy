@@ -81,3 +81,8 @@ export const cleanObject = (obj: any): any => {
 
   return obj;
 };
+
+export const ValidateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};

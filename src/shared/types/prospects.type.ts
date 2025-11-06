@@ -11,6 +11,7 @@ export interface ProspectListingHeaderProps {
   onFilter: () => void;
   filtersActive: boolean;
   onBulkMail: () => void;
+  selectedEmails: number;
 }
 
 export interface AddProspectProps {
