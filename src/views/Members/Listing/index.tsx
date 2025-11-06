@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { IconChevronLeft, IconChevronRight } from "obra-icons-react";
 
 import Header from "../Header";
 import useDrawer from "src/shared/hooks/useDrawer";
@@ -20,8 +21,12 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import Actions from "src/shared/components/atoms/Table/Actions";
 import { SettingFormModalModel } from "src/views/Settings/constants";
 import { memberHeaders } from "../MembersForm/constants";
+import { PageListingDirections } from "src/views/Prospects/Listing/constants";
+import Button from "src/shared/components/Button";
 
 import styles from "./membersListing.module.scss";
+import { fallbackHandler } from "src/shared/utils/commonHelpers";
+import DeleteModal from "../DeleteModal";
 import { VisibilityType } from "src/enums/visibilityType.enum";
 
 interface ModalState {
@@ -100,6 +105,32 @@ const Members = () => {
     handleModalVisibility(VisibilityType.EDIT, member);
   };
 
+  const [deleteItem, setDeleteItem] = useState<Member | undefined>();
+
+  const handlePageChange = useCallback(
+    (direction: PageListingDirections) => {
+      setQueryParams((prev) => {
+        const currentPage = prev.page || 1;
+        const totalPages = data?.pagination?.overallPages || 1;
+
+        let newPage = currentPage;
+
+        if (direction === PageListingDirections.PREV && currentPage > 1)
+          newPage = currentPage - 1;
+        else if (
+          direction === PageListingDirections.NEXT &&
+          currentPage < totalPages
+        )
+          newPage = currentPage + 1;
+
+        if (newPage === currentPage) return prev;
+
+        return { ...prev, page: newPage };
+      });
+    },
+    [data?.pagination?.overallPages],
+  );
+
   return (
     <div>
       <Header
@@ -123,7 +154,7 @@ const Members = () => {
             isPending={isFetching}
             isSuccess={isSuccess}
           >
-            <div className={styles.body}>
+            <div className={styles.listContainer}>
               {data?.members?.map((item) => {
                 const selectedValue = memberShipStatusesOptions.find(
                   (opt) => opt.label === item.membershipStatus,
@@ -140,12 +171,18 @@ const Members = () => {
                       lastName={item.lastName}
                       email={item.email}
                       profilePictureUrl={item.profilePictureUrl}
-                      contactNumber={`${item?.countryCode} ${item?.contactNumber}`}
+                      contactNumber={
+                        item?.contactNumber
+                          ? `${item?.countryCode} ${item?.contactNumber}`
+                          : undefined
+                      }
                       showCheckbox
                     />
 
                     <div className={styles.rowItem}>
-                      {formatDate(item.joinedDate, DateFormats.DD_MMM__YYYY)}
+                      {fallbackHandler(
+                        formatDate(item.joinedDate, DateFormats.DD_MMM__YYYY),
+                      )}
                     </div>
 
                     <Actions
@@ -156,15 +193,49 @@ const Members = () => {
                         handleStatusChange(item.id, value)
                       }
                       onEditClick={() => handleEditClick(item)}
-                      onDeleteClick={() => {}}
+                      onDeleteClick={() => setDeleteItem(item)}
                     />
                   </div>
                 );
               })}
             </div>
+
+            <div className={styles.paginationContainer}>
+              <Button
+                disabled={data?.pagination?.currentPage === 1}
+                onClick={() => handlePageChange(PageListingDirections.PREV)}
+                icon={<IconChevronLeft size={20} />}
+              ></Button>
+              <div className={styles.textContainer}>
+                Page
+                <span className={styles.active}>
+                  {data?.pagination?.currentPage ?? queryParams.page ?? 1}
+                </span>
+                of
+                <span className={styles.end}>
+                  {data?.pagination?.overallPages ?? 1}
+                </span>
+              </div>
+              <Button
+                onClick={() => handlePageChange(PageListingDirections.NEXT)}
+                disabled={
+                  data?.pagination?.currentPage ===
+                  data?.pagination?.overallPages
+                }
+                icon={<IconChevronRight size={20} />}
+              ></Button>
+            </div>
           </ConditionalRender>
         </div>
       </Form>
+
+      {
+        <DeleteModal
+          visible={!!deleteItem?.id}
+          toggleVisibility={() => setDeleteItem(undefined)}
+          member={deleteItem}
+        />
+      }
 
       {modalState.open && (
         <MembersForm

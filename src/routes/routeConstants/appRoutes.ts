@@ -10,7 +10,8 @@ export const NavigationRoutes = {
   INDIVIDUAL_PROSPECT: "/home/prospects/:id",
   STAFF_MEMBER_DETAILS: "/home/staff-member/:id",
   MEMBER_DETAILS: "/home/member/:id",
-  STAFF_MEMBERS: "/home/members",
+  STAFF_MEMBERS: "/home/staff-members",
+  MEMBERS: "/home/members",
 };
 
 export const AppRoutes = {

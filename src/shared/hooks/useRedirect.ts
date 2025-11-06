@@ -8,6 +8,7 @@ const {
   INDIVIDUAL_PROSPECT,
   PROSPECTS_LISTING,
   MEMBER_DETAILS,
+  MEMBERS,
 } = NavigationRoutes;
 
 const useRedirect = () => {
@@ -27,6 +28,8 @@ const useRedirect = () => {
   const navigateToMemberDetails = (id?: string) =>
     navigate(generatePath(MEMBER_DETAILS, { id }));
 
+  const navigateToMembers = () => navigate(MEMBERS);
+
   return {
     navigateToHome,
     navigateToLogin,
@@ -34,6 +37,7 @@ const useRedirect = () => {
     navigateToProspects,
     navigateToIndividualProspect,
     navigateToMemberDetails,
+    navigateToMembers,
   };
 };
 
