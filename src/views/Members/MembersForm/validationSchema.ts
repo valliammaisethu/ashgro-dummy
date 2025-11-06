@@ -7,7 +7,7 @@ const { FIELD_NAMES } = FORM_CONSTANTS;
 const VALIDATION_REGEX = {
   ALPHABETS_ONLY: /^[A-Za-z\s]+$/,
   EMAIL: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-  PHONE_NUMBER: /^(\d{10})?$/,
+  PHONE_NUMBER: /^(\(\d{3}\)\s?\d{3}-?\d{4}|\d{10})?$/,
   DECIMAL_TWO_PLACES: /^\d+(\.\d{1,2})?$/,
 };
 
@@ -29,7 +29,7 @@ const ERROR_MESSAGES = {
     EMAIL_FORMAT: "Invalid email format",
     EMAIL_CHARACTERS:
       "Email can only contain alphanumeric characters and (., -, _, @)",
-    PHONE_NUMBER: "Phone number must be exactly 10 digits",
+    PHONE_NUMBER: "Invalid phone number format",
     NUMBER: "must be a valid number",
     POSITIVE_NUMBER: "must be a positive number",
     DECIMAL_PLACES: "must have at most 2 decimal places",

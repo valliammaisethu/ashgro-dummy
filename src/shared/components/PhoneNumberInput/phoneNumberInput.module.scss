@@ -9,44 +9,35 @@
     margin-bottom: 0.4rem;
   }
 
-  .dropDownWrapper {
-    :global(.ant-select) {
-      height: 4rem;
-    }
-    :global {
-      .ant-select:not(.ant-select-customize-input) {
-        .ant-select-selector {
-          border-right: none;
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-          position: relative;
+  .countryCodePrefix {
+    @include flex-container(center, center, row);
+    gap: 0.8rem;
+    min-width: 8rem;
+    height: 4rem;
+    border: 1px solid $input-border;
+    border-right: none;
+    border-top-left-radius: 1.4rem;
+    border-bottom-left-radius: 1.4rem;
+    background-color: $input-background;
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    font-weight: 500;
+    font-family: $font-secondary;
+    padding: 0 1.2rem;
+    position: relative;
 
-          &::after {
-            content: "";
-            position: absolute;
-            top: 1rem;
-            bottom: 1rem;
-            right: 1px;
-            width: 1px;
-            visibility: visible;
-          }
-        }
-      }
+    .flag {
+      font-size: 1.6rem;
     }
 
-    .dropDown {
-      min-width: 10.9rem;
-
-      &::after {
-        content: "";
-        position: absolute;
-        top: 1rem;
-        bottom: 1rem;
-        right: 1px;
-        width: 1px;
-        background-color: $light-grey;
-        visibility: visible;
-      }
+    &::after {
+      content: "";
+      position: absolute;
+      top: 1rem;
+      bottom: 1rem;
+      right: 0;
+      width: 1px;
+      background-color: $light-grey;
     }
   }
 

@@ -59,6 +59,10 @@ const Members = () => {
     getStaffMembersList(queryParams),
   );
 
+  const [updatingMemberId, setUpdatingMemberId] = useState<
+    string | undefined
+  >();
+
   const handleSearch = useCallback((term: string) => {
     setQueryParams((prev) => ({ ...prev, search: term }));
   }, []);
@@ -78,7 +82,12 @@ const Members = () => {
     memberId?: string,
     membershipStatusId?: string,
   ) => {
-    await updateMemberStatusMutate({ memberId, membershipStatusId });
+    setUpdatingMemberId(memberId);
+    try {
+      await updateMemberStatusMutate({ memberId, membershipStatusId });
+    } finally {
+      setUpdatingMemberId(undefined);
+    }
   };
 
   const handleNavigateToDetails = (id?: string) => () =>
@@ -167,6 +176,7 @@ const Members = () => {
                       onSelectChange={(value) =>
                         handleStatusChange(item.id, value)
                       }
+                      selectLoading={updatingMemberId === item.id}
                       onEditClick={() => handleEditClick(item)}
                       onDeleteClick={() => setDeleteItem(item)}
                     />
@@ -186,21 +196,17 @@ const Members = () => {
         </div>
       </Form>
 
-      {
-        <DeleteModal
-          visible={!!deleteItem?.id}
-          toggleVisibility={() => setDeleteItem(undefined)}
-          member={deleteItem}
-        />
-      }
+      <DeleteModal
+        visible={!!deleteItem?.id}
+        toggleVisibility={() => setDeleteItem(undefined)}
+        member={deleteItem}
+      />
 
-      {modalState.open && (
-        <MembersForm
-          isOpen={modalState.open}
-          handleModalVisibility={() => handleModalVisibility(null)}
-          id={modalState?.item?.id}
-        />
-      )}
+      <MembersForm
+        isOpen={modalState.open}
+        handleModalVisibility={() => handleModalVisibility(null)}
+        id={modalState?.item?.id}
+      />
     </div>
   );
 };

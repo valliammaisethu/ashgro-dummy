@@ -227,7 +227,6 @@ const Details = () => {
             </Col>
           </Row>
         </Card>
-
         {isEditForm && (
           <MembersForm
             isOpen={isEditForm}

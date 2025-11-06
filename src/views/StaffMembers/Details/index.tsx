@@ -121,7 +121,6 @@ const Details = () => {
             </div>
           </div>
         </Card>
-
         {isEditForm && (
           <StaffMembersForm
             isOpen={isEditForm}

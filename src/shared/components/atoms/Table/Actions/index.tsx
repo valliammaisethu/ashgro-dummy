@@ -23,6 +23,7 @@ interface ActionsProps {
   showSelect?: boolean;
   selectPlaceholder?: string;
   selectWidth?: number;
+  selectLoading?: boolean;
 }
 
 const Actions: React.FC<ActionsProps> = ({
@@ -34,6 +35,7 @@ const Actions: React.FC<ActionsProps> = ({
   showSelect = true,
   selectPlaceholder = "Select an option",
   selectWidth = 200,
+  selectLoading = false,
 }) => {
   const handleSelectChange = (value: string) => {
     onSelectChange?.(value);
@@ -59,6 +61,7 @@ const Actions: React.FC<ActionsProps> = ({
             value={selectedValue}
             onChange={handleSelectChange}
             options={options}
+            loading={selectLoading}
           />
         </div>
       )}

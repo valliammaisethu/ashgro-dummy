@@ -14,7 +14,11 @@ import SelectField from "src/shared/components/SelectField";
 import { INPUT_TYPE } from "src/enums/inputType";
 import PhoneNumberField from "src/shared/components/PhoneNumberInput";
 import DatePicker from "src/shared/components/DatePicker";
-import { disableFutureAndToday } from "src/shared/utils/dateUtils";
+import {
+  disableFutureAndToday,
+  convertDateToApiFormat,
+  convertDateToDisplayFormat,
+} from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import TextArea from "src/shared/components/TextArea";
 import { validationSchema } from "./validationSchema";
@@ -23,6 +27,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { StaffMembersService } from "src/services/StaffMembersService/staffMembers.service";
 import { findValueByLabel } from "src/shared/utils/commonHelpers";
 import { StaffMemberDetails } from "src/models/staffMember.model";
+import { getDigitsOnly } from "src/shared/utils/parser";
 
 import styles from "./staffMembersForm.module.scss";
 
@@ -58,13 +63,28 @@ const StaffMembersForm = ({
 
   const { data } = useQuery(staffMembersDeatils(id));
 
-  const { mutateAsync: addStaffMemberMutate } = useMutation(addStaffMember());
-  const { mutateAsync: eddStaffMemberMutate } = useMutation(editStaffMember());
+  const { mutateAsync: addStaffMemberMutate, isPending: isAddPending } =
+    useMutation(addStaffMember());
+  const { mutateAsync: eddStaffMemberMutate, isPending: isEditPending } =
+    useMutation(editStaffMember());
   const { data: staffDepartments, isPending } = useQuery(staffMembersList());
 
   const handleFormSubmit = async (values: FieldValues) => {
+    const payload = {
+      ...values,
+      [FIELD_NAMES.PHONE_NUMBER]: values[FIELD_NAMES.PHONE_NUMBER]
+        ? getDigitsOnly(values[FIELD_NAMES.PHONE_NUMBER])
+        : values[FIELD_NAMES.PHONE_NUMBER],
+      [FIELD_NAMES.BIRTH_DATE]: convertDateToApiFormat(
+        values[FIELD_NAMES.BIRTH_DATE],
+      ),
+      [FIELD_NAMES.WORK_ANNIVERSARY]: convertDateToApiFormat(
+        values[FIELD_NAMES.WORK_ANNIVERSARY],
+      ),
+    };
+
     const mutate = id ? eddStaffMemberMutate : addStaffMemberMutate;
-    await mutate(values as StaffMemberDetails);
+    await mutate(payload as StaffMemberDetails);
     handleFormVisibility?.();
   };
 
@@ -75,12 +95,16 @@ const StaffMembersForm = ({
 
   const formValues = useMemo(() => {
     if (!data || !id) return {};
-    // TODO: findValueByLabel and date format check with BE to send id and value both to avoid unnesaryfindValueByLabel
+
     return {
       ...data,
       [FIELD_NAMES.STAFF_DEPARTMENT]: findValueByLabel(
         staffDepartments,
         data.staffDepartment,
+      ),
+      [FIELD_NAMES.BIRTH_DATE]: convertDateToDisplayFormat(data.birthDate),
+      [FIELD_NAMES.WORK_ANNIVERSARY]: convertDateToDisplayFormat(
+        data.workAnniversaryDate,
       ),
     };
   }, [data, staffDepartments]);
@@ -100,6 +124,9 @@ const StaffMembersForm = ({
         closeModal={handleFormVisibility}
         handleOk={handleSubmit(handleFormSubmit)}
         rootClassName={styles.staffMembersModal}
+        okButtonProps={{
+          loading: id ? isEditPending : isAddPending,
+        }}
       >
         <Form methods={methods}>
           <div className={styles.profileContainer}>
@@ -170,7 +197,7 @@ const StaffMembersForm = ({
                 label={LABELS.BIRTH_DATE}
                 name={FIELD_NAMES.BIRTH_DATE}
                 disabledDate={disableFutureAndToday}
-                format={DateFormats.YYYY_MM_DD}
+                format={DateFormats.DD_MMM__YYYY}
               />
             </Col>
             <Col span={12}>
@@ -179,7 +206,7 @@ const StaffMembersForm = ({
                 label={LABELS.WORK_ANNIVERSARY}
                 name={FIELD_NAMES.WORK_ANNIVERSARY}
                 disabledDate={disableFutureAndToday}
-                format={DateFormats.YYYY_MM_DD}
+                format={DateFormats.DD_MMM__YYYY}
               />
             </Col>
             <Col span={24}>
