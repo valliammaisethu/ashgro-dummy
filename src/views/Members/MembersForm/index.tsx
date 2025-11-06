@@ -16,7 +16,12 @@ import DatePicker from "src/shared/components/DatePicker";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import PhoneNumberField from "src/shared/components/PhoneNumberInput";
-import { disableFutureAndToday, formatDate } from "src/shared/utils/dateUtils";
+import {
+  disableFutureAndToday,
+  formatDate,
+  convertDateToApiFormat,
+  convertDateToDisplayFormat,
+} from "src/shared/utils/dateUtils";
 import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
 import { MetaService } from "src/services/MetaService/meta.service";
 import { Colors } from "src/enums/colors.enum";
@@ -28,6 +33,7 @@ import { defaultModalWidth } from "src/constants/sharedComponents";
 import { findValueByLabel } from "src/shared/utils/commonHelpers";
 import { membersFormValidationSchema } from "./validationSchema";
 import Loader from "src/shared/components/Loader";
+import { getDigitsOnly } from "src/shared/utils/parser";
 
 import styles from "./membersForm.module.scss";
 
@@ -115,15 +121,37 @@ const MembersForm = ({
   };
 
   const handleFormSubmit = async (values: FieldValues) => {
+    const hasActivityDetails =
+      values.activityDetails?.activityTypeId ||
+      values.activityDetails?.description;
+
+    const payload = {
+      ...values,
+      [FIELD_NAMES.PHONE_NUMBER]: values[FIELD_NAMES.PHONE_NUMBER]
+        ? getDigitsOnly(values[FIELD_NAMES.PHONE_NUMBER])
+        : values[FIELD_NAMES.PHONE_NUMBER],
+      [FIELD_NAMES.JOIN_DATE]: convertDateToApiFormat(
+        values[FIELD_NAMES.JOIN_DATE],
+      ),
+      [FIELD_NAMES.BIRTH_DATE]: convertDateToApiFormat(
+        values[FIELD_NAMES.BIRTH_DATE],
+      ),
+      [FIELD_NAMES.RESIGNATION_DATE]: convertDateToApiFormat(
+        values[FIELD_NAMES.RESIGNATION_DATE],
+      ),
+      activityDetails:
+        id || !hasActivityDetails ? undefined : values.activityDetails,
+    };
+
     const mutate = id ? editMemberMutate : addMemberMutate;
-    await mutate(values);
+    await mutate(payload);
     refetch();
     handleFormVisibility?.();
   };
 
   const formValues = useMemo(() => {
     if (!data) return {};
-    // TODO: findValueByLabel and date format check with BE to send id and value both to avoid unnesaryfindValueByLabel
+
     return {
       ...data,
       [FIELD_NAMES.MEMBER_STATUS]: findValueByLabel(
@@ -137,6 +165,11 @@ const MembersForm = ({
       [FIELD_NAMES.LEAD_SOURCE]: findValueByLabel(
         leadSourcesOptions,
         data.leadSource,
+      ),
+      [FIELD_NAMES.JOIN_DATE]: convertDateToDisplayFormat(data.joinedDate),
+      [FIELD_NAMES.BIRTH_DATE]: convertDateToDisplayFormat(data.birthDate),
+      [FIELD_NAMES.RESIGNATION_DATE]: convertDateToDisplayFormat(
+        data.resignationDate,
       ),
       activityDetails: undefined,
     };
@@ -169,6 +202,15 @@ const MembersForm = ({
         rootClassName={styles.membersForm}
         okButtonProps={{
           loading: id ? isEditPending : isAddPending,
+        }}
+        styles={{
+          body: {
+            height: 730,
+          },
+          content: {
+            height: 730,
+            width: 710,
+          },
         }}
       >
         {!!id && isFetching ? (
@@ -214,7 +256,7 @@ const MembersForm = ({
                   placeholder={PLACEHOLDERS.JOIN_DATE}
                   label={LABELS.JOIN_DATE}
                   name={FIELD_NAMES.JOIN_DATE}
-                  format={DateFormats.YYYY_MM_DD}
+                  format={DateFormats.DD_MMM__YYYY}
                   disabledDate={disableFutureAndToday}
                 />
               </Col>
@@ -241,7 +283,7 @@ const MembersForm = ({
                   label={LABELS.BIRTH_DATE}
                   name={FIELD_NAMES.BIRTH_DATE}
                   disabledDate={disableFutureAndToday}
-                  format={DateFormats.YYYY_MM_DD}
+                  format={DateFormats.DD_MMM__YYYY}
                 />
               </Col>
               <Col span={24}>
@@ -249,6 +291,7 @@ const MembersForm = ({
                   placeholder={PLACEHOLDERS.RESIDENTIAL_ADDRESS}
                   name={FIELD_NAMES.RESIDENTIAL_ADDRESS}
                   label={LABELS.RESIDENTIAL_ADDRESS}
+                  className={styles.addressBox}
                 />
               </Col>
             </Row>
@@ -280,7 +323,7 @@ const MembersForm = ({
                   placeholder={PLACEHOLDERS.RESIGNATION_DATE}
                   label={LABELS.RESIGNATION_DATE}
                   name={FIELD_NAMES.RESIGNATION_DATE}
-                  format={DateFormats.YYYY_MM_DD}
+                  format={DateFormats.DD_MMM__YYYY}
                 />
               </Col>
             </Row>
@@ -310,49 +353,54 @@ const MembersForm = ({
               </Col>
             </Row>
 
-            <Divider />
-            <div className={styles.sectionTitle}>
-              {SECTION_TITLES.ACTIVITY_DETAILS}
-            </div>
-            <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
-              <Col span={12}>
-                <InputField
-                  placeholder={PLACEHOLDERS.ACTIVITY_DATE_TIME}
-                  label={LABELS.ACTIVITY_DATE_TIME}
-                  value={formatDate(
-                    activityDateTime,
-                    DateFormats.HH_MM_A__DD_MMM_YYYY,
-                    true,
-                  )}
-                  name={FIELD_NAMES.ACTIVITY_DATE_TIME}
-                  readOnly
-                  suffix={
-                    <IconCalendarWait
-                      color={Colors.ASHGRO_NAVY}
-                      strokeWidth={1.25}
-                      size={16}
+            {!id && (
+              <>
+                <Divider />
+                <div className={styles.sectionTitle}>
+                  {SECTION_TITLES.ACTIVITY_DETAILS}
+                </div>
+                <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
+                  <Col span={12}>
+                    <InputField
+                      placeholder={PLACEHOLDERS.ACTIVITY_DATE_TIME}
+                      label={LABELS.ACTIVITY_DATE_TIME}
+                      value={formatDate(
+                        activityDateTime,
+                        DateFormats.HH_MM_A__DD_MMM_YYYY,
+                        true,
+                      )}
+                      name={FIELD_NAMES.ACTIVITY_DATE_TIME}
+                      readOnly
+                      suffix={
+                        <IconCalendarWait
+                          color={Colors.ASHGRO_NAVY}
+                          strokeWidth={1.25}
+                          size={16}
+                        />
+                      }
                     />
-                  }
-                />
-              </Col>
-              <Col span={12}>
-                <SelectField
-                  placeholder={PLACEHOLDERS.ACTIVITY_TYPE}
-                  label={LABELS.ACTIVITY_TYPE}
-                  name={FIELD_NAMES.ACTIVITY_TYPE}
-                  options={activityTypeOptions}
-                  onSelect={handleActivityTypeChange}
-                />
-              </Col>
-              <Col span={24}>
-                <TextArea
-                  placeholder={PLACEHOLDERS.ACTIVITY_DESCRIPTION}
-                  name={FIELD_NAMES.ACTIVITY_DESCRIPTION}
-                  label={LABELS.ACTIVITY_DESCRIPTION}
-                  onChange={handleActivityDescriptionChange}
-                />
-              </Col>
-            </Row>
+                  </Col>
+                  <Col span={12}>
+                    <SelectField
+                      placeholder={PLACEHOLDERS.ACTIVITY_TYPE}
+                      label={LABELS.ACTIVITY_TYPE}
+                      name={FIELD_NAMES.ACTIVITY_TYPE}
+                      options={activityTypeOptions}
+                      onSelect={handleActivityTypeChange}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <TextArea
+                      placeholder={PLACEHOLDERS.ACTIVITY_DESCRIPTION}
+                      name={FIELD_NAMES.ACTIVITY_DESCRIPTION}
+                      label={LABELS.ACTIVITY_DESCRIPTION}
+                      onChange={handleActivityDescriptionChange}
+                      className={styles.activityDescription}
+                    />
+                  </Col>
+                </Row>
+              </>
+            )}
           </Form>
         )}
       </Modal>

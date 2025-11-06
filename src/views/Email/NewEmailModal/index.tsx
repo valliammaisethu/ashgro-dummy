@@ -92,6 +92,9 @@ const NewEmailModal = (props: NewEmailModalProps) => {
       destroyOnClose
       rootClassName={styles.addEmailModal}
       styles={{
+        body: {
+          height: 650,
+        },
         content: {
           height: 730,
         },
@@ -102,7 +105,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
     >
       <Form onSubmit={handleSubmit} methods={methods}>
         <Row gutter={[16, 16]}>
-          {selectedTemplate ? (
+          {selectedTemplate && (
             <Col span={24}>
               <InputField
                 label={labels.title}
@@ -112,78 +115,73 @@ const NewEmailModal = (props: NewEmailModalProps) => {
                 disabled
               />
             </Col>
-          ) : (
-            <>
-              <Col span={24}>
-                <SelectField
-                  label={labels.to}
-                  name={fields.to}
-                  mode={SelectModes.MULTIPLE}
-                  required
-                  options={generateSelectOptions(
-                    selectedEmails?.map((e) => e.email ?? "") ?? [],
-                  )}
-                  defaultValue={
-                    selectedEmails?.length > 1
-                      ? selectedEmails
-                      : selectedEmails[0]
-                  }
-                  placeholder={placeholders.to}
-                  allowCustomOption
-                  validateCustomInput={ValidateEmail}
-                />
-              </Col>
-              <Col span={24}>
-                <SelectField
-                  placeholder={placeholders.cc}
-                  name={fields.cc}
-                  label={labels.cc}
-                  mode={SelectModes.MULTIPLE}
-                  options={[]}
-                  allowCustomOption
-                  validateCustomInput={ValidateEmail}
-                />
-              </Col>
-              <Col span={24}>
-                <SelectField
-                  placeholder={placeholders.bcc}
-                  name={fields.bcc}
-                  label={labels.bcc}
-                  mode={SelectModes.MULTIPLE}
-                  options={[]}
-                  allowCustomOption
-                  validateCustomInput={ValidateEmail}
-                />
-              </Col>
-              <Col span={24}>
-                <InputField
-                  placeholder={placeholders.subject}
-                  required
-                  name={fields.subject}
-                  label={labels.subject}
-                />
-              </Col>
-              <Col span={24}>
-                <TextArea
-                  required
-                  name={fields.body}
-                  label={labels.emailBody}
-                  placeholder={placeholders.emailBody}
-                  className={styles.emailBodyInput}
-                />
-              </Col>
-              <Col className={styles.fileUploadContainer} span={24}>
-                <FileUpload
-                  name={fields.attachmentIds}
-                  maxFileSizeText={maxFileSizeTextDescription}
-                  containerClassName={styles.uploadFileContainer}
-                  buttonClassName={styles.uploadFilesButton}
-                  maxFileSizeClassName={styles.maxFileSize}
-                  attachmentClassName={styles.attachment}
-                />
-              </Col>
-            </>
           )}
+          <Col span={24}>
+            <SelectField
+              label={labels.to}
+              name={fields.to}
+              mode={SelectModes.MULTIPLE}
+              required
+              options={generateSelectOptions(
+                selectedEmails?.map((e) => e.email ?? "") ?? [],
+              )}
+              defaultValue={
+                selectedEmails?.length > 1 ? selectedEmails : selectedEmails[0]
+              }
+              placeholder={placeholders.to}
+              allowCustomOption
+              validateCustomInput={ValidateEmail}
+            />
+          </Col>
+          <Col span={24}>
+            <SelectField
+              placeholder={placeholders.cc}
+              name={fields.cc}
+              label={labels.cc}
+              mode={SelectModes.MULTIPLE}
+              options={[]}
+              allowCustomOption
+              validateCustomInput={ValidateEmail}
+            />
+          </Col>
+          <Col span={24}>
+            <SelectField
+              placeholder={placeholders.bcc}
+              name={fields.bcc}
+              label={labels.bcc}
+              mode={SelectModes.MULTIPLE}
+              options={[]}
+              allowCustomOption
+              validateCustomInput={ValidateEmail}
+            />
+          </Col>
+          <Col span={24}>
+            <InputField
+              placeholder={placeholders.subject}
+              required
+              name={fields.subject}
+              label={labels.subject}
+            />
+          </Col>
+          <Col span={24}>
+            <TextArea
+              required
+              name={fields.body}
+              label={labels.emailBody}
+              placeholder={placeholders.emailBody}
+              className={styles.emailBodyInput}
+            />
+          </Col>
+          <Col className={styles.fileUploadContainer} span={24}>
+            <FileUpload
+              name={fields.attachmentIds}
+              maxFileSizeText={maxFileSizeTextDescription}
+              containerClassName={styles.uploadFileContainer}
+              buttonClassName={styles.uploadFilesButton}
+              maxFileSizeClassName={styles.maxFileSize}
+              attachmentClassName={styles.attachment}
+            />
+          </Col>
         </Row>
         <div className={styles.modalFooter}>
           <Button

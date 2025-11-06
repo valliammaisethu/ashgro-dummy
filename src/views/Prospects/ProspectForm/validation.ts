@@ -23,7 +23,9 @@ export const validationSchema = yup.object({
       .max(50),
     lastName: yup.string().label(LABELS.LAST_NAME).required(lastName).max(50),
     email: yup.string().label(LABELS.EMAIL_ADDRESS).email().required().max(100),
-    contactNumber: yup.string().length(10, phone),
+    contactNumber: yup
+      .string()
+      .matches(/^(\(\d{3}\)\s?\d{3}-?\d{4}|\d{10})?$/, phone),
     phoneCode: yup.string(),
     monthlyDues: yup
       .string()

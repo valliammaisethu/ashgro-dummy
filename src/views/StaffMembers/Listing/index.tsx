@@ -134,7 +134,6 @@ const StaffMembersListing = () => {
           staffMember={deleteItem}
         />
       }
-
       {modalState.open && (
         <StaffMembersForm
           isOpen={modalState.open}

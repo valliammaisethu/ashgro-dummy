@@ -154,7 +154,6 @@ const SelectField = ({
     onChange: handleOnChange,
     placeholder,
     onInputKeyDown: handleKeyDown,
-    notFoundContent: null,
     ...(allowCustomOption && {
       searchValue,
       onSearch: handleSearch,

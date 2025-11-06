@@ -70,7 +70,7 @@ export const validationMessages = {
   leadStatus: "Lead status is required!",
   followUpDate: "Follow-up date is required!",
   emailAddress: "Email address is required!",
-  phone: "Phone number must be 10 digits!",
+  phone: "Invalid phone number format!",
   inquiryDate: "Inquiry date is required!",
   leadSource: "Lead source is required!",
   membershipCategory: "Membership category is required!",
