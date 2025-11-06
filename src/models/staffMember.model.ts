@@ -2,6 +2,7 @@ import { serializable, object, list, primitive } from "serializr";
 import { ResponseModel } from "./response.model";
 import { FALL_BACKS } from "src/constants/common";
 import { QueryParams } from "./queryParams.model";
+import { Pagination } from "./pagination.model";
 
 const { NOT_AVAILABLE } = FALL_BACKS;
 
@@ -37,10 +38,13 @@ export class StaffMemberDetails {
   title = NOT_AVAILABLE;
 
   @serializable
-  birthDate = "";
+  birthDate?: string;
 
   @serializable
-  workAnniversaryDate = "";
+  workAnniversaryDate?: string;
+
+  @serializable
+  staffDepartmentId?: string;
 
   @serializable
   residentialAddress = NOT_AVAILABLE;
@@ -59,4 +63,12 @@ export class StaffDataResponse extends ResponseModel {
 export class StaffMembersListingParams extends QueryParams {
   @serializable(list(primitive()))
   departmentIds: string[] = [];
+}
+
+export class StaffMemberListData {
+  @serializable(list(object(StaffMemberDetails)))
+  staffs?: StaffMemberDetails[];
+
+  @serializable(object(Pagination))
+  pagination?: Pagination;
 }

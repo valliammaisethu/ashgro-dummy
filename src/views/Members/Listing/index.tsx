@@ -26,6 +26,8 @@ import Button from "src/shared/components/Button";
 
 import styles from "./membersListing.module.scss";
 import { fallbackHandler } from "src/shared/utils/commonHelpers";
+import DeleteModal from "../DeleteModal";
+import { VisibilityType } from "src/enums/visibilityType.enum";
 
 interface ModalState {
   open: boolean;
@@ -97,8 +99,10 @@ const Members = () => {
   };
 
   const handleEditClick = (member: Member) => {
-    handleModalVisibility("edit", member);
+    handleModalVisibility(VisibilityType.EDIT, member);
   };
+
+  const [deleteItem, setDeleteItem] = useState<Member | undefined>();
 
   const handlePageChange = useCallback(
     (direction: PageListingDirections) => {
@@ -130,7 +134,7 @@ const Members = () => {
         filtersActive={filtersActive}
         onFilter={toggleMemberFilters}
         onSearch={handleSearch}
-        onAddMember={() => handleModalVisibility("add")}
+        onAddMember={() => handleModalVisibility(VisibilityType.ADD)}
       />
       <MemberFilters
         toggleVisibility={toggleMemberFilters}
@@ -186,7 +190,7 @@ const Members = () => {
                         handleStatusChange(item.id, value)
                       }
                       onEditClick={() => handleEditClick(item)}
-                      onDeleteClick={() => {}}
+                      onDeleteClick={() => setDeleteItem(item)}
                     />
                   </div>
                 );
@@ -221,6 +225,14 @@ const Members = () => {
           </ConditionalRender>
         </div>
       </Form>
+
+      {
+        <DeleteModal
+          visible={!!deleteItem?.id}
+          toggleVisibility={() => setDeleteItem(undefined)}
+          member={deleteItem}
+        />
+      }
 
       {modalState.open && (
         <MembersForm

@@ -7,7 +7,7 @@ const { FIELD_NAMES } = FORM_CONSTANTS;
 const VALIDATION_REGEX = {
   ALPHABETS_ONLY: /^[A-Za-z\s]+$/,
   EMAIL: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-  PHONE_NUMBER: /^\d{10}$/,
+  PHONE_NUMBER: /^(\d{10})?$/,
   DECIMAL_TWO_PLACES: /^\d+(\.\d{1,2})?$/,
 };
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Card, Col, Row } from "antd";
+import { Card, Col, Row, Select } from "antd";
 import {
   IconEdit,
   IconCakeAlt,
@@ -27,8 +27,15 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
 
 import styles from "./details.module.scss";
-import { fallbackHandler } from "src/shared/utils/commonHelpers";
+import {
+  fallbackHandler,
+  findValueByLabel,
+} from "src/shared/utils/commonHelpers";
 import MembersForm from "../MembersForm";
+import { MemberShipService } from "src/services/SettingsService/memberShip.service";
+import { defaultAntdDropdownWidth } from "src/constants/common";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 
 const {
   footer: {
@@ -42,6 +49,7 @@ const {
   feesAndDuesLabel,
   joinedDate,
   memberDetailsLabel,
+  statusPlaceholder,
 } = detailsConstants;
 
 const { GET_MEMBERS } = QueryKeys;
@@ -51,10 +59,16 @@ const Details = () => {
   const [isEditForm, setIsEditForm] = useState(false);
   const queryClient = useQueryClient();
 
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
   const { navigateToMembers } = useRedirect();
 
+  const { MembersDetails, updateMemberStatus } = MembersService();
+  const { memberShipStatuses } = MemberShipService();
   const { deleteResource } = CommonService();
-  const { MembersDetails } = MembersService();
+
+  const { data: memberShipStatusesOptions = [] } =
+    useQuery(memberShipStatuses());
 
   const { data, isPending, isSuccess, isFetching, refetch } = useQuery(
     MembersDetails(id),
@@ -62,6 +76,8 @@ const Details = () => {
 
   const { mutateAsync: deleteStaffMemberMutate } =
     useMutation(deleteResource());
+  const { mutateAsync: updateMemberStatusMutate } =
+    useMutation(updateMemberStatus());
 
   const handleDelete = async () => {
     const path = generatePath(ApiRoutes.MEMBER_DETAILS, { id });
@@ -69,6 +85,7 @@ const Details = () => {
     await deleteStaffMemberMutate(path, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: [GET_MEMBERS] });
+        queryClient.refetchQueries({ queryKey: [GET_MEMBERS, clubId] });
 
         navigateToMembers();
       },
@@ -87,6 +104,15 @@ const Details = () => {
   ];
 
   const handleModalVisibility = () => setIsEditForm((prev) => !prev);
+
+  const handleStatusChange = async (value: string) => {
+    await updateMemberStatusMutate({
+      memberId: data?.id,
+      membershipStatusId: value,
+    });
+    refetch();
+  };
+
   return (
     <>
       <IndividualDetailsHeader
@@ -104,6 +130,18 @@ const Details = () => {
           <Row justify={Justify.START}>
             <Col span={14} className={styles.leftSide}>
               <Row justify={Justify.END} gutter={[10, 0]}>
+                <Col>
+                  <Select
+                    style={{ width: defaultAntdDropdownWidth }}
+                    placeholder={statusPlaceholder}
+                    value={findValueByLabel(
+                      memberShipStatusesOptions,
+                      data?.membershipStatus,
+                    )}
+                    onChange={handleStatusChange}
+                    options={memberShipStatusesOptions}
+                  />
+                </Col>
                 <Col>
                   <Button
                     onClick={handleModalVisibility}

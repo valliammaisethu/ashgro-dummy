@@ -27,6 +27,8 @@ export const ApiRoutes = {
   MEMBERS_LIST: "/members",
   MEMBER_DETAILS: "/members/:id",
   SEND_EMAIL: "/email",
+  PROSPECT_EMAIL_RECIPIENTS: "/prospects/recipients",
+  MEMBER_EMAIL_RECIPIENTS: "/members/recipients",
   // TODO: Check with BE and avoid redundancy in api endpoint
   LEAD_SOURCES_SETTINGS_LIST: "settings/:id/leadSources",
   LEAD_STATUS_SETTINGS_LIST: "settings/:id/leadStatuses",
@@ -44,5 +46,10 @@ export const ApiRoutes = {
   STAFF_MEMBERS_SETTINGS_LISTING: "/settings/:clubId/staffDepartments",
   STAFF_MEMBERS_SETTINGS: "/settings/:clubId/staffDepartment",
   UPDATE_STAFF_MEMBERS_SETTINGS: "settings/:clubId/staffDepartment/:id",
+
+  EMAIL_TEMPLATES_SETTINGS_LIST: "/settings/:id/emailTemplates",
+  EMAIL_TEMPLATE_DETAIL: "/settings/:id/emailTemplate/:emailTemplateId",
+  EMAIL_TEMPLATES_SETTINGS: "/settings/:clubId/emailTemplate",
+  UPDATE_EMAIL_TEMPLATE_SETTINGS: "/settings/:clubId/emailTemplate/:id",
   STAFF_MEMBERS: "/staffs",
 };

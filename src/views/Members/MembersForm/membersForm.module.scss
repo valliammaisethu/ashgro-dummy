@@ -32,7 +32,11 @@
   }
 }
 
-:global(.ant-modal-body) {
-  height: 50rem;
-  overflow-y: auto;
+.membersForm {
+  :global(.ant-modal-body) {
+    height: 50rem;
+    overflow-y: auto;
+  }
 }
+
+// whenever delete is happening we are not able to getch api
