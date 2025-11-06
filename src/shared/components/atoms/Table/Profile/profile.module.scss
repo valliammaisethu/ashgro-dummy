@@ -1,0 +1,48 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.profileInfo {
+  @include flex-container(start);
+
+  gap: 1rem;
+
+  .info {
+    @include flex-container(start);
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+    .name {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+  }
+}
+
+.profileRow {
+  @include flex-container;
+  gap: 3rem;
+}
+
+.contactInfo {
+  @include flex-container;
+  gap: 2rem;
+  .email {
+    color: $email;
+    font-weight: 400;
+    font-size: 1.4rem;
+    font-family: $font-secondary;
+  }
+  .contactNumber {
+    opacity: 0.6;
+    .phone {
+      color: $ashgro-navy;
+      font-size: 1.4rem;
+      font-family: $font-secondary;
+    }
+    .dot {
+      color: $dot-color;
+      font-size: 2rem;
+      margin-right: 0.4rem;
+    }
+  }
+}

@@ -10,6 +10,7 @@ export const NavigationRoutes = {
   INDIVIDUAL_PROSPECT: "/home/prospects/:id",
   STAFF_MEMBER_DETAILS: "/home/staff-member/:id",
   MEMBER_DETAILS: "/home/member/:id",
+  STAFF_MEMBERS: "/home/members",
 };
 
 export const AppRoutes = {
@@ -31,4 +32,5 @@ export const AppRoutes = {
   SETTINGS: "/home/settings",
   STAFF_MEMBER_DETAILS: "/home/staff-member/:id",
   MEMBER_DETAILS: "/home/member/:id",
+  STAFF_MEMBERS: "/home/members",
 };
