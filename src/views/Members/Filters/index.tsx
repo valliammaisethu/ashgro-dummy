@@ -60,7 +60,7 @@ const MemberFilters = (props: MemberFiltersProps) => {
   const { data: membershipStatusesData, isPending: membershipStatusesPending } =
     useQuery({
       ...getMembershipStatuses({
-        filter: QueryParamKeys.PROSPECTS,
+        filter: QueryParamKeys.MEMBERS,
       }),
       enabled: visible,
     });

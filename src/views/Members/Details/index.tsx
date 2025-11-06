@@ -56,10 +56,10 @@ const { GET_MEMBERS } = QueryKeys;
 
 const Details = () => {
   const { id = "" } = useParams();
-  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
-
   const [isEditForm, setIsEditForm] = useState(false);
   const queryClient = useQueryClient();
+
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
 
   const { navigateToMembers } = useRedirect();
 
@@ -84,6 +84,7 @@ const Details = () => {
 
     await deleteStaffMemberMutate(path, {
       onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [GET_MEMBERS] });
         queryClient.refetchQueries({ queryKey: [GET_MEMBERS, clubId] });
 
         navigateToMembers();
