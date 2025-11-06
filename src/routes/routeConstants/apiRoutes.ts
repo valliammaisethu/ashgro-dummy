@@ -24,6 +24,7 @@ export const ApiRoutes = {
   MEMBERSHIP_TYPE_STATUS: "settings/:id/membershipCategories",
   MEMBERS: "members",
   STAFF_MEMBER_DETAILS: "/staffs/:id",
+  MEMBERS_LIST: "/members",
   MEMBER_DETAILS: "/members/:id",
   SEND_EMAIL: "/email",
   PROSPECT_EMAIL_RECIPIENTS: "/prospects/recipients",
@@ -50,4 +51,5 @@ export const ApiRoutes = {
   EMAIL_TEMPLATE_DETAIL: "/settings/:id/emailTemplate/:emailTemplateId",
   EMAIL_TEMPLATES_SETTINGS: "/settings/:clubId/emailTemplate",
   UPDATE_EMAIL_TEMPLATE_SETTINGS: "/settings/:clubId/emailTemplate/:id",
+  STAFF_MEMBERS: "/staffs",
 };
