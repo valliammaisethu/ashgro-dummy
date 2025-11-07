@@ -2,14 +2,19 @@ import React from "react";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Buttons } from "src/enums/buttons.enum";
 import { defaultModalWidth } from "src/constants/sharedComponents";
-import { StaffMembersService } from "src/services/StaffMembersService/staffMembers.service";
 import { deleteModalConstants } from "../constants";
 import { replaceString } from "src/shared/utils/commonHelpers";
 import { StaffMemberDetails } from "src/models/staffMember.model";
 import { getFullName } from "src/shared/utils/helpers";
+import { generatePath } from "react-router-dom";
+import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
+import { CommonService } from "src/services/CommonService.ts/common.service";
+import { QueryKeys } from "src/enums/cacheEvict.enum";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 
 import styles from "./deleteModal.module.scss";
 
@@ -21,15 +26,28 @@ interface DeleteModalProps {
 
 const DeleteModal = (props: DeleteModalProps) => {
   const { visible, toggleVisibility, staffMember } = props;
+  const queryClient = useQueryClient();
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
 
-  const { deleteStaffMember } = StaffMembersService();
+  const { deleteResource } = CommonService();
 
-  const { mutateAsync } = useMutation(deleteStaffMember());
+  const { mutateAsync, isPending } = useMutation(deleteResource());
 
-  const handleDelete = async () =>
-    await mutateAsync(staffMember?.id, {
-      onSuccess: toggleVisibility,
+  const handleDelete = async () => {
+    const path = generatePath(ApiRoutes.STAFF_MEMBER_DETAILS, {
+      id: staffMember?.id,
     });
+
+    await mutateAsync(path, {
+      onSuccess: () => {
+        queryClient.refetchQueries({
+          queryKey: [QueryKeys.GET_STAFF_MEMBER_LIST, clubId],
+        });
+
+        toggleVisibility();
+      },
+    });
+  };
 
   return (
     <div>
@@ -42,7 +60,11 @@ const DeleteModal = (props: DeleteModalProps) => {
         rootClassName={styles.deleteModal}
         footer={[
           <div className={styles.footer} key={Buttons.DELETE_PERMANENTLY}>
-            <Button onClick={handleDelete} className={styles.deleteButton}>
+            <Button
+              onClick={handleDelete}
+              loading={isPending}
+              className={styles.deleteButton}
+            >
               {Buttons.DELETE_PERMANENTLY}
             </Button>
           </div>,

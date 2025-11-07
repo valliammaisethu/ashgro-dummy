@@ -77,7 +77,7 @@ const MemberFilters = (props: MemberFiltersProps) => {
   );
 
   const membershipStatusOptions = useMemo(
-    () => mapToSelectOptionsDynamic(membershipStatusesData?.leadStatuses),
+    () => mapToSelectOptionsDynamic(membershipStatusesData?.membershipStatuses),
     [membershipStatusesData],
   );
 

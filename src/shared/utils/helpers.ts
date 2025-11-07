@@ -8,7 +8,7 @@ export const clearAuthData = () => {
   localStorageHelper.removeItem(LocalStorageKeys.TOKEN);
 };
 
-export const fillEmptyData = (val?: string) => val || "N/A";
+export const fillEmptyData = (val?: string) => val || "-";
 
 export const getFullName = (firstName = "", lastName = ""): string =>
   `${firstName} ${lastName}`.trim();

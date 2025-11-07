@@ -65,3 +65,9 @@ span.ant-input-affix-wrapper.customInput > .ant-input:not(.ant-input-disabled) {
   // Using important as antd used important to override browser default
   -webkit-box-shadow: 0 0 0 1000px $input-background inset !important;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

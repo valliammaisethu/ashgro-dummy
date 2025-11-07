@@ -13,6 +13,7 @@ import { DateFormats } from "src/enums/dateFormats.enum";
 import { getPhoneNumber } from "../utils";
 import { AttachmentService } from "src/services/AttachmentService/attachment.service";
 import { useQuery } from "@tanstack/react-query";
+import { formatAndSetPhoneNumber } from "src/shared/utils/phoneNumberUtils";
 
 interface ProspectInfoProps {
   data?: ViewProspect;
@@ -62,7 +63,9 @@ const ProspectInfo: React.FC<ProspectInfoProps> = ({
           {contactNumber && (
             <IconText
               icon={<IconCall color={Colors.ASHGRO_GOLD} size={20} />}
-              text={getPhoneNumber(countryCode, contactNumber)}
+              text={formatAndSetPhoneNumber(
+                getPhoneNumber(countryCode, contactNumber),
+              )}
               className={styles.phone}
             />
           )}

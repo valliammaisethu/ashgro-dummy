@@ -21,6 +21,7 @@ import StaffMembersForm from "../StaffMembersForm";
 import DeleteModal from "../DeleteModal";
 import { VisibilityType } from "src/enums/visibilityType.enum";
 import Pagination from "src/shared/components/Pagination";
+import { fillEmptyData } from "src/shared/utils/helpers";
 interface ModalState {
   open: boolean;
   mode: SettingFormModalModel;
@@ -100,7 +101,7 @@ const StaffMembersListing = () => {
                     />
 
                     <div className={styles.rowItem}>
-                      {item?.staffDepartment}
+                      {fillEmptyData(item?.staffDepartment)}
                     </div>
                     <div className={styles.rowItem}>{item?.title}</div>
 

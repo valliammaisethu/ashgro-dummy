@@ -30,6 +30,7 @@ import { StaffMemberDetails } from "src/models/staffMember.model";
 import { getDigitsOnly } from "src/shared/utils/parser";
 
 import styles from "./staffMembersForm.module.scss";
+import Loader from "src/shared/components/Loader";
 
 interface MembersFormProps {
   isOpen?: boolean;
@@ -61,7 +62,7 @@ const StaffMembersForm = ({
   const { addStaffMember, staffMembersDeatils, editStaffMember } =
     StaffMembersService();
 
-  const { data } = useQuery(staffMembersDeatils(id));
+  const { data, refetch, isFetching } = useQuery(staffMembersDeatils(id));
 
   const { mutateAsync: addStaffMemberMutate, isPending: isAddPending } =
     useMutation(addStaffMember());
@@ -72,6 +73,7 @@ const StaffMembersForm = ({
   const handleFormSubmit = async (values: FieldValues) => {
     const payload = {
       ...values,
+      attachmentId: values?.attachmentId || undefined,
       [FIELD_NAMES.PHONE_NUMBER]: values[FIELD_NAMES.PHONE_NUMBER]
         ? getDigitsOnly(values[FIELD_NAMES.PHONE_NUMBER])
         : values[FIELD_NAMES.PHONE_NUMBER],
@@ -85,11 +87,12 @@ const StaffMembersForm = ({
 
     const mutate = id ? eddStaffMemberMutate : addStaffMemberMutate;
     await mutate(payload as StaffMemberDetails);
+    refetch();
     handleFormVisibility?.();
   };
 
   const handleFormVisibility = () => {
-    methods.reset();
+    methods.reset({});
     handleModalVisibility?.();
   };
 
@@ -113,6 +116,7 @@ const StaffMembersForm = ({
   useEffect(() => {
     methods.reset(formValues);
   }, [data]);
+
   return (
     <div>
       <Modal
@@ -128,96 +132,100 @@ const StaffMembersForm = ({
           loading: id ? isEditPending : isAddPending,
         }}
       >
-        <Form methods={methods}>
-          <div className={styles.profileContainer}>
-            <ProfilePictureInput
-              name={FIELD_NAMES.PROFILE_PICTURE}
-              label={LABELS.PROFILE_PICTURE}
-            />
-          </div>
+        {!!id && isFetching ? (
+          <Loader />
+        ) : (
+          <Form methods={methods}>
+            <div className={styles.profileContainer}>
+              <ProfilePictureInput
+                name={FIELD_NAMES.PROFILE_PICTURE}
+                label={LABELS.PROFILE_PICTURE}
+              />
+            </div>
 
-          <Divider />
+            <Divider />
 
-          <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
-            <Col span={12}>
-              <InputField
-                placeholder={PLACEHOLDERS.FIRST_NAME}
-                label={LABELS.FIRST_NAME}
-                name={FIELD_NAMES.FIRST_NAME}
-                required
-              />
-            </Col>
-            <Col span={12}>
-              <InputField
-                placeholder={PLACEHOLDERS.LAST_NAME}
-                label={LABELS.LAST_NAME}
-                name={FIELD_NAMES.LAST_NAME}
-                required
-              />
-            </Col>
-            <Col span={12}>
-              <SelectField
-                placeholder={PLACEHOLDERS.STAFF_DEPARTMENT}
-                label={LABELS.STAFF_DEPARTMENT}
-                name={FIELD_NAMES.STAFF_DEPARTMENT}
-                options={staffDepartments}
-                loading={isPending}
-              />
-            </Col>
+            <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
+              <Col span={12}>
+                <InputField
+                  placeholder={PLACEHOLDERS.FIRST_NAME}
+                  label={LABELS.FIRST_NAME}
+                  name={FIELD_NAMES.FIRST_NAME}
+                  required
+                />
+              </Col>
+              <Col span={12}>
+                <InputField
+                  placeholder={PLACEHOLDERS.LAST_NAME}
+                  label={LABELS.LAST_NAME}
+                  name={FIELD_NAMES.LAST_NAME}
+                  required
+                />
+              </Col>
+              <Col span={12}>
+                <SelectField
+                  placeholder={PLACEHOLDERS.STAFF_DEPARTMENT}
+                  label={LABELS.STAFF_DEPARTMENT}
+                  name={FIELD_NAMES.STAFF_DEPARTMENT}
+                  options={staffDepartments}
+                  loading={isPending}
+                />
+              </Col>
 
-            <Col span={12}>
-              <InputField
-                placeholder={PLACEHOLDERS.TITLE}
-                label={LABELS.TITLE}
-                name={FIELD_NAMES.TITLE}
-                required
-              />
-            </Col>
+              <Col span={12}>
+                <InputField
+                  placeholder={PLACEHOLDERS.TITLE}
+                  label={LABELS.TITLE}
+                  name={FIELD_NAMES.TITLE}
+                  required
+                />
+              </Col>
 
-            <Col span={12}>
-              <InputField
-                placeholder={PLACEHOLDERS.EMAIL_ADDRESS}
-                label={LABELS.EMAIL_ADDRESS}
-                name={FIELD_NAMES.EMAIL_ADDRESS}
-                type={INPUT_TYPE.EMAIL}
-                required
-              />
-            </Col>
-            <Col span={12}>
-              <PhoneNumberField
-                label={LABELS.PHONE_NUMBER}
-                name={FIELD_NAMES.PHONE_NUMBER}
-                phoneCodeName={FIELD_NAMES.PHONE_CODE}
-                placeholder={PLACEHOLDERS.PHONE_NUMBER}
-              />
-            </Col>
-            <Col span={12}>
-              <DatePicker
-                placeholder={PLACEHOLDERS.BIRTH_DATE}
-                label={LABELS.BIRTH_DATE}
-                name={FIELD_NAMES.BIRTH_DATE}
-                disabledDate={disableFutureAndToday}
-                format={DateFormats.DD_MMM__YYYY}
-              />
-            </Col>
-            <Col span={12}>
-              <DatePicker
-                placeholder={PLACEHOLDERS.WORK_ANNIVERSARY}
-                label={LABELS.WORK_ANNIVERSARY}
-                name={FIELD_NAMES.WORK_ANNIVERSARY}
-                disabledDate={disableFutureAndToday}
-                format={DateFormats.DD_MMM__YYYY}
-              />
-            </Col>
-            <Col span={24}>
-              <TextArea
-                placeholder={PLACEHOLDERS.RESIDENTIAL_ADDRESS}
-                name={FIELD_NAMES.RESIDENTIAL_ADDRESS}
-                label={LABELS.RESIDENTIAL_ADDRESS}
-              />
-            </Col>
-          </Row>
-        </Form>
+              <Col span={12}>
+                <InputField
+                  placeholder={PLACEHOLDERS.EMAIL_ADDRESS}
+                  label={LABELS.EMAIL_ADDRESS}
+                  name={FIELD_NAMES.EMAIL_ADDRESS}
+                  type={INPUT_TYPE.EMAIL}
+                  required
+                />
+              </Col>
+              <Col span={12}>
+                <PhoneNumberField
+                  label={LABELS.PHONE_NUMBER}
+                  name={FIELD_NAMES.PHONE_NUMBER}
+                  phoneCodeName={FIELD_NAMES.PHONE_CODE}
+                  placeholder={PLACEHOLDERS.PHONE_NUMBER}
+                />
+              </Col>
+              <Col span={12}>
+                <DatePicker
+                  placeholder={PLACEHOLDERS.BIRTH_DATE}
+                  label={LABELS.BIRTH_DATE}
+                  name={FIELD_NAMES.BIRTH_DATE}
+                  disabledDate={disableFutureAndToday}
+                  format={DateFormats.DD_MMM__YYYY}
+                />
+              </Col>
+              <Col span={12}>
+                <DatePicker
+                  placeholder={PLACEHOLDERS.WORK_ANNIVERSARY}
+                  label={LABELS.WORK_ANNIVERSARY}
+                  name={FIELD_NAMES.WORK_ANNIVERSARY}
+                  disabledDate={disableFutureAndToday}
+                  format={DateFormats.DD_MMM__YYYY}
+                />
+              </Col>
+              <Col span={24}>
+                <TextArea
+                  placeholder={PLACEHOLDERS.RESIDENTIAL_ADDRESS}
+                  name={FIELD_NAMES.RESIDENTIAL_ADDRESS}
+                  label={LABELS.RESIDENTIAL_ADDRESS}
+                />
+              </Col>
+            </Row>
+          </Form>
+        )}
       </Modal>
     </div>
   );

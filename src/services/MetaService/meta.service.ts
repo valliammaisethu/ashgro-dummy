@@ -14,6 +14,7 @@ import {
   MembershipCategoriesData,
   StaffDepartmentsData,
   MembershipStatusParams,
+  MembershipStatusData,
 } from "src/models/meta.model";
 import { ResponseModel } from "src/models/response.model";
 import { UserData } from "src/models/user.model";
@@ -116,7 +117,11 @@ export const MetaService = () => {
 
   const getMembershipStatuses = (
     params: MembershipStatusParams = new MembershipStatusParams(),
-  ): UseQueryOptions<LeadStatusesData, ResponseModel, LeadStatusesData> => {
+  ): UseQueryOptions<
+    MembershipStatusData,
+    ResponseModel,
+    MembershipStatusData
+  > => {
     return {
       queryKey: [GET_MEMBERSHIP_STATUSES_KEY, clubId],
       queryFn: async () => {
@@ -127,7 +132,7 @@ export const MetaService = () => {
           },
         );
 
-        return deserialize(LeadStatusesData, data?.data);
+        return deserialize(MembershipStatusData, data?.data);
       },
       enabled: !!clubId,
     };

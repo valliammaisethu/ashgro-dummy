@@ -127,9 +127,10 @@ const MembersForm = ({
 
     const payload = {
       ...values,
-      [FIELD_NAMES.PHONE_NUMBER]: values[FIELD_NAMES.PHONE_NUMBER]
+      attachmentId: values?.attachmentId ? values?.attachmentId : undefined,
+      [FIELD_NAMES.PHONE_NUMBER]: values[FIELD_NAMES.PHONE_NUMBER]?.trim()
         ? getDigitsOnly(values[FIELD_NAMES.PHONE_NUMBER])
-        : values[FIELD_NAMES.PHONE_NUMBER],
+        : undefined,
       [FIELD_NAMES.JOIN_DATE]: convertDateToApiFormat(
         values[FIELD_NAMES.JOIN_DATE],
       ),

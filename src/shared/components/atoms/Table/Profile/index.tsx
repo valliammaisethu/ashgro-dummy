@@ -30,9 +30,8 @@ const Profile: React.FC<ProfileProps> = ({
   onSelectChange,
 }) => {
   const handleCheckboxChange = (e?: CheckboxChangeEvent) => {
-    if (!e?.target.checked) return;
-    e.stopPropagation();
-    onSelectChange?.(e.target.checked);
+    e?.stopPropagation();
+    onSelectChange?.(e?.target.checked ?? false);
   };
 
   return (
