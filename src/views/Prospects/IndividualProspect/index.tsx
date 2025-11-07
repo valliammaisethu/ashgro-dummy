@@ -21,7 +21,6 @@ import DeleteModal from "../DeleteModal";
 
 import MemberConversionModal from "../MemberConversionModal";
 import { getFullName } from "src/shared/utils/helpers";
-import { QueryParamKeys } from "src/enums/queryParams.enum";
 import NewEmailModal from "src/views/Email/NewEmailModal";
 import { SelectedEmailModel } from "src/models/email.model";
 
@@ -36,11 +35,7 @@ const IndividualProspect = () => {
 
   const { getLeadStatuses } = MetaService();
 
-  const { data: leadStatusOptions } = useQuery(
-    getLeadStatuses({
-      filter: QueryParamKeys.PROSPECTS,
-    }),
-  );
+  const { data: leadStatusOptions } = useQuery(getLeadStatuses());
 
   const [isEdit, setIsEdit] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState<SelectedEmailModel>(

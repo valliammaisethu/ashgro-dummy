@@ -59,6 +59,7 @@ const TemplateModal = ({
       cancelButtonProps={{
         className: "d-none",
       }}
+      footer={[]}
       closeModal={onClose}
       visible={isOpen}
       onCancel={onClose}

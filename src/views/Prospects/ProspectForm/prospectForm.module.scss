@@ -39,11 +39,14 @@
   :global(.ant-modal) {
     top: 2rem;
   }
+
+  :global(.ant-modal-body) {
+    padding-bottom: 9.2rem;
+  }
 }
 
 .activityDescBox {
   textArea {
     min-height: 24rem;
-    margin-bottom: 6rem;
   }
 }

@@ -22,6 +22,7 @@
     .fullName {
       font-size: 3.2rem;
       font-weight: 400;
+      @include primaryRegular;
     }
     .joinedDatelabel {
       font-size: 1.4rem;
