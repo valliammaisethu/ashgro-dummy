@@ -42,6 +42,7 @@
   .location {
     margin-top: 2rem;
     @include flex-container(center, center);
+    justify-content: start;
     font-size: 2.1rem;
     font-weight: 400;
     gap: 1rem;
@@ -50,6 +51,7 @@
   .contactDetailsContainer {
     margin-top: 2rem;
     @include flex-container;
+    gap: 1rem;
 
     .contactDetails {
       @include flex-container(center, center);

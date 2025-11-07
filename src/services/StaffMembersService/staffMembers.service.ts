@@ -36,13 +36,13 @@ export const StaffMembersService = () => {
     ResponseModel,
     StaffMemberDetails
   > => ({
-    queryKey: [GET_STAFF_MEMBER_DETAILS, clubId],
+    queryKey: [GET_STAFF_MEMBER_DETAILS, id],
     queryFn: async () => {
       const response = await axiosInstance.get(
         generatePath(STAFF_MEMBER_DETAILS, { id }),
       );
 
-      return deserialize(StaffMemberDetails, response?.data?.staff);
+      return deserialize(StaffMemberDetails, response?.data?.data?.staff);
     },
     enabled: !!id,
   });
@@ -64,6 +64,7 @@ export const StaffMembersService = () => {
       renderNotification(title, description, NotificationTypes.ERROR);
       queryClient.invalidateQueries({
         queryKey: [GET_STAFF_MEMBER_DETAILS, clubId],
+        // here as well
       });
     },
   });
@@ -86,7 +87,7 @@ export const StaffMembersService = () => {
       const { title, description } = response;
       renderNotification(title, description);
       queryClient.invalidateQueries({
-        queryKey: [GET_STAFF_MEMBER_DETAILS, clubId],
+        queryKey: [GET_STAFF_MEMBER_LIST, clubId],
       });
     },
   });
@@ -110,7 +111,7 @@ export const StaffMembersService = () => {
       const { title, description } = response;
       renderNotification(title, description);
       queryClient.invalidateQueries({
-        queryKey: [GET_STAFF_MEMBER_DETAILS, clubId],
+        queryKey: [GET_STAFF_MEMBER_LIST, clubId],
       });
     },
   });

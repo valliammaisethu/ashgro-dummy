@@ -7,8 +7,8 @@ import {
 } from "obra-icons-react";
 import { Col, Row } from "antd";
 import clsx from "clsx";
-import { useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { generatePath, useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import Card from "src/shared/components/Card";
 import ConditionalRender from "src/shared/components/ConditionalRender";
@@ -23,6 +23,12 @@ import { footerLabels } from "./constants";
 import { Justify } from "src/enums/align.enum";
 import StaffMembersForm from "../StaffMembersForm";
 import useRedirect from "src/shared/hooks/useRedirect";
+import { fallbackHandler } from "src/shared/utils/commonHelpers";
+import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
+import { CommonService } from "src/services/CommonService.ts/common.service";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { QueryKeys } from "src/enums/cacheEvict.enum";
 
 import styles from "./details.module.scss";
 
@@ -30,21 +36,37 @@ const { birthData, department, title, workAnniversary } = footerLabels;
 
 const Details = () => {
   const { id = "" } = useParams();
+  const queryClient = useQueryClient();
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
   const [isEditForm, setIsEditForm] = useState(false);
 
   const { navigateToStaffMemberList } = useRedirect();
 
-  const { staffMembersDeatils, deleteStaffMember } = StaffMembersService();
+  const { staffMembersDeatils } = StaffMembersService();
 
   const { data, isPending, isSuccess, isFetching } = useQuery(
     staffMembersDeatils(id),
   );
 
-  const { mutateAsync: deleteStaffMemberMutate } =
-    useMutation(deleteStaffMember());
+  const { deleteResource } = CommonService();
 
-  const handlDelete = async () => {
-    await deleteStaffMemberMutate(id);
+  const { mutateAsync, isPending: isDeletingPending } =
+    useMutation(deleteResource());
+
+  // TODO: To reduce redundancy
+  const handleDelete = async () => {
+    const path = generatePath(ApiRoutes.STAFF_MEMBER_DETAILS, { id });
+
+    await mutateAsync(path, {
+      onSuccess: () => {
+        queryClient.refetchQueries({
+          queryKey: [QueryKeys.GET_STAFF_MEMBER_LIST, clubId],
+        });
+
+        navigateToStaffMemberList();
+      },
+    });
   };
 
   const footer = [
@@ -79,7 +101,8 @@ const Details = () => {
               <DeleteModal
                 title={"Staff Member"}
                 description={getFullName(data?.firstName, data?.lastName)}
-                onDelete={handlDelete}
+                onDelete={handleDelete}
+                loading={isDeletingPending}
               />
             </Col>
           </Row>
@@ -95,7 +118,7 @@ const Details = () => {
             <div>
               <p className={styles.location}>
                 <IconLocationMarker color={Colors.ASHGRO_GOLD} size={22} />
-                {data?.residentialAddress}
+                {fallbackHandler(data?.residentialAddress)}
               </p>
               <div className={styles.contactDetailsContainer}>
                 <span className={clsx(styles.contactDetails, styles.email)}>
@@ -104,7 +127,8 @@ const Details = () => {
                 </span>
                 <span className={styles.contactDetails}>
                   <IconCall color={Colors.ASHGRO_GOLD} size={22} />
-                  {data?.contactNumber}
+                  {data?.contactNumber ? `+1 ${data?.contactNumber}` : "-"}
+                  {/* to add +1 fallback here */}
                 </span>
               </div>
             </div>
@@ -114,7 +138,9 @@ const Details = () => {
                 {footer?.map(({ label, value }) => (
                   <div key={label}>
                     <p className={styles.title}>{label}</p>
-                    <p className={styles.description}>{value}</p>
+                    <p className={styles.description}>
+                      {fallbackHandler(value)}
+                    </p>
                   </div>
                 ))}
               </div>

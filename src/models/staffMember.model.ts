@@ -23,19 +23,19 @@ export class StaffMemberDetails {
   lastName = "";
 
   @serializable
-  email = NOT_AVAILABLE;
+  email?: string;
 
   @serializable
-  contactNumber = NOT_AVAILABLE;
+  contactNumber?: string;
 
   @serializable
   countryCode = "+1";
 
   @serializable
-  staffDepartment = NOT_AVAILABLE;
+  staffDepartment?: string;
 
   @serializable
-  title = NOT_AVAILABLE;
+  title?: string;
 
   @serializable
   birthDate?: string;
@@ -47,7 +47,7 @@ export class StaffMemberDetails {
   staffDepartmentId?: string;
 
   @serializable
-  residentialAddress = NOT_AVAILABLE;
+  residentialAddress?: string;
 }
 
 export class StaffData {
