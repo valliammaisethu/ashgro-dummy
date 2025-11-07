@@ -9,7 +9,6 @@ import {
 } from "./constants";
 import { MemberFiltersProps } from "src/shared/types/members.type";
 import { Buttons, HtmlButtonType } from "src/enums/buttons.enum";
-import { QueryParamKeys } from "src/enums/queryParams.enum";
 import Form from "src/shared/components/Form";
 import Drawer from "src/shared/components/Drawer";
 import useForm from "src/shared/components/UseForm";
@@ -43,9 +42,7 @@ const MemberFilters = (props: MemberFiltersProps) => {
     MetaService();
 
   const { data: leadSourcesData, isPending: leadSourcesPending } = useQuery({
-    ...getLeadSources({
-      filter: QueryParamKeys.MEMBERS,
-    }),
+    ...getLeadSources(),
     enabled: visible,
   });
 
@@ -59,9 +56,7 @@ const MemberFilters = (props: MemberFiltersProps) => {
 
   const { data: membershipStatusesData, isPending: membershipStatusesPending } =
     useQuery({
-      ...getMembershipStatuses({
-        filter: QueryParamKeys.MEMBERS,
-      }),
+      ...getMembershipStatuses(),
       enabled: visible,
     });
 

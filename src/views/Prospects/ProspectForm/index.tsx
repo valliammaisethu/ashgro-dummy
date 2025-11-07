@@ -30,7 +30,7 @@ import {
   formatDate,
 } from "src/shared/utils/dateUtils";
 import { AddProspectProps } from "src/shared/types/prospects.type";
-import { validationSchema } from "./validation";
+import { getValidationSchema } from "./validation";
 import { getDigitsOnly } from "src/shared/utils/parser";
 import { findValueByLabel } from "src/shared/utils/commonHelpers";
 import Loader from "src/shared/components/Loader";
@@ -133,7 +133,7 @@ const ProspectForm = ({
   ]);
 
   const methods = useForm({
-    validationSchema,
+    validationSchema: getValidationSchema(isEdit),
     defaultValues: isEdit ? defaultValues : {},
   });
 
@@ -190,6 +190,7 @@ const ProspectForm = ({
       ...values,
       prospect: {
         ...values.prospect,
+        id: prospectData?.id,
         contactNumber: values.prospect?.contactNumber?.trim()
           ? getDigitsOnly(values.prospect.contactNumber)
           : undefined,

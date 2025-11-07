@@ -35,6 +35,10 @@ import styles from "./membersListing.module.scss";
 import { fallbackHandler } from "src/shared/utils/commonHelpers";
 import DeleteModal from "../DeleteModal";
 import { VisibilityType } from "src/enums/visibilityType.enum";
+import TemplateModal from "src/views/Email/TemplateModal";
+import NewEmailModal from "src/views/Email/NewEmailModal";
+import { EmailTemplate } from "src/models/meta.model";
+import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 
 interface ModalState {
   open: boolean;
@@ -47,6 +51,9 @@ const Members = () => {
     new MembersListingParams(),
   );
   const [selectedMembers, setSelectedMembers] = useState<SelectedMember[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
+  const [isAllSelected, setIsAllSelected] = useState(false);
+
   const filtersActive = useMemo(
     () => areFiltersActive(queryParams),
     [queryParams],
@@ -54,6 +61,16 @@ const Members = () => {
   const {
     visible: memberFiltersVisible,
     toggleVisibility: toggleMemberFilters,
+  } = useDrawer();
+
+  const {
+    visible: emailTemplateModalVisible,
+    toggleVisibility: toggleEmailTemplateModal,
+  } = useDrawer();
+
+  const {
+    visible: newEmailModalVisible,
+    toggleVisibility: toggleNewEmailModal,
   } = useDrawer();
 
   const { navigateToMemberDetails } = useRedirect();
@@ -110,6 +127,7 @@ const Members = () => {
   const handleSelectAll = useCallback(
     (checked: boolean) => {
       setSelectedMembers(toggleAllSelections(checked, data?.members));
+      setIsAllSelected(checked);
     },
     [data?.members],
   );
@@ -119,6 +137,8 @@ const Members = () => {
       setSelectedMembers((prev) =>
         toggleSingleSelection(id, email, name, checked, prev),
       );
+
+      if (!checked) setIsAllSelected(false);
     },
     [],
   );
@@ -158,6 +178,21 @@ const Members = () => {
 
   const [deleteItem, setDeleteItem] = useState<Member | undefined>();
 
+  const handleEmailTemplateModal = useCallback(
+    (type: EmailModalEnum, template?: EmailTemplate) => {
+      setSelectedTemplate(type === EmailModalEnum.EMAIL ? undefined : template);
+      toggleEmailTemplateModal();
+      toggleNewEmailModal();
+    },
+    [toggleEmailTemplateModal, toggleNewEmailModal],
+  );
+
+  const handleNewEmailModalClose = useCallback(() => {
+    setSelectedTemplate(undefined);
+    setIsAllSelected(false);
+    toggleNewEmailModal();
+  }, [toggleNewEmailModal]);
+
   return (
     <div>
       <Header
@@ -165,6 +200,8 @@ const Members = () => {
         onFilter={toggleMemberFilters}
         onSearch={handleSearch}
         onAddMember={() => handleModalVisibility(VisibilityType.ADD)}
+        onBulkMail={toggleEmailTemplateModal}
+        selectedEmails={selectedMembers.length}
       />
       <MemberFilters
         toggleVisibility={toggleMemberFilters}
@@ -271,6 +308,19 @@ const Members = () => {
         isOpen={modalState.open}
         handleModalVisibility={() => handleModalVisibility(null)}
         id={modalState?.item?.id}
+      />
+
+      <TemplateModal
+        isOpen={emailTemplateModalVisible}
+        onClose={toggleEmailTemplateModal}
+        toggleEmailModal={handleEmailTemplateModal}
+      />
+
+      <NewEmailModal
+        isOpen={newEmailModalVisible}
+        onClose={handleNewEmailModalClose}
+        selectedEmails={selectedMembers}
+        selectedTemplate={selectedTemplate}
       />
     </div>
   );
