@@ -20,7 +20,6 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import useDrawer from "src/shared/hooks/useDrawer";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { QueryParamKeys } from "src/enums/queryParams.enum";
 import { UserData } from "src/models/user.model";
 import {
   ProspectsList,
@@ -63,11 +62,7 @@ const ProspectsListing = () => {
   const { getProspectEmailRecipients } = EmailService();
 
   const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
-  const { data: leadStatusesData } = useQuery(
-    getLeadStatuses({
-      filter: QueryParamKeys.PROSPECTS,
-    }),
-  );
+  const { data: leadStatusesData } = useQuery(getLeadStatuses());
   const { data: isEditData, isFetching: isEditDataFetching } = useQuery({
     ...viewProspect(isEdit?.prospect?.id),
     enabled: !!isEdit?.prospect?.id,

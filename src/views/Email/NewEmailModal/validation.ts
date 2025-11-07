@@ -24,4 +24,5 @@ export const addEmailValidation = yup.object().shape({
     .notRequired()
     .label("BCC"),
   clubId: yup.string().notRequired(),
+  attachmentIds: yup.array().of(yup.string()).notRequired(),
 });

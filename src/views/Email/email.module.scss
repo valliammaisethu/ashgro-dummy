@@ -14,6 +14,10 @@
       color: $gold-text;
     }
   }
+
+  :global(.ant-modal-body) {
+    padding-bottom: 9.2rem;
+  }
 }
 
 .modalFooter {
@@ -69,6 +73,10 @@
 .addEmailModal {
   :global(.ant-modal) {
     top: 2rem;
+  }
+
+  :global(.ant-modal-body) {
+    padding-bottom: 9.2rem;
   }
 }
 .uploadFilesButton {

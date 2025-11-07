@@ -13,4 +13,5 @@ export interface MembersHeaderProps {
   onFilter: () => void;
   filtersActive: boolean;
   onBulkMail?: () => void;
+  selectedEmails?: number;
 }

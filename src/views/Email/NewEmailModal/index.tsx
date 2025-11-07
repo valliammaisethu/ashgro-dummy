@@ -40,12 +40,13 @@ const NewEmailModal = (props: NewEmailModalProps) => {
     validationSchema: addEmailValidation,
     values: {
       to: selectedEmails.map((e) => e.email),
-      subject: "",
-      body: "",
+      subject: selectedTemplate?.subject || "",
+      body: selectedTemplate?.body || "",
       title: selectedTemplate?.title || "",
       cc: [],
       bcc: [],
       clubId,
+      attachmentIds: selectedTemplate?.attachmentIds || [],
     },
   });
 
@@ -53,14 +54,14 @@ const NewEmailModal = (props: NewEmailModalProps) => {
 
   const { sendEmail } = EmailService();
 
-  const { mutateAsync } = useMutation(sendEmail());
+  const { mutateAsync, isPending } = useMutation(sendEmail());
 
   const handleClose = () => {
     onClose();
     reset();
   };
 
-  const handleSubmit = (values: FieldValues) => {
+  const handleSubmit = async (values: FieldValues) => {
     const recipients =
       selectedEmails && selectedEmails.length > 0
         ? selectedEmails
@@ -73,10 +74,17 @@ const NewEmailModal = (props: NewEmailModalProps) => {
       }),
     );
 
-    mutateAsync({
-      ...values,
-      to: formattedRecipients,
-    });
+    await mutateAsync(
+      {
+        ...values,
+        to: formattedRecipients,
+      },
+      {
+        onSuccess: () => {
+          handleClose();
+        },
+      },
+    );
   };
 
   return (
@@ -90,6 +98,8 @@ const NewEmailModal = (props: NewEmailModalProps) => {
       closeModal={handleClose}
       destroyOnHidden
       destroyOnClose
+      footer={[]}
+      cancelButtonProps={{ className: "d-none" }}
       rootClassName={styles.addEmailModal}
       styles={{
         body: {
@@ -190,6 +200,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
             htmlType={HtmlButtonType.SUBMIT}
             type={ButtonTypes.DEFAULT}
             className={styles.okButton}
+            loading={isPending}
           >
             {Buttons.SEND_EMAIL}
           </Button>

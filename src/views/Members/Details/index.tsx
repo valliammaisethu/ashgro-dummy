@@ -36,6 +36,9 @@ import { MemberShipService } from "src/services/SettingsService/memberShip.servi
 import { defaultAntdDropdownWidth } from "src/constants/common";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import NewEmailModal from "src/views/Email/NewEmailModal";
+import { SelectedEmailModel } from "src/models/email.model";
+import useDrawer from "src/shared/hooks/useDrawer";
 
 const {
   footer: {
@@ -57,9 +60,15 @@ const { GET_MEMBERS } = QueryKeys;
 const Details = () => {
   const { id = "" } = useParams();
   const [isEditForm, setIsEditForm] = useState(false);
+  const [selectedEmail, setSelectedEmail] = useState<SelectedEmailModel>(
+    new SelectedEmailModel(),
+  );
   const queryClient = useQueryClient();
 
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
+  const { visible: emailModalVisible, toggleVisibility: toggleEmailModal } =
+    useDrawer();
 
   const { navigateToMembers } = useRedirect();
 
@@ -113,11 +122,20 @@ const Details = () => {
     refetch();
   };
 
+  const handleEmailModal = () => {
+    setSelectedEmail({
+      email: data?.email,
+      id: String(data?.id),
+      name: data?.firstName,
+    });
+    toggleEmailModal();
+  };
+
   return (
     <>
       <IndividualDetailsHeader
         navigateBack={navigateToMembers}
-        onEmailClick={() => {}}
+        onEmailClick={handleEmailModal}
       />
 
       <ConditionalRender
@@ -235,6 +253,11 @@ const Details = () => {
           />
         )}
       </ConditionalRender>
+      <NewEmailModal
+        selectedEmails={[selectedEmail]}
+        isOpen={emailModalVisible}
+        onClose={toggleEmailModal}
+      />
     </>
   );
 };
