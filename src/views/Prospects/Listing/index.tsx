@@ -39,6 +39,7 @@ import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import Filters from "../Filters";
 
 import styles from "./listing.module.scss";
+import { getFullName } from "src/shared/utils/helpers";
 
 const ProspectsListing = () => {
   const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
@@ -52,7 +53,7 @@ const ProspectsListing = () => {
   >([]);
   const [isEdit, setIsEdit] = useState({
     state: false,
-    id: "",
+    prospect: new ProspectsList(),
   });
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
   const [isAllSelected, setIsAllSelected] = useState(false);
@@ -67,9 +68,9 @@ const ProspectsListing = () => {
       filter: QueryParamKeys.PROSPECTS,
     }),
   );
-  const { data: isEditData } = useQuery({
-    ...viewProspect(isEdit?.id),
-    enabled: !!isEdit?.id,
+  const { data: isEditData, isFetching: isEditDataFetching } = useQuery({
+    ...viewProspect(isEdit?.prospect?.id),
+    enabled: !!isEdit?.prospect?.id,
   });
   const { data: emailRecipientsData } = useQuery({
     ...getProspectEmailRecipients(queryParams),
@@ -98,7 +99,7 @@ const ProspectsListing = () => {
   } = useDrawer();
 
   const handleSelectAll = useCallback(
-    (checked: boolean) => {
+    (checked = false) => {
       setSelectedProspects(toggleAllSelections(checked, data?.prospects));
       setIsAllSelected(checked);
     },
@@ -118,7 +119,7 @@ const ProspectsListing = () => {
 
   const handleHeaderCheckboxChange = useCallback(
     (e?: CheckboxChangeEvent) => {
-      handleSelectAll(e?.target?.checked ?? false);
+      handleSelectAll(e?.target?.checked);
     },
     [handleSelectAll],
   );
@@ -157,18 +158,21 @@ const ProspectsListing = () => {
     setQueryParams((prev) => ({ ...prev, search: term }));
   }, []);
 
-  const handleOnEdit = useCallback((prospect: ProspectsList) => {
-    setIsEdit({
-      state: true,
-      id: prospect.id!,
-    });
-    toggleVisibility();
-  }, []);
+  const handleOnEdit = useCallback(
+    (prospect: ProspectsList) => {
+      setIsEdit({
+        state: true,
+        prospect: prospect,
+      });
+      toggleVisibility();
+    },
+    [toggleVisibility],
+  );
 
   const handleOnDelete = (prospect: ProspectsList) => {
     setIsEdit({
       state: false,
-      id: prospect.id!,
+      prospect: prospect,
     });
     toggleDeleteModal();
   };
@@ -276,13 +280,22 @@ const ProspectsListing = () => {
       <DeleteModal
         visible={deleteModalVisible}
         toggleVisibility={toggleDeleteModal}
-        id={isEdit?.id}
+        id={isEdit?.prospect?.id ?? ""}
+        prospectName={getFullName(
+          isEdit?.prospect?.firstName,
+          isEdit?.prospect?.lastName,
+        )}
       />
       <ProspectForm
+        key={isEdit?.prospect?.id || "new"}
         prospectData={isEditData?.prospect}
         isEdit={isEdit?.state}
         visible={visible}
-        onClose={toggleVisibility}
+        isLoading={isEdit?.state && isEditDataFetching}
+        onClose={() => {
+          setIsEdit({ state: false, prospect: new ProspectsList() });
+          toggleVisibility();
+        }}
       />
       <Filters
         visible={drawerVisible}

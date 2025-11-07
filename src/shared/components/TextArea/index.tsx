@@ -16,6 +16,7 @@ interface TextAreaFieldProps extends TextAreaProps {
   name: string;
   label?: string;
   required?: boolean;
+  className?: string;
 }
 
 const TextArea: FC<TextAreaFieldProps> = ({

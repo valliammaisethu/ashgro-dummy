@@ -19,6 +19,7 @@ export interface AddProspectProps {
   onClose: () => void;
   isEdit?: boolean;
   prospectData?: ViewProspect;
+  isLoading?: boolean;
 }
 
 export interface IndividualProspectHeaderProps {

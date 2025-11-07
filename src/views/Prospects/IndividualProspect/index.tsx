@@ -160,6 +160,10 @@ const IndividualProspect = () => {
         visible={deleteModalVisible}
         toggleVisibility={toggleDeleteModal}
         id={id}
+        prospectName={getFullName(
+          data?.prospect?.firstName,
+          data?.prospect?.lastName,
+        )}
       />
       <NewEmailModal
         selectedEmails={[selectedEmail]}
