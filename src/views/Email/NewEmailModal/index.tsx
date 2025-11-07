@@ -138,6 +138,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
               placeholder={placeholders.cc}
               name={fields.cc}
               label={labels.cc}
+              notFoundContent={null}
               mode={SelectModes.MULTIPLE}
               options={[]}
               allowCustomOption
@@ -149,6 +150,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
               placeholder={placeholders.bcc}
               name={fields.bcc}
               label={labels.bcc}
+              notFoundContent={null}
               mode={SelectModes.MULTIPLE}
               options={[]}
               allowCustomOption

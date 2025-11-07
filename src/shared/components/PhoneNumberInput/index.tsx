@@ -12,7 +12,6 @@ import Label from "../Label";
 import styles from "./phoneNumberInput.module.scss";
 
 const PhoneNumberField = ({
-  phoneCodeName,
   name,
   label,
   required = false,
@@ -22,7 +21,7 @@ const PhoneNumberField = ({
     [key: string]: string;
   }>();
 
-  const phoneValue = watch(name) || "";
+  const phoneValue = watch(name);
 
   const formatAndSetPhoneNumber = (input: string) => {
     const raw = getDigitsOnly(input);

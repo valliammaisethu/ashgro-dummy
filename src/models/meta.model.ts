@@ -164,6 +164,11 @@ export class LeadStatusesData {
   leadStatuses?: LeadStatus[];
 }
 
+export class MembershipStatusData {
+  @serializable(list(object(MembershipStatus)))
+  membershipStatuses?: MembershipStatus[];
+}
+
 export class EmailTemplatesData {
   @serializable(list(object(EmailTemplate)))
   emailTemplates?: EmailTemplate[];

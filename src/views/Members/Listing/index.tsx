@@ -1,18 +1,27 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { FieldValues } from "react-hook-form";
+import { CheckboxChangeEvent } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import Header from "../Header";
 import useDrawer from "src/shared/hooks/useDrawer";
 import MemberFilters from "../Filters";
 import { Member, MembersListingParams } from "src/models/members.model";
-import { areFiltersActive } from "../helpers";
+import {
+  areFiltersActive,
+  toggleAllSelections,
+  toggleSingleSelection,
+  areAllMembersSelected,
+  areSomeMembersSelected,
+  SelectedMember,
+} from "../helpers";
 import { MembersService } from "src/services/MembersService/members.service";
 import MembersForm from "../MembersForm";
-import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import Profile from "src/shared/components/atoms/Table/Profile";
 import Form from "src/shared/components/Form";
+import Checkbox from "src/shared/components/Checkbox";
+import { stopPropagation } from "src/shared/utils/eventUtils";
 import { MemberShipService } from "src/services/SettingsService/memberShip.service";
 import { formatDate } from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
@@ -37,6 +46,7 @@ const Members = () => {
   const [queryParams, setQueryParams] = useState<MembersListingParams>(
     new MembersListingParams(),
   );
+  const [selectedMembers, setSelectedMembers] = useState<SelectedMember[]>([]);
   const filtersActive = useMemo(
     () => areFiltersActive(queryParams),
     [queryParams],
@@ -55,7 +65,7 @@ const Members = () => {
     useQuery(memberShipStatuses());
   const { mutateAsync: updateMemberStatusMutate } =
     useMutation(updateMemberStatus());
-  const { data, isFetching, isSuccess } = useQuery(
+  const { data, isPending, isSuccess } = useQuery(
     getStaffMembersList(queryParams),
   );
 
@@ -97,6 +107,39 @@ const Members = () => {
     setQueryParams((prev) => ({ ...prev, page: newPage }));
   }, []);
 
+  const handleSelectAll = useCallback(
+    (checked: boolean) => {
+      setSelectedMembers(toggleAllSelections(checked, data?.members));
+    },
+    [data?.members],
+  );
+
+  const handleSelectOne = useCallback(
+    (id: string, email: string, name: string, checked: boolean) => {
+      setSelectedMembers((prev) =>
+        toggleSingleSelection(id, email, name, checked, prev),
+      );
+    },
+    [],
+  );
+
+  const handleHeaderCheckboxChange = useCallback(
+    (e?: CheckboxChangeEvent) => {
+      handleSelectAll(e?.target?.checked ?? false);
+    },
+    [handleSelectAll],
+  );
+
+  const allSelected = useMemo(
+    () => areAllMembersSelected(data?.members, selectedMembers),
+    [data?.members, selectedMembers],
+  );
+
+  const someSelected = useMemo(
+    () => areSomeMembersSelected(data?.members, selectedMembers),
+    [data?.members, selectedMembers],
+  );
+
   const [modalState, setModalState] = useState<ModalState>({
     open: false,
     mode: null,
@@ -131,11 +174,24 @@ const Members = () => {
       />
       <Form>
         <div className={styles.listContainer}>
-          <ListHeader headers={memberHeaders} />
+          <div className={styles.headerRow}>
+            <div className={styles.headerWithCheckbox}>
+              <div className={styles.checkboxCol} onClick={stopPropagation}>
+                <Checkbox
+                  checked={allSelected}
+                  indeterminate={someSelected}
+                  onChange={handleHeaderCheckboxChange}
+                />
+              </div>
+              <p className={styles.headerLabel}>{memberHeaders[0]}</p>
+            </div>
+            <p className={styles.headerLabel}>{memberHeaders[1]}</p>
+            <p className={styles.headerLabel}>{memberHeaders[2]}</p>
+          </div>
 
           <ConditionalRender
             records={data?.members}
-            isPending={isFetching}
+            isPending={isPending}
             isSuccess={isSuccess}
           >
             <div className={styles.listContainer}>
@@ -161,6 +217,15 @@ const Members = () => {
                           : undefined
                       }
                       showCheckbox
+                      isSelected={selectedMembers.some((m) => m.id === item.id)}
+                      onSelectChange={(checked) =>
+                        handleSelectOne(
+                          item.id!,
+                          item.email!,
+                          item.firstName!,
+                          checked,
+                        )
+                      }
                     />
 
                     <div className={styles.rowItem}>

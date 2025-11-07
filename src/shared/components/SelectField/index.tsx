@@ -43,6 +43,7 @@ const SelectField = ({
   onClear,
   allowCustomOption = false,
   validateCustomInput,
+  notFoundContent,
   ...props
 }: DropDownProps & {
   allowCustomOption?: boolean;
@@ -154,6 +155,7 @@ const SelectField = ({
     onChange: handleOnChange,
     placeholder,
     onInputKeyDown: handleKeyDown,
+    notFoundContent,
     ...(allowCustomOption && {
       searchValue,
       onSearch: handleSearch,
