@@ -11,6 +11,16 @@ export enum Buttons {
   DELETE_PERMANENTLY = "Delete Permanently",
   BACK = "Back",
   YES_CONVERT = "Yes, Convert",
+  APPLY_FILTERS = "Apply Filters",
+  CLEAR_FILTERS = "Clear Filters",
+  CLEAR = "Clear",
+  NEXT = "Next",
+  NEW_EMAIL = "New Email",
+  ADD_STAFF = "Add Staff",
+  ADD_MEMBER = "Add Member",
+  SEND_EMAIL = "Send Email",
+  UPLOAD_FILES = "Upload file(s)",
+  ADD_TEMPLATE = "Add Template",
 }
 
 export enum HtmlButtonType {

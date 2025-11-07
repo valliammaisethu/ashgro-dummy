@@ -1,5 +1,9 @@
 import React from "react";
-import { getCountries, getCountryCallingCode } from "libphonenumber-js";
+import {
+  AsYouType,
+  getCountries,
+  getCountryCallingCode,
+} from "libphonenumber-js";
 
 import { MobileCode } from "src/models/meta.model";
 import { REGEX } from "src/constants/regex";
@@ -30,3 +34,9 @@ export const getPhoneCodeOptions = (options: MobileCode[]) =>
   });
 
 export const getDigitsOnly = (val: string) => val.replace(REGEX.DIGITS, "");
+
+export const formatAndSetPhoneNumber = (input: string) => {
+  const raw = getDigitsOnly(input);
+  const formatted = new AsYouType("US").input(raw);
+  return `+${formatted}`;
+};

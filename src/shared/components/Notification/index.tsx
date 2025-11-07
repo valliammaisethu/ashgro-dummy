@@ -12,7 +12,7 @@ const Notification = ({
   title,
   description,
   type = NotificationTypes.SUCCESS,
-  duration = 4.5,
+  duration = 3,
   placement = Placement.TOP,
 }: INotification): void => {
   const combinedClass = clsx(

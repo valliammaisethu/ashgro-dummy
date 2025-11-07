@@ -93,7 +93,6 @@ const ProfilePictureInput = ({
     }
 
     setIsLoading(true);
-    const uploadedAttachmentId: string | null = null;
 
     try {
       const attachmentPayload: AttachmentPayload = {

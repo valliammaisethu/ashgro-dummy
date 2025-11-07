@@ -1,18 +1,20 @@
 import React, { Fragment } from "react";
-import { Modal as AntModal, Divider } from "antd";
-import styles from "./Modal.module.scss";
+import { Divider, Modal as AntModal } from "antd";
 import { IconCircleClose } from "obra-icons-react";
 import { Colors } from "src/enums/colors.enum";
-import Button from "../Button";
 import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { ModalProps } from "src/shared/types/sharedComponents.type";
+
+import styles from "./Modal.module.scss";
+import { defaultModalWidth } from "src/constants/sharedComponents";
+import Button from "../Button";
 
 const Modal: React.FC<ModalProps> = ({
   children,
   closeModal,
   visible,
   title,
-  width,
+  width = defaultModalWidth,
   handleOk,
   footer,
   cancelText = Buttons.CANCEL,
@@ -60,15 +62,15 @@ const Modal: React.FC<ModalProps> = ({
       <AntModal
         width={width}
         rootClassName={rootClassName}
+        destroyOnHidden={destroyOnHidden}
+        destroyOnClose={destroyOnClose ?? true}
         centered={centered}
         bodyStyle={bodyStyle}
         styles={modalStyles}
         open={visible}
-        destroyOnHidden={destroyOnHidden}
         onOk={handleOk ?? closeModal}
         onCancel={onCancel ?? closeModal}
         confirmLoading={confirmLoading}
-        destroyOnClose={destroyOnClose}
         footer={footer === undefined ? defaultFooter : footer}
         title={
           <Fragment>

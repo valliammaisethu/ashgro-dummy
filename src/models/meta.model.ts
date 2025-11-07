@@ -1,5 +1,4 @@
 import { alias, list, object, primitive, serializable } from "serializr";
-import { ResponseModel } from "./response.model";
 
 export class MobileCode {
   @serializable
@@ -21,6 +20,12 @@ export class ActivityType {
 
   @serializable
   type?: string;
+
+  @serializable(alias("sourceName"))
+  label?: string;
+
+  @serializable(alias("id"))
+  value?: string;
 }
 
 export class MembershipCategory {
@@ -47,6 +52,72 @@ export class LeadStatus {
   statusName?: string;
 }
 
+export class MembershipStatus {
+  @serializable
+  id?: string;
+
+  @serializable
+  statusName?: string;
+}
+
+export class EmailTemplate {
+  @serializable
+  id?: string;
+
+  @serializable
+  title?: string;
+
+  @serializable
+  subject?: string;
+
+  @serializable
+  body?: string;
+
+  @serializable(list(primitive()))
+  attachmentIds?: string[];
+}
+
+export class Attachment {
+  @serializable
+  id?: string;
+
+  @serializable
+  fileName?: string;
+
+  @serializable
+  s3Key?: string;
+
+  @serializable
+  contentType?: string;
+
+  @serializable
+  fileSize?: number;
+}
+
+export class EmailTemplateDetail {
+  @serializable
+  id?: string;
+
+  @serializable
+  title?: string;
+
+  @serializable
+  subject?: string;
+
+  @serializable
+  body?: string;
+
+  @serializable(list(object(Attachment)))
+  attachments?: Attachment[];
+}
+
+export class StaffDepartment {
+  @serializable
+  id?: string;
+
+  @serializable
+  name?: string;
+}
 export class LeadSourceParams {
   @serializable
   filter?: string;
@@ -61,6 +132,17 @@ export class LeadStatusParams {
 
   @serializable(list(primitive()))
   leadSourceIds?: string[];
+}
+
+export class MembershipStatusParams {
+  @serializable(list(primitive()))
+  leadSourceIds?: string[];
+
+  @serializable
+  filter?: string;
+
+  @serializable(list(primitive()))
+  membershipCategoryIds?: string[];
 }
 
 export class MembershipCategoriesData {
@@ -82,22 +164,17 @@ export class LeadStatusesData {
   leadStatuses?: LeadStatus[];
 }
 
-export class MembershipCategoriesResponse extends ResponseModel {
-  @serializable(object(MembershipCategoriesData))
-  data?: MembershipCategoriesData;
+export class MembershipStatusData {
+  @serializable(list(object(MembershipStatus)))
+  membershipStatuses?: MembershipStatus[];
 }
 
-export class LeadSourcesResponse extends ResponseModel {
-  @serializable(object(ActivityTypesData))
-  data?: LeadSourcesData;
+export class EmailTemplatesData {
+  @serializable(list(object(EmailTemplate)))
+  emailTemplates?: EmailTemplate[];
 }
 
-export class LeadStatusesResponse extends ResponseModel {
-  @serializable(object(LeadStatusesData))
-  data?: LeadStatusesData;
-}
-
-export class ActivityTypesResponse extends ResponseModel {
-  @serializable(object(ActivityTypesData))
-  data?: ActivityTypesData;
+export class StaffDepartmentsData {
+  @serializable(list(object(StaffDepartment)))
+  staffDepartments?: StaffDepartment[];
 }

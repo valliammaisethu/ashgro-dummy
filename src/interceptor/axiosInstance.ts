@@ -1,14 +1,18 @@
-import axios from "axios";
+import axios, { AxiosRequestHeaders } from "axios";
 import { ApiRoutes } from "../routes/routeConstants/apiRoutes";
 import Notification from "../shared/components/Notification";
 import { NotificationTypes } from "../enums/notificationTypes";
 import { axiosInstanceErrors } from "src/constants/sharedComponents";
 import { NavigationRoutes } from "src/routes/routeConstants/appRoutes";
+import { FailedQueueItem } from "src/shared/types/axios.type";
+import { TokenData } from "src/models/user.model";
+import { deserialize } from "serializr";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 
 const {
   networkError,
   forbidden,
-  unAuthorised,
   notFound,
   genericError,
   failed,
@@ -16,14 +20,26 @@ const {
   genericErrorTitle,
 } = axiosInstanceErrors;
 
-export const getHeaders = (): any => {
-  let user;
-  if (localStorage.getItem("token")) {
-    user = JSON.parse(localStorage.getItem("token") || "");
-  }
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${user && user.accessToken ? user.accessToken : ""}`,
+let failedQueue: FailedQueueItem[] = [];
+let isRefreshing = false;
+
+const clearLocalStorage = () => {
+  localStorageHelper.clearData();
+  return (window.location.href = NavigationRoutes.LOGIN);
+};
+
+export const getHeaders = <T extends AxiosRequestHeaders>(
+  defaultHeaders: T,
+): T => {
+  // TODO: To fix issue in utility and use here
+  const accessToken = localStorage.getItem(LocalStorageKeys.TOKEN);
+  const token = accessToken ? JSON.parse(accessToken) : "";
+
+  const headers: T = {
+    ...defaultHeaders,
+    "Content-Type": defaultHeaders["Content-Type"] ?? "application/json",
+    Authorization:
+      defaultHeaders.Authorization === null ? undefined : `Bearer ${token}`,
   };
   return headers;
 };
@@ -34,10 +50,11 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(function (config) {
-  config.headers = getHeaders();
+  config.headers = getHeaders(config.headers);
   return config;
 });
 
+// TO remove any and use proper type
 axiosInstance.interceptors.response.use(
   (response): any => {
     return {
@@ -46,8 +63,8 @@ axiosInstance.interceptors.response.use(
       status: response.status,
     };
   },
-  (error) => {
-    const { response } = error;
+  async (error) => {
+    const { response, config } = error;
 
     if (!response) {
       Notification({
@@ -61,16 +78,60 @@ axiosInstance.interceptors.response.use(
     const { status, data } = response;
 
     if (status === 401) {
-      Notification({
-        title: unAuthorised.title,
-        description: unAuthorised.description,
-        type: NotificationTypes.ERROR,
-      });
-      localStorage.removeItem("user");
-      window.location.href = NavigationRoutes.LOGIN;
-      return Promise.reject(error);
-    }
+      const refreshToken = localStorage.getItem(LocalStorageKeys.REFRESH_TOKEN);
 
+      if (!refreshToken) {
+        clearLocalStorage();
+        return Promise.reject(error);
+      }
+
+      const parsedRefreshToken = JSON.parse(refreshToken);
+
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject, config });
+        });
+      }
+
+      isRefreshing = true;
+
+      try {
+        const { data } = await axios.post(
+          `${ApiRoutes.BASE_URL}${ApiRoutes.REFRESH}`,
+          {},
+          {
+            headers: {
+              "refresh-token": `Bearer ${parsedRefreshToken}`,
+            },
+          },
+        );
+
+        const { token = {} } = data?.data ?? {};
+        const { refreshToken, accessToken } = deserialize(TokenData, token);
+
+        const newAccessToken = accessToken ?? "";
+
+        localStorageHelper.setItem(LocalStorageKeys.TOKEN, newAccessToken);
+        localStorageHelper.setItem(
+          LocalStorageKeys.REFRESH_TOKEN,
+          refreshToken,
+        );
+
+        failedQueue.forEach(({ resolve, config }) => {
+          config.headers = config.headers ?? {};
+          config.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          resolve(axiosInstance(config));
+        });
+
+        failedQueue = [];
+        isRefreshing = false;
+
+        config.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        return axiosInstance(config);
+      } catch (error) {
+        clearLocalStorage();
+      }
+    }
     const errorTitle = data?.title || genericErrorTitle;
     const errorMessage = data?.message || data?.error || genericError;
 

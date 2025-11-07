@@ -40,9 +40,10 @@
     top: 2rem;
   }
 }
-.activityDescriptionTextArea {
+
+.activityDescBox {
   textArea {
-    height: 24rem;
+    min-height: 24rem;
     margin-bottom: 6rem;
   }
 }

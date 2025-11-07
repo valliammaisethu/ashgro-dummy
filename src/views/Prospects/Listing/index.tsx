@@ -1,14 +1,15 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { CheckboxChangeEvent } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { IconChevronLeft, IconChevronRight } from "obra-icons-react";
+import { FieldValues } from "react-hook-form";
 
-import { PageListingDirections, TABLE_HEADERS } from "./constants";
+import { TABLE_HEADERS } from "./constants";
 import {
   toggleAllSelections,
   toggleSingleSelection,
   areAllProspectsSelected,
   areSomeProspectsSelected,
+  areFiltersActive,
 } from "./helpers";
 import Header from "./Header";
 import Checkbox from "src/shared/components/Checkbox";
@@ -19,55 +20,102 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import useDrawer from "src/shared/hooks/useDrawer";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { QueryParamKeys } from "src/enums/queryParams.enum";
 import { UserData } from "src/models/user.model";
 import {
   ProspectsList,
   ProspectsListingParams,
 } from "src/models/prospects.model";
+import { EmailTemplate } from "src/models/meta.model";
 import { MetaService } from "src/services/MetaService/meta.service";
+import { SelectedProspect } from "src/shared/types/prospects.type";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
+import { EmailService } from "src/services/EmailService/email.service";
 import DeleteModal from "../DeleteModal";
-import Button from "src/shared/components/Button";
+import Pagination from "src/shared/components/Pagination";
+import TemplateModal from "src/views/Email/TemplateModal";
+import NewEmailModal from "src/views/Email/NewEmailModal";
+import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
+import Filters from "../Filters";
 
 import styles from "./listing.module.scss";
 import { getFullName } from "src/shared/utils/helpers";
 
 const ProspectsListing = () => {
+  const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
+  const clubId = user?.clubId;
+
   const [queryParams, setQueryParams] = useState<ProspectsListingParams>(
     new ProspectsListingParams(),
   );
-  const { getProspects, viewProspect } = ProspectsService();
-  const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
-
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [selectedProspects, setSelectedProspects] = useState<
+    SelectedProspect[]
+  >([]);
   const [isEdit, setIsEdit] = useState({
     state: false,
     prospect: new ProspectsList(),
   });
-  const { data: isEditData } = useQuery({
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
+  const [isAllSelected, setIsAllSelected] = useState(false);
+
+  const { getProspects, viewProspect } = ProspectsService();
+  const { getLeadStatuses } = MetaService();
+  const { getProspectEmailRecipients } = EmailService();
+
+  const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
+  const { data: leadStatusesData } = useQuery(
+    getLeadStatuses({
+      filter: QueryParamKeys.PROSPECTS,
+    }),
+  );
+  const { data: isEditData, isFetching: isEditDataFetching } = useQuery({
     ...viewProspect(isEdit?.prospect?.id),
     enabled: !!isEdit?.prospect?.id,
   });
+  const { data: emailRecipientsData } = useQuery({
+    ...getProspectEmailRecipients(queryParams),
+    enabled: isAllSelected,
+  });
 
-  const { getLeadStatuses } = MetaService();
+  const leadStatusOptions = useMemo(
+    () => leadStatusesData?.leadStatuses,
+    [leadStatusesData],
+  );
 
-  const { data: leadStatusOptions } = useQuery(getLeadStatuses());
   const { navigateToIndividualProspect } = useRedirect();
 
   const { visible, show, toggleVisibility } = useDrawer();
   const { visible: deleteModalVisible, toggleVisibility: toggleDeleteModal } =
     useDrawer();
+  const { visible: drawerVisible, toggleVisibility: toggleDrawerVisibility } =
+    useDrawer();
+  const {
+    visible: emailTemplateModalVisible,
+    toggleVisibility: toggleEmailTemplateModal,
+  } = useDrawer();
+  const {
+    visible: newEmailModalVisible,
+    toggleVisibility: toggleNewEmailModal,
+  } = useDrawer();
+
   const handleSelectAll = useCallback(
     (checked = false) => {
-      setSelectedIds(toggleAllSelections(checked, data?.prospects));
+      setSelectedProspects(toggleAllSelections(checked, data?.prospects));
+      setIsAllSelected(checked);
     },
     [data?.prospects],
   );
-  const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
-  const clubId = user?.clubId;
-  const handleSelectOne = useCallback((id: string, checked: boolean) => {
-    setSelectedIds((prev) => toggleSingleSelection(id, checked, prev));
-  }, []);
+
+  const handleSelectOne = useCallback(
+    (id: string, email: string, name: string, checked: boolean) => {
+      setSelectedProspects((prev) =>
+        toggleSingleSelection(id, email, name, checked, prev),
+      );
+
+      if (!checked) setIsAllSelected(false);
+    },
+    [],
+  );
 
   const handleHeaderCheckboxChange = useCallback(
     (e?: CheckboxChangeEvent) => {
@@ -77,20 +125,31 @@ const ProspectsListing = () => {
   );
 
   const allSelected = useMemo(
-    () => areAllProspectsSelected(data?.prospects, selectedIds),
-    [data?.prospects, selectedIds],
+    () => areAllProspectsSelected(data?.prospects, selectedProspects),
+    [data?.prospects, selectedProspects],
   );
 
   const someSelected = useMemo(
-    () => areSomeProspectsSelected(data?.prospects, selectedIds),
-    [data?.prospects, selectedIds],
+    () => areSomeProspectsSelected(data?.prospects, selectedProspects),
+    [data?.prospects, selectedProspects],
   );
 
-  useEffect(() => {
-    if (clubId && queryParams.clubId !== clubId) {
-      setQueryParams((prev) => ({ ...prev, clubId }));
+  const filtersActive = useMemo(
+    () => areFiltersActive(queryParams),
+    [queryParams],
+  );
+
+  const emailRecipients = useMemo(() => {
+    if (isAllSelected && emailRecipientsData?.prospects) {
+      // Convert API recipients to SelectedEmailModel format
+      return emailRecipientsData.prospects.map((prospect) => ({
+        id: prospect.email || "",
+        email: prospect.email || "",
+        name: prospect.firstName || "",
+      }));
     }
-  }, [clubId]);
+    return selectedProspects;
+  }, [isAllSelected, emailRecipientsData, selectedProspects]);
 
   const navigateToProspect = (id: string) => () =>
     navigateToIndividualProspect(id);
@@ -99,13 +158,16 @@ const ProspectsListing = () => {
     setQueryParams((prev) => ({ ...prev, search: term }));
   }, []);
 
-  const handleOnEdit = useCallback((prospect: ProspectsList) => {
-    setIsEdit({
-      state: true,
-      prospect: prospect,
-    });
-    toggleVisibility();
-  }, []);
+  const handleOnEdit = useCallback(
+    (prospect: ProspectsList) => {
+      setIsEdit({
+        state: true,
+        prospect: prospect,
+      });
+      toggleVisibility();
+    },
+    [toggleVisibility],
+  );
 
   const handleOnDelete = (prospect: ProspectsList) => {
     setIsEdit({
@@ -115,33 +177,52 @@ const ProspectsListing = () => {
     toggleDeleteModal();
   };
 
-  const handlePageChange = useCallback(
-    (direction: PageListingDirections) => {
-      setQueryParams((prev) => {
-        const currentPage = prev.page || 1;
-        const totalPages = data?.pagination?.overallPages || 1;
+  const handlePageChange = useCallback((newPage: number) => {
+    setQueryParams((prev) => ({ ...prev, page: newPage }));
+  }, []);
 
-        let newPage = currentPage;
+  const handleApplyFilter = (filters: FieldValues) => {
+    setQueryParams((prev) => ({
+      ...prev,
+      ...filters,
+      followUpStartDate: filters.followUpDateRange?.[0],
+      followUpEndDate: filters.followUpDateRange?.[1],
+      page: 1,
+    }));
+    toggleDrawerVisibility();
+  };
 
-        if (direction === PageListingDirections.PREV && currentPage > 1)
-          newPage = currentPage - 1;
-        else if (
-          direction === PageListingDirections.NEXT &&
-          currentPage < totalPages
-        )
-          newPage = currentPage + 1;
+  const handleEmailTemplateModal = (
+    type: EmailModalEnum,
+    template?: EmailTemplate,
+  ) => {
+    setSelectedTemplate(type === EmailModalEnum.EMAIL ? undefined : template);
+    toggleEmailTemplateModal();
+    toggleNewEmailModal();
+  };
 
-        if (newPage === currentPage) return prev;
+  const handleNewEmailModalClose = useCallback(() => {
+    setSelectedTemplate(undefined);
+    setIsAllSelected(false);
+    toggleNewEmailModal();
+  }, [toggleNewEmailModal]);
 
-        return { ...prev, page: newPage };
-      });
-    },
-    [data?.pagination?.overallPages],
-  );
+  useEffect(() => {
+    if (clubId && queryParams.clubId !== clubId) {
+      setQueryParams((prev) => ({ ...prev, clubId }));
+    }
+  }, [clubId]);
 
   return (
     <div>
-      <Header onSearch={handleSearch} onAddProspect={show} />
+      <Header
+        onFilter={toggleDrawerVisibility}
+        onSearch={handleSearch}
+        onAddProspect={show}
+        filtersActive={filtersActive}
+        onBulkMail={toggleEmailTemplateModal}
+        selectedEmails={selectedProspects.length}
+      />
       <div className={styles.prospectList}>
         <div className={styles.tableContainer}>
           <div className={styles.tableHeader}>
@@ -168,39 +249,31 @@ const ProspectsListing = () => {
                   key={prospect.id}
                   onClick={navigateToProspect(prospect.id!)}
                   prospect={prospect}
-                  isSelected={selectedIds.includes(prospect.id!)}
-                  leadStatusOptions={leadStatusOptions?.leadStatuses}
-                  onSelectChange={handleSelectOne}
+                  isSelected={selectedProspects.some(
+                    (p) => p.id === prospect.id,
+                  )}
+                  leadStatusOptions={leadStatusOptions}
+                  onSelectChange={(checked) =>
+                    handleSelectOne(
+                      prospect.id!,
+                      prospect.email!,
+                      prospect.firstName!,
+                      checked,
+                    )
+                  }
                   onEditClick={handleOnEdit}
                   onDeleteClick={handleOnDelete}
                 />
               ))}
             </div>
-            <div className={styles.paginationContainer}>
-              <Button
-                disabled={data?.pagination?.currentPage === 1}
-                onClick={() => handlePageChange(PageListingDirections.PREV)}
-                icon={<IconChevronLeft size={20} />}
-              ></Button>
-              <div className={styles.textContainer}>
-                Page
-                <span className={styles.active}>
-                  {data?.pagination?.currentPage}
-                </span>
-                of
-                <span className={styles.end}>
-                  {data?.pagination?.overallPages}
-                </span>
-              </div>
-              <Button
-                onClick={() => handlePageChange(PageListingDirections.NEXT)}
-                disabled={
-                  data?.pagination?.currentPage ===
-                  data?.pagination?.overallPages
-                }
-                icon={<IconChevronRight size={20} />}
-              ></Button>
-            </div>
+            <Pagination
+              currentPage={
+                data?.pagination?.currentPage ?? queryParams.page ?? 1
+              }
+              totalPages={data?.pagination?.overallPages ?? 1}
+              onPageChange={handlePageChange}
+              hasData={!!data?.prospects && data.prospects.length > 0}
+            />
           </ConditionalRender>
         </div>
       </div>
@@ -214,10 +287,32 @@ const ProspectsListing = () => {
         )}
       />
       <ProspectForm
+        key={isEdit?.prospect?.id || "new"}
         prospectData={isEditData?.prospect}
         isEdit={isEdit?.state}
         visible={visible}
-        onClose={toggleVisibility}
+        isLoading={isEdit?.state && isEditDataFetching}
+        onClose={() => {
+          setIsEdit({ state: false, prospect: new ProspectsList() });
+          toggleVisibility();
+        }}
+      />
+      <Filters
+        visible={drawerVisible}
+        toggleVisibility={toggleDrawerVisibility}
+        onSubmit={handleApplyFilter}
+        defaultValues={queryParams}
+      />
+      <TemplateModal
+        isOpen={emailTemplateModalVisible}
+        onClose={toggleEmailTemplateModal}
+        toggleEmailModal={handleEmailTemplateModal}
+      />
+      <NewEmailModal
+        isOpen={newEmailModalVisible}
+        onClose={handleNewEmailModalClose}
+        selectedEmails={emailRecipients}
+        selectedTemplate={selectedTemplate}
       />
     </div>
   );

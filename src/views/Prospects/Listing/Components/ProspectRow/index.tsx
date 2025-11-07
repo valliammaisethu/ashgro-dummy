@@ -15,12 +15,13 @@ import { N_A } from "src/constants/sharedComponents";
 import { Colors } from "src/enums/colors.enum";
 
 import styles from "./prospectRow.module.scss";
+import { stopPropagation } from "src/shared/utils/eventUtils";
 
 interface ProspectRowProps {
   prospect: ProspectsList;
   isSelected: boolean;
   leadStatusOptions?: LeadStatus[];
-  onSelectChange: (id: string, checked: boolean) => void;
+  onSelectChange: (checked: boolean) => void;
   onClick: () => void;
   onEditClick: (data: ProspectsList) => void;
   onDeleteClick: (data: ProspectsList) => void;
@@ -36,7 +37,6 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   onDeleteClick,
 }) => {
   const {
-    id = "",
     leadStatus,
     firstName,
     lastName,
@@ -50,7 +50,7 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
 
   const handleCheckboxChange = (e?: CheckboxChangeEvent) => {
     e?.stopPropagation();
-    onSelectChange(id, e?.target?.checked ?? false);
+    onSelectChange(e?.target?.checked || false);
   };
 
   const handleSelectClick = (e: React.MouseEvent) => e.stopPropagation();
@@ -67,7 +67,7 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
 
   return (
     <div onClick={onClick} className={styles.tableRow}>
-      <div className={styles.checkboxCol}>
+      <div className={styles.checkboxCol} onClick={stopPropagation}>
         <Checkbox checked={isSelected} onChange={handleCheckboxChange} />
       </div>
 

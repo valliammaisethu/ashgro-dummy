@@ -8,7 +8,7 @@ export const clearAuthData = () => {
   localStorageHelper.removeItem(LocalStorageKeys.TOKEN);
 };
 
-export const fillEmptyData = (val?: string) => val || "N/A";
+export const fillEmptyData = (val?: string) => val || "-";
 
 export const getFullName = (firstName = "", lastName = ""): string =>
   `${firstName} ${lastName}`.trim();
@@ -80,4 +80,9 @@ export const cleanObject = (obj: any): any => {
   }
 
   return obj;
+};
+
+export const ValidateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 };

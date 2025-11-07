@@ -6,19 +6,23 @@ import Button from "src/shared/components/Button";
 import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
 
 import styles from "../listing.module.scss";
+import { ProspectListingHeaderProps } from "src/shared/types/prospects.type";
 
-interface HeaderProps {
-  onAddProspect: () => void;
-  onSearch: (searchTerm: string) => void;
-}
-
-const Header = ({ onAddProspect, onSearch }: HeaderProps) => {
+const Header = ({
+  onAddProspect,
+  onSearch,
+  onFilter,
+  filtersActive,
+  onBulkMail,
+  selectedEmails,
+}: ProspectListingHeaderProps) => {
   return (
     <div className={styles.header}>
       <SearchField
         onSearch={onSearch}
-        onFilter={() => {}}
+        onFilter={onFilter}
         className={styles.searchField}
+        filtersActive={filtersActive}
       />
       <div className={styles.actions}>
         <Button
@@ -27,8 +31,10 @@ const Header = ({ onAddProspect, onSearch }: HeaderProps) => {
         />
         <div>
           <Button
+            onClick={onBulkMail}
             className={styles.bulkUploadButton}
             icon={<IconEmail size={20} />}
+            disabled={!selectedEmails}
           >
             {Buttons.BULK_MAIL}
           </Button>

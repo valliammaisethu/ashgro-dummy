@@ -1,0 +1,36 @@
+@import "src/styles/variables";
+@import "src/styles/_helpers.scss";
+
+.drawerFooter {
+  background-color: $modal-footer-bg;
+  padding: 1.6rem 3.2rem;
+  @include flex-flow(row, wrap, center);
+  gap: 1.6rem;
+  justify-content: flex-end;
+
+  .confirmButton {
+    background-color: $ashgro-navy;
+    color: $ashgro-white;
+    border-radius: 3.6rem;
+    padding: 1.2rem 1.6rem;
+    width: 14.4rem;
+    height: 4.4rem;
+
+    &:hover {
+      background-color: $ashgro-navy !important;
+      color: $ashgro-white !important;
+    }
+  }
+
+  .cancelButton {
+    color: $gold-text;
+    font-weight: 600;
+    font-size: 1.4rem;
+    background-color: transparent;
+
+    &:hover {
+      background-color: transparent !important;
+      color: $gold-text !important;
+    }
+  }
+}

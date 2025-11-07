@@ -48,6 +48,9 @@ $modal-footer-bg: #f8f7f3;
 $ashgro-title-gold: #81693f;
 $table-row-hover: #f9fafb;
 $modal-description-text: #0c2340a6;
+$range-picker-tr: #0c234080;
+$email: #5a7ad0;
+$range-picker-cell-range-bg: #f2ebdf;
 $nav-active-bg: linear-gradient(
   270deg,
   #eadbbd -12.5%,
@@ -87,6 +90,8 @@ $correct-bg: #e7fcd0;
 $incorrect-bg: #ffdfdf;
 $club-name: #f0ede1;
 $club-name-text: #43330bb2;
+$upload-text: #9499a0;
+$settings-hover-bg: #c5a25d66;
 
 /* Component colors */
 $notification-success: #8bc34a;
@@ -172,3 +177,10 @@ $notification-warning-gradient: linear-gradient(
   #873e10 100%
 );
 $notification-info-gradient: linear-gradient(180deg, #1d74ed 0%, #104287 100%);
+
+$profile-bg: linear-gradient(
+  180deg,
+  rgba(197, 162, 93, 0) 0%,
+  rgba(197, 162, 93, 0.3) 50%,
+  #c5a25d 100%
+);

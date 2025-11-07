@@ -247,29 +247,24 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 /* Select */
 .ant-select {
   width: 100%;
+  height: 4rem;
   &:focus-visible {
     box-shadow: $select-focus-box-shadow;
   }
 }
-.ant-select-selector {
-  border-color: $select-border-color;
-  &:hover {
-    border-color: $select-hover-border-color;
-    height: 4rem;
-  }
 
-  .ant-select-selector {
-    border-color: $ashgro-input-border;
-    &:hover {
-      border-color: $ashgro-input-border;
-    }
+.ant-select-selector {
+  border-color: $incrementer-border;
+  &:hover {
+    border-color: $incrementer-border;
   }
 }
+
 .ant-select-outlined:not(.ant-select-disabled):not(
     .ant-select-customize-input
   ):not(.ant-pagination-size-changer):hover
   .ant-select-selector {
-  border-color: $ashgro-input-border;
+  border-color: $incrementer-border;
 }
 .ant-select-selector {
   background-color: $input-background;
@@ -287,7 +282,7 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   ):not(.ant-pagination-size-changer)
   .ant-select-selector {
   box-shadow: none;
-  border-color: $ashgro-input-border;
+  border-color: $incrementer-border;
 }
 .ant-select .ant-select-arrow {
   color: $ashgro-black;
@@ -313,6 +308,12 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   .ant-select-selection-item-remove {
   color: $select-tag-color;
   margin-inline-end: 0.5rem;
+}
+.ant-select-outlined:not(.ant-select-disabled):not(
+    .ant-select-customize-input
+  ):not(.ant-pagination-size-changer)
+  .ant-select-selector {
+  border-color: $incrementer-border;
 }
 
 .ant-select-item-option-state {
@@ -491,7 +492,6 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   color: $ashgro-grey !important;
   opacity: 0.6;
   font-size: 1.2rem;
-  line-height: 1.3rem;
 }
 .ant-btn:not(:disabled):focus-visible {
   outline: none;
@@ -520,6 +520,15 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 .ant-modal .ant-modal-content {
   border-radius: 1.6rem;
 }
+
+.ant-modal-mask {
+  animation-duration: 0.3s !important;
+}
+
+.ant-modal {
+  animation-duration: 0.3s !important;
+}
+
 .ant-modal-title {
   font-weight: 700;
   font-size: 2rem;
@@ -618,4 +627,163 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   border: 1px solid $danger-border;
   background-color: $danger-input;
   box-shadow: 0px 1px 0.5px 0.05px rgba(29, 41, 61, 0.02);
+}
+
+.ant-drawer-right > .ant-drawer-content-wrapper {
+  top: 1.6rem;
+  bottom: 1.6rem;
+  right: 1.6rem;
+}
+.ant-drawer-content {
+  border-radius: 1.6rem;
+}
+.ant-drawer-close {
+  position: absolute;
+  right: 1.5rem;
+}
+.ant-drawer .ant-drawer-title {
+  padding-top: 1rem;
+  color: $ashgro-navy;
+  font-weight: 400;
+  font-size: 2rem;
+  font-family: $font-primary;
+  padding-left: 0.5rem;
+}
+.ant-drawer .ant-drawer-header {
+  border-bottom: 0;
+}
+
+.ant-drawer .ant-drawer-body {
+  padding: 1rem 3.2rem 0 3.2rem;
+}
+.ant-select .ant-select-arrow {
+  inset-inline-end: 0.7rem;
+}
+.ant-drawer .ant-drawer-footer {
+  padding: 0;
+  border: 0;
+}
+
+.ant-picker-input {
+  background-color: $input-background;
+}
+
+.ant-picker.ant-picker-range.ant-picker-focused.ant-picker-outlined {
+  .ant-picker-input {
+    background-color: $ashgro-white;
+  }
+}
+
+.ant-picker-range {
+  .ant-picker-input {
+    border: 1px solid $ashgro-input-border;
+    padding: 1rem;
+    border-radius: 1.2rem;
+    width: 20.4rem;
+  }
+}
+.ant-picker-range .ant-picker-range-separator {
+  padding: 0.2rem 1.3rem;
+}
+.ant-picker-active-bar {
+  display: none;
+}
+.ant-picker-outlined:focus-within {
+  box-shadow: none;
+}
+
+.ant-picker-dropdown .ant-picker-cell .ant-picker-cell-inner {
+  height: 3.5rem;
+  width: 3.5rem;
+}
+
+.ant-picker-outlined:focus-within {
+  background-color: $input-background;
+}
+.ant-picker-dropdown .ant-picker-cell .ant-picker-cell-inner {
+  line-height: 3.5rem;
+}
+.ant-picker-dropdown .ant-picker-cell::before {
+  height: 3.5rem;
+}
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner {
+  background-color: $ashgro-gold;
+}
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-end:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner {
+  background-color: $ashgro-gold;
+}
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-in-range:not(
+    .ant-picker-cell-disabled
+  ):before,
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
+    .ant-picker-cell-disabled
+  ):before {
+  background: $range-picker-cell-range-bg;
+}
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-today
+  .ant-picker-cell-inner::before {
+  border-color: $ashgro-gold;
+}
+.ant-picker-dropdown.ant-picker-dropdown-range {
+  .ant-picker-header-super-prev-btn,
+  .ant-picker-header-prev-btn,
+  .ant-picker-header-next-btn,
+  .ant-picker-header-super-next-btn {
+    margin-top: 0.8rem;
+  }
+}
+.ant-picker-range .ant-picker-clear {
+  inset-inline-end: -0.7rem;
+}
+.ant-select-dropdown
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: transparent;
+}
+.rc-virtual-list-holder-inner {
+  gap: 1rem;
+}
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-selected:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner {
+  background-color: $ashgro-gold;
+}
+
+.ant-picker-dropdown .ant-picker-header-view > button:hover {
+  color: $ashgro-gold;
+}
+.ant-picker-now-btn {
+  color: $ashgro-gold;
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+
+  &:hover {
+    color: $ashgro-gold;
+    opacity: 0.5;
+  }
+}
+
+.ant-notification
+  .ant-notification-notice-wrapper
+  .ant-notification-notice-close {
+  color: $ashgro-white;
+
+  &:hover {
+    color: $ashgro-white;
+  }
 }

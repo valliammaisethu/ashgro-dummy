@@ -6,13 +6,13 @@ export class ActivityDetails {
   id?: number;
 
   @serializable
-  activityType = "";
+  activityType?: string;
 
   @serializable
-  description = "";
+  description?: string;
 
   @serializable
-  createdAt = "";
+  createdAt?: string;
 }
 
 export class ViewProspect {

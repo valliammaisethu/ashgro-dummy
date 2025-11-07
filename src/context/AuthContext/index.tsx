@@ -47,9 +47,12 @@ const AuthContext = () => {
       token,
     };
     setAuth(newAuth);
-
     localStorageHelper.setItem(LocalStorageKeys.USER, user);
-    localStorageHelper.setItem(LocalStorageKeys.TOKEN, token);
+    localStorageHelper.setItem(LocalStorageKeys.TOKEN, token?.accessToken);
+    localStorageHelper.setItem(
+      LocalStorageKeys.REFRESH_TOKEN,
+      token?.refreshToken,
+    );
   };
 
   const resetAuthState = () => {
@@ -58,8 +61,7 @@ const AuthContext = () => {
       user: new UserData(),
       token: new TokenData(),
     });
-    localStorageHelper.removeItem(LocalStorageKeys.USER);
-    localStorageHelper.removeItem(LocalStorageKeys.TOKEN);
+    localStorageHelper.clearData();
   };
 
   return {
