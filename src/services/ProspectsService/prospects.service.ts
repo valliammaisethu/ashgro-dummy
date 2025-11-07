@@ -1,4 +1,8 @@
-import { UseMutationOptions, UseQueryOptions } from "@tanstack/react-query";
+import {
+  UseMutationOptions,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { generatePath } from "react-router-dom";
 import { deserialize, serialize } from "serializr";
 import { deleteProspectMessages } from "src/constants/notificationMessages";
@@ -28,6 +32,7 @@ const { ADD_PROSPECT, EDIT_PROSPECT, DELETE_PROSPECT, CONVERT_TO_MEMBER } =
   MutationKeys;
 
 export const ProspectsService = () => {
+  const queryClient = useQueryClient();
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
   const getProspects = (
     params: ProspectsListingParams = new ProspectsListingParams(),
@@ -104,6 +109,7 @@ export const ProspectsService = () => {
     onSuccess: (response) => {
       const { title, description } = response;
       renderNotification(title, description);
+      queryClient.invalidateQueries({ queryKey: [GET_PROSPECTS] });
     },
   });
 

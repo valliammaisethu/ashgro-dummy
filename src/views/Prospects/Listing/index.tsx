@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { CheckboxChangeEvent } from "antd";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 
 import { TABLE_HEADERS } from "./constants";
@@ -56,8 +56,11 @@ const ProspectsListing = () => {
   });
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
   const [isAllSelected, setIsAllSelected] = useState(false);
+  const [updatingProspectId, setUpdatingProspectId] = useState<
+    string | undefined
+  >();
 
-  const { getProspects, viewProspect } = ProspectsService();
+  const { getProspects, viewProspect, editProspect } = ProspectsService();
   const { getLeadStatuses } = MetaService();
   const { getProspectEmailRecipients } = EmailService();
 
@@ -71,6 +74,8 @@ const ProspectsListing = () => {
     ...getProspectEmailRecipients(queryParams),
     enabled: isAllSelected,
   });
+
+  const { mutateAsync: updateProspectMutate } = useMutation(editProspect());
 
   const leadStatusOptions = useMemo(
     () => leadStatusesData?.leadStatuses,
@@ -202,6 +207,22 @@ const ProspectsListing = () => {
     toggleNewEmailModal();
   }, [toggleNewEmailModal]);
 
+  const handleStatusChange = async (
+    prospectId: string,
+    leadStatusId: string,
+  ) => {
+    setUpdatingProspectId(prospectId);
+
+    await updateProspectMutate({
+      prospect: {
+        id: prospectId,
+        leadStatusId,
+        clubId,
+      },
+    });
+    setUpdatingProspectId(undefined);
+  };
+
   useEffect(() => {
     if (clubId && queryParams.clubId !== clubId) {
       setQueryParams((prev) => ({ ...prev, clubId }));
@@ -258,6 +279,8 @@ const ProspectsListing = () => {
                   }
                   onEditClick={handleOnEdit}
                   onDeleteClick={handleOnDelete}
+                  onStatusChange={handleStatusChange}
+                  isUpdatingStatus={updatingProspectId === prospect.id}
                 />
               ))}
             </div>

@@ -3,20 +3,5 @@
 
 .header {
   @include flex-container(space-between, center, row);
-
   width: 100%;
-  .backBtn {
-    background-color: transparent;
-    box-shadow: none;
-    &:hover {
-      border-color: transparent;
-    }
-  }
-
-  .backText {
-    color: $ashgro-navy;
-    font-weight: 600;
-    font-size: 1.4rem;
-    font-family: $font-secondary;
-  }
 }
