@@ -17,23 +17,31 @@ export const disableFutureAndToday = (date: dayjs.Dayjs) =>
   date.isAfter(dayjs().subtract(1, "day"));
 
 /**
- * Converts date from display format (DD MMM, YYYY) to API format (YYYY-MM-DD)
- * @param date - Date string in DD MMM, YYYY format
+ * Converts date from display format to API format (YYYY-MM-DD)
+ * @param date - Date string in display format
+ * @param format - Display format (default: DD MMM, YYYY)
  * @returns Date string in YYYY-MM-DD format or undefined if date is not provided
  */
-export const convertDateToApiFormat = (date: string | undefined) => {
+export const convertDateToApiFormat = (
+  date: string | undefined,
+  format: DateFormats = DateFormats.DD_MMM__YYYY,
+) => {
   if (!date) return date;
-  const parsed = dayjs(date, DateFormats.DD_MMM__YYYY, true);
+  const parsed = dayjs(date, format, true);
   return parsed.isValid() ? parsed.format(DateFormats.YYYY_MM_DD) : date;
 };
 
 /**
- * Converts date from API format (YYYY-MM-DD) to display format (DD MMM, YYYY)
+ * Converts date from API format (YYYY-MM-DD) to display format
  * @param date - Date string in YYYY-MM-DD format
- * @returns Date string in DD MMM, YYYY format or undefined if date is not provided
+ * @param format - Display format (default: DD MMM, YYYY)
+ * @returns Date string in display format or undefined if date is not provided
  */
-export const convertDateToDisplayFormat = (date: string | undefined) => {
+export const convertDateToDisplayFormat = (
+  date: string | undefined,
+  format: DateFormats = DateFormats.DD_MMM__YYYY,
+) => {
   if (!date) return date;
   const parsed = dayjs(date, DateFormats.YYYY_MM_DD, true);
-  return parsed.isValid() ? parsed.format(DateFormats.DD_MMM__YYYY) : date;
+  return parsed.isValid() ? parsed.format(format) : date;
 };

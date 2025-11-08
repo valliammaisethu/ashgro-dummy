@@ -230,6 +230,9 @@ const Members = () => {
             records={data?.members}
             isPending={isPending}
             isSuccess={isSuccess}
+            useGridSkeleton
+            skeletonCols={1}
+            skeletonRows={8}
           >
             <div className={styles.listContainer}>
               {data?.members?.map((item) => {

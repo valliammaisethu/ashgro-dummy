@@ -86,6 +86,7 @@
     color: $ashgro-blue;
     font-size: 1.4rem;
     font-family: $font-secondary;
+    width: 22rem;
   }
   .phone {
     color: $ashgro-navy;
@@ -96,21 +97,6 @@
     color: $dot-color;
     font-size: 2rem;
   }
-}
-
-.statusTag {
-  display: inline-flex;
-  align-items: center;
-  width: 14rem;
-  height: 3.6rem;
-  font-size: 1.3rem;
-  font-weight: 600;
-  border-radius: 2.8rem;
-  padding-left: 1.5rem;
-  font-family: $font-secondary;
-  border: 1px solid transparent;
-  text-align: left;
-  gap: 0.5rem;
 }
 
 .statusTag--blue {
@@ -159,7 +145,7 @@
       background: transparent;
 
       :global(.ant-select-selection-item) {
-        padding: 0;
+        padding: 1rem;
       }
     }
 

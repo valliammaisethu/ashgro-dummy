@@ -81,13 +81,16 @@ const IndividualProspect = () => {
         isSuccess={isSuccess}
         isFetching={isFetching}
         records={[data?.prospect]}
+        useGridSkeleton
+        skeletonRows={16}
       >
         <Card className={styles.card}>
           <div className={styles.leftSide}>
             <div className={styles.header}>
               <Select
-                value={data?.prospect?.leadStatus}
+                value={data?.prospect?.leadStatus || undefined}
                 className={styles.statusSelect}
+                placeholder="Select a status"
               >
                 {leadStatusOptions?.leadStatuses?.map(
                   ({ id, statusName = "" }) => (
@@ -135,7 +138,7 @@ const IndividualProspect = () => {
       </ConditionalRender>
       {isEdit && !isFetching ? (
         <ProspectForm
-          prospectData={data?.prospect}
+          prospectId={String(data?.prospect?.id)}
           isEdit={isEdit}
           visible={visible}
           onClose={toggleVisibility}
