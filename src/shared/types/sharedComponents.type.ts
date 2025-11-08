@@ -279,4 +279,5 @@ export interface FileUploadProps {
   containerClassName?: string;
   maxFileSizeClassName?: string;
   attachmentClassName?: string;
+  initialFiles?: UploadedFile[];
 }

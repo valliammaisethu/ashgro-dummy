@@ -135,7 +135,7 @@ export const logoutMessages = {
 };
 export const N_A = "N/A";
 export const empty = " - ";
-export const imageAccept = "image/*";
+export const imageAccept = "image/png, image/jpeg, image/jpg";
 
 export const profileMaxSize = 5 * 1024 * 1024;
 

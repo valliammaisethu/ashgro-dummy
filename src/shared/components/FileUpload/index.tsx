@@ -38,13 +38,15 @@ const FileUpload = ({
   containerClassName,
   maxFileSizeClassName,
   attachmentClassName,
+  initialFiles = [],
 }: FileUploadProps) => {
   const { control } = useFormContext();
   const { field } = useController({ name, control });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [uploadedFiles, setUploadedFiles] =
+    useState<UploadedFile[]>(initialFiles);
   const [isUploading, setIsUploading] = useState(false);
 
   const { uploadFile, deleteFile } = AttachmentService();
