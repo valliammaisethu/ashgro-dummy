@@ -5,4 +5,5 @@ export enum TopBarItems {
   MEMBERS = "Members",
   CLUB_STAFF = "Club Staff",
   SETTINGS = "Settings",
+  CLUBS = "Clubs",
 }

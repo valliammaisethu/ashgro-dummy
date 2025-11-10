@@ -35,4 +35,6 @@ export const AppRoutes = {
   STAFF_MEMBER_DETAILS: "/home/staff-member/:id",
   MEMBER_DETAILS: "/home/member/:id",
   STAFF_MEMBERS: "/home/members",
+
+  CLUBS: "/home/clubs",
 };
