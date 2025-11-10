@@ -12,10 +12,17 @@
     font-size: 1.4rem;
     font-family: $font-secondary;
   }
-}
 
-.backIcon {
+  .backIcon {
+    transition: transform 0.2s ease;
+  }
+
   &:hover {
-    transform: translateX(-0.4rem);
+    .backIcon {
+      transform: translateX(-0.4rem);
+    }
+    .backText {
+      color: darken($ashgro-navy, 10%);
+    }
   }
 }

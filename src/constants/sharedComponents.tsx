@@ -134,6 +134,7 @@ export const logoutMessages = {
   description: "You have been logged out successfully.",
 };
 export const N_A = "N/A";
+export const empty = " - ";
 export const imageAccept = "image/*";
 
 export const profileMaxSize = 5 * 1024 * 1024;

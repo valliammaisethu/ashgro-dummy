@@ -11,10 +11,15 @@ const {
   STAFF_MEMBER_DETAILS,
   CLUB_STAFF,
   MEMBERS,
+  DASHBOARD,
 } = NavigationRoutes;
 
 const useRedirect = () => {
   const navigate = useNavigate();
+
+  const navigateBack = () => navigate(-1);
+
+  const navigateToDashboard = () => navigate(DASHBOARD);
 
   const navigateToHome = () => navigate(HOME);
 
@@ -39,6 +44,8 @@ const useRedirect = () => {
 
   return {
     navigateToHome,
+    navigateToDashboard,
+    navigateBack,
     navigateToLogin,
     navigateToForgotPassword,
     navigateToProspects,

@@ -1,4 +1,4 @@
-import { Empty, Skeleton, SkeletonProps } from "antd";
+import { Empty, Skeleton, SkeletonProps, Row, Col } from "antd";
 import React, { ReactNode } from "react";
 
 import Loader from "../Loader";
@@ -17,12 +17,17 @@ interface ConditionalRenderProps<T> {
   showLoader?: boolean;
   useSkeleton?: boolean;
   skeletonProps?: SkeletonProps;
+  useGridSkeleton?: boolean;
+  skeletonRows?: number;
+  skeletonCols?: number;
+  skipEmptyState?: boolean;
 }
 
 const ConditionalRender = <T,>(props: ConditionalRenderProps<T>) => {
   const {
     records = [],
     isPending,
+    isFetching,
     isSuccess,
     children,
     emptyDescription = noDataFound,
@@ -30,33 +35,49 @@ const ConditionalRender = <T,>(props: ConditionalRenderProps<T>) => {
     showLoader = true,
     useSkeleton = false,
     skeletonProps,
-    isFetching,
+    useGridSkeleton = false,
+    skeletonRows = 6,
+    skeletonCols = 2,
+    skipEmptyState = false,
   } = props;
 
-  const isDataEmpty = isSuccess && records.length <= 0;
-
+  const isDataEmpty = isSuccess && records.length <= 0 && !skipEmptyState;
   const wrapperClass = className ?? styles.centerWrapper;
 
   if ((isPending || isFetching) && showLoader) {
+    if (useGridSkeleton) {
+      const totalItems = skeletonRows * skeletonCols;
+      return (
+        <div className={styles.skeletonWrapper}>
+          <Row gutter={[20, 20]}>
+            {Array.from({ length: totalItems }).map((_, index) => (
+              <Col span={24 / skeletonCols} key={index}>
+                <div className={styles.skeletonBox} />
+              </Col>
+            ))}
+          </Row>
+        </div>
+      );
+    }
+
     if (useSkeleton) {
       return <Skeleton active {...skeletonProps} />;
     }
 
-    if ((isPending || isFetching) && showLoader) {
-      return (
-        <div className={wrapperClass}>
-          <Loader />
-        </div>
-      );
-    }
+    return (
+      <div className={wrapperClass}>
+        <Loader />
+      </div>
+    );
   }
 
-  if (isDataEmpty)
+  if (isDataEmpty) {
     return (
       <div className={wrapperClass}>
         <Empty description={emptyDescription} />
       </div>
     );
+  }
 
   return <>{children}</>;
 };

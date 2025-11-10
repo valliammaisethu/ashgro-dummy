@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { IconDelete, IconEdit } from "obra-icons-react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { Select } from "antd";
 
@@ -35,7 +35,7 @@ const IndividualProspect = () => {
   const { data, isPending, isSuccess, isFetching, refetch } = useQuery(
     viewProspect(id),
   );
-  const queryClient = useQueryClient();
+
   const { getLeadStatuses } = MetaService();
 
   const { data: leadStatusOptions } = useQuery(getLeadStatuses());
@@ -103,13 +103,16 @@ const IndividualProspect = () => {
         isSuccess={isSuccess}
         isFetching={isFetching}
         records={[data?.prospect]}
+        useGridSkeleton
+        skeletonRows={16}
       >
         <Card className={styles.card}>
           <div className={styles.leftSide}>
             <div className={styles.header}>
               <Select
-                value={data?.prospect?.leadStatus}
+                value={data?.prospect?.leadStatus || undefined}
                 className={styles.statusSelect}
+                placeholder="Select a status"
                 onChange={handleStatusChange}
                 loading={isUpdatingStatus}
               >
@@ -159,7 +162,7 @@ const IndividualProspect = () => {
       </ConditionalRender>
       {isEdit && !isFetching ? (
         <ProspectForm
-          prospectData={data?.prospect}
+          prospectId={String(data?.prospect?.id)}
           isEdit={isEdit}
           visible={visible}
           onClose={toggleVisibility}

@@ -7,15 +7,11 @@
   width: 100%;
 }
 
-.passwordSuffix {
-  i::before {
-    color: $disabled-text;
-    cursor: pointer;
-    font-size: 2rem;
-  }
-}
-
 .passwordInput {
   font-size: 1.4rem;
   font-family: $font-secondary;
+}
+
+.passwordIcon {
+  cursor: pointer;
 }

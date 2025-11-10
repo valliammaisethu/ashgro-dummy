@@ -1,6 +1,31 @@
+@import "src/styles/_variables.scss";
+
 .centerWrapper {
   position: absolute;
   top: 50%;
   left: 55%;
   transform: translate(-50%, -50%);
+}
+
+.skeletonWrapper {
+  padding: 2rem;
+}
+
+.skeletonBox {
+  height: 2rem;
+  background-color: $ashgro-gold;
+  border-radius: 0.8rem;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }

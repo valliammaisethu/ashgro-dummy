@@ -11,7 +11,7 @@ import AvatarFallback from "src/shared/components/AvatarFallback";
 import Checkbox from "src/shared/components/Checkbox";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import StatusTag from "../../Atoms/StatusTag";
-import { N_A } from "src/constants/sharedComponents";
+import { empty } from "src/constants/sharedComponents";
 import { Colors } from "src/enums/colors.enum";
 
 import styles from "./prospectRow.module.scss";
@@ -135,7 +135,7 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
           </Select>
         </div>
       ) : (
-        <div className={styles.sourceColValue}>{N_A}</div>
+        <div className={styles.sourceColValue}>{empty}</div>
       )}
       <div className={styles.actions}>
         <IconEdit

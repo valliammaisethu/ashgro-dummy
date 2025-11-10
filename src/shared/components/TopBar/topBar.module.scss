@@ -64,6 +64,11 @@
     font-family: $font-secondary;
   }
   .logoutIcon {
+    transition: transform 0.2s ease;
     cursor: pointer;
+    &:hover {
+      transform: translateX(0.4rem);
+      color: darken($ashgro-navy, 10%);
+    }
   }
 }
