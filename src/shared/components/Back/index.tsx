@@ -3,9 +3,9 @@ import { IconChevronLeft } from "obra-icons-react";
 import clsx from "clsx";
 
 import { Buttons } from "src/enums/buttons.enum";
+import useRedirect from "src/shared/hooks/useRedirect";
 
 import styles from "./back.module.scss";
-import useRedirect from "src/shared/hooks/useRedirect";
 
 interface BackButtonProps {
   onClick?: () => void;

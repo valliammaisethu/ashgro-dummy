@@ -9,9 +9,9 @@ import Button from "src/shared/components/Button";
 import { ButtonTypes } from "src/enums/buttons.enum";
 import { headerConstants } from "../constants";
 import { IndividualProspectHeaderProps } from "src/shared/types/prospects.type";
+import BackButton from "src/shared/components/Back";
 
 import styles from "../individualProspect.module.scss";
-import BackButton from "src/shared/components/Back";
 
 const Header = (props: IndividualProspectHeaderProps) => {
   const { onConvert, onEmail } = props;

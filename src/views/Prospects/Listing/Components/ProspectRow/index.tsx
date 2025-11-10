@@ -25,6 +25,8 @@ interface ProspectRowProps {
   onClick: () => void;
   onEditClick: (data: ProspectsList) => void;
   onDeleteClick: (data: ProspectsList) => void;
+  onStatusChange?: (prospectId: string, leadStatusId: string) => void;
+  isUpdatingStatus?: boolean;
 }
 
 const ProspectRow: React.FC<ProspectRowProps> = ({
@@ -35,6 +37,8 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   onClick,
   onEditClick,
   onDeleteClick,
+  onStatusChange,
+  isUpdatingStatus = false,
 }) => {
   const {
     leadStatus,
@@ -63,6 +67,15 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   const handleDeleteClick = (e: MouseEvent, data: ProspectsList) => {
     e.stopPropagation();
     onDeleteClick(data);
+  };
+
+  const handleStatusChange = (statusName: string) => {
+    const selectedStatus = leadStatusOptions.find(
+      (status) => status.statusName === statusName,
+    );
+    if (selectedStatus?.id && prospect.id && onStatusChange) {
+      onStatusChange(prospect.id, selectedStatus.id);
+    }
   };
 
   return (
@@ -111,6 +124,8 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
             value={leadStatus}
             className={styles.statusSelect}
             onClick={handleSelectClick}
+            onChange={handleStatusChange}
+            loading={isUpdatingStatus}
           >
             {leadStatusOptions?.map(({ id, statusName = "" }) => (
               <Select.Option key={id} value={statusName}>
