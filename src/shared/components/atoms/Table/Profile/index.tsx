@@ -12,6 +12,7 @@ interface ProfileProps {
   firstName?: string;
   lastName?: string;
   email?: string;
+  address?: string;
   profilePictureUrl?: string;
   onSelectChange?: (checked: boolean) => void;
   contactNumber?: string;
@@ -23,6 +24,7 @@ const Profile: React.FC<ProfileProps> = ({
   firstName,
   lastName,
   email,
+  address,
   profilePictureUrl,
   showCheckbox,
   isSelected,
@@ -51,7 +53,8 @@ const Profile: React.FC<ProfileProps> = ({
         <div className={styles.info}>
           <p className={styles.name}>{getFullName(firstName, lastName)}</p>
           <div className={styles.contactInfo}>
-            <p className={styles.email}>{email}</p>
+            {email && <p className={styles.email}>{email}</p>}
+            {address && <p className={styles.address}>{address}</p>}
             {contactNumber && (
               <div className={styles.contactNumber}>
                 <span className={styles.phone}>{contactNumber}</span>

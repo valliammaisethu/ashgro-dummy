@@ -61,7 +61,7 @@ const TopBar = () => {
       </div>
 
       <div className={styles.topBarEnd}>
-        <div className={styles.clubName}>{clubName}</div>
+        {!isSuperAdmin && <div className={styles.clubName}>{clubName}</div>}
         <IconLogOut className={styles.logoutIcon} onClick={handleLogOut} />
       </div>
     </div>

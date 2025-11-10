@@ -1,0 +1,70 @@
+@import "src/styles/_variables";
+@import "src/styles/_helpers";
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+.addClubButton {
+  background-color: $ashgro-navy;
+  border-radius: 3.6rem;
+  height: 4.4rem;
+  width: 14.4rem;
+  color: $ashgro-white;
+  @include secondaryBold;
+  font-size: 1.4rem;
+
+  &:global(
+      .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
+    ):hover {
+    background-color: $ashgro-navy;
+    color: $ashgro-white;
+  }
+}
+.addClub {
+  position: relative;
+}
+.plusIcon {
+  position: absolute;
+  height: 1rem;
+  width: 1rem;
+  top: 0.8rem;
+  left: 4.4rem;
+  z-index: 4;
+}
+.table {
+  margin-top: 2rem;
+}
+.rowContainer {
+  padding: 2.4rem 4rem;
+  background-color: $ashgro-white;
+  height: 10.4rem;
+  border: 1px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(
+    151.49deg,
+    rgba(246, 239, 222, 0.5) 0%,
+    rgba(216, 201, 167, 0.5) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.badge {
+  margin-left: 15rem;
+}
+
+.statusSelect {
+  &:global(.ant-select) {
+    width: 14rem;
+
+    :global(.ant-select-selector) {
+      border-radius: 2.8rem !important;
+    }
+    :global(.ant-select-arrow) {
+      inset-inline-end: 1.5rem;
+    }
+  }
+  margin-right: 2rem;
+}
