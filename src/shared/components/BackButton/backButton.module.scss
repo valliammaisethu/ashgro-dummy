@@ -1,0 +1,21 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.backButton {
+  @include flex-flow(row, nowrap, center);
+  gap: 0.4rem;
+  cursor: pointer;
+
+  .backText {
+    color: $ashgro-navy;
+    font-weight: 600;
+    font-size: 1.4rem;
+    font-family: $font-secondary;
+  }
+}
+
+.backIcon {
+  &:hover {
+    transform: translateX(-0.4rem);
+  }
+}

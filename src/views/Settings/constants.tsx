@@ -151,6 +151,7 @@ export const EMAIL_TEMPLATE_CONSTANTS = {
     TITLE: "title",
     SUBJECT: "subject",
     EMAIL_BODY: "body",
+    ATTACHMENTS: "attachments",
     ATTACHMENT_IDS: "attachmentIds",
   },
   BUTTON_TEXT: {

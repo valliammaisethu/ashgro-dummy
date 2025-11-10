@@ -1,9 +1,9 @@
 import React from "react";
-import { IconChevronLeft, IconEmail } from "obra-icons-react";
-import { ConfigProvider } from "antd";
+import { IconEmail } from "obra-icons-react";
 
 import Button from "src/shared/components/Button";
-import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
+import BackButton from "src/shared/components/BackButton";
+import { ButtonTypes } from "src/enums/buttons.enum";
 import { ButtonNames } from "./constant";
 
 import styles from "./IndividualDetailsHeader.module.scss";
@@ -22,16 +22,7 @@ const IndividualDetailsHeader = ({
   return (
     <div className={styles.header}>
       <div className={styles.leftSide}>
-        <ConfigProvider wave={{ disabled: true }}>
-          <Button
-            className={styles.backBtn}
-            disabled={false}
-            onClick={navigateBack}
-          >
-            <IconChevronLeft />
-            <span className={styles.backText}>{Buttons.BACK}</span>
-          </Button>
-        </ConfigProvider>
+        {navigateBack && <BackButton onClick={navigateBack} />}
       </div>
       <div className={styles.rightSide}>
         {onEmailClick && (

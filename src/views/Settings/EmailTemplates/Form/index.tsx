@@ -50,7 +50,7 @@ const EmailTemplateForm = ({
       title: templateDetail?.title || "",
       subject: templateDetail?.subject || "",
       body: templateDetail?.body || "",
-      attachmentIds: attachmentIds,
+      attachments: attachmentIds,
     },
   });
 
@@ -62,7 +62,7 @@ const EmailTemplateForm = ({
     title: string;
     subject: string;
     body: string;
-    attachmentIds: string[];
+    attachments: string[];
   }) => {
     await saveTemplate({
       type: "emailTemplate",
@@ -102,7 +102,7 @@ const EmailTemplateForm = ({
         </Col>
         <Col span={24}>
           <FileUpload
-            name={FIELDS.ATTACHMENT_IDS}
+            name={FIELDS.ATTACHMENTS}
             maxFileSizeText={maxFileSizeTextDescription}
             containerClassName={styles.uploadFileContainer}
             buttonClassName={styles.uploadFilesButton}
