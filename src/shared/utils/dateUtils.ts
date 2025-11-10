@@ -16,12 +16,6 @@ export const formatDate = (date = "", format: DateFormats, isUTC = false) => {
 export const disableFutureAndToday = (date: dayjs.Dayjs) =>
   date.isAfter(dayjs().subtract(1, "day"));
 
-/**
- * Converts date from display format to API format (YYYY-MM-DD)
- * @param date - Date string in display format
- * @param format - Display format (default: DD MMM, YYYY)
- * @returns Date string in YYYY-MM-DD format or undefined if date is not provided
- */
 export const convertDateToApiFormat = (
   date: string | undefined,
   format: DateFormats = DateFormats.DD_MMM__YYYY,
@@ -31,12 +25,6 @@ export const convertDateToApiFormat = (
   return parsed.isValid() ? parsed.format(DateFormats.YYYY_MM_DD) : date;
 };
 
-/**
- * Converts date from API format (YYYY-MM-DD) to display format
- * @param date - Date string in YYYY-MM-DD format
- * @param format - Display format (default: DD MMM, YYYY)
- * @returns Date string in display format or undefined if date is not provided
- */
 export const convertDateToDisplayFormat = (
   date: string | undefined,
   format: DateFormats = DateFormats.DD_MMM__YYYY,

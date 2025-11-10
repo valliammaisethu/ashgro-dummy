@@ -265,6 +265,7 @@ export interface UploadedFile {
   id: string;
   name: string;
   size: number;
+  isInitial?: boolean;
 }
 
 export interface FileUploadProps {
