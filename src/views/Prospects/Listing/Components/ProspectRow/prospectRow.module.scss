@@ -130,9 +130,11 @@
 }
 
 .statusSelect {
+  border-radius: 2.8rem;
   :global(.ant-select.ant-select.ant-select-open .ant-select-selector) {
     border: none;
     box-shadow: none;
+    border-radius: 2.8rem;
   }
   &:global(.ant-select) {
     width: 14rem;
@@ -143,6 +145,7 @@
       box-shadow: none;
       padding: 0;
       background: transparent;
+      border-radius: 2.8rem !important;
 
       :global(.ant-select-selection-item) {
         padding: 1rem;

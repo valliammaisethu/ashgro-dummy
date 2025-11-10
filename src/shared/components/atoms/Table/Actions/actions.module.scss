@@ -15,3 +15,17 @@
     opacity: 1;
   }
 }
+.sourceColValue {
+  color: $ashgro-navy;
+  font-weight: 600;
+  font-family: $font-secondary;
+  font-size: 1.4rem;
+  text-align: center;
+  padding-left: 7rem;
+}
+
+.statusSelect {
+  :global(.ant-select-selector) {
+    border-radius: 2.8rem !important;
+  }
+}
