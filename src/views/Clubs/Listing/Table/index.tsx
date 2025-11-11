@@ -1,20 +1,13 @@
 import React from "react";
 import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
-import {
-  clubHeaderColumnGrid,
-  clubListingHeaders,
-  clubStatuses,
-} from "../../constants";
+import { clubHeaderColumnGrid, clubListingHeaders } from "../../constants";
 
 import styles from "../../clubs.module.scss";
 import Profile from "src/shared/components/atoms/Table/Profile";
 import Badge from "src/shared/components/atoms/Badge";
 import { Colors } from "src/enums/colors.enum";
 import Switch from "src/shared/components/Switch";
-import { Select } from "antd";
-import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
-import { stopPropagation } from "src/shared/utils/eventUtils";
-import { IconChevronDown } from "obra-icons-react";
+import Actions from "src/shared/components/atoms/Table/Actions";
 
 const ClubListingTable = () => {
   return (
@@ -39,18 +32,7 @@ const ClubListingTable = () => {
 
         <Switch className={styles.switch} name="switch" />
 
-        <Select
-          onClick={stopPropagation}
-          value="active"
-          className={styles.statusSelect}
-          suffixIcon={<IconChevronDown size={20} />}
-        >
-          {clubStatuses?.map(({ value, label = "" }) => (
-            <Select.Option key={value} value={value}>
-              <StatusTag label={label} />
-            </Select.Option>
-          ))}
-        </Select>
+        <Actions onEditClick={() => {}} selectWidth={160} />
       </div>
       <div className={styles.rowContainer}>
         <Profile
@@ -68,18 +50,7 @@ const ClubListingTable = () => {
 
         <Switch className={styles.switch} name="switch" />
 
-        <Select
-          onClick={stopPropagation}
-          value="active"
-          className={styles.statusSelect}
-          suffixIcon={<IconChevronDown size={20} />}
-        >
-          {clubStatuses?.map(({ value, label = "" }) => (
-            <Select.Option key={value} value={value}>
-              <StatusTag label={label} />
-            </Select.Option>
-          ))}
-        </Select>
+        <Actions onEditClick={() => {}} selectWidth={160} />
       </div>
     </div>
   );

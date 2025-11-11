@@ -15,16 +15,34 @@ import Members from "src/views/Members/Listing";
 import StaffMemberDetails from "src/views/StaffMembers/Details";
 import StaffMembersListing from "src/views/StaffMembers/Listing";
 import MemberDetails from "src/views/Members/Details";
-import Settings from "src/views/Settings";
-import DashboardWrapper from "src/views/Dashboard";
 import RoleGuard from "src/shared/components/RoleGuard";
 import { RoleNames } from "src/enums/roleNames.enum";
-import { useUserRole } from "src/shared/hooks/useUserRole";
 import Clubs from "src/views/Clubs";
 import SettingsWrapper from "src/views/Settings";
+import DashboardWrapper from "src/views/Dashboard";
+import Calender from "src/views/Calender";
 
 const AppRouter = () => {
-  const { isSuperAdmin } = useUserRole();
+  const children: RouterProps[] = [
+    { path: AppRoutes.PROSPECTS_LISTING, component: <ProspectsListing /> },
+    { path: AppRoutes.CALENDAR, component: <Calender /> },
+    { path: AppRoutes.MEMBERS, component: <Members /> },
+    { path: AppRoutes.CLUB_STAFF, component: <StaffMembersListing /> },
+    { path: AppRoutes.INDIVIDUAL_PROSPECT, component: <IndividualProspect /> },
+    { path: AppRoutes.STAFF_MEMBER_DETAILS, component: <StaffMemberDetails /> },
+    { path: AppRoutes.MEMBER_DETAILS, component: <MemberDetails /> },
+    { path: AppRoutes.SETTINGS, component: <SettingsWrapper /> },
+    { path: AppRoutes.DASHBOARD, component: <DashboardWrapper /> },
+
+    {
+      path: AppRoutes.CLUBS,
+      component: (
+        <RoleGuard allowedRoles={[RoleNames.SUPER_ADMIN]}>
+          <Clubs />
+        </RoleGuard>
+      ),
+    },
+  ];
 
   const routes: RouterProps[] = [
     { path: AppRoutes.AUTH, component: <AuthWrapper /> },
@@ -32,57 +50,7 @@ const AppRouter = () => {
     {
       path: AppRoutes.HOME,
       component: <AppLayout />,
-      children: isSuperAdmin
-        ? [
-            {
-              path: AppRoutes.DASHBOARD,
-              component: (
-                <RoleGuard allowedRoles={[RoleNames.SUPER_ADMIN]}>
-                  <DashboardWrapper />
-                </RoleGuard>
-              ),
-            },
-            {
-              path: AppRoutes.CLUBS,
-              component: (
-                <RoleGuard allowedRoles={[RoleNames.SUPER_ADMIN]}>
-                  <Clubs />
-                </RoleGuard>
-              ),
-            },
-            {
-              path: AppRoutes.SETTINGS,
-              component: (
-                <RoleGuard allowedRoles={[RoleNames.SUPER_ADMIN]}>
-                  <SettingsWrapper />
-                </RoleGuard>
-              ),
-            },
-          ]
-        : [
-            {
-              path: AppRoutes.DASHBOARD,
-              component: <DashboardWrapper />,
-            },
-            {
-              path: AppRoutes.PROSPECTS_LISTING,
-              component: <ProspectsListing />,
-            },
-            { path: AppRoutes.CALENDAR, component: <></> },
-            { path: AppRoutes.MEMBERS, component: <Members /> },
-            { path: AppRoutes.CLUB_STAFF, component: <StaffMembersListing /> },
-            { path: AppRoutes.SETTINGS, component: <Settings /> },
-            {
-              path: AppRoutes.INDIVIDUAL_PROSPECT,
-              component: <IndividualProspect />,
-            },
-            {
-              path: AppRoutes.STAFF_MEMBER_DETAILS,
-              component: <StaffMemberDetails />,
-            },
-            { path: AppRoutes.MEMBER_DETAILS, component: <MemberDetails /> },
-            { path: AppRoutes.SETTINGS, component: <SettingsWrapper /> },
-          ],
+      children,
     },
   ];
 
@@ -90,21 +58,20 @@ const AppRouter = () => {
     <BrowserRouter>
       <TopBarProvider>
         <Routes>
-          {/* Default redirect */}
           <Route
             path="/"
             element={<Navigate to={AppRoutes.DASHBOARD} replace />}
           />
 
-          {routes.map((route, index) => (
-            <Route key={index} path={route.path} element={route.component}>
+          {routes.map((route) => (
+            <Route key={route.path} path={route.path} element={route.component}>
               {route.children && (
                 <Route element={<Home />}>
-                  {route.children.map((childRoute) => (
+                  {route.children.map((child) => (
                     <Route
-                      key={childRoute.path}
-                      path={childRoute.path}
-                      element={childRoute.component}
+                      key={child.path}
+                      path={child.path}
+                      element={child.component}
                     />
                   ))}
                 </Route>

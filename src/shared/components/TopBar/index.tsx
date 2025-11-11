@@ -11,10 +11,9 @@ import { AuthService } from "src/services/AuthService/auth.service";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { useUserRole } from "src/shared/hooks/useUserRole";
-import { superAdminRoutes } from "./constants";
+import { clubAdminRoutes, superAdminRoutes } from "./constants";
 
 import styles from "./topBar.module.scss";
-import { TopBarItems } from "src/enums/topBar.enum";
 
 const TopBar = () => {
   const navigate = useNavigate();
@@ -35,7 +34,7 @@ const TopBar = () => {
       );
     }
 
-    return topBarItems.filter((item) => item.title !== TopBarItems.CLUBS);
+    return topBarItems.filter((item) => clubAdminRoutes.includes(item.title));
   }, [isSuperAdmin]);
 
   return (

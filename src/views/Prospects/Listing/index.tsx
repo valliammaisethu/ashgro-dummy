@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { CheckboxChangeEvent } from "antd";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 
 import { TABLE_HEADERS } from "./constants";
@@ -15,12 +15,12 @@ import Header from "./Header";
 import Checkbox from "src/shared/components/Checkbox";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import ProspectRow from "./Components/ProspectRow";
+import { getFullName } from "src/shared/utils/helpers";
 import ProspectForm from "../ProspectForm";
 import useRedirect from "src/shared/hooks/useRedirect";
 import useDrawer from "src/shared/hooks/useDrawer";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { UserData } from "src/models/user.model";
 import {
   ProspectsList,
   ProspectsListingParams,
@@ -38,11 +38,9 @@ import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import Filters from "../Filters";
 
 import styles from "./listing.module.scss";
-import { getFullName } from "src/shared/utils/helpers";
 
 const ProspectsListing = () => {
-  const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
-  const clubId = user?.clubId;
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER).clubId;
 
   const [queryParams, setQueryParams] = useState<ProspectsListingParams>(
     new ProspectsListingParams(),
@@ -56,21 +54,23 @@ const ProspectsListing = () => {
   });
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
   const [isAllSelected, setIsAllSelected] = useState(false);
+  const [updatingProspectId, setUpdatingProspectId] = useState<
+    string | undefined
+  >();
 
-  const { getProspects, viewProspect } = ProspectsService();
+  const { getProspects, editProspect } = ProspectsService();
   const { getLeadStatuses } = MetaService();
   const { getProspectEmailRecipients } = EmailService();
 
   const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
   const { data: leadStatusesData } = useQuery(getLeadStatuses());
-  const { data: isEditData, isFetching: isEditDataFetching } = useQuery({
-    ...viewProspect(isEdit?.prospect?.id),
-    enabled: !!isEdit?.prospect?.id,
-  });
+
   const { data: emailRecipientsData } = useQuery({
     ...getProspectEmailRecipients(queryParams),
     enabled: isAllSelected,
   });
+
+  const { mutateAsync: updateProspectMutate } = useMutation(editProspect());
 
   const leadStatusOptions = useMemo(
     () => leadStatusesData?.leadStatuses,
@@ -136,7 +136,6 @@ const ProspectsListing = () => {
 
   const emailRecipients = useMemo(() => {
     if (isAllSelected && emailRecipientsData?.prospects) {
-      // Convert API recipients to SelectedEmailModel format
       return emailRecipientsData.prospects.map((prospect) => ({
         id: prospect.email || "",
         email: prospect.email || "",
@@ -163,6 +162,22 @@ const ProspectsListing = () => {
     },
     [toggleVisibility],
   );
+
+  const closeForm = () => {
+    setIsEdit({
+      state: false,
+      prospect: new ProspectsList(),
+    });
+    toggleVisibility();
+  };
+
+  const showForm = () => {
+    setIsEdit({
+      state: false,
+      prospect: new ProspectsList(),
+    });
+    show();
+  };
 
   const handleOnDelete = (prospect: ProspectsList) => {
     setIsEdit({
@@ -202,6 +217,22 @@ const ProspectsListing = () => {
     toggleNewEmailModal();
   }, [toggleNewEmailModal]);
 
+  const handleStatusChange = async (
+    prospectId: string,
+    leadStatusId: string,
+  ) => {
+    setUpdatingProspectId(prospectId);
+
+    await updateProspectMutate({
+      prospect: {
+        id: prospectId,
+        leadStatusId,
+        clubId,
+      },
+    });
+    setUpdatingProspectId(undefined);
+  };
+
   useEffect(() => {
     if (clubId && queryParams.clubId !== clubId) {
       setQueryParams((prev) => ({ ...prev, clubId }));
@@ -213,7 +244,7 @@ const ProspectsListing = () => {
       <Header
         onFilter={toggleDrawerVisibility}
         onSearch={handleSearch}
-        onAddProspect={show}
+        onAddProspect={showForm}
         filtersActive={filtersActive}
         onBulkMail={toggleEmailTemplateModal}
         selectedEmails={selectedProspects.length}
@@ -237,6 +268,9 @@ const ProspectsListing = () => {
             records={data?.prospects}
             isPending={isPending}
             isSuccess={isSuccess}
+            useGridSkeleton
+            skeletonCols={1}
+            skeletonRows={13}
           >
             <div className={styles.tableBody}>
               {data?.prospects?.filter(Boolean).map((prospect) => (
@@ -258,6 +292,8 @@ const ProspectsListing = () => {
                   }
                   onEditClick={handleOnEdit}
                   onDeleteClick={handleOnDelete}
+                  onStatusChange={handleStatusChange}
+                  isUpdatingStatus={updatingProspectId === prospect.id}
                 />
               ))}
             </div>
@@ -282,15 +318,10 @@ const ProspectsListing = () => {
         )}
       />
       <ProspectForm
-        key={isEdit?.prospect?.id || "new"}
-        prospectData={isEditData?.prospect}
+        prospectId={isEdit?.prospect?.id}
         isEdit={isEdit?.state}
         visible={visible}
-        isLoading={isEdit?.state && isEditDataFetching}
-        onClose={() => {
-          setIsEdit({ state: false, prospect: new ProspectsList() });
-          toggleVisibility();
-        }}
+        onClose={closeForm}
       />
       <Filters
         visible={drawerVisible}

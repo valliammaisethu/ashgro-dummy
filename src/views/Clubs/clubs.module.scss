@@ -2,8 +2,7 @@
 @import "src/styles/_helpers";
 
 .header {
-  display: flex;
-  justify-content: space-between;
+  @include flex-container(space-between, normal, row, 0);
 }
 .addClubButton {
   background-color: $ashgro-navy;
@@ -39,16 +38,8 @@
   padding: 2.4rem 4rem;
   background-color: $ashgro-white;
   height: 10.4rem;
-  border: 1px solid;
-  border-image-slice: 1;
-  border-image-source: linear-gradient(
-    151.49deg,
-    rgba(246, 239, 222, 0.5) 0%,
-    rgba(216, 201, 167, 0.5) 100%
-  );
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @include gradientBorder($club-row-border-bg);
+  @include flex-container(space-between, center, row, 0);
 }
 
 .badge {

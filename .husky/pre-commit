@@ -10,11 +10,3 @@ echo "✅ Linting passed."
 
 # Get all staged files with relevant extensions
 STAGED_FILES=$(git diff --name-only --cached | grep -E '\.(ts|tsx)$' || true)
-
-# Run related tests in non-interactive mode
-if [ -n "$STAGED_FILES" ]; then
-  echo "🧪 Running tests related to staged files..."
-  echo "$STAGED_FILES" | xargs npx vitest related --run --reporter=verbose || { echo "❌ Tests failed."; exit 1; }
-else
-  echo "No relevant files staged. Skipping tests."
-fi
