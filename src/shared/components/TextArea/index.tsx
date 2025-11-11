@@ -24,6 +24,7 @@ const TextArea: FC<TextAreaFieldProps> = ({
   label,
   required = false,
   className,
+  rootClassName,
   ...rest
 }) => {
   const { control } = useFormContext<FieldValues>();
@@ -42,6 +43,7 @@ const TextArea: FC<TextAreaFieldProps> = ({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
+        className={rootClassName}
         {...rest}
         status={fieldState.error ? InputStatus.ERROR : undefined}
       />

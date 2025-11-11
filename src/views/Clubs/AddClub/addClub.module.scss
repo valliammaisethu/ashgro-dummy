@@ -4,8 +4,10 @@
 .chatbot {
   @include flex-container(space-between, center, row);
 }
-.textArea {
-  textArea {
+
+.clubAddressInput,
+.notesInput {
+  &:global(.ant-input) {
     min-height: 8rem;
   }
 }
@@ -14,10 +16,7 @@
   background-color: $modal-footer-bg;
   min-height: 7.6rem;
   border-radius: 1.6rem;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  justify-content: flex-end;
+  @include flex-container(flex-end, center, row, 2rem);
   padding: 1.6rem 3.2rem;
   position: absolute;
   left: 0;

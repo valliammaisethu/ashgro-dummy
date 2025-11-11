@@ -8,7 +8,7 @@ export const titles = {
   misc: {
     chatbotStatus: "Chatbot Status",
   },
-} as const;
+};
 
 export const labels = {
   clubName: "Club Name",
@@ -23,7 +23,7 @@ export const labels = {
   primaryPhone: "Phone Number",
 
   notesDescription: "Notes Description",
-} as const;
+};
 
 export const placeholders = {
   clubName: "Enter club name",
@@ -37,7 +37,7 @@ export const placeholders = {
   email: "Enter email address",
 
   notesDescription: "Enter Notes",
-} as const;
+};
 
 export const fields = {
   profilePicture: "profilePicture",
@@ -58,4 +58,4 @@ export const fields = {
   primaryPhoneCountryCode: "countryCode",
 
   notesDescription: "description",
-} as const;
+};

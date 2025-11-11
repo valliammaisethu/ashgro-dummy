@@ -25,7 +25,7 @@ import { INPUT_TYPE } from "src/enums/inputType";
 import { NotificationTypes } from "src/enums/notificationTypes";
 import { ProfilePictureInputProps } from "src/shared/types/sharedComponents.type";
 import { renderNotification } from "src/shared/utils/renderNotification";
-import { defaultPlaceholder, maxSizeText } from "./constants";
+import { defaultPlaceholder, maxSizeText, uploadPictureAlt } from "./constants";
 
 import styles from "./profilePictureInput.module.scss";
 
@@ -156,6 +156,7 @@ const ProfilePictureInput = ({
           <img
             src={preview || (isClubUpload ? clubUpload : logo)}
             className={styles.profileImage}
+            alt={uploadPictureAlt}
           />
           {(isLoading || isLoadingPreview) && (
             <div className={styles.loaderOverlay}>
