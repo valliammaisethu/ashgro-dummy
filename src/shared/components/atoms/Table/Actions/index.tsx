@@ -8,6 +8,8 @@ import { stopPropagation } from "src/shared/utils/eventUtils";
 import { hoverActionBtnClass } from "./constants";
 
 import styles from "./actions.module.scss";
+import { empty } from "src/constants/sharedComponents";
+import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
 
 interface Option {
   label?: string;
@@ -34,7 +36,6 @@ const Actions: React.FC<ActionsProps> = ({
   onDeleteClick,
   showSelect = true,
   selectPlaceholder = "Select an option",
-  selectWidth = 200,
   selectLoading = false,
 }) => {
   const handleSelectChange = (value: string) => {
@@ -53,19 +54,25 @@ const Actions: React.FC<ActionsProps> = ({
 
   return (
     <div className={styles.actionContainer}>
-      {showSelect && (
-        <div onClick={stopPropagation}>
+      {showSelect && selectedValue ? (
+        <div onClick={stopPropagation} className={styles.statusCol}>
           <Select
-            style={{ width: selectWidth }}
-            placeholder={selectPlaceholder}
             value={selectedValue}
+            placeholder={selectPlaceholder}
+            className={styles.statusSelect}
             onChange={handleSelectChange}
-            options={options}
             loading={selectLoading}
-          />
+          >
+            {options?.map(({ value, label = "" }) => (
+              <Select.Option key={value} value={value}>
+                <StatusTag label={label} />
+              </Select.Option>
+            ))}
+          </Select>
         </div>
+      ) : (
+        <div className={styles.sourceColValue}>{empty}</div>
       )}
-
       <div className={clsx(styles.actions, hoverActionBtnClass)}>
         {onEditClick && (
           <IconEdit

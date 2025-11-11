@@ -1,31 +1,19 @@
 import { RoleNames } from "src/enums/roleNames.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { localStorageHelper } from "./localStorageHelper";
-import { UserData } from "src/models/user.model";
 
-export const getCurrentUserRole = (): string | undefined => {
-  const user = localStorageHelper.getItem(
-    LocalStorageKeys.USER,
-  ) as UserData | null;
-  return user?.role;
-};
+export const getCurrentUserRole = () =>
+  localStorageHelper.getItem(LocalStorageKeys.USER)?.role;
 
-export const isSuperAdmin = (): boolean => {
-  const role = getCurrentUserRole();
-  return role === RoleNames.SUPER_ADMIN;
-};
+export const isSuperAdmin = () =>
+  getCurrentUserRole() === RoleNames.SUPER_ADMIN;
 
-export const isClubAdmin = (): boolean => {
-  const role = getCurrentUserRole();
-  return role === RoleNames.CLUB_ADMIN;
-};
+export const isClubAdmin = () => getCurrentUserRole() === RoleNames.CLUB_ADMIN;
 
-export const hasRole = (roleName: RoleNames): boolean => {
-  const role = getCurrentUserRole();
-  return role === roleName;
-};
+export const hasRole = (roleName: RoleNames) =>
+  getCurrentUserRole() === roleName;
 
-export const hasAnyRole = (roleNames: RoleNames[]): boolean => {
+export const hasAnyRole = (roleNames: RoleNames[]) => {
   const role = getCurrentUserRole();
   return role ? roleNames.includes(role as RoleNames) : false;
 };

@@ -15,9 +15,7 @@ const RoleGuard: React.FC<RoleGuardProps> = ({
 }) => {
   const { hasAnyRole } = useUserRole();
 
-  if (hasAnyRole(allowedRoles)) {
-    return <>{children}</>;
-  }
+  if (hasAnyRole(allowedRoles)) return <>{children}</>;
 
   return <>{fallback}</>;
 };

@@ -14,6 +14,7 @@ import { maxFileSizeTextDescription } from "src/constants/sharedComponents";
 import { EmailTemplateService } from "src/services/SettingsService/emailTemplate.service";
 import { EmailTemplate } from "src/models/meta.model";
 import useForm from "src/shared/components/UseForm";
+import { UploadedFile } from "src/shared/types/sharedComponents.type";
 
 interface EmailTemplateFormProps {
   onClose: () => void;
@@ -32,16 +33,26 @@ const EmailTemplateForm = ({
   const { getEmailTemplate, emailTemplateOperations } = EmailTemplateService();
 
   // Fetch the full template data when editing
-  const { data: templateDetail } = useQuery(
+  const { data: templateDetail, refetch } = useQuery(
     getEmailTemplate(selectedTemplate?.id),
   );
 
-  // Extract attachment IDs from the full attachment objects
   const attachmentIds = useMemo(() => {
     if (templateDetail?.attachments) {
       return templateDetail.attachments.map((att) => att.id || "");
     }
     return [];
+  }, [templateDetail?.attachments]);
+
+  const initialFiles = useMemo(() => {
+    if (!templateDetail?.attachments) return [];
+
+    return templateDetail.attachments.map((att) => ({
+      id: att.id || "",
+      name: att.fileName || "",
+      size: att.fileSize || 0,
+      isInitial: true,
+    })) as UploadedFile[];
   }, [templateDetail?.attachments]);
 
   const methods = useForm({
@@ -50,7 +61,7 @@ const EmailTemplateForm = ({
       title: templateDetail?.title || "",
       subject: templateDetail?.subject || "",
       body: templateDetail?.body || "",
-      attachmentIds: attachmentIds,
+      attachments: attachmentIds,
     },
   });
 
@@ -62,14 +73,21 @@ const EmailTemplateForm = ({
     title: string;
     subject: string;
     body: string;
-    attachmentIds: string[];
+    attachments: string[];
   }) => {
-    await saveTemplate({
-      type: "emailTemplate",
-      id: selectedTemplate?.id,
-      data,
-    });
-    onClose();
+    await saveTemplate(
+      {
+        type: "emailTemplate",
+        id: selectedTemplate?.id,
+        data,
+      },
+      {
+        onSuccess: () => {
+          refetch();
+          onClose();
+        },
+      },
+    );
   };
 
   return (
@@ -102,12 +120,13 @@ const EmailTemplateForm = ({
         </Col>
         <Col span={24}>
           <FileUpload
-            name={FIELDS.ATTACHMENT_IDS}
+            name={FIELDS.ATTACHMENTS}
             maxFileSizeText={maxFileSizeTextDescription}
             containerClassName={styles.uploadFileContainer}
             buttonClassName={styles.uploadFilesButton}
             maxFileSizeClassName={styles.maxFileSize}
             attachmentClassName={styles.attachment}
+            initialFiles={initialFiles}
           />
         </Col>
       </Row>
