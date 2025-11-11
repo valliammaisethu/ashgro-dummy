@@ -16,6 +16,7 @@ import StaffMemberDetails from "src/views/StaffMembers/Details";
 import StaffMembersListing from "src/views/StaffMembers/Listing";
 import MemberDetails from "src/views/Members/Details";
 import Settings from "src/views/Settings";
+import Calender from "src/views/Calender";
 
 const AppRouter = () => {
   const routes: RouterProps[] = [
@@ -35,7 +36,7 @@ const AppRouter = () => {
         },
         {
           path: AppRoutes.CALENDAR,
-          component: <></>,
+          component: <Calender />,
         },
         {
           path: AppRoutes.MEMBERS,
