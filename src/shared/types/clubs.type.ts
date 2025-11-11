@@ -1,4 +1,4 @@
-import { ClubFormData } from "src/models/club.model";
+import { ClubFormData, ClubNotes, ClubProfile } from "src/models/club.model";
 
 export interface AddClubModalProps {
   open: boolean;
@@ -12,4 +12,16 @@ export interface ClubListingHeaderProps {
 
 export interface ClubListingTableProps {
   onEditClub: (data: ClubFormData) => void;
+}
+
+export interface ClubInfoProps {
+  data?: ClubProfile;
+}
+
+export interface ContactDetailsProps {
+  data?: ClubProfile;
+}
+
+export interface NotesSectionProps {
+  notes?: ClubNotes;
 }

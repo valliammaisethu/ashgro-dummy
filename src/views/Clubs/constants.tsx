@@ -14,6 +14,7 @@ export const clubHeaderColumnGrid = "53% 16% 16% 16%";
 
 export const mockClubs = [
   {
+    id: 1,
     profilePicture: "",
     chatbotSwitch: true,
     clubName: "The Ned",
@@ -30,6 +31,7 @@ export const mockClubs = [
     description: "Luxury club in downtown DC",
   },
   {
+    id: 2,
     profilePicture: "",
     chatbotSwitch: false,
     clubName: "The Ned",

@@ -40,6 +40,12 @@
   height: 10.4rem;
   @include gradientBorder($club-row-border-bg);
   @include flex-container(space-between, center, row, 0);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(197, 162, 93, 0.05);
+  }
 }
 
 .badge {
