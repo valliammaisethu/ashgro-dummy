@@ -8,4 +8,6 @@ export enum Colors {
   SEARCH_ICON_COLOR = "#B5AA96",
   MODAL_CLOSE_ICON = "#9A917B",
   ASHGRO_NAVY = "#0C2340",
+  DARK_GOLD = "#766A4C",
+  LIGHT_GOLD = "#F6EFDE",
 }
