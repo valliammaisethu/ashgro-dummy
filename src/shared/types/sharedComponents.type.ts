@@ -265,6 +265,7 @@ export interface UploadedFile {
   id: string;
   name: string;
   size: number;
+  isInitial?: boolean;
 }
 
 export interface FileUploadProps {
@@ -279,4 +280,5 @@ export interface FileUploadProps {
   containerClassName?: string;
   maxFileSizeClassName?: string;
   attachmentClassName?: string;
+  initialFiles?: UploadedFile[];
 }

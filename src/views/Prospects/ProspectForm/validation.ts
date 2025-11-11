@@ -8,16 +8,34 @@ const {
   lastName,
   monthlyDues,
   initiationFee,
+  validEmail,
   phone,
   negativeNumber,
   activityType,
   activityDescription,
+  firstNameLetters,
+  lastNameLetters,
 } = validationMessages;
 
 const prospectSchema = yup.object({
-  firstName: yup.string().label(LABELS.FIRST_NAME).required(firstName).max(50),
-  lastName: yup.string().label(LABELS.LAST_NAME).required(lastName).max(50),
-  email: yup.string().label(LABELS.EMAIL_ADDRESS).email().required().max(100),
+  firstName: yup
+    .string()
+    .label(LABELS.FIRST_NAME)
+    .required(firstName)
+    .max(50)
+    .matches(REGEX.LETTERS, firstNameLetters),
+  lastName: yup
+    .string()
+    .label(LABELS.LAST_NAME)
+    .required(lastName)
+    .max(50)
+    .matches(REGEX.LETTERS, lastNameLetters),
+  email: yup
+    .string()
+    .label(LABELS.EMAIL_ADDRESS)
+    .email(validEmail)
+    .required()
+    .max(100),
   contactNumber: yup
     .string()
     .matches(/^(\(\d{3}\)\s?\d{3}-?\d{4}|\d{10})?$/, phone),

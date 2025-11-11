@@ -27,7 +27,7 @@ const { title, description } = logoutMessages;
 
 export const AuthService = () => {
   const { setAuthenticated, resetAuthState } = AuthContext();
-  const { navigateToProspects, navigateToLogin } = useRedirect();
+  const { navigateToLogin, navigateToDashboard } = useRedirect();
   const queryClient = useQueryClient();
 
   const loginUser = (): UseMutationOptions<
@@ -47,7 +47,7 @@ export const AuthService = () => {
     onSuccess: (response) => {
       const { data, title, description } = response;
       setAuthenticated(data?.user, response?.data?.token);
-      navigateToProspects();
+      navigateToDashboard();
       renderNotification(title, description);
     },
   });

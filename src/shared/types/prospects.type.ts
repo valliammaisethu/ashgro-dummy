@@ -1,5 +1,4 @@
 import { FieldValues } from "react-hook-form";
-import { ViewProspect } from "src/models/viewProspect.model";
 
 export interface ProspectHeaderProps {
   onEdit: () => void;
@@ -14,12 +13,11 @@ export interface ProspectListingHeaderProps {
   selectedEmails: number;
 }
 
-export interface AddProspectProps {
+export interface ProspectFormProps {
   visible: boolean;
   onClose: () => void;
   isEdit?: boolean;
-  prospectData?: ViewProspect;
-  isLoading?: boolean;
+  prospectId?: string;
 }
 
 export interface IndividualProspectHeaderProps {

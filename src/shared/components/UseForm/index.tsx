@@ -18,7 +18,7 @@ const useForm = <T extends FieldValues>({
   ...rest
 }: useFormProps<T>): UseFormReturn<T> => {
   return useRHKForm<T>({
-    mode: FormModes.ON_BLUR,
+    mode: FormModes.ON_CHANGE,
     resolver: validationSchema
       ? (yupResolver<T, object, T>(validationSchema) as Resolver<T>)
       : undefined,

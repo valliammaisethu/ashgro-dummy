@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Col, Row } from "antd";
 import { FieldValues } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { NewEmailModalProps } from "src/shared/types/email.type";
 import {
@@ -25,6 +25,7 @@ import { maxFileSizeTextDescription } from "src/constants/sharedComponents";
 import { generateSelectOptions } from "../utils";
 import { addEmailValidation } from "./validation";
 import { EmailService } from "src/services/EmailService/email.service";
+import { EmailTemplateService } from "src/services/SettingsService/emailTemplate.service";
 import { SelectedEmailModel } from "src/models/email.model";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { ValidateEmail } from "src/shared/utils/helpers";
@@ -36,6 +37,23 @@ const NewEmailModal = (props: NewEmailModalProps) => {
 
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
 
+  const { getEmailTemplate } = EmailTemplateService();
+
+  const { data: templateDetails } = useQuery({
+    ...getEmailTemplate(selectedTemplate?.id),
+    enabled: !!selectedTemplate?.id && isOpen,
+  });
+
+  const initialAttachments = useMemo(
+    () =>
+      templateDetails?.attachments?.map((attachment) => ({
+        id: attachment.id || "",
+        name: attachment.fileName || "",
+        size: attachment.fileSize || 0,
+      })) || [],
+    [templateDetails],
+  );
+
   const methods = useForm({
     validationSchema: addEmailValidation,
     values: {
@@ -46,7 +64,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
       cc: [],
       bcc: [],
       clubId,
-      attachmentIds: selectedTemplate?.attachmentIds || [],
+      attachmentIds: initialAttachments.map((a) => a.id),
     },
   });
 
@@ -186,12 +204,14 @@ const NewEmailModal = (props: NewEmailModalProps) => {
           </Col>
           <Col className={styles.fileUploadContainer} span={24}>
             <FileUpload
+              key={selectedTemplate?.id || "new"}
               name={fields.attachmentIds}
               maxFileSizeText={maxFileSizeTextDescription}
               containerClassName={styles.uploadFileContainer}
               buttonClassName={styles.uploadFilesButton}
               maxFileSizeClassName={styles.maxFileSize}
               attachmentClassName={styles.attachment}
+              initialFiles={initialAttachments}
             />
           </Col>
         </Row>

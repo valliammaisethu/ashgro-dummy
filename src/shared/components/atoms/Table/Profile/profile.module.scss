@@ -14,6 +14,7 @@
     .name {
       font-size: 1.8rem;
       font-weight: 600;
+      @include secondaryBold;
     }
   }
 }
@@ -31,9 +32,12 @@
     font-weight: 400;
     font-size: 1.4rem;
     font-family: $font-secondary;
+    width: 22rem;
   }
   .contactNumber {
     opacity: 0.6;
+    @include flex-container;
+    gap: 1.2rem;
     .phone {
       color: $ashgro-navy;
       font-size: 1.4rem;

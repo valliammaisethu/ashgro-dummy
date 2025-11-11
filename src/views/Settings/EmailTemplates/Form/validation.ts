@@ -16,7 +16,7 @@ export const addEmailTemplateValidation = yup.object().shape({
     .required("Email body is required")
     .max(1000000, "Email body is too long")
     .label("Email Body"),
-  attachmentIds: yup
+  attachments: yup
     .array()
     .of(yup.string().required())
     .default([])

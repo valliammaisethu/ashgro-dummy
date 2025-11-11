@@ -52,7 +52,7 @@ const Members = () => {
   );
   const [selectedMembers, setSelectedMembers] = useState<SelectedMember[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
-  const [isAllSelected, setIsAllSelected] = useState(false);
+  const [, setIsAllSelected] = useState(false);
 
   const filtersActive = useMemo(
     () => areFiltersActive(queryParams),
@@ -230,6 +230,9 @@ const Members = () => {
             records={data?.members}
             isPending={isPending}
             isSuccess={isSuccess}
+            useGridSkeleton
+            skeletonCols={1}
+            skeletonRows={13}
           >
             <div className={styles.listContainer}>
               {data?.members?.map((item) => {
