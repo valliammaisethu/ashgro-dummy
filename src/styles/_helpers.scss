@@ -239,3 +239,9 @@
     border-color: transparent !important;
   }
 }
+
+@mixin gradientBorder($color: transparent) {
+  border: 1px solid;
+  border-image-slice: 1;
+  border-image-source: $color;
+}

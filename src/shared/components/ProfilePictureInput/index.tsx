@@ -24,7 +24,7 @@ import { INPUT_TYPE } from "src/enums/inputType";
 import { NotificationTypes } from "src/enums/notificationTypes";
 import { ProfilePictureInputProps } from "src/shared/types/sharedComponents.type";
 import { renderNotification } from "src/shared/utils/renderNotification";
-import { defaultPlaceholder } from "./constants";
+import { defaultPlaceholder, maxSizeText } from "./constants";
 
 import styles from "./profilePictureInput.module.scss";
 
@@ -159,6 +159,7 @@ const ProfilePictureInput = ({
           disabled={isLoading || isLoadingPreview}
         />
       </div>
+      <span className={styles.maxSize}>{maxSizeText}</span>
       {preview && !isLoading && !isLoadingPreview && (
         <div className={styles.actions}>
           <button

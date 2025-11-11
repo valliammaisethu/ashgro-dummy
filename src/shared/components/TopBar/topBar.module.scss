@@ -39,6 +39,10 @@
   gap: 0.4rem;
   padding-bottom: 0.9rem;
   font-weight: 400;
+  cursor: pointer;
+  transition:
+    color 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
 
   &.active {
     font-weight: 600;
@@ -46,7 +50,12 @@
     border-image: $nav-active-bg;
     border-image-slice: 1;
     color: $nav-active-text;
-    font-size: 1.5rem;
+    opacity: 1;
+  }
+
+  &:hover {
+    color: $nav-active-text;
+    opacity: 1;
   }
 }
 
@@ -64,6 +73,11 @@
     font-family: $font-secondary;
   }
   .logoutIcon {
+    transition: transform 0.2s ease;
     cursor: pointer;
+    &:hover {
+      transform: translateX(0.4rem);
+      color: darken($ashgro-navy, 10%);
+    }
   }
 }

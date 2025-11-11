@@ -57,3 +57,9 @@ export const passwordCriteriaMap: Record<string, RegExp> = {
   uppercase: /[A-Z]/,
   special: /[!@#$%^&*(),.?":{}|<>]/,
 };
+
+export const newPasswordValidation =
+  "Password can’t be longer than 25 characters";
+
+export const confirmPasswordValidation = "Confirm password is required";
+export const matchingPasswordValidation = "Passwords must match";

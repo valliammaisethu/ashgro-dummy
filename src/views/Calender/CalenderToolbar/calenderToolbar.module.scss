@@ -1,0 +1,45 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.toolbarContainer {
+  @include flex-container;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: $cream-bg;
+  padding-bottom: 1.6rem;
+
+  .leftSide {
+    @include flex-container;
+    gap: 2.1rem;
+
+    .monthLabel {
+      font-size: 1.8rem;
+      font-weight: 600;
+      font-family: $font-secondary;
+      color: $select-tag-color;
+    }
+
+    .navigationBtn {
+      cursor: pointer;
+      box-shadow: none;
+      &:hover {
+        border-color: transparent;
+      }
+    }
+  }
+
+  .rightSide {
+    @include flex-container;
+    gap: 1.6rem;
+
+    .actionBtn {
+      border-radius: 3.6rem;
+      padding: 2rem;
+    }
+
+    .bookingBtn {
+      background-color: transparent;
+    }
+  }
+}

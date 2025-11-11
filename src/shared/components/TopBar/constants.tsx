@@ -5,3 +5,12 @@ export const superAdminRoutes = [
   TopBarItems.SETTINGS,
   TopBarItems.CLUBS,
 ];
+
+export const clubAdminRoutes = [
+  TopBarItems.DASHBOARD,
+  TopBarItems.SETTINGS,
+  TopBarItems.PROSPECTS,
+  TopBarItems.CALENDAR,
+  TopBarItems.MEMBERS,
+  TopBarItems.CLUB_STAFF,
+];

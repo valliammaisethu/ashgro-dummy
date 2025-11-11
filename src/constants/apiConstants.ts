@@ -8,7 +8,7 @@ export interface OperationParams {
     title?: string;
     subject?: string;
     body?: string;
-    attachmentIds?: string[];
+    attachments?: string[];
   };
 }
 
@@ -64,7 +64,7 @@ export const getEmailTemplatePayload = (
     title?: string;
     subject?: string;
     body?: string;
-    attachmentIds?: string[];
+    attachments?: string[];
   },
 ) => {
   if (type === "emailTemplate" && data) {
@@ -72,7 +72,7 @@ export const getEmailTemplatePayload = (
       title: data.title,
       subject: data.subject,
       body: data.body,
-      attachmentIds: data.attachmentIds,
+      attachments: data.attachments,
     };
   }
   return {};

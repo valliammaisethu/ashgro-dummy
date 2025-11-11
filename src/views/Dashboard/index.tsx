@@ -1,9 +1,14 @@
 import React from "react";
 import { useUserRole } from "src/shared/hooks/useUserRole";
-import ClubAdminDashboard from "./Admin";
-import SuperAdminDashboard from "./SuperAdmin";
 
 const DashboardWrapper = () => {
+  const SuperAdminDashboard = () => {
+    return <div>SuperAdminDashboard</div>;
+  };
+
+  const ClubAdminDashboard = () => {
+    return <div>ClubAdmin</div>;
+  };
   const { isSuperAdmin, isClubAdmin } = useUserRole();
 
   if (isSuperAdmin) return <SuperAdminDashboard />;

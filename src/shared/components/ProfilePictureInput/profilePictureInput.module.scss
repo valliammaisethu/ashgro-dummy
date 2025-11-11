@@ -1,4 +1,5 @@
 @import "src/styles/variables";
+@import "src/styles/helpers";
 
 .title {
   font-size: 1.6rem;
@@ -17,7 +18,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.6rem;
+  gap: 1rem;
+}
+
+.maxSize {
+  color: $upload-text;
+  @include secondaryRegular;
+  font-size: 1.3rem;
 }
 
 .imageWrapper {

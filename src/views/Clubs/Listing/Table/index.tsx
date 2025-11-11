@@ -1,20 +1,19 @@
 import React from "react";
+
 import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
 import {
   clubHeaderColumnGrid,
   clubListingHeaders,
-  clubStatuses,
+  mockClubs,
 } from "../../constants";
 
-import styles from "../../clubs.module.scss";
 import Profile from "src/shared/components/atoms/Table/Profile";
 import Badge from "src/shared/components/atoms/Badge";
 import { Colors } from "src/enums/colors.enum";
 import Switch from "src/shared/components/Switch";
-import { Select } from "antd";
-import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
-import { stopPropagation } from "src/shared/utils/eventUtils";
-import { IconChevronDown } from "obra-icons-react";
+import Actions from "src/shared/components/atoms/Table/Actions";
+
+import styles from "../../clubs.module.scss";
 
 const ClubListingTable = () => {
   return (
@@ -23,64 +22,26 @@ const ClubListingTable = () => {
         columnTemplate={clubHeaderColumnGrid}
         headers={clubListingHeaders}
       />
-      <div className={styles.rowContainer}>
-        <Profile
-          address="734 15th St NW, Washington, DC 20005, United States"
-          firstName="The"
-          lastName="Ned"
-        />
+      {mockClubs.map((club, index) => (
+        <div key={index} className={styles.rowContainer}>
+          <Profile
+            address={club.clubAddress}
+            firstName={club.clubName.split(" ")[0]}
+            lastName={club.clubName.split(" ")[1]}
+          />
 
-        <Badge
-          text="45 Members"
-          color={Colors.DARK_GOLD}
-          backgroundColor={Colors.LIGHT_GOLD}
-          className={styles.badge}
-        />
+          <Badge
+            text="45 Members"
+            color={Colors.DARK_GOLD}
+            backgroundColor={Colors.LIGHT_GOLD}
+            className={styles.badge}
+          />
 
-        <Switch className={styles.switch} name="switch" />
+          <Switch className={styles.switch} name={`switch-${index}`} />
 
-        <Select
-          onClick={stopPropagation}
-          value="active"
-          className={styles.statusSelect}
-          suffixIcon={<IconChevronDown size={20} />}
-        >
-          {clubStatuses?.map(({ value, label = "" }) => (
-            <Select.Option key={value} value={value}>
-              <StatusTag label={label} />
-            </Select.Option>
-          ))}
-        </Select>
-      </div>
-      <div className={styles.rowContainer}>
-        <Profile
-          address="734 15th St NW, Washington, DC 20005, United States"
-          firstName="The"
-          lastName="Ned"
-        />
-
-        <Badge
-          text="45 Members"
-          color={Colors.DARK_GOLD}
-          backgroundColor={Colors.LIGHT_GOLD}
-          className={styles.badge}
-        />
-
-        <Switch className={styles.switch} name="switch" />
-
-        <Select
-          onClick={stopPropagation}
-          value="active"
-          className={styles.statusSelect}
-          suffixIcon={<IconChevronDown size={20} />}
-        >
-          {clubStatuses?.map(({ value, label = "" }) => (
-            <Select.Option key={value} value={value}>
-              <StatusTag label={label} />
-            </Select.Option>
-          ))}
-        </Select>
-      </div>
+          <Actions onEditClick={() => {}} selectWidth={160} />
+        </div>
+      ))}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { RcFile } from "antd/es/upload";
 import { useController, useFormContext } from "react-hook-form";
 import { IconAttachment, IconCircleClose } from "obra-icons-react";
@@ -38,13 +38,15 @@ const FileUpload = ({
   containerClassName,
   maxFileSizeClassName,
   attachmentClassName,
+  initialFiles = [],
 }: FileUploadProps) => {
   const { control } = useFormContext();
   const { field } = useController({ name, control });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [uploadedFiles, setUploadedFiles] =
+    useState<UploadedFile[]>(initialFiles);
   const [isUploading, setIsUploading] = useState(false);
 
   const { uploadFile, deleteFile } = AttachmentService();
@@ -114,6 +116,13 @@ const FileUpload = ({
   };
 
   const handleDeleteFile = async (fileId: string) => {
+    const fileToDelete = uploadedFiles.find((file) => file.id === fileId);
+    if (fileToDelete?.isInitial) {
+      const newFiles = uploadedFiles.filter((file) => file.id !== fileId);
+      setUploadedFiles(newFiles);
+      field.onChange(newFiles.map((f) => f.id));
+      return;
+    }
     try {
       await deleteFile.mutateAsync(fileId);
       const newFiles = uploadedFiles.filter((file) => file.id !== fileId);
@@ -123,6 +132,13 @@ const FileUpload = ({
       renderNotification(fileDeletionError, "", NotificationTypes.ERROR);
     }
   };
+
+  useEffect(() => {
+    if (initialFiles?.length) {
+      setUploadedFiles(initialFiles);
+      field.onChange(initialFiles.map((f) => f.id));
+    }
+  }, [initialFiles]);
 
   return (
     <>
