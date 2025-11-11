@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { IconDelete, IconEdit } from "obra-icons-react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { Select } from "antd";
 
@@ -23,11 +23,14 @@ import MemberConversionModal from "../MemberConversionModal";
 import { getFullName } from "src/shared/utils/helpers";
 import NewEmailModal from "src/views/Email/NewEmailModal";
 import { SelectedEmailModel } from "src/models/email.model";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 
 import styles from "./individualProspect.module.scss";
 
 const IndividualProspect = () => {
-  const { viewProspect } = ProspectsService();
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+  const { viewProspect, editProspect } = ProspectsService();
   const { id = "" } = useParams();
   const { data, isPending, isSuccess, isFetching, refetch } = useQuery(
     viewProspect(id),
@@ -36,6 +39,9 @@ const IndividualProspect = () => {
   const { getLeadStatuses } = MetaService();
 
   const { data: leadStatusOptions } = useQuery(getLeadStatuses());
+
+  const { mutateAsync: updateProspectMutate, isPending: isUpdatingStatus } =
+    useMutation(editProspect());
 
   const [isEdit, setIsEdit] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState<SelectedEmailModel>(
@@ -73,6 +79,22 @@ const IndividualProspect = () => {
     toggleEmailModal();
   };
 
+  const handleStatusChange = async (statusName: string) => {
+    const selectedStatus = leadStatusOptions?.leadStatuses?.find(
+      (status) => status.statusName === statusName,
+    );
+    if (selectedStatus?.id && id) {
+      await updateProspectMutate({
+        prospect: {
+          id,
+          leadStatusId: selectedStatus.id,
+          clubId,
+        },
+      });
+      refetch();
+    }
+  };
+
   return (
     <div className={styles.individualProspect}>
       <Header onEmail={handleEmailModal} onConvert={handleConvertToMember} />
@@ -81,13 +103,18 @@ const IndividualProspect = () => {
         isSuccess={isSuccess}
         isFetching={isFetching}
         records={[data?.prospect]}
+        useGridSkeleton
+        skeletonRows={16}
       >
         <Card className={styles.card}>
           <div className={styles.leftSide}>
             <div className={styles.header}>
               <Select
-                value={data?.prospect?.leadStatus}
+                value={data?.prospect?.leadStatus || undefined}
                 className={styles.statusSelect}
+                placeholder="Select a status"
+                onChange={handleStatusChange}
+                loading={isUpdatingStatus}
               >
                 {leadStatusOptions?.leadStatuses?.map(
                   ({ id, statusName = "" }) => (
@@ -135,7 +162,7 @@ const IndividualProspect = () => {
       </ConditionalRender>
       {isEdit && !isFetching ? (
         <ProspectForm
-          prospectData={data?.prospect}
+          prospectId={String(data?.prospect?.id)}
           isEdit={isEdit}
           visible={visible}
           onClose={toggleVisibility}

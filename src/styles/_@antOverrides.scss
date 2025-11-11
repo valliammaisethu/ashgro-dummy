@@ -543,6 +543,7 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   padding: 2.4rem;
   overflow-y: auto;
   overflow-x: hidden;
+  margin-bottom: 6rem;
 
   /* Custom scrollbar styling */
   &::-webkit-scrollbar {
@@ -750,11 +751,9 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 }
 .ant-select-dropdown
   .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-  background-color: transparent;
+  background-color: $search-field-placeholder;
 }
-.rc-virtual-list-holder-inner {
-  gap: 1rem;
-}
+
 .ant-picker-dropdown
   .ant-picker-cell-in-view.ant-picker-cell-selected:not(
     .ant-picker-cell-disabled

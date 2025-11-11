@@ -27,7 +27,7 @@ const TemplateModal = ({
 }: EmailTemplateModalProps) => {
   const { getEmailTemplates } = MetaService();
 
-  const { data: emailTemplatesData } = useQuery({
+  const { data: emailTemplatesData, isPending } = useQuery({
     ...getEmailTemplates(),
     enabled: isOpen,
   });
@@ -37,7 +37,11 @@ const TemplateModal = ({
     [emailTemplatesData],
   );
 
-  const methods = useForm({});
+  const methods = useForm({
+    defaultValues: {
+      [fields.emailTemplate]: undefined,
+    },
+  });
 
   const { watch } = methods;
   const emailTemplateWatch = watch(fields.emailTemplate);
@@ -53,6 +57,11 @@ const TemplateModal = ({
     toggleEmailModal(EmailModalEnum.TEMPLATE, selectedTemplate);
   }, [toggleEmailModal, emailTemplatesData, emailTemplateWatch]);
 
+  const closeModal = useCallback(() => {
+    methods.reset({});
+    onClose();
+  }, [onClose, methods]);
+
   return (
     <Modal
       title={emailConstants.templateModalTitle}
@@ -60,9 +69,9 @@ const TemplateModal = ({
         className: "d-none",
       }}
       footer={[]}
-      closeModal={onClose}
+      closeModal={closeModal}
       visible={isOpen}
-      onCancel={onClose}
+      onCancel={closeModal}
       rootClassName={styles.emailTemplateModal}
     >
       <div className={styles.modalBody}>
@@ -72,6 +81,7 @@ const TemplateModal = ({
             name={fields.emailTemplate}
             label={labels.emailTemplate}
             placeholder={placeholders.emailTemplate}
+            loading={isPending}
           />
         </Form>
         <div className={styles.or}>or</div>

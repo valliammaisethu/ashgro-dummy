@@ -7,7 +7,7 @@ import { ModalProps } from "src/shared/types/sharedComponents.type";
 
 import styles from "./Modal.module.scss";
 import { defaultModalWidth } from "src/constants/sharedComponents";
-import Button from "../Button";
+import { ModalFooter } from "./atoms";
 
 const Modal: React.FC<ModalProps> = ({
   children,
@@ -29,32 +29,23 @@ const Modal: React.FC<ModalProps> = ({
   centered,
   styles: modalStyles,
   destroyOnHidden,
+  loading,
   destroyOnClose,
   bodyStyle,
 }: ModalProps) => {
   const defaultFooter = (
-    <div className={styles.modalFooter}>
-      <Button
-        {...cancelButtonProps}
-        type={ButtonTypes.PRIMARY}
-        htmlType={HtmlButtonType.BUTTON}
-        loading={!!cancelButtonProps?.loading}
-        onClick={onCancel ?? closeModal}
-      >
-        {cancelText}
-      </Button>
-
-      <Button
-        {...okButtonProps}
-        type={okButtonType}
-        className={styles.okButton}
-        htmlType={okButtonHtmlType}
-        loading={confirmLoading}
-        onClick={handleOk ?? closeModal}
-      >
-        {okText}
-      </Button>
-    </div>
+    <ModalFooter
+      cancelText={cancelText}
+      okText={okText}
+      cancelButtonProps={cancelButtonProps}
+      okButtonProps={okButtonProps}
+      okButtonType={okButtonType}
+      okButtonHtmlType={okButtonHtmlType}
+      confirmLoading={confirmLoading}
+      onCancel={onCancel}
+      handleOk={handleOk}
+      closeModal={closeModal}
+    />
   );
 
   return (
@@ -68,6 +59,7 @@ const Modal: React.FC<ModalProps> = ({
         bodyStyle={bodyStyle}
         styles={modalStyles}
         open={visible}
+        loading={loading}
         onOk={handleOk ?? closeModal}
         onCancel={onCancel ?? closeModal}
         confirmLoading={confirmLoading}

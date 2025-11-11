@@ -11,7 +11,7 @@ import AvatarFallback from "src/shared/components/AvatarFallback";
 import Checkbox from "src/shared/components/Checkbox";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import StatusTag from "../../Atoms/StatusTag";
-import { N_A } from "src/constants/sharedComponents";
+import { empty } from "src/constants/sharedComponents";
 import { Colors } from "src/enums/colors.enum";
 
 import styles from "./prospectRow.module.scss";
@@ -25,6 +25,8 @@ interface ProspectRowProps {
   onClick: () => void;
   onEditClick: (data: ProspectsList) => void;
   onDeleteClick: (data: ProspectsList) => void;
+  onStatusChange?: (prospectId: string, leadStatusId: string) => void;
+  isUpdatingStatus?: boolean;
 }
 
 const ProspectRow: React.FC<ProspectRowProps> = ({
@@ -35,6 +37,8 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   onClick,
   onEditClick,
   onDeleteClick,
+  onStatusChange,
+  isUpdatingStatus = false,
 }) => {
   const {
     leadStatus,
@@ -63,6 +67,15 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   const handleDeleteClick = (e: MouseEvent, data: ProspectsList) => {
     e.stopPropagation();
     onDeleteClick(data);
+  };
+
+  const handleStatusChange = (statusName: string) => {
+    const selectedStatus = leadStatusOptions.find(
+      (status) => status.statusName === statusName,
+    );
+    if (selectedStatus?.id && prospect.id && onStatusChange) {
+      onStatusChange(prospect.id, selectedStatus.id);
+    }
   };
 
   return (
@@ -111,6 +124,8 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
             value={leadStatus}
             className={styles.statusSelect}
             onClick={handleSelectClick}
+            onChange={handleStatusChange}
+            loading={isUpdatingStatus}
           >
             {leadStatusOptions?.map(({ id, statusName = "" }) => (
               <Select.Option key={id} value={statusName}>
@@ -120,7 +135,7 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
           </Select>
         </div>
       ) : (
-        <div className={styles.sourceColValue}>{N_A}</div>
+        <div className={styles.sourceColValue}>{empty}</div>
       )}
       <div className={styles.actions}>
         <IconEdit

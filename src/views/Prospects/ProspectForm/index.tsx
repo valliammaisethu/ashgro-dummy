@@ -26,16 +26,17 @@ import { ProspectsService } from "src/services/ProspectsService/prospects.servic
 import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
 import {
   convertDateToApiFormat,
+  convertDateToDisplayFormat,
   disableFutureAndToday,
   formatDate,
 } from "src/shared/utils/dateUtils";
-import { AddProspectProps } from "src/shared/types/prospects.type";
+import { ProspectFormProps } from "src/shared/types/prospects.type";
 import { getValidationSchema } from "./validation";
 import { getDigitsOnly } from "src/shared/utils/parser";
 import { findValueByLabel } from "src/shared/utils/commonHelpers";
-import Loader from "src/shared/components/Loader";
 
 import styles from "./prospectForm.module.scss";
+import ConditionalRender from "src/shared/components/ConditionalRender";
 
 const {
   MODAL_TITLE,
@@ -51,19 +52,26 @@ const ProspectForm = ({
   visible,
   onClose,
   isEdit = false,
-  prospectData,
-  isLoading = false,
-}: AddProspectProps) => {
+  prospectId,
+}: ProspectFormProps) => {
   const {
     getLeadSources,
     getLeadStatuses,
     getMembershipCategories,
     getActivityTypes,
   } = MetaService();
+
   const queryClient = useQueryClient();
-  const { addProspect, editProspect } = ProspectsService();
+
+  const { addProspect, editProspect, viewProspect } = ProspectsService();
+
+  const { data: prospectData, isPending: isFetchingProspect } = useQuery({
+    ...viewProspect(prospectId!),
+    enabled: isEdit && !!prospectId,
+  });
 
   const { mutateAsync, isPending } = useMutation(addProspect());
+
   const { mutateAsync: editMutateAsync, isPending: isEditPending } =
     useMutation(editProspect());
 
@@ -71,14 +79,17 @@ const ProspectForm = ({
     ...getLeadSources(),
     enabled: visible,
   });
+
   const { data: leadStatusesData } = useQuery({
     ...getLeadStatuses(),
     enabled: visible,
   });
+
   const { data: membershipCategoriesData } = useQuery({
     ...getMembershipCategories(),
     enabled: visible,
   });
+
   const { data: activityTypesData } = useQuery({
     ...getActivityTypes(),
     enabled: visible,
@@ -103,9 +114,9 @@ const ProspectForm = ({
   );
 
   const defaultValues = useMemo(() => {
-    if (!prospectData) return {};
+    if (!isEdit || !prospectData?.prospect) return {};
 
-    const { activityDetails, ...prospect } = prospectData;
+    const { activityDetails, ...prospect } = prospectData.prospect;
 
     return {
       activityDetails: activityDetails?.[0] || {},
@@ -118,14 +129,18 @@ const ProspectForm = ({
         ),
         leadSourceId: findValueByLabel(leadSourceOptions, prospect.leadSource),
         leadStatusId: findValueByLabel(leadStatusOptions, prospect.leadStatus),
-        followUpDate: formatDate(
+        followUpDate: convertDateToDisplayFormat(
           prospect.followUpDate,
-          DateFormats.DD_MMM__YYYY,
+          DateFormats.DD_MMM_YYYY,
         ),
-        inquiryDate: formatDate(prospect.inquiryDate, DateFormats.DD_MMM__YYYY),
+        inquiryDate: convertDateToDisplayFormat(
+          prospect.inquiryDate,
+          DateFormats.DD_MMM_YYYY,
+        ),
       },
     };
   }, [
+    isEdit,
     prospectData,
     membershipCategoryOptions,
     leadSourceOptions,
@@ -139,25 +154,6 @@ const ProspectForm = ({
 
   const { setValue, watch, reset } = methods;
   const activityDateTime = watch(FIELD_NAMES.ACTIVITY_DATE_TIME);
-
-  // Reset form with prospect data when editing
-  useEffect(() => {
-    if (isEdit && Object.keys(defaultValues).length > 0) {
-      reset(defaultValues);
-    }
-  }, [isEdit, defaultValues, reset]);
-
-  const handleActivityTypeChange = (value: string) => {
-    setValue(FIELD_NAMES.ACTIVITY_TYPE, value);
-
-    const description = methods.getValues(FIELD_NAMES.ACTIVITY_DESCRIPTION);
-
-    if (value || description) {
-      setValue(FIELD_NAMES.ACTIVITY_DATE_TIME, new Date().toISOString());
-    } else {
-      setValue(FIELD_NAMES.ACTIVITY_DATE_TIME, "");
-    }
-  };
 
   const handleActivityDescriptionChange = (value: string) => {
     setValue(FIELD_NAMES.ACTIVITY_DESCRIPTION, value);
@@ -190,12 +186,18 @@ const ProspectForm = ({
       ...values,
       prospect: {
         ...values.prospect,
-        id: prospectData?.id,
+        id: prospectData?.prospect?.id,
         contactNumber: values.prospect?.contactNumber?.trim()
           ? getDigitsOnly(values.prospect.contactNumber)
           : undefined,
-        followUpDate: convertDateToApiFormat(values.prospect?.followUpDate),
-        inquiryDate: convertDateToApiFormat(values.prospect?.inquiryDate),
+        followUpDate: convertDateToApiFormat(
+          values.prospect?.followUpDate,
+          DateFormats.DD_MMM_YYYY,
+        ),
+        inquiryDate: convertDateToApiFormat(
+          values.prospect?.inquiryDate,
+          DateFormats.DD_MMM_YYYY,
+        ),
       },
       activityDetails:
         isEdit || !hasActivityDetails ? undefined : values.activityDetails,
@@ -208,6 +210,24 @@ const ProspectForm = ({
         handleFormSuccess();
       },
     });
+  };
+
+  useEffect(() => {
+    if (isEdit && Object.keys(defaultValues).length > 0) {
+      reset(defaultValues);
+    }
+  }, [isEdit, defaultValues, reset]);
+
+  const handleActivityTypeChange = (value: string) => {
+    setValue(FIELD_NAMES.ACTIVITY_TYPE, value);
+
+    const description = methods.getValues(FIELD_NAMES.ACTIVITY_DESCRIPTION);
+
+    if (value || description) {
+      setValue(FIELD_NAMES.ACTIVITY_DATE_TIME, new Date().toISOString());
+    } else {
+      setValue(FIELD_NAMES.ACTIVITY_DATE_TIME, "");
+    }
   };
 
   return (
@@ -231,9 +251,14 @@ const ProspectForm = ({
         },
       }}
     >
-      {isLoading ? (
-        <Loader />
-      ) : (
+      <ConditionalRender
+        isPending={isFetchingProspect && isEdit}
+        isSuccess={!isFetchingProspect || !isEdit}
+        useGridSkeleton
+        skeletonRows={14}
+        skeletonCols={2}
+        skipEmptyState
+      >
         <Form methods={methods} onSubmit={handleSubmit}>
           <div className={styles.profileContainer}>
             <ProfilePictureInput
@@ -274,7 +299,7 @@ const ProspectForm = ({
                 placeholder={PLACEHOLDERS.FOLLOW_UP_DATE}
                 label={LABELS.FOLLOW_UP_DATE}
                 name={FIELD_NAMES.FOLLOW_UP_DATE}
-                format={DateFormats.DD_MMM__YYYY}
+                format={DateFormats.DD_MMM_YYYY}
               />
             </Col>
             <Col span={12}>
@@ -308,7 +333,7 @@ const ProspectForm = ({
                 label={LABELS.INQUIRY_DATE}
                 name={FIELD_NAMES.INQUIRY_DATE}
                 disabledDate={disableFutureAndToday}
-                format={DateFormats.DD_MMM__YYYY}
+                format={DateFormats.DD_MMM_YYYY}
               />
             </Col>
             <Col span={12}>
@@ -416,7 +441,7 @@ const ProspectForm = ({
             </Button>
           </div>
         </Form>
-      )}
+      </ConditionalRender>
     </Modal>
   );
 };
