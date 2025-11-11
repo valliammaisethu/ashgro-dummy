@@ -20,11 +20,12 @@ import { RoleNames } from "src/enums/roleNames.enum";
 import Clubs from "src/views/Clubs";
 import SettingsWrapper from "src/views/Settings";
 import DashboardWrapper from "src/views/Dashboard";
+import Calender from "src/views/Calender";
 
 const AppRouter = () => {
   const children: RouterProps[] = [
     { path: AppRoutes.PROSPECTS_LISTING, component: <ProspectsListing /> },
-    // { path: AppRoutes.CALENDAR, component: <Calendar /> },
+    { path: AppRoutes.CALENDAR, component: <Calender /> },
     { path: AppRoutes.MEMBERS, component: <Members /> },
     { path: AppRoutes.CLUB_STAFF, component: <StaffMembersListing /> },
     { path: AppRoutes.INDIVIDUAL_PROSPECT, component: <IndividualProspect /> },

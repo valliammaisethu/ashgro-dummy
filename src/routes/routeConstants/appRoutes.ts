@@ -20,6 +20,8 @@ export const NavigationRoutes = {
 
   STAFF_MEMBERS: "/home/staff-members",
   STAFF_MEMBER_DETAILS: "/home/staff-member/:id",
+
+  CALENDER: "/home/calender",
 };
 
 export const AppRoutes = {
@@ -44,10 +46,11 @@ export const AppRoutes = {
 
   STAFF_MEMBERS: "/home/members",
 
-  CLUBS: "/home/clubs",
   STAFF_MEMBER_DETAILS: "/home/staff-member/:id",
 
   CLUB_STAFF: "/home/club-staff",
 
   SETTINGS: "/home/settings",
+
+  CLUBS: "/home/clubs",
 };
