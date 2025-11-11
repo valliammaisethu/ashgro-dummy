@@ -1,6 +1,7 @@
 import React from "react";
 import {
   IconCalendarSelectedDate,
+  IconClub,
   IconCrown,
   IconEmployeeBadge,
   IconMasonryAlt,
@@ -88,6 +89,11 @@ export const topBarItems = [
     title: TopBarItems.CLUB_STAFF,
     path: AppRoutes.CLUB_STAFF,
     icon: <IconEmployeeBadge size={20} />,
+  },
+  {
+    title: TopBarItems.CLUBS,
+    path: AppRoutes.CLUBS,
+    icon: <IconClub size={20} />,
   },
   {
     title: TopBarItems.SETTINGS,
