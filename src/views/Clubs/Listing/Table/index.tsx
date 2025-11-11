@@ -1,4 +1,5 @@
 import React from "react";
+
 import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
 import {
   clubHeaderColumnGrid,
@@ -7,13 +8,14 @@ import {
   mockClubs,
 } from "../../constants";
 
-import styles from "../../clubs.module.scss";
 import Profile from "src/shared/components/atoms/Table/Profile";
 import Badge from "src/shared/components/atoms/Badge";
 import { Colors } from "src/enums/colors.enum";
 import Switch from "src/shared/components/Switch";
 import Actions from "src/shared/components/atoms/Table/Actions";
 import { ClubListingTableProps } from "src/shared/types/clubs.type";
+
+import styles from "../../clubs.module.scss";
 
 const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
   return (
