@@ -20,7 +20,7 @@ interface DatePickerFieldProps extends Omit<DatePickerProps, "name" | "value"> {
 const DatePicker: FC<DatePickerFieldProps> = ({
   name,
   label,
-  format = DateFormats.DD_MMM__YYYY,
+  format = DateFormats.DD_MMM_YYYY,
   placeholder,
   required = false,
   ...rest

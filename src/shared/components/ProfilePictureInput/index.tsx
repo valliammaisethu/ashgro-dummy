@@ -8,6 +8,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/es/upload";
 
 import logo from "src/assets/images/profilePicture.webp";
+import clubUpload from "src/assets/images/clubUpload.webp";
 import {
   imageAccept,
   imageUploadFailed,
@@ -32,6 +33,7 @@ const ProfilePictureInput = ({
   name,
   label = defaultPlaceholder,
   required = false,
+  isClubUpload = false,
 }: ProfilePictureInputProps) => {
   const { control } = useFormContext();
   const { field } = useController({ name, control });
@@ -132,9 +134,12 @@ const ProfilePictureInput = ({
         {required && <span className={styles.asterisk}>*</span>}
       </div>
       <div
-        className={clsx(styles.imageWrapper, {
+        className={clsx(styles.imageWrapperOuter, {
           [styles.withBorder]: preview,
           [styles.loading]: isLoading || isLoadingPreview,
+          [styles.clubUploadWrapper]: isClubUpload,
+          [styles.clubUploadWrapperBorder]:
+            isClubUpload && (preview || isLoading),
         })}
         onClick={
           !preview && !isLoading && !isLoadingPreview
@@ -142,22 +147,32 @@ const ProfilePictureInput = ({
             : undefined
         }
       >
-        <img src={preview || logo} className={styles.profileImage} />
-        {(isLoading || isLoadingPreview) && (
-          <div className={styles.loaderOverlay}>
-            <Spin
-              indicator={<LoadingOutlined style={{ fontSize: 32 }} spin />}
-            />
-          </div>
-        )}
-        <input
-          ref={fileInputRef}
-          type={INPUT_TYPE.FILE}
-          accept={imageAccept}
-          onChange={handleFileChange}
-          className="d-none"
-          disabled={isLoading || isLoadingPreview}
-        />
+        <div
+          className={clsx(styles.imageWrapperInner, {
+            [styles.withoutBorder]: isClubUpload,
+            [styles.clubUploadBorder]: isClubUpload && (preview || isLoading),
+          })}
+        >
+          <img
+            src={preview || (isClubUpload ? clubUpload : logo)}
+            className={styles.profileImage}
+          />
+          {(isLoading || isLoadingPreview) && (
+            <div className={styles.loaderOverlay}>
+              <Spin
+                indicator={<LoadingOutlined style={{ fontSize: 32 }} spin />}
+              />
+            </div>
+          )}
+          <input
+            ref={fileInputRef}
+            type={INPUT_TYPE.FILE}
+            accept={imageAccept}
+            onChange={handleFileChange}
+            className="d-none"
+            disabled={isLoading || isLoadingPreview}
+          />
+        </div>
       </div>
       <span className={styles.maxSize}>{maxSizeText}</span>
       {preview && !isLoading && !isLoadingPreview && (

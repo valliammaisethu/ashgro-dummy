@@ -27,10 +27,11 @@
   font-size: 1.3rem;
 }
 
-.imageWrapper {
-  position: relative;
+.imageWrapperOuter {
   border-radius: 50%;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: opacity 0.2s;
 
@@ -39,7 +40,8 @@
   }
 
   &.withBorder {
-    border: 3px solid $ashgro-gold;
+    background: $profile-bg-gradient;
+    padding: 0.15rem;
     cursor: default;
 
     &:hover {
@@ -50,6 +52,33 @@
   &.loading {
     cursor: not-allowed;
     pointer-events: none;
+  }
+
+  &.clubUploadWrapper {
+    border-radius: 0;
+  }
+
+  &.clubUploadWrapperBorder {
+    border-radius: 50%;
+  }
+}
+
+.imageWrapperInner {
+  width: 8.8rem;
+  height: 8.8rem;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  &.withoutBorder {
+    border-radius: 0;
+  }
+
+  &.clubUploadBorder {
+    border-radius: 50%;
   }
 }
 

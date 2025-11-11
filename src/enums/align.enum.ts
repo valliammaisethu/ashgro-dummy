@@ -6,3 +6,10 @@ export enum Justify {
   SPACE_AROUND = "space-around",
   SPACE_EVENLY = "space-evenly",
 }
+
+export enum Align {
+  TOP = "top",
+  MIDDLE = "middle",
+  BOTTOM = "bottom",
+  STRETCH = "stretch",
+}

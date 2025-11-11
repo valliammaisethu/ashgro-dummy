@@ -1,0 +1,53 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.chatbot {
+  @include flex-container(space-between, center, row);
+}
+.textArea {
+  textArea {
+    min-height: 8rem;
+  }
+}
+
+.modalFooter {
+  background-color: $modal-footer-bg;
+  min-height: 7.6rem;
+  border-radius: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  justify-content: flex-end;
+  padding: 1.6rem 3.2rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+
+  .okButton {
+    background-color: $ashgro-navy;
+    color: $ashgro-white;
+    border-radius: 3.6rem;
+    padding: 1.2rem 1.6rem;
+    width: 14.4rem;
+    height: 4.4rem;
+    display: flex;
+
+    &:hover {
+      background-color: $ashgro-navy !important;
+      color: $ashgro-white !important;
+    }
+  }
+}
+.addClubModal {
+  :global(.ant-modal) {
+    top: 2rem;
+  }
+}
+
+.sectionTitle {
+  color: $add-icon-bg;
+  @include secondaryRegular;
+  font-size: 1.6rem;
+}
