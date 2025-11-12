@@ -8,7 +8,6 @@ import Modal from "src/shared/components/Modal";
 import InputField from "src/shared/components/InputField";
 import Form from "src/shared/components/Form";
 import SelectField from "src/shared/components/SelectField";
-import Button from "src/shared/components/Button";
 import DatePicker from "src/shared/components/DatePicker";
 import PhoneNumberField from "src/shared/components/PhoneNumberInput";
 import ProfilePictureInput from "src/shared/components/ProfilePictureInput";
@@ -19,8 +18,8 @@ import { Justify } from "src/enums/align.enum";
 import { Colors } from "src/enums/colors.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
-import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
-import { ADD_PROSPECT_CONSTANTS, submitButtonKey } from "./constants";
+import { Buttons } from "src/enums/buttons.enum";
+import { ADD_PROSPECT_CONSTANTS } from "./constants";
 import { MetaService } from "src/services/MetaService/meta.service";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
@@ -152,7 +151,7 @@ const ProspectForm = ({
     defaultValues: isEdit ? defaultValues : {},
   });
 
-  const { setValue, watch, reset } = methods;
+  const { setValue, watch, reset, handleSubmit: handleFormSubmit } = methods;
   const activityDateTime = watch(FIELD_NAMES.ACTIVITY_DATE_TIME);
 
   const handleActivityDescriptionChange = (value: string) => {
@@ -236,11 +235,15 @@ const ProspectForm = ({
       title={isEdit ? EDIT_TITLE : MODAL_TITLE}
       visible={visible}
       width={MODAL_WIDTH}
-      okText={Buttons.ADD_PROSPECT}
+      okText={isEdit ? Buttons.SAVE_CHANGES : Buttons.ADD_PROSPECT}
       closeModal={modalClose}
       destroyOnClose
-      footer={[]}
+      handleOk={handleFormSubmit(handleSubmit)}
       rootClassName={styles.prospectFormModal}
+      okButtonProps={{
+        loading: isEdit ? isEditPending : isPending,
+        className: styles.okButton,
+      }}
       styles={{
         wrapper: {
           top: 0,
@@ -259,7 +262,7 @@ const ProspectForm = ({
         skeletonCols={2}
         skipEmptyState
       >
-        <Form methods={methods} onSubmit={handleSubmit}>
+        <Form methods={methods}>
           <div className={styles.profileContainer}>
             <ProfilePictureInput
               name={FIELD_NAMES.PROFILE_PICTURE}
@@ -428,18 +431,6 @@ const ProspectForm = ({
               </Row>
             </>
           )}
-
-          <div className={styles.modalFooter}>
-            <Button
-              key={submitButtonKey}
-              type={ButtonTypes.DEFAULT}
-              className={styles.okButton}
-              loading={isEdit ? isEditPending : isPending}
-              htmlType={HtmlButtonType.SUBMIT}
-            >
-              {isEdit ? Buttons.SAVE_CHANGES : Buttons.ADD_PROSPECT}
-            </Button>
-          </div>
         </Form>
       </ConditionalRender>
     </Modal>
