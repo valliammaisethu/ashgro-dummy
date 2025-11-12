@@ -142,8 +142,15 @@ export const logoutMessages = {
 export const N_A = "N/A";
 export const empty = " - ";
 export const imageAccept = "image/png, image/jpeg, image/jpg";
-
+export const excelAccept =
+  ".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+export const excelValidTypes = [
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+];
 export const profileMaxSize = 5 * 1024 * 1024;
+
+export const fiveMb = 5 * 1024 * 1024;
 
 export const profileMaxSizeTitle = "The image size should not exceed 5 MB";
 

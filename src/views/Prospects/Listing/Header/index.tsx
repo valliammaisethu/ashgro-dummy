@@ -7,13 +7,15 @@ import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
 
 import styles from "../listing.module.scss";
 import { ProspectListingHeaderProps } from "src/shared/types/prospects.type";
+import { bulkImportProspects } from "../constants";
 
 const Header = ({
   onAddProspect,
   onSearch,
   onFilter,
-  filtersActive,
+  onBulkImport,
   onBulkMail,
+  filtersActive,
   selectedEmails,
 }: ProspectListingHeaderProps) => {
   return (
@@ -28,6 +30,10 @@ const Header = ({
         <Button
           icon={<IconDocumentUpload size={20} />}
           className={styles.filterButton}
+          onClick={onBulkImport}
+          tooltip={{
+            title: bulkImportProspects,
+          }}
         />
         <div>
           <Button
