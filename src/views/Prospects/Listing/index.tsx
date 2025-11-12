@@ -137,7 +137,7 @@ const ProspectsListing = () => {
   const emailRecipients = useMemo(() => {
     if (isAllSelected && emailRecipientsData?.prospects) {
       return emailRecipientsData.prospects.map((prospect) => ({
-        id: prospect.email || "",
+        id: prospect.id || "",
         email: prospect.email || "",
         name: prospect.firstName || "",
       }));

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { CheckboxChangeEvent } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -16,6 +16,7 @@ import {
   SelectedMember,
 } from "../helpers";
 import { MembersService } from "src/services/MembersService/members.service";
+import { EmailService } from "src/services/EmailService/email.service";
 import MembersForm from "../MembersForm";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import Profile from "src/shared/components/atoms/Table/Profile";
@@ -30,15 +31,17 @@ import Actions from "src/shared/components/atoms/Table/Actions";
 import { SettingFormModalModel } from "src/views/Settings/constants";
 import { memberHeaders } from "../MembersForm/constants";
 import Pagination from "src/shared/components/Pagination";
-
-import styles from "./membersListing.module.scss";
 import { fallbackHandler } from "src/shared/utils/commonHelpers";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import DeleteModal from "../DeleteModal";
 import { VisibilityType } from "src/enums/visibilityType.enum";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import TemplateModal from "src/views/Email/TemplateModal";
 import NewEmailModal from "src/views/Email/NewEmailModal";
 import { EmailTemplate } from "src/models/meta.model";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
+
+import styles from "./membersListing.module.scss";
 
 interface ModalState {
   open: boolean;
@@ -47,12 +50,14 @@ interface ModalState {
 }
 
 const Members = () => {
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
   const [queryParams, setQueryParams] = useState<MembersListingParams>(
     new MembersListingParams(),
   );
   const [selectedMembers, setSelectedMembers] = useState<SelectedMember[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
-  const [, setIsAllSelected] = useState(false);
+  const [isAllSelected, setIsAllSelected] = useState(false);
 
   const filtersActive = useMemo(
     () => areFiltersActive(queryParams),
@@ -77,6 +82,7 @@ const Members = () => {
 
   const { getStaffMembersList, updateMemberStatus } = MembersService();
   const { memberShipStatuses } = MemberShipService();
+  const { getMemberEmailRecipients } = EmailService();
 
   const { data: memberShipStatusesOptions = [] } =
     useQuery(memberShipStatuses());
@@ -85,6 +91,11 @@ const Members = () => {
   const { data, isPending, isSuccess } = useQuery(
     getStaffMembersList(queryParams),
   );
+
+  const { data: emailRecipientsData } = useQuery({
+    ...getMemberEmailRecipients(queryParams),
+    enabled: isAllSelected,
+  });
 
   const [updatingMemberId, setUpdatingMemberId] = useState<
     string | undefined
@@ -160,6 +171,17 @@ const Members = () => {
     [data?.members, selectedMembers],
   );
 
+  const emailRecipients = useMemo(() => {
+    if (isAllSelected && emailRecipientsData?.prospects) {
+      return emailRecipientsData.prospects.map((member) => ({
+        id: member.id || "",
+        email: member.email || "",
+        name: member.firstName || "",
+      }));
+    }
+    return selectedMembers;
+  }, [isAllSelected, emailRecipientsData, selectedMembers]);
+
   const [modalState, setModalState] = useState<ModalState>({
     open: false,
     mode: null,
@@ -192,6 +214,12 @@ const Members = () => {
     setIsAllSelected(false);
     toggleNewEmailModal();
   }, [toggleNewEmailModal]);
+
+  useEffect(() => {
+    if (clubId && queryParams.clubId !== clubId) {
+      setQueryParams((prev) => ({ ...prev, clubId }));
+    }
+  }, [clubId, queryParams.clubId]);
 
   return (
     <div>
@@ -322,7 +350,7 @@ const Members = () => {
       <NewEmailModal
         isOpen={newEmailModalVisible}
         onClose={handleNewEmailModalClose}
-        selectedEmails={selectedMembers}
+        selectedEmails={emailRecipients}
         selectedTemplate={selectedTemplate}
       />
     </div>
