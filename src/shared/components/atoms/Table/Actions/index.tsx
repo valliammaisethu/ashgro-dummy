@@ -1,6 +1,6 @@
 import React from "react";
 import { Select } from "antd";
-import { IconEdit, IconDelete } from "obra-icons-react";
+import { IconEdit, IconDelete, IconChevronDown } from "obra-icons-react";
 import clsx from "clsx";
 
 import { Colors } from "src/enums/colors.enum";
@@ -8,7 +8,6 @@ import { stopPropagation } from "src/shared/utils/eventUtils";
 import { hoverActionBtnClass } from "./constants";
 
 import styles from "./actions.module.scss";
-import { empty } from "src/constants/sharedComponents";
 import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
 
 interface Option {
@@ -37,6 +36,7 @@ const Actions: React.FC<ActionsProps> = ({
   showSelect = true,
   selectPlaceholder = "Select an option",
   selectLoading = false,
+  selectWidth = 200,
 }) => {
   const handleSelectChange = (value: string) => {
     onSelectChange?.(value);
@@ -54,14 +54,16 @@ const Actions: React.FC<ActionsProps> = ({
 
   return (
     <div className={styles.actionContainer}>
-      {showSelect && selectedValue ? (
+      {showSelect && (
         <div onClick={stopPropagation} className={styles.statusCol}>
           <Select
             value={selectedValue}
             placeholder={selectPlaceholder}
             className={styles.statusSelect}
+            style={{ width: selectWidth }}
             onChange={handleSelectChange}
             loading={selectLoading}
+            suffixIcon={<IconChevronDown size={20} />}
           >
             {options?.map(({ value, label = "" }) => (
               <Select.Option key={value} value={value}>
@@ -70,8 +72,6 @@ const Actions: React.FC<ActionsProps> = ({
             ))}
           </Select>
         </div>
-      ) : (
-        <div className={styles.sourceColValue}>{empty}</div>
       )}
       <div className={clsx(styles.actions, hoverActionBtnClass)}>
         {onEditClick && (

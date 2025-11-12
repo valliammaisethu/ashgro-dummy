@@ -21,6 +21,7 @@ export enum Buttons {
   SEND_EMAIL = "Send Email",
   UPLOAD_FILES = "Upload file(s)",
   ADD_TEMPLATE = "Add Template",
+  ADD_CLUB = "Add Club",
 }
 
 export enum HtmlButtonType {

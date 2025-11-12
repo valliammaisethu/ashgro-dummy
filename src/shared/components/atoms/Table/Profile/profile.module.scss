@@ -13,7 +13,6 @@
     gap: 1rem;
     .name {
       font-size: 1.8rem;
-      font-weight: 600;
       @include secondaryBold;
     }
   }
@@ -33,6 +32,12 @@
     font-size: 1.4rem;
     font-family: $font-secondary;
     width: 22rem;
+  }
+  .address {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    opacity: 60%;
+    @include secondaryRegular;
   }
   .contactNumber {
     opacity: 0.6;

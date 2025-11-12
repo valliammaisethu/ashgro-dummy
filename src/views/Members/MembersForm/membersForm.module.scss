@@ -8,38 +8,25 @@
   padding-bottom: 1.6rem;
 }
 
-.modalFooter {
-  background-color: $modal-footer-bg;
-  min-height: 7.6rem;
-  border-radius: 1.6rem;
-  @include flex-container(flex-end, center);
-  gap: 2rem;
-
-  padding: 1.6rem 3.2rem;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  z-index: 100;
-
-  .okButton {
-    background-color: $ashgro-navy;
-    color: $ashgro-white;
-    border-radius: 3.6rem;
-    padding: 1.2rem 1.6rem;
-    width: 14.4rem;
-    height: 4.4rem;
-  }
+.okButton {
+  @include modalOkButton;
 }
 
 .membersForm {
   :global(.ant-modal-body) {
-    height: 50rem;
+    height: 58rem;
     overflow-y: auto;
-    padding-bottom: 9.2rem;
   }
   :global(.ant-modal) {
     top: 2rem;
+  }
+
+  :global(.ant-modal-footer) {
+    border-radius: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-content: flex-end;
   }
 }
 
