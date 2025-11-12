@@ -230,6 +230,8 @@ export interface ModalProps extends AntdModalProps {
   onCancel?: () => void;
   okButtonHtmlType?: HtmlButtonType;
   okButtonType?: ButtonTypes;
+  renderHeader?: boolean;
+  closeIcon?: ReactNode;
 }
 
 export interface ProfilePictureInputProps {
