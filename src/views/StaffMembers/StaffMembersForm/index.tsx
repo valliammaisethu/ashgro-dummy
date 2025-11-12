@@ -1,36 +1,36 @@
 import React, { useEffect, useMemo } from "react";
 import { Col, Divider, Row } from "antd";
 import { FieldValues } from "react-hook-form";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { defaultModalWidth } from "src/constants/sharedComponents";
-import Form from "src/shared/components/Form";
-import Modal from "src/shared/components/Modal";
-import ProfilePictureInput from "src/shared/components/ProfilePictureInput";
-import useForm from "src/shared/components/UseForm";
-import { FORM_CONSTANTS } from "../constants";
-import { Justify } from "src/enums/align.enum";
-import InputField from "src/shared/components/InputField";
-import SelectField from "src/shared/components/SelectField";
-import { INPUT_TYPE } from "src/enums/inputType";
-import PhoneNumberField from "src/shared/components/PhoneNumberInput";
 import DatePicker from "src/shared/components/DatePicker";
+import Form from "src/shared/components/Form";
+import InputField from "src/shared/components/InputField";
+import Loader from "src/shared/components/Loader";
+import Modal from "src/shared/components/Modal";
+import PhoneNumberField from "src/shared/components/PhoneNumberInput";
+import ProfilePictureInput from "src/shared/components/ProfilePictureInput";
+import SelectField from "src/shared/components/SelectField";
+import TextArea from "src/shared/components/TextArea";
+import useForm from "src/shared/components/UseForm";
 import {
   disableFutureAndToday,
   convertDateToApiFormat,
   convertDateToDisplayFormat,
 } from "src/shared/utils/dateUtils";
-import { DateFormats } from "src/enums/dateFormats.enum";
-import TextArea from "src/shared/components/TextArea";
+import { findValueByLabel } from "src/shared/utils/commonHelpers";
+import { getDigitsOnly } from "src/shared/utils/parser";
+import { StaffMemberDetails } from "src/models/staffMember.model";
+import { FORM_CONSTANTS } from "../constants";
 import { validationSchema } from "./validationSchema";
 import { StaffDepartmentService } from "src/services/SettingsService/staffDepartment.service";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { StaffMembersService } from "src/services/StaffMembersService/staffMembers.service";
-import { findValueByLabel } from "src/shared/utils/commonHelpers";
-import { StaffMemberDetails } from "src/models/staffMember.model";
-import { getDigitsOnly } from "src/shared/utils/parser";
+import { defaultModalWidth } from "src/constants/sharedComponents";
+import { Justify } from "src/enums/align.enum";
+import { INPUT_TYPE } from "src/enums/inputType";
+import { DateFormats } from "src/enums/dateFormats.enum";
 
 import styles from "./staffMembersForm.module.scss";
-import Loader from "src/shared/components/Loader";
 
 interface MembersFormProps {
   isOpen?: boolean;
@@ -74,9 +74,9 @@ const StaffMembersForm = ({
     const payload = {
       ...values,
       attachmentId: values?.attachmentId || undefined,
-      [FIELD_NAMES.PHONE_NUMBER]: values[FIELD_NAMES.PHONE_NUMBER]
-        ? getDigitsOnly(values[FIELD_NAMES.PHONE_NUMBER])
-        : values[FIELD_NAMES.PHONE_NUMBER],
+      [FIELD_NAMES.PHONE_NUMBER]: getDigitsOnly(
+        values[FIELD_NAMES.PHONE_NUMBER],
+      ),
       [FIELD_NAMES.BIRTH_DATE]: convertDateToApiFormat(
         values[FIELD_NAMES.BIRTH_DATE],
       ),
@@ -123,13 +123,14 @@ const StaffMembersForm = ({
         cancelButtonProps={{ className: "d-none" }}
         title={id ? EDIT_TITLE : ADD_TITLE}
         visible={isOpen}
-        width={defaultModalWidth}
         okText={id ? EDIT_BTN_TXT : ADD_BTN_TXT}
+        width={defaultModalWidth}
         closeModal={handleFormVisibility}
         handleOk={handleSubmit(handleFormSubmit)}
         rootClassName={styles.staffMembersModal}
         okButtonProps={{
           loading: id ? isEditPending : isAddPending,
+          className: styles.okButton,
         }}
       >
         {!!id && isFetching ? (
@@ -221,6 +222,7 @@ const StaffMembersForm = ({
                   placeholder={PLACEHOLDERS.RESIDENTIAL_ADDRESS}
                   name={FIELD_NAMES.RESIDENTIAL_ADDRESS}
                   label={LABELS.RESIDENTIAL_ADDRESS}
+                  className={styles.addressBox}
                 />
               </Col>
             </Row>
