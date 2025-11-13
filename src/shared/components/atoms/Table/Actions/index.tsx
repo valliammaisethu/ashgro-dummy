@@ -79,6 +79,7 @@ const Actions: React.FC<ActionsProps> = ({
             onClick={handleEditClick}
             size={20}
             color={Colors.MODAL_CLOSE_ICON}
+            className={styles.icon}
           />
         )}
         {onDeleteClick && (
@@ -86,6 +87,7 @@ const Actions: React.FC<ActionsProps> = ({
             onClick={handleDeleteClick}
             size={20}
             color={Colors.MODAL_CLOSE_ICON}
+            className={styles.icon}
           />
         )}
       </div>

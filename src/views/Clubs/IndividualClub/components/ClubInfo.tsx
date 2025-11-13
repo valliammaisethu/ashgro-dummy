@@ -2,12 +2,12 @@ import React from "react";
 import { IconCall, IconEmail, IconLocationMarker } from "obra-icons-react";
 import { useQuery } from "@tanstack/react-query";
 
-import IconText from "../atoms/IconText";
 import { AttachmentService } from "src/services/AttachmentService/attachment.service";
 import { formatDate } from "src/shared/utils/dateUtils";
 import { formatAndSetPhoneNumber } from "src/shared/utils/phoneNumberUtils";
 import { getPhoneNumber } from "src/views/Prospects/IndividualProspect/utils";
 import { ClubInfoProps } from "src/shared/types/clubs.type";
+import IconText from "src/shared/components/atoms/IconText";
 import { CLUB_LABELS } from "../constants";
 import { Colors } from "src/enums/colors.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
@@ -28,10 +28,9 @@ const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
 
   const { getAttachmentPreview } = AttachmentService();
 
-  const { data: attachmentPreview } = useQuery({
-    ...getAttachmentPreview(attachmentId),
-    enabled: !!attachmentId,
-  });
+  const { data: attachmentPreview } = useQuery(
+    getAttachmentPreview(attachmentId),
+  );
 
   return (
     <div className={styles.top}>

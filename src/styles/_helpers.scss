@@ -187,10 +187,11 @@
   gap: $gap;
 }
 
-@mixin flex-flow($direction: row, $wrap: wrap, $align-items: normal) {
+@mixin flex-flow($direction: row, $wrap: wrap, $align-items: normal, $gap: 0) {
   display: flex;
   flex-flow: $direction $wrap;
   align-items: $align-items;
+  gap: $gap;
 }
 
 @mixin primaryRegular {
@@ -244,4 +245,34 @@
   border: 1px solid;
   border-image-slice: 1;
   border-image-source: $color;
+}
+
+@mixin modalFooter {
+  background-color: $modal-footer-bg;
+  min-height: 7.6rem;
+  border-radius: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  justify-content: flex-end;
+  padding: 1.6rem 3.2rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+@mixin modalOkButton {
+  background-color: $ashgro-navy;
+  color: $ashgro-white;
+  border-radius: 3.6rem;
+  padding: 1.2rem 1.6rem;
+  width: 14.4rem;
+  height: 4.4rem;
+
+  &:hover {
+    background-color: $ashgro-navy !important;
+    color: $ashgro-white !important;
+  }
 }

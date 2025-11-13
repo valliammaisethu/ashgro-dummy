@@ -2,6 +2,9 @@ import { alias, list, object, primitive, serializable } from "serializr";
 
 export class EmailModel {
   @serializable
+  id?: string;
+
+  @serializable
   email?: string;
 
   @serializable

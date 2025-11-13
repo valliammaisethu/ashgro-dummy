@@ -543,7 +543,6 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   padding: 2.4rem;
   overflow-y: auto;
   overflow-x: hidden;
-  margin-bottom: 6rem;
 
   /* Custom scrollbar styling */
   &::-webkit-scrollbar {
@@ -577,7 +576,7 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   flex-shrink: 0;
   position: sticky;
   bottom: 0;
-  background-color: $ashgro-white;
+  background-color: $modal-footer-bg;
   z-index: 10;
 }
 .ant-picker-outlined {

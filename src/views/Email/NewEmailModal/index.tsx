@@ -26,7 +26,6 @@ import { generateSelectOptions } from "../utils";
 import { addEmailValidation } from "./validation";
 import { EmailService } from "src/services/EmailService/email.service";
 import { EmailTemplateService } from "src/services/SettingsService/emailTemplate.service";
-import { SelectedEmailModel } from "src/models/email.model";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { ValidateEmail } from "src/shared/utils/helpers";
 
@@ -80,17 +79,17 @@ const NewEmailModal = (props: NewEmailModalProps) => {
   };
 
   const handleSubmit = async (values: FieldValues) => {
-    const recipients =
-      selectedEmails && selectedEmails.length > 0
-        ? selectedEmails
-        : values.recipients || [];
+    const toEmails = values.to || [];
 
-    const formattedRecipients = recipients.map(
-      (recipient: SelectedEmailModel) => ({
-        email: recipient.email,
-        firstName: recipient.name,
-      }),
-    );
+    const formattedRecipients = toEmails.map((email: string) => {
+      const matchedRecipient = selectedEmails.find((e) => e.email === email);
+
+      return {
+        email,
+        firstName: matchedRecipient?.name,
+        id: matchedRecipient?.id || undefined,
+      };
+    });
 
     await mutateAsync(
       {

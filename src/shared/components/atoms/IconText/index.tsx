@@ -1,12 +1,8 @@
 import React from "react";
 
-import styles from "../../individualClub.module.scss";
+import { IconTextProps } from "src/shared/types/clubs.type";
 
-interface IconTextProps {
-  icon: React.ReactNode;
-  text?: string;
-  className?: string;
-}
+import styles from "./iconText.module.scss";
 
 const IconText: React.FC<IconTextProps> = ({ icon, text = "", className }) => {
   return (

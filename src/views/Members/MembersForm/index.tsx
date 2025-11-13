@@ -196,22 +196,14 @@ const MembersForm = ({
         cancelButtonProps={{ className: "d-none" }}
         title={id ? EDIT_TITLE : ADD_TITLE}
         visible={isOpen}
-        width={defaultModalWidth}
         okText={id ? EDIT_BTN_TXT : ADD_BTN_TXT}
+        width={defaultModalWidth}
         closeModal={handleFormVisibility}
         handleOk={handleSubmit(handleFormSubmit)}
         rootClassName={styles.membersForm}
         okButtonProps={{
           loading: id ? isEditPending : isAddPending,
-        }}
-        styles={{
-          body: {
-            height: 730,
-          },
-          content: {
-            height: 730,
-            width: 710,
-          },
+          className: styles.okButton,
         }}
       >
         {!!id && isFetching ? (

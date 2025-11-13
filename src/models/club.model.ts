@@ -1,10 +1,8 @@
 import { serializable, object } from "serializr";
 import { ResponseModel } from "./response.model";
+import { ProfileDetails } from "./profile.model";
 
-export class ClubFormData {
-  @serializable
-  profilePicture?: string;
-
+export class ClubFormData extends ProfileDetails {
   @serializable
   chatbotSwitch?: boolean;
 
@@ -25,21 +23,6 @@ export class ClubFormData {
 
   @serializable
   clubAddress?: string;
-
-  @serializable
-  firstName?: string;
-
-  @serializable
-  lastName?: string;
-
-  @serializable
-  email?: string;
-
-  @serializable
-  phoneNumber?: string;
-
-  @serializable
-  countryCode?: string;
 
   @serializable
   description?: string;

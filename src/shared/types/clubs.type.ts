@@ -25,3 +25,16 @@ export interface ContactDetailsProps {
 export interface NotesSectionProps {
   notes?: ClubNotes;
 }
+export interface ClubFormState {
+  visible: boolean;
+  clubData: ClubFormData | null;
+}
+export interface ClubDetailsHeaderProps {
+  onChatbotQuestions?: () => void;
+}
+
+export interface IconTextProps {
+  icon: React.ReactNode;
+  text?: string;
+  className?: string;
+}

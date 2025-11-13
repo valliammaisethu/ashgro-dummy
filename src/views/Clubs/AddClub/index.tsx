@@ -12,12 +12,11 @@ import InputField from "src/shared/components/InputField";
 import DatePicker from "src/shared/components/DatePicker";
 import PhoneNumberField from "src/shared/components/PhoneNumberInput";
 import TextArea from "src/shared/components/TextArea";
-import Button from "src/shared/components/Button";
-import { Buttons, HtmlButtonType } from "src/enums/buttons.enum";
 
 import { fields, labels, placeholders, titles } from "./constants";
 import { Align } from "src/enums/align.enum";
 import { convertDateToDisplayFormat } from "src/shared/utils/dateUtils";
+import { Buttons } from "src/enums/buttons.enum";
 
 const AddClub = (props: AddClubModalProps) => {
   const { onClose, open, clubData } = props;
@@ -35,9 +34,13 @@ const AddClub = (props: AddClubModalProps) => {
     <Modal
       rootClassName={styles.addClubModal}
       title={clubData ? titles.editTitle : titles.modalTitle}
-      footer={[]}
       visible={open}
+      cancelButtonProps={{
+        className: "d-none",
+      }}
       onCancel={onClose}
+      okText={Buttons.ADD_CLUB}
+      onOk={handleSubmit}
       styles={{
         body: { height: 650 },
         content: { height: 730 },
@@ -104,7 +107,7 @@ const AddClub = (props: AddClubModalProps) => {
               label={labels.clubAddress}
               name={fields.clubAddress}
               placeholder={placeholders.clubAddress}
-              className={styles.textArea}
+              rootClassName={styles.clubAddressInput}
             />
           </Col>
 
@@ -159,16 +162,10 @@ const AddClub = (props: AddClubModalProps) => {
               label={labels.notesDescription}
               name={fields.notesDescription}
               placeholder={placeholders.notesDescription}
-              className={styles.textArea}
+              rootClassName={styles.notesInput}
             />
           </Col>
         </Row>
-
-        <div className={styles.modalFooter}>
-          <Button htmlType={HtmlButtonType.SUBMIT} className={styles.okButton}>
-            {Buttons.ADD_CLUB}
-          </Button>
-        </div>
       </Form>
     </Modal>
   );
