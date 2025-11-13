@@ -54,4 +54,5 @@ export const ApiRoutes = {
   STAFF_MEMBERS: "/staffs",
 
   GET_CLUBS: "/clubs",
+  GET_CLUB_PROFILE: "/clubs/:id",
 };

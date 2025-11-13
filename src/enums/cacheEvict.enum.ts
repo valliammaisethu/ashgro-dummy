@@ -54,4 +54,5 @@ export enum QueryKeys {
   GET_STAFF_MEMBER_LIST = "getStaffMemberList",
 
   GET_CLUBS = "getClubs",
+  GET_CLUB_PROFILE = "getClubProfile",
 }

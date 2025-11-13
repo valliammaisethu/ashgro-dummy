@@ -4,8 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 
 import { AttachmentService } from "src/services/AttachmentService/attachment.service";
 import { formatDate } from "src/shared/utils/dateUtils";
-import { formatAndSetPhoneNumber } from "src/shared/utils/phoneNumberUtils";
-import { getPhoneNumber } from "src/views/Prospects/IndividualProspect/utils";
 import { ClubInfoProps } from "src/shared/types/clubs.type";
 import IconText from "src/shared/components/atoms/IconText";
 import { CLUB_LABELS } from "../constants";
@@ -17,13 +15,12 @@ import styles from "../individualClub.module.scss";
 const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
   const {
     clubName,
-    onBoardedDate,
-    email,
+    numberOfMembers,
+    clubAddress,
     contactNumber,
-    countryCode,
-    address,
-    attachmentId = "",
-    memberCount = 0,
+    onboardingDate,
+    email,
+    attachmentId,
   } = data || {};
 
   const { getAttachmentPreview } = AttachmentService();
@@ -45,19 +42,19 @@ const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
         <div className={styles.nameContainer}>
           <div className={styles.name}>{clubName}</div>
           <div className={styles.memberBadge}>
-            {memberCount} {CLUB_LABELS.members}
+            {numberOfMembers} {CLUB_LABELS.members}
           </div>
         </div>
         <div className={styles.details}>
           <span className={styles.dateTitle}>{CLUB_LABELS.onBoardedDate}</span>
           <span className={styles.date}>
-            {formatDate(onBoardedDate, DateFormats.DD_MMM__YYYY)}
+            {formatDate(onboardingDate, DateFormats.DD_MMM__YYYY)}
           </span>
         </div>
         <div className={styles.contactInfo}>
           <IconText
             icon={<IconLocationMarker color={Colors.ASHGRO_GOLD} size={20} />}
-            text={address}
+            text={clubAddress}
             className={styles.address}
           />
         </div>
@@ -70,9 +67,7 @@ const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
           {contactNumber && (
             <IconText
               icon={<IconCall color={Colors.ASHGRO_GOLD} size={20} />}
-              text={formatAndSetPhoneNumber(
-                getPhoneNumber(countryCode, contactNumber),
-              )}
+              text={contactNumber}
               className={styles.phone}
             />
           )}
