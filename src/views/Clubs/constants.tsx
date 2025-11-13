@@ -5,12 +5,14 @@ export const clubListingHeaders = [
   "Club Status",
 ];
 
+export const membersText = (count: number) => `${count} Members`;
+
 export const clubStatuses = [
   { value: "active", label: "Active" },
   { value: "inactive", label: "Inactive" },
 ];
 
-export const clubHeaderColumnGrid = "53% 16% 16% 16%";
+export const clubHeaderColumnGrid = "52% 15% 15% 20%";
 
 export const mockClubs = [
   {

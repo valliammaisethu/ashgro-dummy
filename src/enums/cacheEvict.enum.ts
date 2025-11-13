@@ -52,4 +52,6 @@ export enum QueryKeys {
   GET_EMAIL_TEMPLATE_DETAIL = "getEmailTemplateDetail",
   GET_MEMBERS = "getMembers",
   GET_STAFF_MEMBER_LIST = "getStaffMemberList",
+
+  GET_CLUBS = "getClubs",
 }
