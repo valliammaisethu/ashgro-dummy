@@ -8,16 +8,16 @@ import Button from "src/shared/components/Button";
 import styles from "./pagination.module.scss";
 
 export interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
+  currentPage?: number;
+  totalPages?: number;
   onPageChange: (newPage: number) => void;
   className?: string;
   hasData?: boolean;
 }
 
 const Pagination: FC<PaginationProps> = ({
-  currentPage,
-  totalPages,
+  currentPage = 1,
+  totalPages = 1,
   onPageChange,
   className,
   hasData = true,

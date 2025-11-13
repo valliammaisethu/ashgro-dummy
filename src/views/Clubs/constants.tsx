@@ -5,12 +5,14 @@ export const clubListingHeaders = [
   "Club Status",
 ];
 
+export const membersText = (count: number) => `${count} Members`;
+
 export const clubStatuses = [
   { value: "active", label: "Active" },
   { value: "inactive", label: "Inactive" },
 ];
 
-export const clubHeaderColumnGrid = "53% 16% 16% 16%";
+export const clubHeaderColumnGrid = "51% 15% 15% 15%";
 
 export const mockClubs = [
   {
@@ -22,7 +24,7 @@ export const mockClubs = [
     clubEmail: "contact@thened.com",
     clubPhoneNumber: "2025551234",
     clubCountryCode: "+1",
-    clubAddress: "734 15th St NW, Washington, DC 20005, United States",
+    clubAddress: "734 15th St NW, Wahington, DC 20005, United States",
     firstName: "John",
     lastName: "Doe",
     email: "john.doe@thened.com",

@@ -1,80 +1,101 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-import Actions from "src/shared/components/atoms/Table/Actions";
-import Badge from "src/shared/components/atoms/Badge";
-import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
-import Profile from "src/shared/components/atoms/Table/Profile";
-import Switch from "src/shared/components/Switch";
-import { ClubListingTableProps } from "src/shared/types/clubs.type";
 import {
   clubHeaderColumnGrid,
   clubListingHeaders,
   clubStatuses,
-  mockClubs,
+  membersText,
 } from "../../constants";
-import { NavigationRoutes } from "src/routes/routeConstants/appRoutes";
+import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
+import Profile from "src/shared/components/atoms/Table/Profile";
+import Badge from "src/shared/components/atoms/Badge";
 import { Colors } from "src/enums/colors.enum";
+import Switch from "src/shared/components/Switch";
+import Actions from "src/shared/components/atoms/Table/Actions";
+import Pagination from "src/shared/components/Pagination";
+import { ClubListingTableProps } from "src/shared/types/clubs.type";
+import { ClubService } from "src/services/ClubService/club.service";
+import { extractNameParts } from "src/shared/utils/parser";
+import useRedirect from "src/shared/hooks/useRedirect";
 
 import styles from "../../clubs.module.scss";
+import ConditionalRender from "src/shared/components/ConditionalRender";
 
 const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
-  const navigate = useNavigate();
+  const { getClubs } = ClubService();
+  const [currentPage, setCurrentPage] = useState(1);
+  const { navigateToInvidualClub } = useRedirect();
+  const {
+    data: clubsData,
+    isPending,
+    isSuccess,
+    isFetching,
+  } = useQuery(getClubs());
 
-  const handleRowClick = (
-    clubId: string | number,
-    e: React.MouseEvent<HTMLDivElement>,
-  ) => {
-    // Don't navigate if clicking on interactive elements
-    const target = e.target as HTMLElement;
-    if (
-      target.closest("button") ||
-      target.closest(".ant-switch") ||
-      target.closest(".ant-select")
-    ) {
-      return;
-    }
-    navigate(NavigationRoutes.INDIVIDUAL_CLUB.replace(":id", String(clubId)));
-  };
+  const handlePageChange = useCallback((newPage: number) => {
+    setCurrentPage(newPage);
+  }, []);
 
-  const handleEditClick = (club: (typeof mockClubs)[0]) => {
-    onEditClub(club);
+  const handleRowClick = (clubId = "", e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    navigateToInvidualClub(clubId);
   };
 
   return (
-    <div className={styles.table}>
+    <div className={styles.tableContainer}>
       <ListHeader
         columnTemplate={clubHeaderColumnGrid}
         headers={clubListingHeaders}
       />
-      {mockClubs.map((club, index) => (
-        <div
-          key={index}
-          className={styles.rowContainer}
-          onClick={(e) => handleRowClick(club.id, e)}
+      <div className={styles.tableBody}>
+        <ConditionalRender
+          isFetching={isFetching}
+          isPending={isPending}
+          isSuccess={isSuccess}
+          records={clubsData?.clubs}
         >
-          <Profile
-            address={club.clubAddress}
-            firstName={club.clubName.split(" ")[0]}
-            lastName={club.clubName.split(" ")[1]}
-          />
+          {clubsData?.clubs?.map((club, index) => (
+            <div
+              onClick={(e) => handleRowClick(club.id, e)}
+              key={index}
+              className={styles.rowContainer}
+            >
+              <Profile
+                address={club.clubAddress}
+                firstName={extractNameParts(club.clubName).firstName}
+                lastName={extractNameParts(club.clubName).lastName}
+              />
 
-          <Badge
-            text="45 Members"
-            color={Colors.DARK_GOLD}
-            backgroundColor={Colors.LIGHT_GOLD}
-            className={styles.badge}
-          />
+              <Badge
+                text={membersText(club.numberOfMembers)}
+                color={Colors.DARK_GOLD}
+                backgroundColor={Colors.LIGHT_GOLD}
+                className={styles.badge}
+              />
 
-          <Switch className={styles.switch} name={`switch-${index}`} />
+              <Switch
+                checked={club.chatbotEnabled}
+                className={styles.switch}
+                name={`switch-${index}`}
+              />
 
-          <Actions
-            options={clubStatuses}
-            onEditClick={() => handleEditClick(club)}
-            selectWidth={160}
-          />
-        </div>
-      ))}
+              <Actions
+                options={clubStatuses}
+                onEditClick={() => onEditClub(club)}
+                selectWidth={140}
+                selectedValue={club.status}
+              />
+            </div>
+          ))}
+        </ConditionalRender>
+      </div>
+      <Pagination
+        currentPage={currentPage ?? clubsData?.pagination?.currentPage}
+        totalPages={clubsData?.pagination?.overallPages}
+        onPageChange={handlePageChange}
+        hasData={!!clubsData?.clubs && clubsData.clubs.length > 0}
+      />
     </div>
   );
 };
