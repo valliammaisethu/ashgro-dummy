@@ -1,12 +1,12 @@
 import React from "react";
 import dayjs from "dayjs";
 import clsx from "clsx";
-import { IconCircleClose, IconClock4Alt, IconUsers } from "obra-icons-react";
+import { IconCircleClose } from "obra-icons-react";
 
 import { formatTimeRange } from "../utils/calendarUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
-import { Colors } from "src/enums/colors.enum";
 import { EventsPopoverProps } from "src/shared/types/calender";
+import MeetingPreview from "./MeetingPreview";
 
 import styles from "../DateCell/dateCell.module.scss";
 
@@ -31,15 +31,11 @@ const EventsPopover: React.FC<EventsPopoverProps> = ({
           <div key={event.id} className={styles.popoverEvent}>
             {!event?.resource?.chatbot ? (
               <>
-                <div className={styles.eventTitle}>
-                  <IconUsers color={Colors.ASHGRO_GOLD} size={17} />
-                  <p>{event.title}</p>
-                </div>
-
-                <div className={clsx(styles.eventTitle, styles.eventTime)}>
-                  <IconClock4Alt color={Colors.ASHGRO_GOLD} size={17} />
-                  <p>{formatTimeRange(event.start, event.end)}</p>
-                </div>
+                <MeetingPreview
+                  event={{ ...event, date }}
+                  onReschedule={() => {}}
+                  isMorePopup
+                />
               </>
             ) : (
               <div className={clsx(styles.eventTitle, styles.chatbotTime)}>
