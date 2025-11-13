@@ -1,29 +1,34 @@
 import React, { useState } from "react";
 import ClubListingHeader from "./Listing/Header";
 import ClubListingTable from "./Listing/Table";
-import useDrawer from "src/shared/hooks/useDrawer";
 import AddClub from "./AddClub";
 import { ClubFormData } from "src/models/club.model";
+import { ClubFormState } from "src/shared/types/clubs.type";
 
-const Clubs = () => {
-  const { visible, toggleVisibility } = useDrawer();
-  const [clubData, setClubData] = useState<ClubFormData | null>(null);
+const Clubs: React.FC = () => {
+  const [formState, setFormState] = useState<ClubFormState>({
+    clubData: null,
+    visible: false,
+  });
 
-  const handleAddClub = () => {
-    setClubData(null);
-    toggleVisibility();
-  };
+  const handleAddClub = () =>
+    setFormState((prev) => ({ ...prev, visible: true, clubData: null }));
 
-  const handleEditClub = (data: ClubFormData) => {
-    setClubData(data);
-    toggleVisibility();
-  };
+  const handleEditClub = (data: ClubFormData) =>
+    setFormState((prev) => ({ ...prev, visible: true, clubData: data }));
+
+  const handleVisibility = () =>
+    setFormState((prev) => ({ ...prev, visible: !prev.visible }));
 
   return (
     <div>
       <ClubListingHeader onAddClub={handleAddClub} />
       <ClubListingTable onEditClub={handleEditClub} />
-      <AddClub onClose={toggleVisibility} open={visible} clubData={clubData} />
+      <AddClub
+        onClose={handleVisibility}
+        open={formState.visible}
+        clubData={formState.clubData}
+      />
     </div>
   );
 };

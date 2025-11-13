@@ -18,13 +18,17 @@ const PhoneNumberField = ({
   ...props
 }: PhoneNumberFieldProps) => {
   const { watch, setValue } = useFormContext<{
-    [key: string]: string;
+    [key: string]: string | undefined;
   }>();
 
   const phoneValue = watch(name);
 
   const formatAndSetPhoneNumber = (input: string) => {
     const raw = getDigitsOnly(input);
+    if (!raw) {
+      setValue(name, undefined);
+      return;
+    }
     const formatted = new AsYouType("US").input(raw);
     setValue(name, formatted, { shouldValidate: true });
   };

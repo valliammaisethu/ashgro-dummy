@@ -26,9 +26,7 @@
 
 .imageWrapperOuter {
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-container(center, center, row, 0);
   cursor: pointer;
   transition: opacity 0.2s;
 
@@ -84,9 +82,7 @@
   right: 0;
   bottom: 0;
   background-color: rgba(247, 244, 237, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-container(center, center);
   z-index: 10;
 }
 
@@ -97,9 +93,7 @@
 }
 
 .actions {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
+  @include flex-container(normal, center, row, 2rem);
 }
 
 .actionButton {
@@ -109,9 +103,7 @@
   border: none;
   background-color: $ashgro-cream;
   color: $ashgro-grey;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-container(center, center, row, 0);
   cursor: pointer;
   transition: all 0.2s;
 

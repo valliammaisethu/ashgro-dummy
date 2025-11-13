@@ -13,3 +13,8 @@ export interface ClubListingHeaderProps {
 export interface ClubListingTableProps {
   onEditClub: (data: ClubFormData) => void;
 }
+
+export interface ClubFormState {
+  visible: boolean;
+  clubData: ClubFormData | null;
+}
