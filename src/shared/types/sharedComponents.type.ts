@@ -236,6 +236,7 @@ export interface ProfilePictureInputProps {
   name: string;
   label?: string;
   required?: boolean;
+  isClubUpload?: boolean;
 }
 
 export interface AvatarWithFallbackProps {

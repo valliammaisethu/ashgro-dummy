@@ -187,10 +187,11 @@
   gap: $gap;
 }
 
-@mixin flex-flow($direction: row, $wrap: wrap, $align-items: normal) {
+@mixin flex-flow($direction: row, $wrap: wrap, $align-items: normal, $gap: 0) {
   display: flex;
   flex-flow: $direction $wrap;
   align-items: $align-items;
+  gap: $gap;
 }
 
 @mixin primaryRegular {

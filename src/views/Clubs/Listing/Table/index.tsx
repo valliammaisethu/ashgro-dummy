@@ -4,6 +4,7 @@ import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
 import {
   clubHeaderColumnGrid,
   clubListingHeaders,
+  clubStatuses,
   mockClubs,
 } from "../../constants";
 
@@ -12,10 +13,11 @@ import Badge from "src/shared/components/atoms/Badge";
 import { Colors } from "src/enums/colors.enum";
 import Switch from "src/shared/components/Switch";
 import Actions from "src/shared/components/atoms/Table/Actions";
+import { ClubListingTableProps } from "src/shared/types/clubs.type";
 
 import styles from "../../clubs.module.scss";
 
-const ClubListingTable = () => {
+const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
   return (
     <div className={styles.table}>
       <ListHeader
@@ -39,7 +41,11 @@ const ClubListingTable = () => {
 
           <Switch className={styles.switch} name={`switch-${index}`} />
 
-          <Actions onEditClick={() => {}} selectWidth={160} />
+          <Actions
+            options={clubStatuses}
+            onEditClick={() => onEditClub(club)}
+            selectWidth={160}
+          />
         </div>
       ))}
     </div>

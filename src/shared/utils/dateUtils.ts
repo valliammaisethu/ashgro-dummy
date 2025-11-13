@@ -26,8 +26,8 @@ export const convertDateToApiFormat = (
 };
 
 export const convertDateToDisplayFormat = (
-  date: string | undefined,
-  format: DateFormats = DateFormats.DD_MMM__YYYY,
+  date = "",
+  format: DateFormats = DateFormats.DD_MMM_YYYY,
 ) => {
   if (!date) return date;
   const parsed = dayjs(date, DateFormats.YYYY_MM_DD, true);

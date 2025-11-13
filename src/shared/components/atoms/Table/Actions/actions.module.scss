@@ -9,6 +9,20 @@
     display: flex;
     gap: 1rem;
     opacity: 0;
+    transition: opacity 0.3s ease;
+
+    .icon {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
   }
 
   &:hover .actions {
