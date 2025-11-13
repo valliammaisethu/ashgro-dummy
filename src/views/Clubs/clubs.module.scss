@@ -50,8 +50,9 @@
   height: 10.4rem;
   @include gradientBorder($club-row-border-bg);
   display: grid;
-  grid-template-columns: 52% 10% 22% 16%;
+  grid-template-columns: 53% 10% 22% 16%;
   align-items: center;
+  cursor: pointer;
 
   &:hover :global(.actions-icons) {
     opacity: 1;

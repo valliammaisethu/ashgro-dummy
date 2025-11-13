@@ -13,21 +13,34 @@ import Badge from "src/shared/components/atoms/Badge";
 import { Colors } from "src/enums/colors.enum";
 import Switch from "src/shared/components/Switch";
 import Actions from "src/shared/components/atoms/Table/Actions";
+import Pagination from "src/shared/components/Pagination";
 import { ClubListingTableProps } from "src/shared/types/clubs.type";
 import { ClubService } from "src/services/ClubService/club.service";
-import Pagination from "src/shared/components/Pagination";
-import styles from "../../clubs.module.scss";
 import { extractNameParts } from "src/shared/utils/parser";
+import useRedirect from "src/shared/hooks/useRedirect";
+
+import styles from "../../clubs.module.scss";
+import ConditionalRender from "src/shared/components/ConditionalRender";
 
 const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
   const { getClubs } = ClubService();
   const [currentPage, setCurrentPage] = useState(1);
-
-  const { data: clubsData } = useQuery(getClubs());
+  const { navigateToInvidualClub } = useRedirect();
+  const {
+    data: clubsData,
+    isPending,
+    isSuccess,
+    isFetching,
+  } = useQuery(getClubs());
 
   const handlePageChange = useCallback((newPage: number) => {
     setCurrentPage(newPage);
   }, []);
+
+  const handleRowClick = (clubId = "", e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    navigateToInvidualClub(clubId);
+  };
 
   return (
     <div className={styles.tableContainer}>
@@ -36,35 +49,46 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
         headers={clubListingHeaders}
       />
       <div className={styles.tableBody}>
-        {clubsData?.clubs?.map((club, index) => (
-          <div key={index} className={styles.rowContainer}>
-            <Profile
-              address={club.clubAddress}
-              firstName={extractNameParts(club.clubName).firstName}
-              lastName={extractNameParts(club.clubName).lastName}
-            />
+        <ConditionalRender
+          isFetching={isFetching}
+          isPending={isPending}
+          isSuccess={isSuccess}
+          records={clubsData?.clubs}
+        >
+          {clubsData?.clubs?.map((club, index) => (
+            <div
+              onClick={(e) => handleRowClick(club.id, e)}
+              key={index}
+              className={styles.rowContainer}
+            >
+              <Profile
+                address={club.clubAddress}
+                firstName={extractNameParts(club.clubName).firstName}
+                lastName={extractNameParts(club.clubName).lastName}
+              />
 
-            <Badge
-              text={membersText(club.numberOfMembers)}
-              color={Colors.DARK_GOLD}
-              backgroundColor={Colors.LIGHT_GOLD}
-              className={styles.badge}
-            />
+              <Badge
+                text={membersText(club.numberOfMembers)}
+                color={Colors.DARK_GOLD}
+                backgroundColor={Colors.LIGHT_GOLD}
+                className={styles.badge}
+              />
 
-            <Switch
-              checked={club.chatbotEnabled}
-              className={styles.switch}
-              name={`switch-${index}`}
-            />
+              <Switch
+                checked={club.chatbotEnabled}
+                className={styles.switch}
+                name={`switch-${index}`}
+              />
 
-            <Actions
-              options={clubStatuses}
-              onEditClick={() => onEditClub(club)}
-              selectWidth={140}
-              selectedValue={club.status}
-            />
-          </div>
-        ))}
+              <Actions
+                options={clubStatuses}
+                onEditClick={() => onEditClub(club)}
+                selectWidth={140}
+                selectedValue={club.status}
+              />
+            </div>
+          ))}
+        </ConditionalRender>
       </div>
       <Pagination
         currentPage={currentPage ?? clubsData?.pagination?.currentPage}
