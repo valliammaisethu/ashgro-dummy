@@ -13,7 +13,7 @@ import {
   importDescription,
   inputPlaceholder,
   maxSizeDescription,
-  modalTitles,
+  importTitle,
 } from "./constants";
 import excelIcon from "src/assets/images/excelIcon.webp";
 import ashgroLogo from "src/assets/images/homeLogo.webp";
@@ -41,7 +41,7 @@ const BulkImportModal = (props: BulkImportModalProps) => {
     <div>
       <Modal
         rootClassName={styles.bulkImportModal}
-        title={modalTitles.prospects}
+        title={importTitle(importMode)}
         onCancel={handleClose}
         visible={visible}
         width={800}

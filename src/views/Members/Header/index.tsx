@@ -7,13 +7,15 @@ import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
 
 import styles from "../members.module.scss";
 import { MembersHeaderProps } from "src/shared/types/members.type";
+import { importMembers } from "../constant";
 
 const Header = ({
   onAddMember,
   onSearch,
   onFilter,
-  filtersActive,
   onBulkMail,
+  onBulkImport,
+  filtersActive,
   selectedEmails,
 }: MembersHeaderProps) => {
   return (
@@ -28,6 +30,10 @@ const Header = ({
         <Button
           icon={<IconDocumentUpload size={20} />}
           className={styles.filterButton}
+          onClick={onBulkImport}
+          tooltip={{
+            title: importMembers,
+          }}
         />
         <div>
           <Button

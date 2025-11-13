@@ -1,11 +1,9 @@
 import { BulkModes } from "src/enums/bulkModes";
 
-export const modalTitles = {
-  prospects: "Import Prospects",
-};
-
 export const importDescription = (type: BulkModes) =>
   `Import ${type} from XLS file`;
+
+export const importTitle = (type: BulkModes) => `Import ${type}`;
 
 export const maxSizeDescription = "Upload a file with maximum size of 5MB";
 
