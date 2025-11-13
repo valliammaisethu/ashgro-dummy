@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 import {
   clubHeaderColumnGrid,
@@ -13,11 +14,13 @@ import Badge from "src/shared/components/atoms/Badge";
 import { Colors } from "src/enums/colors.enum";
 import Switch from "src/shared/components/Switch";
 import Actions from "src/shared/components/atoms/Table/Actions";
+import Pagination from "src/shared/components/Pagination";
 import { ClubListingTableProps } from "src/shared/types/clubs.type";
 import { ClubService } from "src/services/ClubService/club.service";
-import Pagination from "src/shared/components/Pagination";
-import styles from "../../clubs.module.scss";
 import { extractNameParts } from "src/shared/utils/parser";
+import { NavigationRoutes } from "src/routes/routeConstants/appRoutes";
+
+import styles from "../../clubs.module.scss";
 
 const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
   const { getClubs } = ClubService();
@@ -28,6 +31,12 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
   const handlePageChange = useCallback((newPage: number) => {
     setCurrentPage(newPage);
   }, []);
+  const navigate = useNavigate();
+
+  const handleRowClick = (clubId = "", e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    navigate(NavigationRoutes.INDIVIDUAL_CLUB.replace(":id", String(clubId)));
+  };
 
   return (
     <div className={styles.tableContainer}>
@@ -37,7 +46,11 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
       />
       <div className={styles.tableBody}>
         {clubsData?.clubs?.map((club, index) => (
-          <div key={index} className={styles.rowContainer}>
+          <div
+            onClick={(e) => handleRowClick(club.id, e)}
+            key={index}
+            className={styles.rowContainer}
+          >
             <Profile
               address={club.clubAddress}
               firstName={extractNameParts(club.clubName).firstName}

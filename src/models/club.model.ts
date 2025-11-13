@@ -1,4 +1,5 @@
 import { list, object, serializable } from "serializr";
+import { ResponseModel } from "./response.model";
 import { ProfileDetails } from "./profile.model";
 import { Pagination } from "./pagination.model";
 
@@ -26,6 +27,91 @@ export class ClubFormData extends ProfileDetails {
 
   @serializable
   description?: string;
+}
+
+export class PrimaryContact {
+  @serializable
+  name = "";
+
+  @serializable
+  email = "";
+
+  @serializable
+  phoneNumber = "";
+}
+
+export class ClubNotes {
+  @serializable
+  signatureHoles = "";
+
+  @serializable
+  tournamentsEvents = "";
+
+  @serializable
+  specialAmenities = "";
+
+  @serializable
+  memberExperience = "";
+
+  @serializable
+  reputationRecognition = "";
+
+  @serializable
+  hospitalityCorporateFeatures = "";
+}
+
+export class ClubProfile {
+  @serializable
+  id?: string;
+
+  @serializable
+  logoUrl?: string;
+
+  @serializable
+  attachmentId = "";
+
+  @serializable
+  clubName = "";
+
+  @serializable
+  onBoardedDate = "";
+
+  @serializable
+  email = "";
+
+  @serializable
+  contactNumber = "";
+
+  @serializable
+  countryCode = "";
+
+  @serializable
+  phoneCode = "";
+
+  @serializable
+  address = "";
+
+  @serializable
+  chatbotStatus = "";
+
+  @serializable
+  memberCount = 0;
+
+  @serializable(object(PrimaryContact))
+  primaryContact = new PrimaryContact();
+
+  @serializable(object(ClubNotes))
+  notes = new ClubNotes();
+}
+
+export class ClubData {
+  @serializable(object(ClubProfile))
+  club = new ClubProfile();
+}
+
+export class ClubDataResponse extends ResponseModel {
+  @serializable(object(ClubData))
+  data = new ClubData();
 }
 
 export class ClubListData {

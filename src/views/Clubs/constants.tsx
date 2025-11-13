@@ -12,10 +12,11 @@ export const clubStatuses = [
   { value: "inactive", label: "Inactive" },
 ];
 
-export const clubHeaderColumnGrid = "52% 15% 15% 20%";
+export const clubHeaderColumnGrid = "51% 15% 15% 15%";
 
 export const mockClubs = [
   {
+    id: 1,
     profilePicture: "",
     chatbotSwitch: true,
     clubName: "The Ned",
@@ -23,7 +24,7 @@ export const mockClubs = [
     clubEmail: "contact@thened.com",
     clubPhoneNumber: "2025551234",
     clubCountryCode: "+1",
-    clubAddress: "734 15th St NW, Washington, DC 20005, United States",
+    clubAddress: "734 15th St NW, Wahington, DC 20005, United States",
     firstName: "John",
     lastName: "Doe",
     email: "john.doe@thened.com",
@@ -32,6 +33,7 @@ export const mockClubs = [
     description: "Luxury club in downtown DC",
   },
   {
+    id: 2,
     profilePicture: "",
     chatbotSwitch: false,
     clubName: "The Ned",
