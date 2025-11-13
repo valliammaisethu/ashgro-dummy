@@ -3,8 +3,12 @@ import { Outlet, useLocation, matchPath } from "react-router-dom";
 import { useTopBar } from "../../shared/contexts/TopBarContext";
 import { NavigationRoutes } from "../../routes/routeConstants/appRoutes";
 
-const { INDIVIDUAL_PROSPECT, STAFF_MEMBER_DETAILS, MEMBER_DETAILS } =
-  NavigationRoutes;
+const {
+  INDIVIDUAL_PROSPECT,
+  STAFF_MEMBER_DETAILS,
+  MEMBER_DETAILS,
+  INDIVIDUAL_CLUB,
+} = NavigationRoutes;
 
 const Home = () => {
   const location = useLocation();
@@ -15,6 +19,7 @@ const Home = () => {
       INDIVIDUAL_PROSPECT,
       STAFF_MEMBER_DETAILS,
       MEMBER_DETAILS,
+      INDIVIDUAL_CLUB,
     ];
 
     const shouldHideTopBar = hideTopBarRoutes.some((route) =>
