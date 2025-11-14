@@ -6,15 +6,20 @@ import {
   IconAdd,
 } from "obra-icons-react";
 import clsx from "clsx";
-import { ToolbarProps, Navigate, NavigateAction } from "react-big-calendar";
+import { Navigate, NavigateAction } from "react-big-calendar";
 
+import { ToolbarProps } from "src/shared/types/calender";
 import Button from "src/shared/components/Button";
 import { ButtonTypes } from "src/enums/buttons.enum";
 import { CALENDAR_CONSTANTS } from "../constants";
 
 import styles from "./calenderToolbar.module.scss";
 
-const CalendarToolbar: FC<ToolbarProps> = ({ label, onNavigate }) => {
+const CalendarToolbar: FC<ToolbarProps> = ({
+  label,
+  onNavigate,
+  onBookMeeting,
+}) => {
   const handleNavigation = (direction: NavigateAction) => () =>
     onNavigate(direction);
 
@@ -40,7 +45,7 @@ const CalendarToolbar: FC<ToolbarProps> = ({ label, onNavigate }) => {
 
       <div className={styles.rightSide}>
         <Button
-          onClick={() => {}}
+          onClick={onBookMeeting}
           className={clsx(styles.actionBtn, styles.bookingBtn)}
           icon={<IconCalendarSelectedDate strokeWidth={1.5} />}
           type={ButtonTypes.LINK}

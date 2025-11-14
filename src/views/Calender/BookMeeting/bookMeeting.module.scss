@@ -1,0 +1,27 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.bookMeeting {
+  :global {
+    .ant-modal {
+      .ant-modal-body {
+        margin-bottom: 0;
+      }
+
+      .ant-modal-footer {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.bookforLabel {
+  color: $ashgro-gold;
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin: 1.6rem 0;
+}
+
+.selectType {
+  margin: 1rem 0;
+}

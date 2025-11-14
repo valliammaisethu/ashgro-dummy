@@ -3,7 +3,7 @@
 
 .cellContent {
   padding: 1rem;
-
+  height: 18rem;
   .cellHeader {
     @include flex-container;
     margin-bottom: 0.6rem;
@@ -144,4 +144,17 @@
       justify-content: center;
     }
   }
+}
+
+.chatBotTime {
+  padding: 0.8rem 1rem;
+  background-color: $search-bg;
+  border-radius: 8px;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.allowedDates {
+  cursor: pointer;
 }
