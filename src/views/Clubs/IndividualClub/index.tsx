@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IconChevronDown, IconEdit } from "obra-icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -17,12 +17,14 @@ import useDrawer from "src/shared/hooks/useDrawer";
 import { stopPropagation } from "src/shared/utils/eventUtils";
 import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
 import { Colors } from "src/enums/colors.enum";
+import AddClub from "../AddClub";
 
 import styles from "./individualClub.module.scss";
 import { ClubService } from "src/services/ClubService/club.service";
 
 const IndividualClub = () => {
   const { id = "" } = useParams();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const { getClubProfile } = ClubService();
   const {
@@ -35,8 +37,11 @@ const IndividualClub = () => {
   const { toggleVisibility } = useDrawer();
 
   const handleEdit = () => {
-    // TODO: Need to do integration
-    toggleVisibility();
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
   };
 
   const handleChatbotQuestions = () => {
@@ -110,6 +115,11 @@ const IndividualClub = () => {
           </div>
         </Card>
       </ConditionalRender>
+      <AddClub
+        onClose={handleCloseEditModal}
+        open={isEditModalOpen}
+        clubId={id}
+      />
     </div>
   );
 };

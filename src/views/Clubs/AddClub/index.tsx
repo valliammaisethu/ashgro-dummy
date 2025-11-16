@@ -15,49 +15,117 @@ import TextArea from "src/shared/components/TextArea";
 
 import { fields, labels, placeholders, titles } from "./constants";
 import { Align } from "src/enums/align.enum";
-import { convertDateToDisplayFormat } from "src/shared/utils/dateUtils";
+import {
+  convertDateToApiFormat,
+  convertDateToDisplayFormat,
+} from "src/shared/utils/dateUtils";
+import useForm from "src/shared/components/UseForm";
+import { FieldValues } from "react-hook-form";
+import { stripPhoneCode, addPhoneCode } from "src/shared/utils/parser";
+import { DateFormats } from "src/enums/dateFormats.enum";
+import { ClubService } from "src/services/ClubService/club.service";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Buttons } from "src/enums/buttons.enum";
 
 const AddClub = (props: AddClubModalProps) => {
-  const { onClose, open, clubData } = props;
+  const { onClose, open, clubId = "" } = props;
 
-  const handleSubmit = () => {
-    // TODO: Add API call to save club data
-  };
+  const { addClub, getClubProfile, editClub } = ClubService();
+
+  const { data: clubData } = useQuery({
+    ...getClubProfile(clubId),
+    enabled: !!clubId && open,
+  });
+
+  const clubProfile = clubData?.club;
+
+  const values = clubProfile
+    ? {
+        ...clubProfile,
+        contactNumber: stripPhoneCode(clubProfile.contactNumber),
+        onboardingDate: convertDateToDisplayFormat(clubProfile.onboardingDate),
+        clubCountryCode: clubProfile.clubCountryCode || "+1",
+        adminDetails: {
+          ...clubProfile.adminDetails,
+          contactNumber: stripPhoneCode(clubProfile.adminDetails.contactNumber),
+          countryCode: clubProfile.adminDetails.countryCode || "+1",
+        },
+      }
+    : undefined;
 
   const defaultValues = {
-    ...clubData,
-    onboardingDate: convertDateToDisplayFormat(clubData?.onboardingDate),
+    clubCountryCode: "+1",
+    adminDetails: {
+      countryCode: "+1",
+    },
+  };
+
+  const methods = useForm({
+    values: values,
+    defaultValues: defaultValues,
+    validationSchema: clubFormValidationSchema,
+  });
+
+  const { mutateAsync, isPending: isAdding } = useMutation(addClub());
+  const { mutateAsync: editMutateAsync, isPending: isEditing } =
+    useMutation(editClub());
+
+  const formSubmit = async (values: FieldValues) => {
+    const formValues = {
+      ...values,
+      onboardingDate: convertDateToApiFormat(
+        values.onboardingDate,
+        DateFormats.DD_MMM_YYYY,
+      ),
+      clubCountryCode: values.clubCountryCode,
+      contactNumber: addPhoneCode(values.contactNumber, values.clubCountryCode),
+      adminDetails: {
+        ...values.adminDetails,
+        countryCode: values.adminDetails.countryCode,
+        contactNumber: addPhoneCode(
+          values.adminDetails.contactNumber,
+          values.adminDetails.countryCode,
+        ),
+      },
+    };
+    if (clubData?.club?.id) {
+      await editMutateAsync(formValues, {
+        onSuccess: onClose,
+      });
+    } else {
+      await mutateAsync(formValues, {
+        onSuccess: onClose,
+      });
+    }
   };
 
   return (
     <Modal
       rootClassName={styles.addClubModal}
-      title={clubData ? titles.editTitle : titles.modalTitle}
+      title={clubId ? titles.editTitle : titles.modalTitle}
       visible={open}
       cancelButtonProps={{
         className: "d-none",
       }}
       onCancel={onClose}
-      okText={Buttons.ADD_CLUB}
-      onOk={handleSubmit}
+      okText={clubData?.club?.id ? Buttons.SAVE_CHANGES : Buttons.ADD_CLUB}
+      okButtonProps={{
+        loading: clubData?.club?.id ? isEditing : isAdding,
+      }}
+      handleOk={methods.handleSubmit(formSubmit)}
       styles={{
         body: { height: 650 },
         content: { height: 730 },
       }}
     >
-      <Form
-        onSubmit={handleSubmit}
-        validationSchema={clubFormValidationSchema}
-        defaultValues={defaultValues}
-      >
+      <Form methods={methods}>
         <ProfilePictureInput isClubUpload name={fields.profilePicture} />
         <Divider />
         <div className={styles.chatbot}>
           <span className={styles.sectionTitle}>
             {titles.misc.chatbotStatus}
           </span>
-          <Switch name={fields.chatbotSwitch} />
+          <Switch name={fields.chatbotEnabled} />
         </div>
         <Divider />
 
@@ -87,7 +155,7 @@ const AddClub = (props: AddClubModalProps) => {
             <InputField
               required
               label={labels.clubEmail}
-              name={fields.clubEmail}
+              name={fields.email}
               placeholder={placeholders.clubEmail}
             />
           </Col>
@@ -96,7 +164,7 @@ const AddClub = (props: AddClubModalProps) => {
             <PhoneNumberField
               label={labels.clubPhone}
               placeholder={placeholders.phone}
-              name={fields.clubPhoneNumber}
+              name={fields.contactNumber}
               phoneCodeName={fields.clubPhoneCountryCode}
             />
           </Col>
@@ -160,7 +228,7 @@ const AddClub = (props: AddClubModalProps) => {
           <Col span={24}>
             <TextArea
               label={labels.notesDescription}
-              name={fields.notesDescription}
+              name={fields.notes}
               placeholder={placeholders.notesDescription}
               rootClassName={styles.notesInput}
             />

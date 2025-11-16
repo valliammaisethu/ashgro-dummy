@@ -2,9 +2,12 @@ import { list, object, serializable } from "serializr";
 import { ProfileDetails } from "./profile.model";
 import { Pagination } from "./pagination.model";
 
-export class ClubFormData extends ProfileDetails {
+export class ClubFormData {
   @serializable
-  chatbotSwitch?: boolean;
+  attachmentId?: string;
+
+  @serializable
+  chatbotEnabled?: boolean;
 
   @serializable
   clubName?: string;
@@ -13,19 +16,19 @@ export class ClubFormData extends ProfileDetails {
   onboardingDate?: string;
 
   @serializable
-  clubEmail?: string;
+  email?: string;
 
   @serializable
-  clubPhoneNumber?: string;
+  contactNumber?: string;
 
   @serializable
-  clubCountryCode?: string;
+  clubCountryCode = "";
 
   @serializable
   clubAddress?: string;
 
-  @serializable
-  description?: string;
+  @serializable(object(ProfileDetails))
+  adminDetails?: ProfileDetails;
 }
 
 export class ClubProfile extends ProfileDetails {
@@ -52,6 +55,9 @@ export class ClubProfile extends ProfileDetails {
 
   @serializable
   numberOfMembers = 0;
+
+  @serializable
+  clubCountryCode = "";
 
   @serializable(object(ProfileDetails))
   adminDetails = new ProfileDetails();

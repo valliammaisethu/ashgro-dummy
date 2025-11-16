@@ -82,7 +82,7 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
 
               <Actions
                 options={clubStatuses}
-                onEditClick={() => onEditClub(club)}
+                onEditClick={() => onEditClub(club.id || "")}
                 selectWidth={140}
                 selectedValue={club.status}
               />

@@ -2,13 +2,13 @@ import { serializable } from "serializr";
 
 export class ProfileDetails {
   @serializable
-  firstName?: string;
+  firstName = "";
 
   @serializable
-  lastName?: string;
+  lastName = "";
 
   @serializable
-  email?: string;
+  email = "";
 
   @serializable
   phoneNumber?: string;
@@ -23,7 +23,7 @@ export class ProfileDetails {
   address?: string;
 
   @serializable
-  contactNumber?: string;
+  contactNumber = "";
 
   @serializable
   notes?: string;
