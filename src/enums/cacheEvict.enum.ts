@@ -28,6 +28,7 @@ export enum MutationKeys {
 
   ADD_CLUB = "addClub",
   EDIT_CLUB = "editClub",
+  EDIT_CHATBOT = "editChatbot",
 }
 
 export enum QueryKeys {

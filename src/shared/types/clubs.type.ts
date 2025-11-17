@@ -20,7 +20,7 @@ export interface ClubInfoProps {
 
 export interface ClubFormState {
   visible: boolean;
-  clubId: string;
+  clubId: string | null;
 }
 export interface ClubDetailsHeaderProps {
   onChatbotQuestions?: () => void;

@@ -14,7 +14,7 @@ export class ProfileDetails {
   phoneNumber?: string;
 
   @serializable
-  countryCode?: string;
+  countryCode = "+1";
 
   @serializable
   profilePicture?: string;
@@ -24,9 +24,6 @@ export class ProfileDetails {
 
   @serializable
   contactNumber = "";
-
-  @serializable
-  notes?: string;
 
   @serializable
   attachmentId = "";

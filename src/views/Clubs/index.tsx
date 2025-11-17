@@ -6,7 +6,7 @@ import { ClubFormState } from "src/shared/types/clubs.type";
 
 const Clubs: React.FC = () => {
   const [formState, setFormState] = useState<ClubFormState>({
-    clubId: "",
+    clubId: null,
     visible: false,
   });
 
@@ -26,7 +26,7 @@ const Clubs: React.FC = () => {
       <AddClub
         onClose={handleVisibility}
         open={formState.visible}
-        clubId={formState.clubId}
+        clubId={formState.clubId || ""}
       />
     </div>
   );

@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   clubHeaderColumnGrid,
   clubListingHeaders,
-  clubStatuses,
   membersText,
 } from "../../constants";
+import { ClubStatusOptions } from "../../IndividualClub/constants";
 import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
 import Profile from "src/shared/components/atoms/Table/Profile";
 import Badge from "src/shared/components/atoms/Badge";
@@ -19,13 +19,16 @@ import { ClubListingTableProps } from "src/shared/types/clubs.type";
 import { ClubService } from "src/services/ClubService/club.service";
 import { extractNameParts } from "src/shared/utils/parser";
 import useRedirect from "src/shared/hooks/useRedirect";
+import { stopPropagation } from "src/shared/utils/eventUtils";
 
 import styles from "../../clubs.module.scss";
 
 const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
-  const { getClubs } = ClubService();
+  const queryClient = useQueryClient();
+  const { getClubs } = ClubService(queryClient);
   const [currentPage, setCurrentPage] = useState(1);
   const { navigateToInvidualClub } = useRedirect();
+
   const {
     data: clubsData,
     isPending,
@@ -36,6 +39,13 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
   const handlePageChange = useCallback((newPage: number) => {
     setCurrentPage(newPage);
   }, []);
+
+  const handleEditClick = useCallback(
+    (clubId: string) => {
+      return () => onEditClub(clubId);
+    },
+    [onEditClub],
+  );
 
   const handleRowClick = (clubId = "", e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -62,9 +72,9 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
               className={styles.rowContainer}
             >
               <Profile
-                address={club.clubAddress}
-                firstName={extractNameParts(club.clubName).firstName}
-                lastName={extractNameParts(club.clubName).lastName}
+                address={club.address}
+                firstName={extractNameParts(club.name).firstName}
+                lastName={extractNameParts(club.name).lastName}
               />
 
               <Badge
@@ -74,15 +84,17 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
                 className={styles.badge}
               />
 
-              <Switch
-                checked={club.chatbotEnabled}
-                className={styles.switch}
-                name={`switch-${index}`}
-              />
+              <div className={styles.switchCol} onClick={stopPropagation}>
+                <Switch
+                  checked={club.chatbotEnabled}
+                  className={styles.switch}
+                  name={`switch-${index}`}
+                />
+              </div>
 
               <Actions
-                options={clubStatuses}
-                onEditClick={() => onEditClub(club.id || "")}
+                options={ClubStatusOptions}
+                onEditClick={handleEditClick(club.id || "")}
                 selectWidth={140}
                 selectedValue={club.status}
               />

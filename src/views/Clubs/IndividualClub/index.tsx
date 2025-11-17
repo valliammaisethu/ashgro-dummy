@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IconChevronDown, IconEdit } from "obra-icons-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { Select } from "antd";
 
@@ -13,7 +13,6 @@ import Card from "src/shared/components/Card";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import Switch from "src/shared/components/Switch";
 import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
-import useDrawer from "src/shared/hooks/useDrawer";
 import { stopPropagation } from "src/shared/utils/eventUtils";
 import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
 import { Colors } from "src/enums/colors.enum";
@@ -25,16 +24,16 @@ import { ClubService } from "src/services/ClubService/club.service";
 const IndividualClub = () => {
   const { id = "" } = useParams();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const queryClient = useQueryClient();
 
-  const { getClubProfile } = ClubService();
+  const { getClubProfile } = ClubService(queryClient);
+
   const {
     data: clubData,
     isPending,
     isSuccess,
     isFetching,
   } = useQuery(getClubProfile(id));
-
-  const { toggleVisibility } = useDrawer();
 
   const handleEdit = () => {
     setIsEditModalOpen(true);
@@ -48,9 +47,7 @@ const IndividualClub = () => {
     // TODO: Need to do integration
   };
 
-  const handleStatusChange = () => {
-    // TODO: Need to do integration
-  };
+  const handleStatusChange = async () => {};
 
   return (
     <div className={styles.individualClub}>

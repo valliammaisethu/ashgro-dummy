@@ -43,18 +43,17 @@ export const fields = {
   profilePicture: "attachmentId",
   chatbotEnabled: "chatbotEnabled",
 
-  clubName: "clubName",
+  clubName: "name",
   onboardingDate: "onboardingDate",
   email: "email",
   contactNumber: "contactNumber",
   clubPhoneCountryCode: "clubCountryCode",
-
-  clubAddress: "clubAddress",
+  notes: "notes",
+  clubAddress: "address",
 
   primaryFirstName: "adminDetails.firstName",
   primaryLastName: "adminDetails.lastName",
   primaryEmail: "adminDetails.email",
   primaryPhoneNumber: "adminDetails.contactNumber",
   primaryPhoneCountryCode: "adminDetails.countryCode",
-  notes: "adminDetails.notes",
 };

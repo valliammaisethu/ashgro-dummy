@@ -1,5 +1,5 @@
 import { Col, Divider, Row } from "antd";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import Form from "src/shared/components/Form";
 import Modal from "src/shared/components/Modal";
 import ProfilePictureInput from "src/shared/components/ProfilePictureInput";
@@ -24,51 +24,68 @@ import { FieldValues } from "react-hook-form";
 import { stripPhoneCode, addPhoneCode } from "src/shared/utils/parser";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { ClubService } from "src/services/ClubService/club.service";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Buttons } from "src/enums/buttons.enum";
 
 const AddClub = (props: AddClubModalProps) => {
-  const { onClose, open, clubId = "" } = props;
+  const { onClose, open, clubId } = props;
 
-  const { addClub, getClubProfile, editClub } = ClubService();
+  const queryClient = useQueryClient();
+  const { addClub, getClubProfile, editClub } = ClubService(queryClient);
 
   const { data: clubData } = useQuery({
-    ...getClubProfile(clubId),
+    ...getClubProfile(clubId || ""),
     enabled: !!clubId && open,
   });
 
-  const clubProfile = clubData?.club;
+  const clubProfile = clubId && clubData?.club ? clubData.club : undefined;
 
-  const values = clubProfile
-    ? {
-        ...clubProfile,
-        contactNumber: stripPhoneCode(clubProfile.contactNumber),
-        onboardingDate: convertDateToDisplayFormat(clubProfile.onboardingDate),
-        clubCountryCode: clubProfile.clubCountryCode || "+1",
-        adminDetails: {
-          ...clubProfile.adminDetails,
-          contactNumber: stripPhoneCode(clubProfile.adminDetails.contactNumber),
-          countryCode: clubProfile.adminDetails.countryCode || "+1",
-        },
-      }
-    : undefined;
+  const defaultValues = useMemo(
+    () => ({
+      clubCountryCode: "+1",
+      adminDetails: {
+        countryCode: "+1",
+      },
+    }),
+    [],
+  );
 
-  const defaultValues = {
-    clubCountryCode: "+1",
-    adminDetails: {
-      countryCode: "+1",
-    },
-  };
+  const values =
+    clubProfile && clubId
+      ? {
+          ...clubProfile,
+          notes: clubProfile.notes,
+          contactNumber: stripPhoneCode(clubProfile.contactNumber),
+          onboardingDate: convertDateToDisplayFormat(
+            clubProfile.onboardingDate,
+          ),
+          clubCountryCode: clubProfile.clubCountryCode,
+          adminDetails: {
+            ...clubProfile.adminDetails,
+            contactNumber: stripPhoneCode(
+              clubProfile.adminDetails?.contactNumber,
+            ),
+            countryCode: clubProfile.adminDetails?.countryCode,
+          },
+        }
+      : undefined;
 
   const methods = useForm({
     values: values,
     defaultValues: defaultValues,
     validationSchema: clubFormValidationSchema,
   });
+  // TODO: Fix the form issue and remove useEffect here
+  useEffect(() => {
+    if (open && !clubId) {
+      methods.reset(defaultValues);
+    }
+  }, [open, clubId, defaultValues]);
 
-  const { mutateAsync, isPending: isAdding } = useMutation(addClub());
-  const { mutateAsync: editMutateAsync, isPending: isEditing } =
-    useMutation(editClub());
+  const { mutateAsync, isPending: isAdding } = useMutation(addClub(onClose));
+  const { mutateAsync: editMutateAsync, isPending: isEditing } = useMutation(
+    editClub(clubId, onClose),
+  );
 
   const formSubmit = async (values: FieldValues) => {
     const formValues = {
@@ -89,13 +106,9 @@ const AddClub = (props: AddClubModalProps) => {
       },
     };
     if (clubData?.club?.id) {
-      await editMutateAsync(formValues, {
-        onSuccess: onClose,
-      });
+      await editMutateAsync(formValues);
     } else {
-      await mutateAsync(formValues, {
-        onSuccess: onClose,
-      });
+      await mutateAsync(formValues);
     }
   };
 

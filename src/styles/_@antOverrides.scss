@@ -785,3 +785,14 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
     color: $ashgro-white;
   }
 }
+
+.ant-picker.ant-picker-range.ant-picker-outlined {
+  .ant-picker-input {
+    border: none;
+    background-color: $input-background;
+  }
+
+  &.ant-picker-focused .ant-picker-input {
+    background-color: $input-background;
+  }
+}
