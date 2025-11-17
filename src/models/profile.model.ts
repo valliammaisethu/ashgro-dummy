@@ -18,4 +18,16 @@ export class ProfileDetails {
 
   @serializable
   profilePicture?: string;
+
+  @serializable
+  address?: string;
+
+  @serializable
+  contactNumber?: string;
+
+  @serializable
+  notes?: string;
+
+  @serializable
+  attachmentId = "";
 }

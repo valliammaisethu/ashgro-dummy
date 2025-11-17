@@ -14,43 +14,6 @@ export const clubStatuses = [
 
 export const clubHeaderColumnGrid = "51% 15% 15% 15%";
 
-export const mockClubs = [
-  {
-    id: 1,
-    profilePicture: "",
-    chatbotSwitch: true,
-    clubName: "The Ned",
-    onboardingDate: "2024-01-15",
-    clubEmail: "contact@thened.com",
-    clubPhoneNumber: "2025551234",
-    clubCountryCode: "+1",
-    clubAddress: "734 15th St NW, Wahington, DC 20005, United States",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@thened.com",
-    phoneNumber: "2025555678",
-    countryCode: "+1",
-    description: "Luxury club in downtown DC",
-  },
-  {
-    id: 2,
-    profilePicture: "",
-    chatbotSwitch: false,
-    clubName: "The Ned",
-    onboardingDate: "2024-02-20",
-    clubEmail: "info@thened.com",
-    clubPhoneNumber: "2025559876",
-    clubCountryCode: "+1",
-    clubAddress: "734 15th St NW, Washington, DC 20005, United States",
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "jane.smith@thened.com",
-    phoneNumber: "2025554321",
-    countryCode: "+1",
-    description: "Premium membership club",
-  },
-];
-
 export const VALIDATION_REGEX = {
   ALPHABETS_ONLY: /^[A-Za-z\s]+$/,
   EMAIL: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,

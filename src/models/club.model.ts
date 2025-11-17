@@ -1,5 +1,4 @@
 import { list, object, serializable } from "serializr";
-import { ResponseModel } from "./response.model";
 import { ProfileDetails } from "./profile.model";
 import { Pagination } from "./pagination.model";
 
@@ -29,38 +28,7 @@ export class ClubFormData extends ProfileDetails {
   description?: string;
 }
 
-export class PrimaryContact {
-  @serializable
-  name = "";
-
-  @serializable
-  email = "";
-
-  @serializable
-  phoneNumber = "";
-}
-
-export class ClubNotes {
-  @serializable
-  signatureHoles = "";
-
-  @serializable
-  tournamentsEvents = "";
-
-  @serializable
-  specialAmenities = "";
-
-  @serializable
-  memberExperience = "";
-
-  @serializable
-  reputationRecognition = "";
-
-  @serializable
-  hospitalityCorporateFeatures = "";
-}
-
-export class ClubProfile {
+export class ClubProfile extends ProfileDetails {
   @serializable
   id?: string;
 
@@ -68,40 +36,25 @@ export class ClubProfile {
   logoUrl?: string;
 
   @serializable
-  attachmentId = "";
-
-  @serializable
   clubName = "";
 
   @serializable
-  onBoardedDate = "";
+  clubAddress = "";
 
   @serializable
-  email = "";
+  onboardingDate = "";
 
   @serializable
-  contactNumber = "";
+  status = "";
 
   @serializable
-  countryCode = "";
+  chatbotEnabled = false;
 
   @serializable
-  phoneCode = "";
+  numberOfMembers = 0;
 
-  @serializable
-  address = "";
-
-  @serializable
-  chatbotStatus = "";
-
-  @serializable
-  memberCount = 0;
-
-  @serializable(object(PrimaryContact))
-  primaryContact = new PrimaryContact();
-
-  @serializable(object(ClubNotes))
-  notes = new ClubNotes();
+  @serializable(object(ProfileDetails))
+  adminDetails = new ProfileDetails();
 }
 
 export class ClubData {
@@ -109,12 +62,7 @@ export class ClubData {
   club = new ClubProfile();
 }
 
-export class ClubDataResponse extends ResponseModel {
-  @serializable(object(ClubData))
-  data = new ClubData();
-}
-
-export class ClubListData {
+export class ClubListData extends ProfileDetails {
   @serializable
   id?: string;
 
@@ -123,12 +71,6 @@ export class ClubListData {
 
   @serializable
   clubName = "";
-
-  @serializable
-  email?: string;
-
-  @serializable
-  contactNumber?: string;
 
   @serializable
   clubAddress = "";

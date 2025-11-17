@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { IconChevronDown, IconEdit } from "obra-icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -15,32 +15,22 @@ import Switch from "src/shared/components/Switch";
 import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
 import useDrawer from "src/shared/hooks/useDrawer";
 import { stopPropagation } from "src/shared/utils/eventUtils";
-import { ClubProfile } from "src/models/club.model";
-import {
-  CLUB_LABELS,
-  clubStatusField,
-  ClubStatusOptions,
-  mockClubData,
-} from "./constants";
+import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
 import { Colors } from "src/enums/colors.enum";
-import { Statuses } from "src/enums/statuses.enum";
 
 import styles from "./individualClub.module.scss";
+import { ClubService } from "src/services/ClubService/club.service";
 
 const IndividualClub = () => {
   const { id = "" } = useParams();
-  const [clubData] = useState<ClubProfile>(mockClubData);
-  const [clubStatus, setClubStatus] = useState(mockClubData.chatbotStatus);
 
-  // TODO: will remove while integration
-
-  const { isPending, isSuccess, isFetching } = useQuery({
-    queryKey: ["club", id],
-    queryFn: async () => {
-      return { club: mockClubData };
-    },
-    enabled: !!id,
-  });
+  const { getClubProfile } = ClubService();
+  const {
+    data: clubData,
+    isPending,
+    isSuccess,
+    isFetching,
+  } = useQuery(getClubProfile(id));
 
   const { toggleVisibility } = useDrawer();
 
@@ -53,8 +43,7 @@ const IndividualClub = () => {
     // TODO: Need to do integration
   };
 
-  const handleStatusChange = (value: string) => {
-    setClubStatus(value);
+  const handleStatusChange = () => {
     // TODO: Need to do integration
   };
 
@@ -65,7 +54,7 @@ const IndividualClub = () => {
         isPending={isPending}
         isSuccess={isSuccess}
         isFetching={isFetching}
-        records={[clubData]}
+        records={[clubData?.club]}
         useGridSkeleton
         skeletonRows={16}
       >
@@ -78,14 +67,14 @@ const IndividualClub = () => {
                 </span>
                 <Switch
                   name={clubStatusField}
-                  checked={clubStatus === Statuses.ACTIVE}
+                  checked={clubData?.club?.chatbotEnabled}
                   className={styles.statusSwitch}
                 />
                 <div onClick={stopPropagation} className={styles.statusCol}>
                   <Select
-                    value={clubStatus}
+                    value={clubData?.club?.status}
                     className={styles.statusSelect}
-                    style={{ width: 160 }}
+                    style={{ width: 140 }}
                     onChange={handleStatusChange}
                     suffixIcon={<IconChevronDown size={20} />}
                   >
@@ -112,12 +101,12 @@ const IndividualClub = () => {
               </div>
             </div>
             <div className={styles.content}>
-              <ClubInfo data={clubData} />
-              <ContactDetails data={clubData} />
+              <ClubInfo data={clubData?.club} />
+              <ContactDetails data={clubData?.club} />
             </div>
           </div>
           <div className={styles.rightSide}>
-            <NotesSection notes={clubData.notes} />
+            <NotesSection data={clubData?.club} />
           </div>
         </Card>
       </ConditionalRender>

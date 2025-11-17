@@ -12,6 +12,7 @@ import Profile from "src/shared/components/atoms/Table/Profile";
 import Badge from "src/shared/components/atoms/Badge";
 import { Colors } from "src/enums/colors.enum";
 import Switch from "src/shared/components/Switch";
+import ConditionalRender from "src/shared/components/ConditionalRender";
 import Actions from "src/shared/components/atoms/Table/Actions";
 import Pagination from "src/shared/components/Pagination";
 import { ClubListingTableProps } from "src/shared/types/clubs.type";
@@ -20,7 +21,6 @@ import { extractNameParts } from "src/shared/utils/parser";
 import useRedirect from "src/shared/hooks/useRedirect";
 
 import styles from "../../clubs.module.scss";
-import ConditionalRender from "src/shared/components/ConditionalRender";
 
 const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
   const { getClubs } = ClubService();
