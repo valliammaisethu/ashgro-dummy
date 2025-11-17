@@ -10,7 +10,7 @@ export const clubFormValidationSchema = yup.object().shape({
 
   chatbotEnabled: yup.boolean().optional().notRequired(),
 
-  clubName: yup
+  name: yup
     .string()
     .required(ERROR_MESSAGES.REQUIRED.CLUB_NAME)
     .max(MAX_LENGTHS.CLUB_NAME, ERROR_MESSAGES.MAX_LENGTH.CLUB_NAME)
@@ -36,11 +36,17 @@ export const clubFormValidationSchema = yup.object().shape({
 
   clubCountryCode: yup.string().optional().notRequired(),
 
-  clubAddress: yup
+  address: yup
     .string()
     .required(ERROR_MESSAGES.REQUIRED.CLUB_ADDRESS)
     .max(MAX_LENGTHS.ADDRESS, ERROR_MESSAGES.MAX_LENGTH.ADDRESS)
     .trim(),
+
+  notes: yup
+    .string()
+    .max(MAX_LENGTHS.NOTES, ERROR_MESSAGES.MAX_LENGTH.NOTES)
+    .optional()
+    .notRequired(),
 
   adminDetails: yup.object().shape({
     firstName: yup
@@ -80,11 +86,5 @@ export const clubFormValidationSchema = yup.object().shape({
       ),
 
     countryCode: yup.string().optional().notRequired(),
-
-    notes: yup
-      .string()
-      .max(MAX_LENGTHS.NOTES, ERROR_MESSAGES.MAX_LENGTH.NOTES)
-      .optional()
-      .notRequired(),
   }),
 });

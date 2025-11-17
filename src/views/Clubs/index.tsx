@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import ClubListingHeader from "./Listing/Header";
 import ClubListingTable from "./Listing/Table";
-import AddClub from "./AddClub";
+import ClubForm from "./ClubForm";
 import { ClubFormState } from "src/shared/types/clubs.type";
 
 const Clubs: React.FC = () => {
   const [formState, setFormState] = useState<ClubFormState>({
-    clubId: "",
+    clubId: null,
     visible: false,
   });
 
@@ -23,10 +23,10 @@ const Clubs: React.FC = () => {
     <div>
       <ClubListingHeader onAddClub={handleAddClub} />
       <ClubListingTable onEditClub={handleEditClub} />
-      <AddClub
+      <ClubForm
         onClose={handleVisibility}
         open={formState.visible}
-        clubId={formState.clubId}
+        clubId={formState.clubId || ""}
       />
     </div>
   );

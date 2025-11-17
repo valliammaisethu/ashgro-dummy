@@ -1,6 +1,7 @@
 import { list, object, serializable } from "serializr";
 import { ProfileDetails } from "./profile.model";
 import { Pagination } from "./pagination.model";
+import { ResponseModel } from "./response.model";
 
 export class ClubFormData {
   @serializable
@@ -10,7 +11,7 @@ export class ClubFormData {
   chatbotEnabled?: boolean;
 
   @serializable
-  clubName?: string;
+  name?: string;
 
   @serializable
   onboardingDate?: string;
@@ -22,16 +23,19 @@ export class ClubFormData {
   contactNumber?: string;
 
   @serializable
-  clubCountryCode = "";
+  clubCountryCode?: string = "+1";
 
   @serializable
-  clubAddress?: string;
+  address?: string;
+
+  @serializable
+  notes?: string;
 
   @serializable(object(ProfileDetails))
   adminDetails?: ProfileDetails;
 }
 
-export class ClubProfile extends ProfileDetails {
+export class ClubProfile {
   @serializable
   id?: string;
 
@@ -39,10 +43,16 @@ export class ClubProfile extends ProfileDetails {
   logoUrl?: string;
 
   @serializable
-  clubName = "";
+  name = "";
 
   @serializable
-  clubAddress = "";
+  email = "";
+
+  @serializable
+  contactNumber = "";
+
+  @serializable
+  address = "";
 
   @serializable
   onboardingDate = "";
@@ -57,7 +67,13 @@ export class ClubProfile extends ProfileDetails {
   numberOfMembers = 0;
 
   @serializable
-  clubCountryCode = "";
+  clubCountryCode = "+1";
+
+  @serializable
+  attachmentId?: string;
+
+  @serializable
+  notes?: string;
 
   @serializable(object(ProfileDetails))
   adminDetails = new ProfileDetails();
@@ -68,7 +84,7 @@ export class ClubData {
   club = new ClubProfile();
 }
 
-export class ClubListData extends ProfileDetails {
+export class ClubListData {
   @serializable
   id?: string;
 
@@ -76,10 +92,10 @@ export class ClubListData extends ProfileDetails {
   logoUrl?: string;
 
   @serializable
-  clubName = "";
+  name = "";
 
   @serializable
-  clubAddress = "";
+  address = "";
 
   @serializable
   onboardingDate?: string;
@@ -100,4 +116,14 @@ export class ClubListReponse {
 
   @serializable(object(Pagination))
   pagination?: Pagination;
+}
+
+export class ClubChatbotStatus {
+  @serializable
+  chatbotEnabled?: boolean;
+}
+
+export class ClubChatbotStatusResponse extends ResponseModel {
+  @serializable(object(ClubProfile))
+  data?: ClubProfile;
 }
