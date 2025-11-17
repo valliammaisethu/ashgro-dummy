@@ -57,6 +57,12 @@
   &:hover :global(.actions-icons) {
     opacity: 1;
   }
+  &:hover {
+    background-color: $table-row-hover;
+  }
+}
+.switchCol {
+  text-align: center;
 }
 
 .badge {

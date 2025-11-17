@@ -13,8 +13,8 @@ export const CONTACT_TITLES = {
 };
 
 export const ClubStatusOptions = [
-  { label: "Active", value: "active" },
-  { label: "Inactive", value: "inactive" },
+  { label: "Active", value: "ACTIVE" },
+  { label: "Inactive", value: "INACTIVE" },
 ];
 
 export const headerConstants = {

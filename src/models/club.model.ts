@@ -1,6 +1,7 @@
 import { list, object, serializable } from "serializr";
 import { ProfileDetails } from "./profile.model";
 import { Pagination } from "./pagination.model";
+import { ResponseModel } from "./response.model";
 
 export class ClubFormData {
   @serializable
@@ -29,6 +30,9 @@ export class ClubFormData {
 
   @serializable(object(ProfileDetails))
   adminDetails?: ProfileDetails;
+
+  @serializable
+  status?: string;
 }
 
 export class ClubProfile extends ProfileDetails {
@@ -76,6 +80,9 @@ export class ClubListData extends ProfileDetails {
   logoUrl?: string;
 
   @serializable
+  name?: string;
+
+  @serializable
   clubName = "";
 
   @serializable
@@ -100,4 +107,14 @@ export class ClubListReponse {
 
   @serializable(object(Pagination))
   pagination?: Pagination;
+}
+
+export class ClubChatbotStatus {
+  @serializable
+  chatbotEnabled?: boolean;
+}
+
+export class ClubChatbotStatusResponse extends ResponseModel {
+  @serializable(object(ClubProfile))
+  data?: ClubProfile;
 }
