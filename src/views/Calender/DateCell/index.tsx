@@ -1,35 +1,77 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import { Switch, Popover } from "antd";
+import dayjs from "dayjs";
 
 import { replaceString } from "src/shared/utils/commonHelpers";
-import { CALENDAR_CONSTANTS } from "../constants";
+import { CALENDAR_CONSTANTS, CALENDER_POPOVER_PROPS } from "../constants";
 import { ButtonSizes } from "src/enums/buttons.enum";
 import { formatTimeRange, getSplitDayEvents } from "../utils/calendarUtils";
 import EventsPopover from "../components/EventsPopover";
-import { Trigger } from "src/enums/trigger.enum";
-import { Placement } from "src/enums/placement.enum";
-import { DateCellProps } from "src/shared/types/calender";
+import {
+  BookingFormState,
+  CalendarEvent,
+  DateCellProps,
+} from "src/shared/types/calender";
+import MeetingPreview from "../components/MeetingPreview";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+import BookMeeting from "../BookMeeting";
+import { checkDate } from "src/shared/utils/dateUtils";
+import { DateType } from "src/enums/dateType.enum";
+import { stopPropagation } from "src/shared/utils/eventUtils";
 
 import styles from "./dateCell.module.scss";
-import dayjs from "dayjs";
 
-const DateCell: React.FC<DateCellProps> = ({ label, date, allEvents }) => {
+const DateCell: React.FC<DateCellProps> = ({ date, allEvents }) => {
   const [isChatbotView, setIsChatbotView] = useState(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [bookingState, setBookingState] = useState<BookingFormState>({
+    visible: false,
+    selectedDate: null,
+    selectedEvent: null,
+  });
 
   const { calendarEvents, chatbotEvents } = getSplitDayEvents(allEvents, date);
   const displayEvents = isChatbotView ? chatbotEvents : calendarEvents;
   const maxVisible = isChatbotView ? 3 : 2;
   const visibleEvents = displayEvents.slice(0, maxVisible);
   const hasMore = displayEvents.length > maxVisible;
+  const isPastDate = checkDate(date, DateType.PAST) as boolean;
 
   const handlePopoverVisibility = () => setIsPopoverOpen((prev) => !prev);
 
-  //  Need to handle old days and bookins and chatbot slots
+  const handleRescheduleClick = (meeting: CalendarEvent) => {
+    setBookingState((prev) => ({
+      ...prev,
+      visible: true,
+      selectedEvent: meeting,
+    }));
+  };
+
+  const handleSelectDate = () => {
+    if (isPastDate) return;
+
+    setBookingState((prev) => ({
+      ...prev,
+      visible: true,
+      selectedDate: date,
+    }));
+  };
+
+  const closeBooking = () =>
+    setBookingState({
+      visible: false,
+      selectedDate: null,
+      selectedEvent: null,
+    });
 
   return (
-    <div className={styles.cellContent}>
+    <div
+      className={clsx(styles.cellContent, {
+        [styles.allowedDates]: !isPastDate,
+      })}
+      onClick={handleSelectDate}
+    >
       <div className={styles.cellHeader}>
         <span className={styles.dateLabel}>{dayjs(date).date()}</span>
 
@@ -50,27 +92,30 @@ const DateCell: React.FC<DateCellProps> = ({ label, date, allEvents }) => {
 
       <div className={styles.eventList}>
         {visibleEvents?.map((event) => (
-          <div
-            key={event.id}
-            className={clsx(styles.eventCard, {
-              [styles.bookings]: !isChatbotView,
-            })}
-          >
-            {!isChatbotView && (
-              <div className={styles.eventTitle}>{event.title}</div>
+          <>
+            {isChatbotView ? (
+              <div className={styles.chatBotTime}>
+                {" "}
+                {formatTimeRange(event.start, event.end)}
+              </div>
+            ) : (
+              <MeetingPreview
+                isPastDate={isPastDate}
+                event={{ ...event, date }}
+                onReschedule={handleRescheduleClick}
+              />
             )}
-            <div
-              className={clsx(styles.eventTime, {
-                [styles.chatbotSlotTime]: isChatbotView,
-              })}
-            >
-              {formatTimeRange(event.start, event.end)}
-            </div>
-          </div>
+          </>
         ))}
 
         {hasMore && (
           <Popover
+            {...CALENDER_POPOVER_PROPS}
+            open={isPopoverOpen}
+            onOpenChange={handlePopoverVisibility}
+            classNames={{
+              root: styles.eventsPopover,
+            }}
             content={
               <EventsPopover
                 date={date}
@@ -78,14 +123,6 @@ const DateCell: React.FC<DateCellProps> = ({ label, date, allEvents }) => {
                 onClose={handlePopoverVisibility}
               />
             }
-            trigger={Trigger.CLICK}
-            open={isPopoverOpen}
-            onOpenChange={handlePopoverVisibility}
-            placement={Placement.BOTTOM}
-            classNames={{
-              root: styles.eventsPopover,
-            }}
-            showArrow={false}
           >
             <div
               className={clsx(styles.moreBtn, {
@@ -100,6 +137,17 @@ const DateCell: React.FC<DateCellProps> = ({ label, date, allEvents }) => {
           </Popover>
         )}
       </div>
+
+      <ConditionalRenderComponent visible={bookingState.visible} hideFallback>
+        <div onClick={stopPropagation}>
+          <BookMeeting
+            isOpen={bookingState.visible}
+            selectedDate={bookingState.selectedDate}
+            calendarEvent={bookingState?.selectedEvent}
+            onClose={closeBooking}
+          />
+        </div>
+      </ConditionalRenderComponent>
     </div>
   );
 };

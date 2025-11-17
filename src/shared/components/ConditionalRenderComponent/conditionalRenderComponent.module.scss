@@ -1,0 +1,7 @@
+@import "src/styles/_helpers.scss";
+
+.loader {
+  height: 100%;
+  width: 100%;
+  @include flex-container(center);
+}
