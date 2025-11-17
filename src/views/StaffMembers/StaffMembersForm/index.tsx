@@ -2,6 +2,10 @@ import React, { useEffect, useMemo } from "react";
 import { Col, Divider, Row } from "antd";
 import { FieldValues } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { EmailService } from "src/services/EmailService/email.service";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { useDebouncedEmailValidation } from "src/shared/hooks/useDebouncedEmailValidation";
 
 import DatePicker from "src/shared/components/DatePicker";
 import Form from "src/shared/components/Form";
@@ -56,11 +60,12 @@ const StaffMembersForm = ({
   const methods = useForm({
     validationSchema: validationSchema,
   });
-  const { handleSubmit } = methods;
+  const { handleSubmit, setError, clearErrors } = methods;
 
   const { staffMembersList } = StaffDepartmentService();
   const { addStaffMember, staffMembersDeatils, editStaffMember } =
     StaffMembersService();
+  const { validateEmail } = EmailService();
 
   const { data, refetch, isFetching } = useQuery(staffMembersDeatils(id));
 
@@ -68,6 +73,18 @@ const StaffMembersForm = ({
     useMutation(addStaffMember());
   const { mutateAsync: eddStaffMemberMutate, isPending: isEditPending } =
     useMutation(editStaffMember());
+
+  const { mutateAsync: validateMutateAsync, error } =
+    useMutation(validateEmail());
+
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
+  const { handleEmailChange: debouncedEmailChange } =
+    useDebouncedEmailValidation({
+      validateMutateAsync,
+      clubId,
+    });
+
   const { data: staffDepartments, isPending } = useQuery(staffMembersList());
 
   const handleFormSubmit = async (values: FieldValues) => {
@@ -96,6 +113,11 @@ const StaffMembersForm = ({
     handleModalVisibility?.();
   };
 
+  const handleEmailChange = (email: string) => {
+    clearErrors(FIELD_NAMES.EMAIL_ADDRESS);
+    debouncedEmailChange(email);
+  };
+
   const formValues = useMemo(() => {
     if (!data || !id) return {};
 
@@ -116,6 +138,18 @@ const StaffMembersForm = ({
   useEffect(() => {
     methods.reset(formValues);
   }, [data]);
+
+  useEffect(() => {
+    const responseError = error as {
+      response?: { data?: { description?: string } };
+    };
+    if (responseError.response?.data?.description) {
+      setError(FIELD_NAMES.EMAIL_ADDRESS, {
+        type: "manual",
+        message: responseError?.response.data.description,
+      });
+    }
+  }, [error, setError]);
 
   return (
     <div>
@@ -189,6 +223,7 @@ const StaffMembersForm = ({
                   name={FIELD_NAMES.EMAIL_ADDRESS}
                   type={INPUT_TYPE.EMAIL}
                   required
+                  onChange={(e) => handleEmailChange(e.target.value)}
                 />
               </Col>
               <Col span={12}>

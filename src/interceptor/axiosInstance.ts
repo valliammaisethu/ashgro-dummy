@@ -10,6 +10,12 @@ import { deserialize } from "serializr";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 
+declare module "axios" {
+  export interface AxiosRequestConfig {
+    silent?: boolean;
+  }
+}
+
 const {
   networkError,
   forbidden,
@@ -31,7 +37,6 @@ const clearLocalStorage = () => {
 export const getHeaders = <T extends AxiosRequestHeaders>(
   defaultHeaders: T,
 ): T => {
-  // TODO: To fix issue in utility and use here
   const accessToken = localStorage.getItem(LocalStorageKeys.TOKEN);
   const token = accessToken ? JSON.parse(accessToken) : "";
 
@@ -54,7 +59,6 @@ axiosInstance.interceptors.request.use(function (config) {
   return config;
 });
 
-// TO remove any and use proper type
 axiosInstance.interceptors.response.use(
   (response): any => {
     return {
@@ -65,6 +69,8 @@ axiosInstance.interceptors.response.use(
   },
   async (error) => {
     const { response, config } = error;
+
+    const isSilent = config?.silent ?? false;
 
     if (!response) {
       Notification({
@@ -132,41 +138,51 @@ axiosInstance.interceptors.response.use(
         clearLocalStorage();
       }
     }
+
     const errorTitle = data?.title || genericErrorTitle;
-    const errorMessage = data?.message || data?.error || genericError;
+    const errorMessage =
+      data?.description || data?.message || data?.error || genericError;
 
     switch (status) {
       case 403:
-        Notification({
-          title: errorTitle || forbidden.title,
-          description: forbidden.description,
-          type: NotificationTypes.ERROR,
-        });
+        if (!isSilent) {
+          Notification({
+            title: errorTitle || forbidden.title,
+            description: forbidden.description,
+            type: NotificationTypes.ERROR,
+          });
+        }
         break;
 
       case 404:
-        Notification({
-          title: errorTitle || notFound.title,
-          description: notFound.description,
-          type: NotificationTypes.ERROR,
-        });
+        if (!isSilent) {
+          Notification({
+            title: errorTitle || notFound.title,
+            description: notFound.description,
+            type: NotificationTypes.ERROR,
+          });
+        }
         break;
 
       case 422:
-        Notification({
-          title: errorTitle || failed.title,
-          description: errorMessage,
-          type: NotificationTypes.ERROR,
-        });
+        if (!isSilent) {
+          Notification({
+            title: errorTitle || failed.title,
+            description: errorMessage,
+            type: NotificationTypes.ERROR,
+          });
+        }
         break;
 
       case 500:
       default:
-        Notification({
-          title: errorTitle || serverError.title,
-          description: errorMessage,
-          type: NotificationTypes.ERROR,
-        });
+        if (!isSilent) {
+          Notification({
+            title: errorTitle || serverError.title,
+            description: errorMessage,
+            type: NotificationTypes.ERROR,
+          });
+        }
         break;
     }
 

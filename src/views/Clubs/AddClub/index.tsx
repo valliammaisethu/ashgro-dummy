@@ -5,6 +5,10 @@ import Modal from "src/shared/components/Modal";
 import ProfilePictureInput from "src/shared/components/ProfilePictureInput";
 import { AddClubModalProps } from "src/shared/types/clubs.type";
 import { clubFormValidationSchema } from "src/views/Clubs/AddClub/clubFormValidation";
+import { EmailService } from "src/services/EmailService/email.service";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { useDebouncedEmailValidation } from "src/shared/hooks/useDebouncedEmailValidation";
 
 import styles from "./addClub.module.scss";
 import Switch from "src/shared/components/Switch";
@@ -32,6 +36,7 @@ const AddClub = (props: AddClubModalProps) => {
 
   const queryClient = useQueryClient();
   const { addClub, getClubProfile, editClub } = ClubService(queryClient);
+  const { validateEmail } = EmailService();
 
   const { data: clubData } = useQuery({
     ...getClubProfile(clubId || ""),
@@ -39,6 +44,25 @@ const AddClub = (props: AddClubModalProps) => {
   });
 
   const clubProfile = clubId && clubData?.club ? clubData.club : undefined;
+
+  const { mutateAsync: validateMutateAsync, error: clubEmailError } =
+    useMutation(validateEmail());
+  const { mutateAsync: validatePrimaryEmailAsync, error: primaryEmailError } =
+    useMutation(validateEmail());
+
+  const userClubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
+  const { handleEmailChange: debouncedClubEmailChange } =
+    useDebouncedEmailValidation({
+      validateMutateAsync,
+      clubId: userClubId,
+    });
+
+  const { handleEmailChange: debouncedPrimaryEmailChange } =
+    useDebouncedEmailValidation({
+      validateMutateAsync: validatePrimaryEmailAsync,
+      clubId: userClubId,
+    });
 
   const defaultValues = useMemo(
     () => ({
@@ -75,6 +99,9 @@ const AddClub = (props: AddClubModalProps) => {
     defaultValues: defaultValues,
     validationSchema: clubFormValidationSchema,
   });
+
+  const { setError, clearErrors } = methods;
+
   // TODO: Fix the form issue and remove useEffect here
   useEffect(() => {
     if (open && !clubId) {
@@ -86,6 +113,40 @@ const AddClub = (props: AddClubModalProps) => {
   const { mutateAsync: editMutateAsync, isPending: isEditing } = useMutation(
     editClub(clubId, onClose),
   );
+
+  const handleClubEmailChange = (email: string) => {
+    clearErrors("email");
+    debouncedClubEmailChange(email);
+  };
+
+  const handlePrimaryEmailChange = (email: string) => {
+    clearErrors("adminDetails.email");
+    debouncedPrimaryEmailChange(email);
+  };
+
+  useEffect(() => {
+    const responseError = clubEmailError as {
+      response?: { data?: { description?: string } };
+    };
+    if (responseError.response?.data?.description) {
+      setError("email", {
+        type: "manual",
+        message: responseError.response.data.description,
+      });
+    }
+  }, [clubEmailError, setError]);
+
+  useEffect(() => {
+    const responseError = primaryEmailError as {
+      response?: { data?: { description?: string } };
+    };
+    if (responseError.response?.data?.description) {
+      setError("adminDetails.email", {
+        type: "manual",
+        message: responseError.response.data.description,
+      });
+    }
+  }, [primaryEmailError, setError]);
 
   const formSubmit = async (values: FieldValues) => {
     const formValues = {
@@ -170,6 +231,7 @@ const AddClub = (props: AddClubModalProps) => {
               label={labels.clubEmail}
               name={fields.email}
               placeholder={placeholders.clubEmail}
+              onChange={(e) => handleClubEmailChange(e.target.value)}
             />
           </Col>
 
@@ -221,6 +283,7 @@ const AddClub = (props: AddClubModalProps) => {
               label={labels.primaryEmail}
               placeholder={placeholders.email}
               required
+              onChange={(e) => handlePrimaryEmailChange(e.target.value)}
             />
           </Col>
 

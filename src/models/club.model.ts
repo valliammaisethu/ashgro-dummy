@@ -118,3 +118,16 @@ export class ClubChatbotStatusResponse extends ResponseModel {
   @serializable(object(ClubProfile))
   data?: ClubProfile;
 }
+
+export class ClubEmailValidation {
+  @serializable
+  email?: string;
+
+  @serializable
+  clubId?: string;
+}
+
+export class ClubEmailValidationResponse extends ResponseModel {
+  @serializable
+  isValid?: boolean;
+}

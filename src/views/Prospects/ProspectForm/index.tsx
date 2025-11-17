@@ -36,6 +36,10 @@ import { findValueByLabel } from "src/shared/utils/commonHelpers";
 
 import styles from "./prospectForm.module.scss";
 import ConditionalRender from "src/shared/components/ConditionalRender";
+import { EmailService } from "src/services/EmailService/email.service";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { useDebouncedEmailValidation } from "src/shared/hooks/useDebouncedEmailValidation";
 
 const {
   MODAL_TITLE,
@@ -63,6 +67,7 @@ const ProspectForm = ({
   const queryClient = useQueryClient();
 
   const { addProspect, editProspect, viewProspect } = ProspectsService();
+  const { validateEmail } = EmailService();
 
   const { data: prospectData, isPending: isFetchingProspect } = useQuery({
     ...viewProspect(prospectId!),
@@ -71,8 +76,24 @@ const ProspectForm = ({
 
   const { mutateAsync, isPending } = useMutation(addProspect());
 
+  const { mutateAsync: validateMutateAsync, error } =
+    useMutation(validateEmail());
+
   const { mutateAsync: editMutateAsync, isPending: isEditPending } =
     useMutation(editProspect());
+
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
+  const { handleEmailChange: debouncedEmailChange } =
+    useDebouncedEmailValidation({
+      validateMutateAsync,
+      clubId,
+    });
+
+  const handleEmailChange = (email: string) => {
+    clearErrors(FIELD_NAMES.EMAIL_ADDRESS);
+    debouncedEmailChange(email);
+  };
 
   const { data: leadSourcesData } = useQuery({
     ...getLeadSources(),
@@ -151,7 +172,14 @@ const ProspectForm = ({
     defaultValues: isEdit ? defaultValues : {},
   });
 
-  const { setValue, watch, reset, handleSubmit: handleFormSubmit } = methods;
+  const {
+    setValue,
+    watch,
+    reset,
+    handleSubmit: handleFormSubmit,
+    setError,
+    clearErrors,
+  } = methods;
   const activityDateTime = watch(FIELD_NAMES.ACTIVITY_DATE_TIME);
 
   const handleActivityDescriptionChange = (value: string) => {
@@ -216,6 +244,17 @@ const ProspectForm = ({
       reset(defaultValues);
     }
   }, [isEdit, defaultValues, reset]);
+
+  useEffect(() => {
+    const responseError = error as {
+      response?: { data?: { description?: string } };
+    };
+    if (!responseError?.response?.data?.description) return;
+    setError(FIELD_NAMES.EMAIL_ADDRESS, {
+      type: "manual",
+      message: responseError.response.data.description,
+    });
+  }, [error, setError]);
 
   const handleActivityTypeChange = (value: string) => {
     setValue(FIELD_NAMES.ACTIVITY_TYPE, value);
@@ -312,6 +351,7 @@ const ProspectForm = ({
                 name={FIELD_NAMES.EMAIL_ADDRESS}
                 type={INPUT_TYPE.EMAIL}
                 required
+                onChange={(e) => handleEmailChange(e.target.value)}
               />
             </Col>
             <Col span={12}>

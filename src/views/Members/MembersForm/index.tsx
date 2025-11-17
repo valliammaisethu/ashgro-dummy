@@ -3,6 +3,10 @@ import React, { ChangeEvent, useEffect, useMemo } from "react";
 import { FieldValues } from "react-hook-form";
 import { IconCalendarWait } from "obra-icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { EmailService } from "src/services/EmailService/email.service";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { useDebouncedEmailValidation } from "src/shared/hooks/useDebouncedEmailValidation";
 
 import { Justify } from "src/enums/align.enum";
 import Form from "src/shared/components/Form";
@@ -67,11 +71,23 @@ const MembersForm = ({
   const { leadSources } = LeadService();
   const { getActivityTypes } = MetaService();
   const { addMember, MembersDetails, updateMemberDetails } = MembersService();
+  const { validateEmail } = EmailService();
 
   const { mutateAsync: addMemberMutate, isPending: isAddPending } =
     useMutation(addMember());
   const { mutateAsync: editMemberMutate, isPending: isEditPending } =
     useMutation(updateMemberDetails());
+
+  const { mutateAsync: validateMutateAsync, error } =
+    useMutation(validateEmail());
+
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
+  const { handleEmailChange: debouncedEmailChange } =
+    useDebouncedEmailValidation({
+      validateMutateAsync,
+      clubId,
+    });
 
   const { data, isFetching, refetch } = useQuery(MembersDetails(id));
 
@@ -86,7 +102,7 @@ const MembersForm = ({
 
   const { data: activityTypesData } = useQuery(getActivityTypes());
 
-  const { setValue, watch, handleSubmit } = methods;
+  const { setValue, watch, handleSubmit, setError, clearErrors } = methods;
 
   const activityTypeOptions = useMemo(
     () => mapToSelectOptionsDynamic(activityTypesData?.activityTypes),
@@ -118,6 +134,11 @@ const MembersForm = ({
       FIELD_NAMES.ACTIVITY_DATE_TIME,
       type || value ? new Date().toISOString() : "",
     );
+  };
+
+  const handleEmailChange = (email: string) => {
+    clearErrors(FIELD_NAMES.EMAIL_ADDRESS);
+    debouncedEmailChange(email);
   };
 
   const handleFormSubmit = async (values: FieldValues) => {
@@ -190,6 +211,18 @@ const MembersForm = ({
     methods.reset(formValues);
   }, [data]);
 
+  useEffect(() => {
+    const responseError = error as {
+      response?: { data?: { description?: string } };
+    };
+    if (responseError?.response?.data?.description) {
+      setError(FIELD_NAMES.EMAIL_ADDRESS, {
+        type: "manual",
+        message: responseError.response.data.description,
+      });
+    }
+  }, [error, setError]);
+
   return (
     <div>
       <Modal
@@ -260,6 +293,7 @@ const MembersForm = ({
                   name={FIELD_NAMES.EMAIL_ADDRESS}
                   type={INPUT_TYPE.EMAIL}
                   required
+                  onChange={(e) => handleEmailChange(e.target.value)}
                 />
               </Col>
               <Col span={12}>
