@@ -8,8 +8,10 @@ import { ButtonTypes } from "src/enums/buttons.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { MeetingPopoverContentProps } from "src/shared/types/calender";
 import Button from "src/shared/components/Button";
+import BookedChatbotIcon from "../atoms/BookedChatbotIcon";
 
 import styles from "./meetingPreview.module.scss";
+import { SLOT_STATUS } from "src/enums/calender.enum";
 
 const { CANCEL_BTN, RESCHEDULE } = BOOK_MEETING_CONSTANTS;
 const { HH_MM_A, DDD_MMM_DO } = DateFormats;
@@ -22,12 +24,19 @@ const MeetingPopoverContent: React.FC<MeetingPopoverContentProps> = ({
   return (
     <div className={styles.meetingPreviewCard}>
       <div className={styles.header}>
-        <p className={styles.name}>Hello</p>
+        <p className={styles.name}>{event?.resource?.bookedUserName}</p>
         <IconClose onClick={onCancel} />
       </div>
 
       <div className={styles.details}>
-        <p className={styles.title}>{event.title}</p>
+        <p className={styles.title}>
+          {event.title}
+
+          <BookedChatbotIcon
+            isBooked={event?.resource?.status == SLOT_STATUS.BOOKED}
+            isPastDate={false}
+          />
+        </p>
         <div className={styles.timeDetailsContainer}>
           <div className={styles.timeDetails}>
             <IconCalendarDates

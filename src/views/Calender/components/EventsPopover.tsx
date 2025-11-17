@@ -30,13 +30,11 @@ const EventsPopover: React.FC<EventsPopoverProps> = ({
         {displayEvents?.map((event) => (
           <div key={event.id} className={styles.popoverEvent}>
             {!event?.resource?.chatbot ? (
-              <>
-                <MeetingPreview
-                  event={{ ...event, date }}
-                  onReschedule={() => {}}
-                  isMorePopup
-                />
-              </>
+              <MeetingPreview
+                event={{ ...event, date }}
+                onReschedule={() => {}}
+                isMorePopup
+              />
             ) : (
               <div className={clsx(styles.eventTitle, styles.chatbotTime)}>
                 <p>{formatTimeRange(event.start, event.end)}</p>

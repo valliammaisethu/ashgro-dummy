@@ -6,7 +6,13 @@ export interface CalendarEvent {
   title?: ReactNode;
   start?: Date;
   end?: Date;
-  resource?: { chatbot?: boolean };
+  resource?: {
+    chatbot?: boolean;
+    status?: string;
+    bookedUserName?: string;
+    bookedUserType?: string;
+    bookedUserId?: string;
+  };
   date?: Date;
 }
 
@@ -19,7 +25,7 @@ export interface EventsPopoverProps {
 export interface DateCellProps {
   label: string;
   date: Date;
-  allEvents: CalendarEvent[];
+  allEvents?: CalendarEvent[];
   onDateClick?: (event: CalendarEvent) => void;
 }
 
@@ -38,7 +44,7 @@ export interface MeetingPreviewProps {
   event: CalendarEvent;
   isMorePopup?: boolean;
   isPastDate?: boolean;
-  onReschedule?: (event: CalendarEvent) => void;
+  onReschedule: (event: CalendarEvent) => void;
   onCancel?: () => void;
   onClose?: () => void;
 }

@@ -55,4 +55,7 @@ export const ApiRoutes = {
 
   GET_CLUBS: "/clubs",
   GET_CLUB_PROFILE: "/clubs/:id",
+
+  // Calender
+  CALENDER_EVENTS_AND_SLOTS: "/calendar?clubId=69082ffabc&month=2025-11",
 };
