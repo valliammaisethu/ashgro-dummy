@@ -18,6 +18,9 @@ export const formatDate = (date = "", format: DateFormats, isUTC = false) => {
     : dayjs(date).format(format);
 };
 
+export const formatDateTime = (date = "", format: DateFormats) =>
+  dayjs.utc(date).format(format);
+
 export const disableFutureAndToday = (date: dayjs.Dayjs) =>
   date.isAfter(dayjs().subtract(1, "day"));
 

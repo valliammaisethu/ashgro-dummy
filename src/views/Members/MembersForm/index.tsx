@@ -187,7 +187,8 @@ const MembersForm = ({
   };
   // TODO: Fix the form issue and remove useEffect here
   useEffect(() => {
-    methods.reset(formValues);
+    if (id) methods.reset(formValues);
+    else methods.reset({});
   }, [data]);
 
   return (

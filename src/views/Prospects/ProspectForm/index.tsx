@@ -35,7 +35,6 @@ import { getDigitsOnly } from "src/shared/utils/parser";
 import { findValueByLabel } from "src/shared/utils/commonHelpers";
 
 import styles from "./prospectForm.module.scss";
-import ConditionalRender from "src/shared/components/ConditionalRender";
 
 const {
   MODAL_TITLE,
@@ -214,8 +213,10 @@ const ProspectForm = ({
   useEffect(() => {
     if (isEdit && Object.keys(defaultValues).length > 0) {
       reset(defaultValues);
+    } else {
+      reset({});
     }
-  }, [isEdit, defaultValues, reset]);
+  }, [isEdit, defaultValues, reset, visible]);
 
   const handleActivityTypeChange = (value: string) => {
     setValue(FIELD_NAMES.ACTIVITY_TYPE, value);
@@ -238,6 +239,7 @@ const ProspectForm = ({
       okText={isEdit ? Buttons.SAVE_CHANGES : Buttons.ADD_PROSPECT}
       closeModal={modalClose}
       destroyOnClose
+      loading={isEdit && isFetchingProspect}
       handleOk={handleFormSubmit(handleSubmit)}
       rootClassName={styles.prospectFormModal}
       okButtonProps={{
@@ -254,182 +256,174 @@ const ProspectForm = ({
         },
       }}
     >
-      <ConditionalRender
-        isPending={isFetchingProspect && isEdit}
-        isSuccess={!isFetchingProspect || !isEdit}
-        skipEmptyState
-      >
-        <Form methods={methods}>
-          <div className={styles.profileContainer}>
-            <ProfilePictureInput
-              name={FIELD_NAMES.PROFILE_PICTURE}
-              label={LABELS.PROFILE_PICTURE}
+      <Form methods={methods}>
+        <div className={styles.profileContainer}>
+          <ProfilePictureInput
+            name={FIELD_NAMES.PROFILE_PICTURE}
+            label={LABELS.PROFILE_PICTURE}
+          />
+        </div>
+
+        <Divider />
+
+        <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
+          <Col span={12}>
+            <InputField
+              placeholder={PLACEHOLDERS.FIRST_NAME}
+              label={LABELS.FIRST_NAME}
+              name={FIELD_NAMES.FIRST_NAME}
+              required
             />
-          </div>
+          </Col>
+          <Col span={12}>
+            <InputField
+              placeholder={PLACEHOLDERS.LAST_NAME}
+              label={LABELS.LAST_NAME}
+              name={FIELD_NAMES.LAST_NAME}
+              required
+            />
+          </Col>
+          <Col span={12}>
+            <SelectField
+              placeholder={PLACEHOLDERS.LEAD_STATUS}
+              label={LABELS.LEAD_STATUS}
+              name={FIELD_NAMES.LEAD_STATUS}
+              options={leadStatusOptions}
+            />
+          </Col>
+          <Col span={12}>
+            <DatePicker
+              placeholder={PLACEHOLDERS.FOLLOW_UP_DATE}
+              label={LABELS.FOLLOW_UP_DATE}
+              name={FIELD_NAMES.FOLLOW_UP_DATE}
+              format={DateFormats.DD_MMM_YYYY}
+            />
+          </Col>
+          <Col span={12}>
+            <InputField
+              placeholder={PLACEHOLDERS.EMAIL_ADDRESS}
+              label={LABELS.EMAIL_ADDRESS}
+              name={FIELD_NAMES.EMAIL_ADDRESS}
+              type={INPUT_TYPE.EMAIL}
+              required
+            />
+          </Col>
+          <Col span={12}>
+            <PhoneNumberField
+              label={LABELS.PHONE_NUMBER}
+              name={FIELD_NAMES.PHONE_NUMBER}
+              phoneCodeName={FIELD_NAMES.PHONE_CODE}
+              placeholder={PLACEHOLDERS.PHONE_NUMBER}
+            />
+          </Col>
+        </Row>
 
-          <Divider />
+        <Divider />
 
-          <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
-            <Col span={12}>
-              <InputField
-                placeholder={PLACEHOLDERS.FIRST_NAME}
-                label={LABELS.FIRST_NAME}
-                name={FIELD_NAMES.FIRST_NAME}
-                required
-              />
-            </Col>
-            <Col span={12}>
-              <InputField
-                placeholder={PLACEHOLDERS.LAST_NAME}
-                label={LABELS.LAST_NAME}
-                name={FIELD_NAMES.LAST_NAME}
-                required
-              />
-            </Col>
-            <Col span={12}>
-              <SelectField
-                placeholder={PLACEHOLDERS.LEAD_STATUS}
-                label={LABELS.LEAD_STATUS}
-                name={FIELD_NAMES.LEAD_STATUS}
-                options={leadStatusOptions}
-              />
-            </Col>
-            <Col span={12}>
-              <DatePicker
-                placeholder={PLACEHOLDERS.FOLLOW_UP_DATE}
-                label={LABELS.FOLLOW_UP_DATE}
-                name={FIELD_NAMES.FOLLOW_UP_DATE}
-                format={DateFormats.DD_MMM_YYYY}
-              />
-            </Col>
-            <Col span={12}>
-              <InputField
-                placeholder={PLACEHOLDERS.EMAIL_ADDRESS}
-                label={LABELS.EMAIL_ADDRESS}
-                name={FIELD_NAMES.EMAIL_ADDRESS}
-                type={INPUT_TYPE.EMAIL}
-                required
-              />
-            </Col>
-            <Col span={12}>
-              <PhoneNumberField
-                label={LABELS.PHONE_NUMBER}
-                name={FIELD_NAMES.PHONE_NUMBER}
-                phoneCodeName={FIELD_NAMES.PHONE_CODE}
-                placeholder={PLACEHOLDERS.PHONE_NUMBER}
-              />
-            </Col>
-          </Row>
+        <div className={styles.sectionTitle}>{SECTION_TITLES.LEAD_DETAILS}</div>
+        <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
+          <Col span={12}>
+            <DatePicker
+              placeholder={PLACEHOLDERS.INQUIRY_DATE}
+              label={LABELS.INQUIRY_DATE}
+              name={FIELD_NAMES.INQUIRY_DATE}
+              disabledDate={disableFutureAndToday}
+              format={DateFormats.DD_MMM_YYYY}
+            />
+          </Col>
+          <Col span={12}>
+            <SelectField
+              placeholder={PLACEHOLDERS.LEAD_SOURCE}
+              label={LABELS.LEAD_SOURCE}
+              name={FIELD_NAMES.LEAD_SOURCE}
+              options={leadSourceOptions}
+            />
+          </Col>
+          <Col span={12}>
+            <SelectField
+              placeholder={PLACEHOLDERS.MEMBERSHIP_CATEGORY}
+              label={LABELS.MEMBERSHIP_CATEGORY}
+              name={FIELD_NAMES.MEMBERSHIP_CATEGORY}
+              options={membershipCategoryOptions}
+            />
+          </Col>
+        </Row>
 
-          <Divider />
+        <Divider />
 
-          <div className={styles.sectionTitle}>
-            {SECTION_TITLES.LEAD_DETAILS}
-          </div>
-          <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
-            <Col span={12}>
-              <DatePicker
-                placeholder={PLACEHOLDERS.INQUIRY_DATE}
-                label={LABELS.INQUIRY_DATE}
-                name={FIELD_NAMES.INQUIRY_DATE}
-                disabledDate={disableFutureAndToday}
-                format={DateFormats.DD_MMM_YYYY}
-              />
-            </Col>
-            <Col span={12}>
-              <SelectField
-                placeholder={PLACEHOLDERS.LEAD_SOURCE}
-                label={LABELS.LEAD_SOURCE}
-                name={FIELD_NAMES.LEAD_SOURCE}
-                options={leadSourceOptions}
-              />
-            </Col>
-            <Col span={12}>
-              <SelectField
-                placeholder={PLACEHOLDERS.MEMBERSHIP_CATEGORY}
-                label={LABELS.MEMBERSHIP_CATEGORY}
-                name={FIELD_NAMES.MEMBERSHIP_CATEGORY}
-                options={membershipCategoryOptions}
-              />
-            </Col>
-          </Row>
+        <div className={styles.sectionTitle}>
+          {SECTION_TITLES.FEES_AND_DUES}
+        </div>
+        <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
+          <Col span={12}>
+            <InputField
+              placeholder={PLACEHOLDERS.MONTHLY_DUES}
+              label={LABELS.MONTHLY_DUES}
+              name={FIELD_NAMES.MONTHLY_DUES}
+              type={INPUT_TYPE.CURRENCY}
+            />
+          </Col>
+          <Col span={12}>
+            <InputField
+              placeholder={PLACEHOLDERS.INITIATION_FEE}
+              label={LABELS.INITIATION_FEE}
+              name={FIELD_NAMES.INITIATION_FEE}
+              type={INPUT_TYPE.CURRENCY}
+            />
+          </Col>
+        </Row>
 
-          <Divider />
-
-          <div className={styles.sectionTitle}>
-            {SECTION_TITLES.FEES_AND_DUES}
-          </div>
-          <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
-            <Col span={12}>
-              <InputField
-                placeholder={PLACEHOLDERS.MONTHLY_DUES}
-                label={LABELS.MONTHLY_DUES}
-                name={FIELD_NAMES.MONTHLY_DUES}
-                type={INPUT_TYPE.CURRENCY}
-              />
-            </Col>
-            <Col span={12}>
-              <InputField
-                placeholder={PLACEHOLDERS.INITIATION_FEE}
-                label={LABELS.INITIATION_FEE}
-                name={FIELD_NAMES.INITIATION_FEE}
-                type={INPUT_TYPE.CURRENCY}
-              />
-            </Col>
-          </Row>
-
-          {!isEdit && (
-            <>
-              <Divider />
-              <div className={styles.sectionTitle}>
-                {SECTION_TITLES.ACTIVITY_DETAILS}
-              </div>
-              <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
-                <Col span={12}>
-                  <InputField
-                    placeholder={PLACEHOLDERS.ACTIVITY_DATE_TIME}
-                    label={LABELS.ACTIVITY_DATE_TIME}
-                    value={formatDate(
-                      activityDateTime,
-                      DateFormats.HH_MM_A__DD_MMM_YYYY,
-                      true,
-                    )}
-                    name={FIELD_NAMES.ACTIVITY_DATE_TIME}
-                    readOnly
-                    suffix={
-                      <IconCalendarWait
-                        color={Colors.ASHGRO_NAVY}
-                        strokeWidth={1.25}
-                        size={16}
-                      />
-                    }
-                  />
-                </Col>
-                <Col span={12}>
-                  <SelectField
-                    placeholder={PLACEHOLDERS.ACTIVITY_TYPE}
-                    label={LABELS.ACTIVITY_TYPE}
-                    name={FIELD_NAMES.ACTIVITY_TYPE}
-                    options={activityTypeOptions}
-                    onChange={(value) => handleActivityTypeChange(value)}
-                  />
-                </Col>
-                <Col span={24}>
-                  <TextArea
-                    placeholder={PLACEHOLDERS.ACTIVITY_DESCRIPTION}
-                    name={FIELD_NAMES.ACTIVITY_DESCRIPTION}
-                    className={styles.activityDescBox}
-                    label={LABELS.ACTIVITY_DESCRIPTION}
-                    onChange={(e) =>
-                      handleActivityDescriptionChange(e.target.value)
-                    }
-                  />
-                </Col>
-              </Row>
-            </>
-          )}
-        </Form>
-      </ConditionalRender>
+        {!isEdit && (
+          <>
+            <Divider />
+            <div className={styles.sectionTitle}>
+              {SECTION_TITLES.ACTIVITY_DETAILS}
+            </div>
+            <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
+              <Col span={12}>
+                <InputField
+                  placeholder={PLACEHOLDERS.ACTIVITY_DATE_TIME}
+                  label={LABELS.ACTIVITY_DATE_TIME}
+                  value={formatDate(
+                    activityDateTime,
+                    DateFormats.HH_MM_A__DD_MMM_YYYY,
+                    true,
+                  )}
+                  name={FIELD_NAMES.ACTIVITY_DATE_TIME}
+                  readOnly
+                  suffix={
+                    <IconCalendarWait
+                      color={Colors.ASHGRO_NAVY}
+                      strokeWidth={1.25}
+                      size={16}
+                    />
+                  }
+                />
+              </Col>
+              <Col span={12}>
+                <SelectField
+                  placeholder={PLACEHOLDERS.ACTIVITY_TYPE}
+                  label={LABELS.ACTIVITY_TYPE}
+                  name={FIELD_NAMES.ACTIVITY_TYPE}
+                  options={activityTypeOptions}
+                  onChange={(value) => handleActivityTypeChange(value)}
+                />
+              </Col>
+              <Col span={24}>
+                <TextArea
+                  placeholder={PLACEHOLDERS.ACTIVITY_DESCRIPTION}
+                  name={FIELD_NAMES.ACTIVITY_DESCRIPTION}
+                  className={styles.activityDescBox}
+                  label={LABELS.ACTIVITY_DESCRIPTION}
+                  onChange={(e) =>
+                    handleActivityDescriptionChange(e.target.value)
+                  }
+                />
+              </Col>
+            </Row>
+          </>
+        )}
+      </Form>
     </Modal>
   );
 };

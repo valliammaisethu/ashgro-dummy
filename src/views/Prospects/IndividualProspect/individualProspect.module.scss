@@ -227,7 +227,7 @@
 
       .activityContainer {
         flex: 1;
-        @include flex-flow(column, wrap, normal);
+        @include flex-flow(column, nowrap, normal);
         min-height: 0;
 
         .header {

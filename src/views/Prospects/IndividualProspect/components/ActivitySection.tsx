@@ -5,7 +5,7 @@ import Card from "src/shared/components/Card";
 import Button from "src/shared/components/Button";
 import { headerConstants, PROSPECT_LABELS } from "../constants";
 import { ActivityDetails } from "src/models/viewProspect.model";
-import { formatDate } from "src/shared/utils/dateUtils";
+import { formatDateTime } from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import AddActivity from "./Activity/AddActivity";
 
@@ -50,7 +50,10 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
           <div className={styles.titleContainer}>
             <div className={styles.title}>{activity.activityType}</div>
             <div className={styles.date}>
-              {formatDate(activity.createdAt, DateFormats.HH_MM_A__DD_MMM_YYYY)}
+              {formatDateTime(
+                activity.createdAt,
+                DateFormats.HH_MM_A__DD_MMM_YYYY,
+              )}
             </div>
           </div>
           <div className={styles.content}>{activity.description}</div>
