@@ -39,6 +39,7 @@ const FileUpload = ({
   maxFileSizeClassName,
   attachmentClassName,
   initialFiles = [],
+  deleteOnRemove = true,
 }: FileUploadProps) => {
   const { control } = useFormContext();
   const { field } = useController({ name, control });
@@ -116,18 +117,19 @@ const FileUpload = ({
   };
 
   const handleDeleteFile = async (fileId: string) => {
-    const fileToDelete = uploadedFiles.find((file) => file.id === fileId);
-    if (fileToDelete?.isInitial) {
-      const newFiles = uploadedFiles.filter((file) => file.id !== fileId);
+    const fileToDelete = uploadedFiles?.find((file) => file.id === fileId);
+    const newFiles = uploadedFiles?.filter((file) => file.id !== fileId);
+
+    if (!deleteOnRemove || fileToDelete?.isInitial) {
       setUploadedFiles(newFiles);
-      field.onChange(newFiles.map((f) => f.id));
+      field.onChange(newFiles?.map((f) => f.id));
       return;
     }
+
     try {
       await deleteFile.mutateAsync(fileId);
-      const newFiles = uploadedFiles.filter((file) => file.id !== fileId);
       setUploadedFiles(newFiles);
-      field.onChange(newFiles.map((f) => f.id));
+      field.onChange(newFiles?.map((f) => f.id));
     } catch {
       renderNotification(fileDeletionError, "", NotificationTypes.ERROR);
     }
@@ -163,7 +165,7 @@ const FileUpload = ({
           {maxFileSizeText}
         </div>
       </div>
-      {uploadedFiles.length && (
+      {Boolean(uploadedFiles.length) && (
         <div className={styles.uploadedFiles}>
           {uploadedFiles.map((file) => (
             <div

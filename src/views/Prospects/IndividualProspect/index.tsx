@@ -103,8 +103,6 @@ const IndividualProspect = () => {
         isSuccess={isSuccess}
         isFetching={isFetching}
         records={[data?.prospect]}
-        useGridSkeleton
-        skeletonRows={16}
       >
         <Card className={styles.card}>
           <div className={styles.leftSide}>

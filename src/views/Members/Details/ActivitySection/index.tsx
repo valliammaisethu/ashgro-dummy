@@ -8,16 +8,21 @@ import { ActivityDetails } from "src/models/viewProspect.model";
 import { detailsConstants } from "../constants";
 
 import styles from "./activitySection.module.scss";
+import ConditionalRender from "src/shared/components/ConditionalRender";
 
 interface ActivitySectionProps {
   activityCount?: number;
   activities?: ActivityDetails[];
   refetch?: () => void;
+  isPending: boolean;
+  isSuccess: boolean;
 }
 const ActivitySection = ({
   activityCount = 0,
   activities,
   refetch,
+  isPending,
+  isSuccess,
 }: ActivitySectionProps) => {
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
 
@@ -34,9 +39,15 @@ const ActivitySection = ({
         </Button>
       </div>
       <div>
-        {activities?.map((activity) => (
-          <ActivityCard key={activity?.id} activity={activity} />
-        ))}
+        <ConditionalRender
+          isPending={isPending}
+          isSuccess={isSuccess}
+          records={activities}
+        >
+          {activities?.map((activity) => (
+            <ActivityCard key={activity?.id} activity={activity} />
+          ))}
+        </ConditionalRender>
       </div>
 
       <AddActivity

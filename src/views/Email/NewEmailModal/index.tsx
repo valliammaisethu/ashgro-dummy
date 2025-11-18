@@ -214,6 +214,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
               maxFileSizeClassName={styles.maxFileSize}
               attachmentClassName={styles.attachment}
               initialFiles={initialAttachments}
+              deleteOnRemove={false}
             />
           </Col>
         </Row>
