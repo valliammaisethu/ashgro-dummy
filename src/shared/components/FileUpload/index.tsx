@@ -163,32 +163,34 @@ const FileUpload = ({
           {maxFileSizeText}
         </div>
       </div>
-      <div className={styles.uploadedFiles}>
-        {uploadedFiles.map((file) => (
-          <div
-            key={file.id}
-            className={attachmentClassName || styles.attachment}
-          >
-            <span className={styles.attachmentIcon}>
-              <IconAttachment
-                color={Colors.ASHGRO_GOLD}
-                size={18}
-                strokeWidth={1.25}
-              />
-            </span>
-            <span className={styles.fileName}>{file.name}</span>
-            <span
-              className={styles.closeIcon}
-              onClick={() => handleDeleteFile(file.id)}
+      {uploadedFiles.length && (
+        <div className={styles.uploadedFiles}>
+          {uploadedFiles.map((file) => (
+            <div
+              key={file.id}
+              className={attachmentClassName || styles.attachment}
             >
-              <IconCircleClose
-                strokeWidth={1.25}
-                color={Colors.MODAL_CLOSE_ICON}
-              />
-            </span>
-          </div>
-        ))}
-      </div>
+              <span className={styles.attachmentIcon}>
+                <IconAttachment
+                  color={Colors.ASHGRO_GOLD}
+                  size={18}
+                  strokeWidth={1.25}
+                />
+              </span>
+              <span className={styles.fileName}>{file.name}</span>
+              <span
+                className={styles.closeIcon}
+                onClick={() => handleDeleteFile(file.id)}
+              >
+                <IconCircleClose
+                  strokeWidth={1.25}
+                  color={Colors.MODAL_CLOSE_ICON}
+                />
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 };

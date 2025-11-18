@@ -62,6 +62,10 @@
   }
 }
 
+.bulkMailIcon {
+  margin-right: 0.8rem;
+}
+
 .filterButton:global(
     .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
   ):hover {
