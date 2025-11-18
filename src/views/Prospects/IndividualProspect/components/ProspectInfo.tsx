@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { IconCall, IconEmail } from "obra-icons-react";
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
 
 import { Colors } from "src/enums/colors.enum";
 import { PROSPECT_LABELS } from "../constants";
@@ -8,19 +10,25 @@ import IconText from "../atoms/IconText";
 import styles from "../individualProspect.module.scss";
 import { ViewProspect } from "src/models/viewProspect.model";
 import { getFullName } from "src/shared/utils/helpers";
-import { formatDate } from "src/shared/utils/dateUtils";
+import { formatDate, convertDateToApiFormat } from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { getPhoneNumber } from "../utils";
 import { AttachmentService } from "src/services/AttachmentService/attachment.service";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { formatAndSetPhoneNumber } from "src/shared/utils/phoneNumberUtils";
+import { ProspectsService } from "src/services/ProspectsService/prospects.service";
+import Loader from "src/shared/components/Loader";
 
 interface ProspectInfoProps {
   data?: ViewProspect;
+  onRefetch?: () => void;
+  clubId?: string;
 }
 
 const ProspectInfo: React.FC<ProspectInfoProps> = ({
   data: prospect = new ViewProspect(),
+  onRefetch,
+  clubId,
 }) => {
   const {
     firstName,
@@ -30,14 +38,45 @@ const ProspectInfo: React.FC<ProspectInfoProps> = ({
     countryCode,
     email,
     attachmentId,
+    id,
   } = prospect;
 
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
   const { getAttachmentPreview } = AttachmentService();
+
+  const { editProspect } = ProspectsService();
+
+  const { mutateAsync: updateProspectMutation, isPending: isUpdating } =
+    useMutation(editProspect());
 
   const { data: attachmentPreview } = useQuery({
     ...getAttachmentPreview(attachmentId),
     enabled: !!attachmentId,
   });
+
+  const handleFollowUpDateChange = async (date: dayjs.Dayjs | null) => {
+    if (date && id) {
+      await updateProspectMutation(
+        {
+          prospect: {
+            id: String(id),
+            followUpDate: convertDateToApiFormat(
+              date.format(DateFormats.DD_MMM_YYYY),
+              DateFormats.DD_MMM_YYYY,
+            ),
+            clubId,
+          },
+        },
+        {
+          onSuccess: () => {
+            onRefetch?.();
+            setIsDatePickerOpen(false);
+          },
+        },
+      );
+    }
+  };
 
   return (
     <div className={styles.top}>
@@ -50,9 +89,19 @@ const ProspectInfo: React.FC<ProspectInfoProps> = ({
           <span className={styles.dateTitle}>
             {PROSPECT_LABELS.followUpDate}
           </span>
-          <span className={styles.date}>
-            {formatDate(followUpDate, DateFormats.DD_MMM__YYYY)}
-          </span>
+          <DatePicker
+            open={isDatePickerOpen}
+            onOpenChange={setIsDatePickerOpen}
+            value={followUpDate ? dayjs(followUpDate) : null}
+            onChange={handleFollowUpDateChange}
+            format={DateFormats.DD_MMM__YYYY}
+            className={styles.datePicker}
+            suffixIcon={null}
+            placeholder={formatDate(followUpDate, DateFormats.DD_MMM__YYYY)}
+            inputReadOnly
+            allowClear={false}
+          />
+          <Loader loading={isUpdating} />
         </div>
         <div className={styles.email}>
           <IconText
