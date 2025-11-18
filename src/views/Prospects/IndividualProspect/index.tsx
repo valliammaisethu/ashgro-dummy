@@ -134,7 +134,11 @@ const IndividualProspect = () => {
               />
             </div>
             <div className={styles.content}>
-              <ProspectInfo data={data?.prospect} />
+              <ProspectInfo
+                data={data?.prospect}
+                onRefetch={handleRefetch}
+                clubId={clubId}
+              />
               <div className={styles.bottom}>
                 <DetailSection
                   title={PROSPECT_LABELS.leadDetails}
