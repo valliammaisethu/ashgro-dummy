@@ -23,7 +23,7 @@ export const disableFutureAndToday = (date: dayjs.Dayjs) =>
 
 export const convertDateToApiFormat = (
   date: string | undefined,
-  format: DateFormats = DateFormats.DD_MMM__YYYY,
+  format: DateFormats = DateFormats.DD_MMM_YYYY,
 ) => {
   if (!date) return date;
   const parsed = dayjs(date, format, true);

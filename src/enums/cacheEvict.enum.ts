@@ -25,6 +25,10 @@ export enum MutationKeys {
   DELETE_STAFF_MEMBER = "deleteStaffMemeber",
   ADD_STAFF_MEMBER = "addStaffMember",
   EDIT_STAFF_MEMBER = "editStaffMember",
+
+  ADD_CLUB = "addClub",
+  EDIT_CLUB = "editClub",
+  EDIT_CHATBOT = "editChatbot",
 }
 
 export enum QueryKeys {

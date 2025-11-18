@@ -40,22 +40,20 @@ export const placeholders = {
 };
 
 export const fields = {
-  profilePicture: "profilePicture",
-  chatbotSwitch: "chatbotSwitch",
+  profilePicture: "attachmentId",
+  chatbotEnabled: "chatbotEnabled",
 
-  clubName: "clubName",
+  clubName: "name",
   onboardingDate: "onboardingDate",
-  clubEmail: "clubEmail",
-  clubPhoneNumber: "clubPhoneNumber",
+  email: "email",
+  contactNumber: "contactNumber",
   clubPhoneCountryCode: "clubCountryCode",
+  notes: "notes",
+  clubAddress: "address",
 
-  clubAddress: "clubAddress",
-
-  primaryFirstName: "firstName",
-  primaryLastName: "lastName",
-  primaryEmail: "email",
-  primaryPhoneNumber: "phoneNumber",
-  primaryPhoneCountryCode: "countryCode",
-
-  notesDescription: "description",
+  primaryFirstName: "adminDetails.firstName",
+  primaryLastName: "adminDetails.lastName",
+  primaryEmail: "adminDetails.email",
+  primaryPhoneNumber: "adminDetails.contactNumber",
+  primaryPhoneCountryCode: "adminDetails.countryCode",
 };

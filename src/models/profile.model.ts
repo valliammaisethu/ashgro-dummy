@@ -1,20 +1,23 @@
-import { serializable } from "serializr";
+import { alias, serializable } from "serializr";
 
 export class ProfileDetails {
-  @serializable
-  firstName?: string;
+  @serializable(alias("id"))
+  id?: string;
 
   @serializable
-  lastName?: string;
+  firstName = "";
 
   @serializable
-  email?: string;
+  lastName = "";
+
+  @serializable
+  email = "";
 
   @serializable
   phoneNumber?: string;
 
   @serializable
-  countryCode?: string;
+  countryCode = "+1";
 
   @serializable
   profilePicture?: string;
@@ -23,10 +26,7 @@ export class ProfileDetails {
   address?: string;
 
   @serializable
-  contactNumber?: string;
-
-  @serializable
-  notes?: string;
+  contactNumber = "";
 
   @serializable
   attachmentId = "";

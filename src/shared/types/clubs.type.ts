@@ -1,9 +1,9 @@
-import { ClubFormData, ClubProfile } from "src/models/club.model";
+import { ClubProfile } from "src/models/club.model";
 
-export interface AddClubModalProps {
+export interface ClubFormProps {
   open: boolean;
   onClose: () => void;
-  clubData?: ClubFormData | null;
+  clubId: string;
 }
 
 export interface ClubListingHeaderProps {
@@ -11,7 +11,7 @@ export interface ClubListingHeaderProps {
 }
 
 export interface ClubListingTableProps {
-  onEditClub: (data: ClubFormData) => void;
+  onEditClub: (clubId: string) => void;
 }
 
 export interface ClubInfoProps {
@@ -20,7 +20,7 @@ export interface ClubInfoProps {
 
 export interface ClubFormState {
   visible: boolean;
-  clubData: ClubFormData | null;
+  clubId: string | null;
 }
 export interface ClubDetailsHeaderProps {
   onChatbotQuestions?: () => void;

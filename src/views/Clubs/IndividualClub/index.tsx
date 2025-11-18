@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IconChevronDown, IconEdit } from "obra-icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -13,18 +13,20 @@ import Card from "src/shared/components/Card";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import Switch from "src/shared/components/Switch";
 import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
-import useDrawer from "src/shared/hooks/useDrawer";
 import { stopPropagation } from "src/shared/utils/eventUtils";
+import ClubForm from "../ClubForm";
 import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
+import { ClubService } from "src/services/ClubService/club.service";
 import { Colors } from "src/enums/colors.enum";
 
 import styles from "./individualClub.module.scss";
-import { ClubService } from "src/services/ClubService/club.service";
 
 const IndividualClub = () => {
   const { id = "" } = useParams();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const { getClubProfile } = ClubService();
+
   const {
     data: clubData,
     isPending,
@@ -32,20 +34,19 @@ const IndividualClub = () => {
     isFetching,
   } = useQuery(getClubProfile(id));
 
-  const { toggleVisibility } = useDrawer();
-
   const handleEdit = () => {
-    // TODO: Need to do integration
-    toggleVisibility();
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
   };
 
   const handleChatbotQuestions = () => {
     // TODO: Need to do integration
   };
 
-  const handleStatusChange = () => {
-    // TODO: Need to do integration
-  };
+  const handleStatusChange = async () => {};
 
   return (
     <div className={styles.individualClub}>
@@ -110,6 +111,11 @@ const IndividualClub = () => {
           </div>
         </Card>
       </ConditionalRender>
+      <ClubForm
+        onClose={handleCloseEditModal}
+        open={isEditModalOpen}
+        clubId={id}
+      />
     </div>
   );
 };

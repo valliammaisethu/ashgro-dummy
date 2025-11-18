@@ -14,9 +14,9 @@ import styles from "../individualClub.module.scss";
 
 const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
   const {
-    clubName,
+    name,
     numberOfMembers,
-    clubAddress,
+    address,
     contactNumber,
     onboardingDate,
     email,
@@ -32,15 +32,11 @@ const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
   return (
     <div className={styles.top}>
       <div className={styles.left}>
-        <img
-          src={attachmentPreview}
-          className={styles.clubImage}
-          alt={clubName}
-        />
+        <img src={attachmentPreview} className={styles.clubImage} alt={name} />
       </div>
       <div className={styles.right}>
         <div className={styles.nameContainer}>
-          <div className={styles.name}>{clubName}</div>
+          <div className={styles.name}>{name}</div>
           <div className={styles.memberBadge}>
             {numberOfMembers} {CLUB_LABELS.members}
           </div>
@@ -54,7 +50,7 @@ const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
         <div className={styles.contactInfo}>
           <IconText
             icon={<IconLocationMarker color={Colors.ASHGRO_GOLD} size={20} />}
-            text={clubAddress}
+            text={address}
             className={styles.address}
           />
         </div>

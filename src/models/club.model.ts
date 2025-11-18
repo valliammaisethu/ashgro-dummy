@@ -1,34 +1,41 @@
 import { list, object, serializable } from "serializr";
 import { ProfileDetails } from "./profile.model";
 import { Pagination } from "./pagination.model";
+import { ResponseModel } from "./response.model";
 
-export class ClubFormData extends ProfileDetails {
+export class ClubFormData {
   @serializable
-  chatbotSwitch?: boolean;
+  attachmentId?: string;
 
   @serializable
-  clubName?: string;
+  chatbotEnabled?: boolean;
+
+  @serializable
+  name?: string;
 
   @serializable
   onboardingDate?: string;
 
   @serializable
-  clubEmail?: string;
+  email?: string;
 
   @serializable
-  clubPhoneNumber?: string;
+  contactNumber?: string;
 
   @serializable
-  clubCountryCode?: string;
+  clubCountryCode?: string = "+1";
 
   @serializable
-  clubAddress?: string;
+  address?: string;
 
   @serializable
-  description?: string;
+  notes?: string;
+
+  @serializable(object(ProfileDetails))
+  adminDetails?: ProfileDetails;
 }
 
-export class ClubProfile extends ProfileDetails {
+export class ClubProfile {
   @serializable
   id?: string;
 
@@ -36,10 +43,16 @@ export class ClubProfile extends ProfileDetails {
   logoUrl?: string;
 
   @serializable
-  clubName = "";
+  name = "";
 
   @serializable
-  clubAddress = "";
+  email = "";
+
+  @serializable
+  contactNumber = "";
+
+  @serializable
+  address = "";
 
   @serializable
   onboardingDate = "";
@@ -53,6 +66,15 @@ export class ClubProfile extends ProfileDetails {
   @serializable
   numberOfMembers = 0;
 
+  @serializable
+  clubCountryCode = "+1";
+
+  @serializable
+  attachmentId?: string;
+
+  @serializable
+  notes?: string;
+
   @serializable(object(ProfileDetails))
   adminDetails = new ProfileDetails();
 }
@@ -62,7 +84,7 @@ export class ClubData {
   club = new ClubProfile();
 }
 
-export class ClubListData extends ProfileDetails {
+export class ClubListData {
   @serializable
   id?: string;
 
@@ -70,10 +92,10 @@ export class ClubListData extends ProfileDetails {
   logoUrl?: string;
 
   @serializable
-  clubName = "";
+  name = "";
 
   @serializable
-  clubAddress = "";
+  address = "";
 
   @serializable
   onboardingDate?: string;
@@ -94,4 +116,14 @@ export class ClubListReponse {
 
   @serializable(object(Pagination))
   pagination?: Pagination;
+}
+
+export class ClubChatbotStatus {
+  @serializable
+  chatbotEnabled?: boolean;
+}
+
+export class ClubChatbotStatusResponse extends ResponseModel {
+  @serializable(object(ClubProfile))
+  data?: ClubProfile;
 }

@@ -6,7 +6,7 @@ import { ClubInfoProps } from "src/shared/types/clubs.type";
 import styles from "../individualClub.module.scss";
 
 const ContactDetails: React.FC<ClubInfoProps> = ({ data }) => {
-  const { email, clubName, contactNumber } = data || {};
+  const { adminDetails } = data || {};
   return (
     <div className={styles.contactDetailsSection}>
       <div className={styles.sectionTitle}>
@@ -15,15 +15,17 @@ const ContactDetails: React.FC<ClubInfoProps> = ({ data }) => {
       <div className={styles.contactDetailsContainer}>
         <div className={styles.contactDetail}>
           <div className={styles.label}>{CONTACT_TITLES.name}</div>
-          <div className={styles.value}>{clubName}</div>
+          <div className={styles.value}>
+            {`${adminDetails?.firstName} ${adminDetails?.lastName}`}
+          </div>
         </div>
         <div className={styles.contactDetail}>
           <div className={styles.label}>{CONTACT_TITLES.emailAddress}</div>
-          <div className={styles.value}>{email}</div>
+          <div className={styles.value}>{adminDetails?.email}</div>
         </div>
         <div className={styles.contactDetail}>
           <div className={styles.label}>{CONTACT_TITLES.phoneNumber}</div>
-          <div className={styles.value}>{contactNumber}</div>
+          <div className={styles.value}>{adminDetails?.contactNumber}</div>
         </div>
       </div>
     </div>
