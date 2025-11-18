@@ -257,9 +257,6 @@ const ProspectForm = ({
       <ConditionalRender
         isPending={isFetchingProspect && isEdit}
         isSuccess={!isFetchingProspect || !isEdit}
-        useGridSkeleton
-        skeletonRows={14}
-        skeletonCols={2}
         skipEmptyState
       >
         <Form methods={methods}>

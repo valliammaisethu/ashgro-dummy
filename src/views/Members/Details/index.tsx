@@ -33,12 +33,17 @@ import {
 } from "src/shared/utils/commonHelpers";
 import MembersForm from "../MembersForm";
 import { MemberShipService } from "src/services/SettingsService/memberShip.service";
-import { defaultAntdDropdownWidth } from "src/constants/common";
+import { defaultCountryCode } from "src/constants/common";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import NewEmailModal from "src/views/Email/NewEmailModal";
 import { SelectedEmailModel } from "src/models/email.model";
 import useDrawer from "src/shared/hooks/useDrawer";
+import { formatDate } from "src/shared/utils/dateUtils";
+import { DateFormats } from "src/enums/dateFormats.enum";
+import { formatAndSetPhoneNumber } from "src/shared/utils/phoneNumberUtils";
+import { getPhoneNumber } from "src/views/Prospects/IndividualProspect/utils";
+import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
 
 const {
   footer: {
@@ -85,7 +90,7 @@ const Details = () => {
 
   const { mutateAsync: deleteStaffMemberMutate } =
     useMutation(deleteResource());
-  const { mutateAsync: updateMemberStatusMutate } =
+  const { mutateAsync: updateMemberStatusMutate, isPending: isUpdatingStatus } =
     useMutation(updateMemberStatus());
 
   const handleDelete = async () => {
@@ -150,15 +155,21 @@ const Details = () => {
               <Row justify={Justify.END} gutter={[10, 0]}>
                 <Col>
                   <Select
-                    style={{ width: defaultAntdDropdownWidth }}
-                    placeholder={statusPlaceholder}
                     value={findValueByLabel(
                       memberShipStatusesOptions,
                       data?.membershipStatus,
                     )}
+                    className={styles.statusSelect}
+                    placeholder={statusPlaceholder}
                     onChange={handleStatusChange}
-                    options={memberShipStatusesOptions}
-                  />
+                    loading={isUpdatingStatus}
+                  >
+                    {memberShipStatusesOptions?.map(({ id, label = "" }) => (
+                      <Select.Option key={id} value={id}>
+                        <StatusTag label={label} />
+                      </Select.Option>
+                    ))}
+                  </Select>
                 </Col>
                 <Col>
                   <Button
@@ -187,18 +198,32 @@ const Details = () => {
                   <div>
                     <span className={styles.joinedDatelabel}>{joinedDate}</span>
                     <span className={styles.joinedDate}>
-                      {fallbackHandler(data?.joinedDate)}
+                      {fallbackHandler(
+                        formatDate(data?.joinedDate, DateFormats.DD_MMM__YYYY),
+                      )}
                     </span>
                   </div>
                   <div className={styles.basicInfo}>
-                    <IconLabel icon={IconCakeAlt} label={data?.birthDate} />
-                    <IconLabel
-                      icon={IconLocationMarker}
-                      label={data?.residentialAddress}
-                    />
+                    {data?.birthDate && (
+                      <IconLabel icon={IconCakeAlt} label={data?.birthDate} />
+                    )}
+                    {data?.residentialAddress && (
+                      <IconLabel
+                        icon={IconLocationMarker}
+                        label={data?.residentialAddress}
+                      />
+                    )}
                     <div className={styles.basicFooterInfo}>
                       <IconLabel icon={IconEmail} label={data?.email} isEmail />
-                      <IconLabel icon={IconCall} label={data?.contactNumber} />
+                      <IconLabel
+                        icon={IconCall}
+                        label={formatAndSetPhoneNumber(
+                          getPhoneNumber(
+                            defaultCountryCode,
+                            data?.contactNumber,
+                          ),
+                        )}
+                      />
                     </div>
                   </div>
                 </Col>
@@ -241,6 +266,8 @@ const Details = () => {
                 activities={data?.activityDetails}
                 activityCount={data?.activityDetails?.length}
                 refetch={refetch}
+                isPending={isPending}
+                isSuccess={isSuccess}
               />
             </Col>
           </Row>
