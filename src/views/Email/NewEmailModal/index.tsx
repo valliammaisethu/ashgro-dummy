@@ -16,11 +16,10 @@ import SelectField from "src/shared/components/SelectField";
 import InputField from "src/shared/components/InputField";
 import TextArea from "src/shared/components/TextArea";
 import FileUpload from "src/shared/components/FileUpload";
-import Button from "src/shared/components/Button";
 import useForm from "src/shared/components/UseForm";
 import { SelectModes } from "src/enums/selectModes.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
+import { Buttons } from "src/enums/buttons.enum";
 import { maxFileSizeTextDescription } from "src/constants/sharedComponents";
 import { generateSelectOptions } from "../utils";
 import { addEmailValidation } from "./validation";
@@ -115,7 +114,11 @@ const NewEmailModal = (props: NewEmailModalProps) => {
       closeModal={handleClose}
       destroyOnHidden
       destroyOnClose
-      footer={[]}
+      okText={Buttons.SEND_EMAIL}
+      handleOk={methods.handleSubmit(handleSubmit)}
+      okButtonProps={{
+        loading: isPending,
+      }}
       cancelButtonProps={{ className: "d-none" }}
       rootClassName={styles.addEmailModal}
       styles={{
@@ -214,16 +217,6 @@ const NewEmailModal = (props: NewEmailModalProps) => {
             />
           </Col>
         </Row>
-        <div className={styles.modalFooter}>
-          <Button
-            htmlType={HtmlButtonType.SUBMIT}
-            type={ButtonTypes.DEFAULT}
-            className={styles.okButton}
-            loading={isPending}
-          >
-            {Buttons.SEND_EMAIL}
-          </Button>
-        </div>
       </Form>
     </Modal>
   );
