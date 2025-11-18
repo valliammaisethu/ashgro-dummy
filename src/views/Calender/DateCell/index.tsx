@@ -22,7 +22,7 @@ import { stopPropagation } from "src/shared/utils/eventUtils";
 
 import styles from "./dateCell.module.scss";
 
-const DateCell: React.FC<DateCellProps> = ({ date, allEvents }) => {
+const DateCell: React.FC<DateCellProps> = ({ date, allEvents = [] }) => {
   const [isChatbotView, setIsChatbotView] = useState(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [bookingState, setBookingState] = useState<BookingFormState>({
@@ -32,7 +32,11 @@ const DateCell: React.FC<DateCellProps> = ({ date, allEvents }) => {
   });
 
   const { calendarEvents, chatbotEvents } = getSplitDayEvents(allEvents, date);
-  const displayEvents = isChatbotView ? chatbotEvents : calendarEvents;
+
+  const isChatbotSelected = isChatbotView || !calendarEvents?.length;
+
+  const displayEvents = isChatbotSelected ? chatbotEvents : calendarEvents;
+
   const maxVisible = isChatbotView ? 3 : 2;
   const visibleEvents = displayEvents.slice(0, maxVisible);
   const hasMore = displayEvents.length > maxVisible;
@@ -49,7 +53,7 @@ const DateCell: React.FC<DateCellProps> = ({ date, allEvents }) => {
   };
 
   const handleSelectDate = () => {
-    if (isPastDate) return;
+    if (isPastDate || displayEvents?.length) return;
 
     setBookingState((prev) => ({
       ...prev,
@@ -92,20 +96,21 @@ const DateCell: React.FC<DateCellProps> = ({ date, allEvents }) => {
 
       <div className={styles.eventList}>
         {visibleEvents?.map((event) => (
-          <>
-            {isChatbotView ? (
+          <ConditionalRenderComponent
+            key={event?.id}
+            visible={!isChatbotSelected}
+            fallback={
               <div className={styles.chatBotTime}>
-                {" "}
                 {formatTimeRange(event.start, event.end)}
               </div>
-            ) : (
-              <MeetingPreview
-                isPastDate={isPastDate}
-                event={{ ...event, date }}
-                onReschedule={handleRescheduleClick}
-              />
-            )}
-          </>
+            }
+          >
+            <MeetingPreview
+              isPastDate={isPastDate}
+              event={{ ...event, date }}
+              onReschedule={handleRescheduleClick}
+            />
+          </ConditionalRenderComponent>
         ))}
 
         {hasMore && (
@@ -126,7 +131,7 @@ const DateCell: React.FC<DateCellProps> = ({ date, allEvents }) => {
           >
             <div
               className={clsx(styles.moreBtn, {
-                [styles.isChatbotView]: isChatbotView,
+                [styles.isChatbotView]: isChatbotSelected,
               })}
             >
               {replaceString(
