@@ -1,0 +1,9 @@
+export enum SLOT_STATUS {
+  BOOKED = "BOOKED",
+  AVAILABLE = "AVAILABLE",
+}
+
+export enum SLOT_TYPE {
+  CHATBOT = "CHATBOT",
+  MEETING = "MEETING",
+}

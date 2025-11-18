@@ -15,10 +15,7 @@
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  @include flex-flow(column, wrap, center, 1rem);
 }
 
 .maxSize {
@@ -27,10 +24,9 @@
   font-size: 1.3rem;
 }
 
-.imageWrapper {
-  position: relative;
+.imageWrapperOuter {
   border-radius: 50%;
-  overflow: hidden;
+  @include flex-container(center, center, row, 0);
   cursor: pointer;
   transition: opacity 0.2s;
 
@@ -39,7 +35,8 @@
   }
 
   &.withBorder {
-    border: 3px solid $ashgro-gold;
+    background: $profile-bg-gradient;
+    padding: 0.15rem;
     cursor: default;
 
     &:hover {
@@ -51,6 +48,31 @@
     cursor: not-allowed;
     pointer-events: none;
   }
+
+  &.clubUploadWrapper {
+    border-radius: 0;
+  }
+
+  &.clubUploadWrapperBorder {
+    border-radius: 50%;
+  }
+}
+
+.imageWrapperInner {
+  width: 8.8rem;
+  height: 8.8rem;
+  border-radius: 50%;
+  overflow: hidden;
+  @include flex-container(center, center);
+  position: relative;
+
+  &.withoutBorder {
+    border-radius: 0;
+  }
+
+  &.clubUploadBorder {
+    border-radius: 50%;
+  }
 }
 
 .loaderOverlay {
@@ -60,9 +82,7 @@
   right: 0;
   bottom: 0;
   background-color: rgba(247, 244, 237, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-container(center, center);
   z-index: 10;
 }
 
@@ -73,9 +93,7 @@
 }
 
 .actions {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
+  @include flex-container(normal, center, row, 2rem);
 }
 
 .actionButton {
@@ -85,9 +103,7 @@
   border: none;
   background-color: $ashgro-cream;
   color: $ashgro-grey;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-container(center, center, row, 0);
   cursor: pointer;
   transition: all 0.2s;
 

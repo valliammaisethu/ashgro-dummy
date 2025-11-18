@@ -5,3 +5,5 @@ export const FALL_BACKS = {
 export const defaultCountryCode = "+1";
 
 export const defaultAntdDropdownWidth = 200;
+
+export const DEBOUNCE_TIME = 500;

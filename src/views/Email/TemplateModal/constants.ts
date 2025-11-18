@@ -1,5 +1,5 @@
 export const emailConstants = {
-  templateModalTitle: "Choose Template",
+  templateModalTitle: "Send Email",
 };
 
 export const fields = {

@@ -11,6 +11,32 @@ export const getDigitsOnly = (val?: string) => {
   return val.replace(REGEX.DIGITS, "");
 };
 
+export const extractNameParts = (fullName = "") => {
+  const parts = fullName.trim().split(" ");
+  const firstName = parts[0];
+  const lastName = parts.slice(1).join(" ");
+
+  return { firstName, lastName };
+};
+
+export const stripPhoneCode = (val?: string) => {
+  if (!val) return undefined;
+  const digits = val.replace(/\D/g, "");
+  const withoutCode =
+    digits.length > 10 ? digits.slice(digits.length - 10) : digits;
+
+  return withoutCode;
+};
+
+export const addPhoneCode = (phoneNumber?: string, countryCode = "+1") => {
+  if (!phoneNumber) return undefined;
+  const digits = phoneNumber.replace(/\D/g, "");
+  if (!digits) return undefined;
+  if (phoneNumber.includes("+")) return phoneNumber;
+  const code = countryCode.startsWith("+") ? countryCode : `+${countryCode}`;
+  return `${code} ${digits}`;
+};
+
 export const toTitleCase = (str: string = "") =>
   str
     .toLowerCase()

@@ -108,6 +108,39 @@
                 font-size: 1.6rem;
                 font-family: $font-secondary;
               }
+
+              .datePicker {
+                &::global {
+                  .ant-picker-input > input {
+                    color: $ashgro-navy;
+                    font-weight: 600;
+                    font-size: 1.6rem;
+                    font-family: $font-secondary;
+                    cursor: pointer;
+                  }
+                  &.ant-picker-outlined {
+                    background-color: none;
+                  }
+
+                  .ant-picker {
+                    border: none;
+                    padding: 0;
+                    box-shadow: none;
+                    background: transparent;
+
+                    &:hover,
+                    &:focus {
+                      border: none;
+                      box-shadow: none;
+                    }
+                  }
+
+                  .ant-picker-input > input::placeholder {
+                    color: $ashgro-navy;
+                    font-weight: 600;
+                  }
+                }
+              }
             }
 
             .email {
@@ -194,7 +227,7 @@
 
       .activityContainer {
         flex: 1;
-        @include flex-flow(column, wrap, normal);
+        @include flex-flow(column, nowrap, normal);
         min-height: 0;
 
         .header {
@@ -357,4 +390,43 @@
   border: 1px solid transparent;
   text-align: left;
   gap: 0.5rem;
+}
+
+.datePicker {
+  padding: 0;
+
+  cursor: pointer;
+  &:global(.ant-picker-outlined) {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    cursor: pointer;
+    &:hover {
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+    }
+  }
+  &:global(.ant-picker-outlined:focus-within) {
+    background-color: transparent;
+  }
+  :global(.ant-picker-input) {
+    border: none;
+    box-shadow: none;
+    cursor: pointer;
+    background-color: transparent;
+
+    input {
+      cursor: pointer;
+      color: $ashgro-navy;
+      font-weight: 600;
+      // using important to override antd styles
+      font-size: 1.6rem !important;
+    }
+
+    &:hover {
+      border: none;
+      box-shadow: none;
+    }
+  }
 }

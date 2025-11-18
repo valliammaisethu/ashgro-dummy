@@ -236,6 +236,7 @@ export interface ProfilePictureInputProps {
   name: string;
   label?: string;
   required?: boolean;
+  isClubUpload?: boolean;
 }
 
 export interface AvatarWithFallbackProps {
@@ -281,4 +282,5 @@ export interface FileUploadProps {
   maxFileSizeClassName?: string;
   attachmentClassName?: string;
   initialFiles?: UploadedFile[];
+  deleteOnRemove?: boolean;
 }

@@ -17,7 +17,7 @@ export class Pagination {
   previousPage?: number;
 
   @serializable
-  currentPage?: number;
+  currentPage = 1;
 
   @serializable
   nextPage?: number;

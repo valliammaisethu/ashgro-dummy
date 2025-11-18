@@ -103,8 +103,6 @@ const IndividualProspect = () => {
         isSuccess={isSuccess}
         isFetching={isFetching}
         records={[data?.prospect]}
-        useGridSkeleton
-        skeletonRows={16}
       >
         <Card className={styles.card}>
           <div className={styles.leftSide}>
@@ -136,7 +134,11 @@ const IndividualProspect = () => {
               />
             </div>
             <div className={styles.content}>
-              <ProspectInfo data={data?.prospect} />
+              <ProspectInfo
+                data={data?.prospect}
+                onRefetch={handleRefetch}
+                clubId={clubId}
+              />
               <div className={styles.bottom}>
                 <DetailSection
                   title={PROSPECT_LABELS.leadDetails}

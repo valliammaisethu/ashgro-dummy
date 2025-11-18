@@ -567,6 +567,9 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   display: flex;
   flex-direction: column;
 }
+.ant-spin {
+  color: $ashgro-gold;
+}
 .ant-modal .ant-modal-header {
   border-radius: 1.6rem;
   padding: 2.4rem 1.6rem;
@@ -784,4 +787,20 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   &:hover {
     color: $ashgro-white;
   }
+}
+
+.ant-picker.ant-picker-range.ant-picker-outlined {
+  .ant-picker-input {
+    border: none;
+    background-color: $input-background;
+  }
+
+  &.ant-picker-focused .ant-picker-input {
+    background-color: $input-background;
+  }
+}
+
+.ant-popover-inner-content {
+  background-color: $ashgro-white;
+  border-radius: 12px;
 }
