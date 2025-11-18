@@ -3,4 +3,5 @@ export const imageAlts = {
   excelIcon: "excel-icon",
   ashgroLogo: "ashgro-logo",
   uploadArrow: "upload-arrow",
+  chatbotIcon: "chatbot-icon",
 };

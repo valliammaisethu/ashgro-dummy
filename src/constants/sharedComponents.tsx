@@ -17,6 +17,7 @@ import type { MenuMode } from "rc-menu/lib/interface.js";
 import { AppRoutes } from "src/routes/routeConstants/appRoutes.js";
 
 export const SharedComponentsConstants = {
+  MOCKURL: "https://b0877fc7-3471-443a-ba64-e20620ad335a.mock.pstmn.io/api/v1",
   DELETE_MODAL: {
     okText: "Yes",
     okType: "danger" as LegacyButtonType,

@@ -18,6 +18,7 @@ import MemberDetails from "src/views/Members/Details";
 import RoleGuard from "src/shared/components/RoleGuard";
 import { RoleNames } from "src/enums/roleNames.enum";
 import Clubs from "src/views/Clubs";
+import IndividualClub from "src/views/Clubs/IndividualClub";
 import SettingsWrapper from "src/views/Settings";
 import DashboardWrapper from "src/views/Dashboard";
 import Calender from "src/views/Calender";
@@ -39,6 +40,14 @@ const AppRouter = () => {
       component: (
         <RoleGuard allowedRoles={[RoleNames.SUPER_ADMIN]}>
           <Clubs />
+        </RoleGuard>
+      ),
+    },
+    {
+      path: AppRoutes.INDIVIDUAL_CLUB,
+      component: (
+        <RoleGuard allowedRoles={[RoleNames.SUPER_ADMIN]}>
+          <IndividualClub />
         </RoleGuard>
       ),
     },

@@ -31,19 +31,40 @@
   left: 4.2rem;
   z-index: 4;
 }
-.table {
+.tableContainer {
   margin-top: 2rem;
+  background-color: $ashgro-white;
+  overflow: hidden;
+  border-radius: 2rem;
 }
+
+.tableBody {
+  background-color: $search-field-placeholder;
+  max-height: 50rem;
+  overflow-y: scroll;
+}
+
 .rowContainer {
   padding: 2.4rem 4rem;
   background-color: $ashgro-white;
   height: 10.4rem;
   @include gradientBorder($club-row-border-bg);
-  @include flex-container(space-between, center, row, 0);
+  display: grid;
+  grid-template-columns: 53% 10% 22% 16%;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover :global(.actions-icons) {
+    opacity: 1;
+  }
 }
 
 .badge {
-  margin-left: 15rem;
+  justify-self: center;
+}
+
+.switch {
+  justify-self: center;
 }
 
 .statusSelect {
