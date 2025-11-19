@@ -20,6 +20,7 @@ export interface EventsPopoverProps {
   date: Date;
   displayEvents: CalendarEvent[];
   onClose: () => void;
+  onRescheduleEvent: (event: CalendarEvent) => void;
 }
 
 export interface DateCellProps {
@@ -51,7 +52,7 @@ export interface MeetingPreviewProps {
 
 export interface MeetingPopoverContentProps {
   event: CalendarEvent;
-  onCancel: (e: React.MouseEvent) => void;
+  onCancel?: (e?: React.MouseEvent) => void;
   onReschedule: (e: React.MouseEvent) => void;
 }
 

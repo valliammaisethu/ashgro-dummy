@@ -33,7 +33,7 @@ const DateCell: React.FC<DateCellProps> = ({ date, allEvents = [] }) => {
 
   const { calendarEvents, chatbotEvents } = getSplitDayEvents(allEvents, date);
 
-  const isChatbotSelected = isChatbotView || !calendarEvents?.length;
+  const isChatbotSelected = isChatbotView || calendarEvents?.length === 0;
 
   const displayEvents = isChatbotSelected ? chatbotEvents : calendarEvents;
 
@@ -126,6 +126,7 @@ const DateCell: React.FC<DateCellProps> = ({ date, allEvents = [] }) => {
                 date={date}
                 displayEvents={displayEvents}
                 onClose={handlePopoverVisibility}
+                onRescheduleEvent={handleRescheduleClick}
               />
             }
           >

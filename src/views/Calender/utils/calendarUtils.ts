@@ -73,7 +73,7 @@ export const mapCalendarDaysToEvents = (
 
         events.push({
           id,
-          title: "",
+          title,
           start: dayjs(`${date} ${startTime}`).toDate(),
           end: dayjs(`${date} ${endTime}`).toDate(),
           resource: {
