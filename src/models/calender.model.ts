@@ -34,3 +34,11 @@ export class CalendarData {
   @serializable(map(list(object(CalendarEventsAndSlots))))
   days?: Record<string, CalendarEventsAndSlots[]>;
 }
+
+export class BookMeeting extends CalendarEventsAndSlots {
+  @serializable
+  slotDate?: string;
+
+  @serializable
+  clubId?: string;
+}

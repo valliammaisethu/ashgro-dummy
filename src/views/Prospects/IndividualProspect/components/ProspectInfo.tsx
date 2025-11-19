@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IconCall, IconEmail } from "obra-icons-react";
+import { IconCalendarDates, IconCall, IconEmail } from "obra-icons-react";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 
@@ -89,6 +89,12 @@ const ProspectInfo: React.FC<ProspectInfoProps> = ({
           <span className={styles.dateTitle}>
             {PROSPECT_LABELS.followUpDate}
           </span>
+          <IconCalendarDates
+            strokeWidth={1.25}
+            color={Colors.ASHGRO_GOLD}
+            onClick={() => setIsDatePickerOpen(true)}
+            className={styles.calendarIcon}
+          />
           <DatePicker
             open={isDatePickerOpen}
             onOpenChange={setIsDatePickerOpen}
@@ -109,15 +115,13 @@ const ProspectInfo: React.FC<ProspectInfoProps> = ({
             text={email}
             className={styles.mail}
           />
-          {contactNumber && (
-            <IconText
-              icon={<IconCall color={Colors.ASHGRO_GOLD} size={20} />}
-              text={formatAndSetPhoneNumber(
-                getPhoneNumber(countryCode, contactNumber),
-              )}
-              className={styles.phone}
-            />
-          )}
+          <IconText
+            icon={<IconCall color={Colors.ASHGRO_GOLD} size={20} />}
+            text={formatAndSetPhoneNumber(
+              getPhoneNumber(countryCode, contactNumber),
+            )}
+            className={styles.phone}
+          />
         </div>
       </div>
     </div>

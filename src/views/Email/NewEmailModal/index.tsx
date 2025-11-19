@@ -31,7 +31,13 @@ import { ValidateEmail } from "src/shared/utils/helpers";
 import styles from "../email.module.scss";
 
 const NewEmailModal = (props: NewEmailModalProps) => {
-  const { isOpen, onClose, selectedEmails = [], selectedTemplate } = props;
+  const {
+    isOpen,
+    onClose,
+    selectedEmails = [],
+    selectedTemplate,
+    isBulkEmail = false,
+  } = props;
 
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
 
@@ -163,30 +169,34 @@ const NewEmailModal = (props: NewEmailModalProps) => {
               validateCustomInput={ValidateEmail}
             />
           </Col>
-          <Col span={24}>
-            <SelectField
-              placeholder={placeholders.cc}
-              name={fields.cc}
-              label={labels.cc}
-              notFoundContent={null}
-              mode={SelectModes.MULTIPLE}
-              options={[]}
-              allowCustomOption
-              validateCustomInput={ValidateEmail}
-            />
-          </Col>
-          <Col span={24}>
-            <SelectField
-              placeholder={placeholders.bcc}
-              name={fields.bcc}
-              label={labels.bcc}
-              notFoundContent={null}
-              mode={SelectModes.MULTIPLE}
-              options={[]}
-              allowCustomOption
-              validateCustomInput={ValidateEmail}
-            />
-          </Col>
+          {!isBulkEmail && (
+            <>
+              <Col span={24}>
+                <SelectField
+                  placeholder={placeholders.cc}
+                  name={fields.cc}
+                  label={labels.cc}
+                  notFoundContent={null}
+                  mode={SelectModes.MULTIPLE}
+                  options={[]}
+                  allowCustomOption
+                  validateCustomInput={ValidateEmail}
+                />
+              </Col>
+              <Col span={24}>
+                <SelectField
+                  placeholder={placeholders.bcc}
+                  name={fields.bcc}
+                  label={labels.bcc}
+                  notFoundContent={null}
+                  mode={SelectModes.MULTIPLE}
+                  options={[]}
+                  allowCustomOption
+                  validateCustomInput={ValidateEmail}
+                />
+              </Col>
+            </>
+          )}
           <Col span={24}>
             <InputField
               placeholder={placeholders.subject}

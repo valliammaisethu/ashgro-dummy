@@ -23,7 +23,6 @@ const { ASHGRO_GOLD, ASHGRO_GREY } = Colors;
 const MeetingPreview: React.FC<MeetingPreviewProps> = ({
   event,
   isMorePopup = false,
-  onCancel,
   onReschedule,
   onClose,
 }) => {
@@ -43,8 +42,6 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
     onClose?.();
   };
 
-  const handleCancelClick = (e: MouseEvent) => closePopup(e, onCancel);
-
   const handleRescheduleClick = (e: MouseEvent) =>
     closePopup(e, () => onReschedule?.(event));
 
@@ -60,7 +57,7 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
         <ConditionalRenderComponent visible={!isPastDate} hideFallback>
           <MeetingPopoverContent
             event={event}
-            onCancel={handleCancelClick}
+            onCancel={() => setIsOpen(false)}
             onReschedule={handleRescheduleClick}
           />
         </ConditionalRenderComponent>

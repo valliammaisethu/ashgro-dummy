@@ -1,15 +1,16 @@
-import React, { ComponentProps, useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import {
   useInfiniteQuery,
   UseInfiniteQueryOptions,
 } from "@tanstack/react-query";
 import { debounce } from "lodash";
-import { Select } from "antd";
 
 import { QueryParams } from "src/models/queryParams.model";
 import { DEBOUNCE_TIME } from "src/constants/common";
 import { BaseSettingsModel } from "src/models/common.model";
 import { Pagination } from "src/models/pagination.model";
+import { DropDownProps } from "src/shared/types/sharedComponents.type";
+import SelectField from "../SelectField";
 
 interface Response<T> {
   data: T[];
@@ -17,7 +18,7 @@ interface Response<T> {
 }
 
 interface PaginatedDropdownProps<T>
-  extends Omit<ComponentProps<typeof Select>, "options">,
+  extends Omit<DropDownProps, "options">,
     Pick<UseInfiniteQueryOptions<Response<T>>, "queryKey" | "enabled"> {
   onPageUpdate: (params: Partial<QueryParams>) => Promise<Response<T>>;
   params?: Partial<QueryParams>;
@@ -85,7 +86,7 @@ const PaginatedDropdown = <T extends BaseSettingsModel>({
     isFetching || ((value && !displayValue && !search) as boolean);
 
   return (
-    <Select
+    <SelectField
       allowClear
       filterOption={false}
       loading={showLoading}

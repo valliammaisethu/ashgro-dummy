@@ -35,7 +35,9 @@ export const getPhoneCodeOptions = (options: MobileCode[]) =>
 
 export const getDigitsOnly = (val: string) => val.replace(REGEX.DIGITS, "");
 
-export const formatAndSetPhoneNumber = (input: string) => {
+export const formatAndSetPhoneNumber = (input?: string) => {
+  if (!input) return "-";
+
   const raw = getDigitsOnly(input);
   const formatted = new AsYouType("US").input(raw);
   return `+${formatted}`;

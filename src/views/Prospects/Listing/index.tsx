@@ -336,6 +336,7 @@ const ProspectsListing = () => {
         onClose={handleNewEmailModalClose}
         selectedEmails={emailRecipients}
         selectedTemplate={selectedTemplate}
+        isBulkEmail
       />
     </div>
   );

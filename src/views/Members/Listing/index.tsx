@@ -120,9 +120,13 @@ const Members = () => {
     memberId?: string,
     membershipStatusId?: string,
   ) => {
+    if (!memberId || !membershipStatusId) return;
+
     setUpdatingMemberId(memberId);
     try {
       await updateMemberStatusMutate({ memberId, membershipStatusId });
+    } catch {
+      // do nothing
     } finally {
       setUpdatingMemberId(undefined);
     }
@@ -349,6 +353,7 @@ const Members = () => {
         onClose={handleNewEmailModalClose}
         selectedEmails={emailRecipients}
         selectedTemplate={selectedTemplate}
+        isBulkEmail
       />
     </div>
   );

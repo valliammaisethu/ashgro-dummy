@@ -71,7 +71,11 @@ const Modal: React.FC<ModalProps> = ({
           </Fragment>
         }
         closeIcon={
-          <IconCircleClose color={Colors.MODAL_CLOSE_ICON} size={20} />
+          <IconCircleClose
+            strokeWidth={1.25}
+            color={Colors.MODAL_CLOSE_ICON}
+            size={20}
+          />
         }
       >
         {children}

@@ -89,7 +89,7 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
           <AvatarFallback
             src={profilePictureUrl}
             name={getFullName(firstName, lastName)}
-            size={40}
+            size={56}
             className={styles.avatar}
           />
           <div className={styles.details}>

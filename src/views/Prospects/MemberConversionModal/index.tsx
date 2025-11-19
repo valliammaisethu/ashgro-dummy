@@ -10,20 +10,24 @@ import Modal from "src/shared/components/Modal";
 import { memberConversionModalConstants } from "./constants";
 
 import styles from "./memberConversionModal.module.scss";
+import useRedirect from "src/shared/hooks/useRedirect";
 
 const { title, description } = memberConversionModalConstants;
 
 const MemberConversionModal = (props: MemberConversionModalProps) => {
   const { onClose, visible, memberName } = props;
-
+  const { navigateToProspects } = useRedirect();
   const { id = "" } = useParams();
   const { convertToMember } = ProspectsService();
 
-  const { mutateAsync } = useMutation(convertToMember());
+  const { mutateAsync, isPending } = useMutation(convertToMember());
 
   const handleConvertToMember = () =>
     mutateAsync(id, {
-      onSuccess: onClose,
+      onSuccess: () => {
+        onClose();
+        navigateToProspects();
+      },
     });
 
   return (
@@ -37,6 +41,9 @@ const MemberConversionModal = (props: MemberConversionModalProps) => {
       width={defaultModalWidth}
       okText={Buttons.YES_CONVERT}
       handleOk={handleConvertToMember}
+      okButtonProps={{
+        loading: isPending,
+      }}
       cancelButtonProps={{
         className: "d-none",
       }}

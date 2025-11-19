@@ -10,7 +10,7 @@ import Form from "src/shared/components/Form";
 
 import styles from "./staffMemberListing.module.scss";
 import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
-import { staffMemberHeaders } from "../constants";
+import { clulbHeaderGrid, staffMemberHeaders } from "../constants";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import { StaffMembersService } from "src/services/StaffMembersService/staffMembers.service";
 import Profile from "src/shared/components/atoms/Table/Profile";
@@ -78,7 +78,10 @@ const StaffMembersListing = () => {
       />
       <Form>
         <div className={styles.listContainer}>
-          <ListHeader headers={staffMemberHeaders} />
+          <ListHeader
+            columnTemplate={clulbHeaderGrid}
+            headers={staffMemberHeaders}
+          />
 
           <ConditionalRender
             records={data?.staffs}
