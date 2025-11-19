@@ -39,7 +39,7 @@ export const getHeaders = <T extends AxiosRequestHeaders>(
     ...defaultHeaders,
     "Content-Type": defaultHeaders["Content-Type"] ?? "application/json",
     Authorization:
-      defaultHeaders.Authorization === null ? undefined : `Bearer ${token}`,
+      defaultHeaders.Authorization ?? (token ? `Bearer ${token}` : undefined),
   };
   return headers;
 };

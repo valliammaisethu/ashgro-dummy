@@ -77,16 +77,20 @@ export const AuthService = () => {
     ResetPassword
   > => ({
     mutationKey: [RESET_PASSWORD_KEY],
-    mutationFn: async (user: ResetPassword) => {
-      const serializedData = serialize(ResetPassword, user);
-      const response = await axiosInstance.patch(RESET_PASSWORD, {
-        user: serializedData,
-      });
+    mutationFn: async (payload: ResetPassword) => {
+      const { token, newPassword } = payload;
+
+      const response = await axiosInstance.patch(
+        RESET_PASSWORD,
+        { user: { newPassword } },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
       return deserialize(ResponseModel, response.data);
-    },
-    onSuccess: (response) => {
-      const { title, description } = response;
-      renderNotification(title, description);
     },
   });
 
