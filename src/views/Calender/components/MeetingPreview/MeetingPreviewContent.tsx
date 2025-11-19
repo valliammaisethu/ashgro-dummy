@@ -33,7 +33,9 @@ const MeetingPopoverContent: React.FC<MeetingPopoverContentProps> = ({
     const path = generatePath(ApiRoutes.CANCEL_MEETING, {
       slotId: event?.id,
     });
-    await mutateAsync(path);
+    await mutateAsync({
+      path: path,
+    });
     onCancel?.();
   };
   return (

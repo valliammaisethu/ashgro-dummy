@@ -1,4 +1,5 @@
 import React from "react";
+import { generatePath } from "react-router-dom";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
@@ -9,14 +10,14 @@ import { deleteModalConstants } from "../constants";
 import { replaceString } from "src/shared/utils/commonHelpers";
 import { StaffMemberDetails } from "src/models/staffMember.model";
 import { getFullName } from "src/shared/utils/helpers";
-import { generatePath } from "react-router-dom";
-import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
-import { CommonService } from "src/services/CommonService.ts/common.service";
-import { QueryKeys } from "src/enums/cacheEvict.enum";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { deleteStaffMessages } from "src/constants/notificationMessages";
+import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 
 import styles from "./deleteModal.module.scss";
+import { QueryKeys } from "src/enums/cacheEvict.enum";
+import { CommonService } from "src/services/CommonService.ts/common.service";
 
 interface DeleteModalProps {
   visible: boolean;
@@ -29,24 +30,27 @@ const DeleteModal = (props: DeleteModalProps) => {
   const queryClient = useQueryClient();
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
 
-  const { deleteResource } = CommonService();
+  const { deleteResource: deleteStaffMember } = CommonService();
 
-  const { mutateAsync, isPending } = useMutation(deleteResource());
+  const { mutateAsync, isPending } = useMutation(deleteStaffMember());
 
   const handleDelete = async () => {
+    const { title, description } = deleteStaffMessages;
     const path = generatePath(ApiRoutes.STAFF_MEMBER_DETAILS, {
       id: staffMember?.id,
     });
 
-    await mutateAsync(path, {
-      onSuccess: () => {
-        queryClient.refetchQueries({
-          queryKey: [QueryKeys.GET_STAFF_MEMBER_LIST, clubId],
-        });
-
-        toggleVisibility();
+    await mutateAsync(
+      { path, title, description },
+      {
+        onSuccess: () => {
+          queryClient.refetchQueries({
+            queryKey: [QueryKeys.GET_STAFF_MEMBER_LIST, clubId],
+          });
+          toggleVisibility();
+        },
       },
-    });
+    );
   };
 
   return (

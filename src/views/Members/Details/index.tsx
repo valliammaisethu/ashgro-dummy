@@ -44,6 +44,9 @@ import { DateFormats } from "src/enums/dateFormats.enum";
 import { formatAndSetPhoneNumber } from "src/shared/utils/phoneNumberUtils";
 import { getPhoneNumber } from "src/views/Prospects/IndividualProspect/utils";
 import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
+import { EmailTemplate } from "src/models/meta.model";
+import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
+import TemplateModal from "src/views/Email/TemplateModal";
 
 const {
   footer: {
@@ -68,6 +71,7 @@ const Details = () => {
   const [selectedEmail, setSelectedEmail] = useState<SelectedEmailModel>(
     new SelectedEmailModel(),
   );
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
   const queryClient = useQueryClient();
 
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
@@ -96,15 +100,25 @@ const Details = () => {
   const handleDelete = async () => {
     const path = generatePath(ApiRoutes.MEMBER_DETAILS, { id });
 
-    await deleteStaffMemberMutate(path, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [GET_MEMBERS] });
-        queryClient.refetchQueries({ queryKey: [GET_MEMBERS, clubId] });
-
-        navigateToMembers();
+    await deleteStaffMemberMutate(
+      {
+        path: path,
       },
-    });
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: [GET_MEMBERS] });
+          queryClient.refetchQueries({ queryKey: [GET_MEMBERS, clubId] });
+
+          navigateToMembers();
+        },
+      },
+    );
   };
+
+  const {
+    visible: templateModalVisible,
+    toggleVisibility: toggleTemplateModal,
+  } = useDrawer();
 
   const memberDetails = [
     { label: LEAD_SOURCE, value: data?.leadSource },
@@ -127,12 +141,17 @@ const Details = () => {
     refetch();
   };
 
-  const handleEmailModal = () => {
+  const handleEmailTemplateModal = (
+    type: EmailModalEnum,
+    template?: EmailTemplate,
+  ) => {
+    setSelectedTemplate(type === EmailModalEnum.EMAIL ? undefined : template);
     setSelectedEmail({
       email: data?.email,
       id: String(data?.id),
       name: data?.firstName,
     });
+    toggleTemplateModal();
     toggleEmailModal();
   };
 
@@ -140,7 +159,8 @@ const Details = () => {
     <>
       <IndividualDetailsHeader
         navigateBack={navigateToMembers}
-        onEmailClick={handleEmailModal}
+        onEmailClick={toggleTemplateModal}
+        isPending={isPending}
       />
 
       <ConditionalRender
@@ -280,6 +300,12 @@ const Details = () => {
         selectedEmails={[selectedEmail]}
         isOpen={emailModalVisible}
         onClose={toggleEmailModal}
+        selectedTemplate={selectedTemplate}
+      />
+      <TemplateModal
+        isOpen={templateModalVisible}
+        onClose={toggleTemplateModal}
+        toggleEmailModal={handleEmailTemplateModal}
       />
     </>
   );

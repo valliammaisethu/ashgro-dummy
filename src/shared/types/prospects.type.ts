@@ -23,6 +23,7 @@ export interface ProspectFormProps {
 export interface IndividualProspectHeaderProps {
   onConvert: () => void;
   onEmail: () => void;
+  isFetchingProfile: boolean;
 }
 
 export interface MemberConversionModalProps {
