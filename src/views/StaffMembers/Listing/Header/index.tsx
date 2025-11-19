@@ -25,7 +25,7 @@ const Header = (props: ClubStaffHeaderProps) => {
 
   const handleDepartmentChange = (value: string[]) =>
     onFilter?.({
-      departmentIds: value,
+      staffDepartmentIds: value,
     });
 
   const staffDepartmentsOptions = useMemo(

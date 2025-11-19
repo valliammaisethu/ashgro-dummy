@@ -28,7 +28,6 @@ import { StaffMembersService } from "src/services/StaffMembersService/staffMembe
 import { defaultModalWidth } from "src/constants/sharedComponents";
 import { Justify } from "src/enums/align.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
-import { DateFormats } from "src/enums/dateFormats.enum";
 
 import styles from "./staffMembersForm.module.scss";
 
@@ -205,7 +204,6 @@ const StaffMembersForm = ({
                   label={LABELS.BIRTH_DATE}
                   name={FIELD_NAMES.BIRTH_DATE}
                   disabledDate={disableFutureAndToday}
-                  format={DateFormats.DD_MMM__YYYY}
                 />
               </Col>
               <Col span={12}>
@@ -214,7 +212,6 @@ const StaffMembersForm = ({
                   label={LABELS.WORK_ANNIVERSARY}
                   name={FIELD_NAMES.WORK_ANNIVERSARY}
                   disabledDate={disableFutureAndToday}
-                  format={DateFormats.DD_MMM__YYYY}
                 />
               </Col>
               <Col span={24}>

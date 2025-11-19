@@ -135,7 +135,7 @@ export const ProspectsService = () => {
   > => ({
     mutationKey: [CONVERT_TO_MEMBER],
     mutationFn: async (id: string) => {
-      const response = await axiosInstance.delete(
+      const response = await axiosInstance.patch(
         generatePath(CONVERT_TO_MEMBER_ROUTE, { id }),
       );
       return deserialize(ResponseModel, response?.data);

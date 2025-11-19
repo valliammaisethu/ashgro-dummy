@@ -204,15 +204,11 @@ const Details = () => {
                     </span>
                   </div>
                   <div className={styles.basicInfo}>
-                    {data?.birthDate && (
-                      <IconLabel icon={IconCakeAlt} label={data?.birthDate} />
-                    )}
-                    {data?.residentialAddress && (
-                      <IconLabel
-                        icon={IconLocationMarker}
-                        label={data?.residentialAddress}
-                      />
-                    )}
+                    <IconLabel icon={IconCakeAlt} label={data?.birthDate} />
+                    <IconLabel
+                      icon={IconLocationMarker}
+                      label={data?.residentialAddress}
+                    />
                     <div className={styles.basicFooterInfo}>
                       <IconLabel icon={IconEmail} label={data?.email} isEmail />
                       <IconLabel

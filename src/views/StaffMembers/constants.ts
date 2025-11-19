@@ -1,6 +1,6 @@
 export const staffMembersConstants = {
   filterTitle: "Departments",
-  field: "departmentIds",
+  field: "staffDepartmentIds",
 };
 
 export const staffMemberHeaders = ["Club Staff", "Department", "Title"];
@@ -9,7 +9,7 @@ export const FORM_CONSTANTS = {
   ADD_TITLE: "New Staff",
   EDIT_TITLE: "Edit Staff",
   ADD_BTN_TXT: "Add Staff",
-  EDIT_BTN_TXT: "Edit Staff",
+  EDIT_BTN_TXT: "Save Changes",
 
   LABELS: {
     PROFILE_PICTURE: "Profile Picture",
