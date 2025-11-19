@@ -14,7 +14,7 @@ import BackButton from "src/shared/components/Back";
 import styles from "../individualProspect.module.scss";
 
 const Header = (props: IndividualProspectHeaderProps) => {
-  const { onConvert, onEmail } = props;
+  const { onConvert, onEmail, isFetchingProfile } = props;
 
   return (
     <div className={styles.header}>
@@ -33,6 +33,7 @@ const Header = (props: IndividualProspectHeaderProps) => {
           className={styles.emailButton}
           icon={<IconEmail strokeWidth={1.5} />}
           type={ButtonTypes.LINK}
+          disabled={isFetchingProfile}
         >
           {headerConstants.sendEmail}
         </Button>

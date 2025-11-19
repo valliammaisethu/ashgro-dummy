@@ -2,7 +2,7 @@ export const staffMembersConstants = {
   filterTitle: "Departments",
   field: "departmentIds",
 };
-
+export const clulbHeaderGrid = "38% 28% 25% 05%";
 export const staffMemberHeaders = ["Club Staff", "Department", "Title"];
 
 export const FORM_CONSTANTS = {
@@ -54,7 +54,7 @@ export const FORM_CONSTANTS = {
 export const memberHeaders = ["Members", "Join Date", "Member Status"];
 
 export const deleteModalConstants = {
-  title: "Delete Staff",
+  title: "Delete Staff?",
   description:
     "Are you sure you want to permanently delete %s? This action is not reversible.",
 };
