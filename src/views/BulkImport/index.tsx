@@ -5,6 +5,7 @@ import {
   IconDocumentUpload,
   IconDownload,
 } from "obra-icons-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
@@ -19,7 +20,15 @@ import excelIcon from "src/assets/images/excelIcon.webp";
 import ashgroLogo from "src/assets/images/homeLogo.webp";
 import { Buttons } from "src/enums/buttons.enum";
 import { Colors } from "src/enums/colors.enum";
+import { BulkModes } from "src/enums/bulkModes";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { TemplateEntity } from "src/enums/templateEntity.enum";
 import { BulkImportModalProps } from "src/shared/types/bulkImport.type";
+import { BulkUploadService } from "src/services/BulkUploadService/bulkUpload.service";
+import { TemplateDownloadService } from "src/services/TemplateDownloadService/templateDownload.service";
+import { downloadTemplateFile } from "src/services/TemplateDownloadService/utils";
+import { BulkUploadParams } from "src/models/bulkUpload.model";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 
 import styles from "./bulkImport.module.scss";
 
@@ -27,14 +36,67 @@ const BulkImportModal = (props: BulkImportModalProps) => {
   const { importMode, onClose, visible, onImport } = props;
   const [isUploading, setIsUploading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
+  const [uploadedS3Key, setUploadedS3Key] = useState<string>("");
 
-  const handleFileUploaded = (_fileId: string, _fileName: string) =>
+  const { bulkUploadMembers, bulkUploadProspects } = BulkUploadService();
+  const { downloadTemplate } = TemplateDownloadService();
+
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
+  const getTemplateEntity = (): TemplateEntity => {
+    return importMode === BulkModes.MEMBERS
+      ? TemplateEntity.MEMBER
+      : TemplateEntity.PROSPECT;
+  };
+
+  const { mutate: uploadMembers, isPending: isMembersUploading } =
+    useMutation(bulkUploadMembers());
+  const { mutate: uploadProspects, isPending: isProspectsUploading } =
+    useMutation(bulkUploadProspects());
+  const { refetch: refetchTemplate, isFetching: isDownloading } = useQuery(
+    downloadTemplate(clubId, getTemplateEntity()),
+  );
+
+  const handleDownloadTemplate = async () => {
+    const { data } = await refetchTemplate();
+    if (data) downloadTemplateFile(data, getTemplateEntity());
+  };
+
+  const handleFileUploaded = (s3Key: string) => {
+    setUploadedS3Key(s3Key);
     setIsUploaded(true);
+  };
+
+  const handleImport = () => {
+    if (!uploadedS3Key || !clubId) return;
+
+    const params: BulkUploadParams = {
+      s3Key: uploadedS3Key,
+      clubId: clubId,
+    };
+
+    if (importMode === BulkModes.MEMBERS) {
+      uploadMembers(params, {
+        onSuccess: () => {
+          onImport?.();
+          handleClose();
+        },
+      });
+    } else if (importMode === BulkModes.PROSPECTS) {
+      uploadProspects(params, {
+        onSuccess: () => {
+          onImport?.();
+          handleClose();
+        },
+      });
+    }
+  };
 
   const handleClose = () => {
     onClose();
     setIsUploading(false);
     setIsUploaded(false);
+    setUploadedS3Key("");
   };
 
   return (
@@ -163,8 +225,11 @@ const BulkImportModal = (props: BulkImportModalProps) => {
             </div>
             {isUploaded && (
               <Button
-                onClick={onImport}
-                disabled={!isUploaded}
+                onClick={handleImport}
+                disabled={
+                  !isUploaded || isMembersUploading || isProspectsUploading
+                }
+                loading={isMembersUploading || isProspectsUploading}
                 className={styles.importButton}
               >
                 {Buttons.IMPORT}
@@ -191,9 +256,15 @@ const BulkImportModal = (props: BulkImportModalProps) => {
               {maxSizeDescription}
             </span>
           </div>
-          <div className={styles.templateDownload}>
+          <div
+            className={styles.templateDownload}
+            onClick={handleDownloadTemplate}
+            style={{ cursor: isDownloading ? "not-allowed" : "pointer" }}
+          >
             <IconDownload />
-            <span>{Buttons.DOWNLOAD_TEMPLATE}</span>
+            <span>
+              {isDownloading ? "Downloading..." : Buttons.DOWNLOAD_TEMPLATE}
+            </span>
           </div>
         </div>
       </Modal>

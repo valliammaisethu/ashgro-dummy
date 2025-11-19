@@ -25,6 +25,13 @@ export enum MutationKeys {
   DELETE_STAFF_MEMBER = "deleteStaffMemeber",
   ADD_STAFF_MEMBER = "addStaffMember",
   EDIT_STAFF_MEMBER = "editStaffMember",
+
+  ADD_CLUB = "addClub",
+  EDIT_CLUB = "editClub",
+  EDIT_CHATBOT = "editChatbot",
+
+  BULK_UPLOAD_MEMBERS = "bulkUploadMembers",
+  BULK_UPLOAD_PROSPECTS = "bulkUploadProspects",
 }
 
 export enum QueryKeys {
@@ -52,4 +59,5 @@ export enum QueryKeys {
   GET_EMAIL_TEMPLATE_DETAIL = "getEmailTemplateDetail",
   GET_MEMBERS = "getMembers",
   GET_STAFF_MEMBER_LIST = "getStaffMemberList",
+  DOWNLOAD_TEMPLATE = "downloadTemplate",
 }

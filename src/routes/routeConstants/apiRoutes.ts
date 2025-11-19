@@ -52,4 +52,17 @@ export const ApiRoutes = {
   EMAIL_TEMPLATES_SETTINGS: "/settings/:clubId/emailTemplate",
   UPDATE_EMAIL_TEMPLATE_SETTINGS: "/settings/:clubId/emailTemplate/:id",
   STAFF_MEMBERS: "/staffs",
+
+  GET_CLUBS: "/clubs",
+  GET_CLUB_PROFILE: "/clubs/:id",
+
+  // Calender
+  CALENDER_EVENTS_AND_SLOTS: "/calendar",
+  CANCEL_MEETING: "calendar/:slotId",
+  MEMBERS_META_LIST: "/members/minimal",
+  PROSPECTS_META_LIST: "/prospects/minimal",
+
+  BULK_IMPORT_MEMBERS: "/members/import",
+  BULK_IMPORT_PROSPECTS: "/prospects/import",
+  DOWNLOAD_TEMPLATE: "/clubs/:id/downloadTemplate",
 };

@@ -13,7 +13,7 @@ import { uploadMessages } from "src/constants/notificationMessages";
 import { INPUT_TYPE } from "src/enums/inputType";
 
 interface BulkFileUploadProps {
-  onFileUploaded?: (fileId: string, fileName: string) => void;
+  onFileUploaded?: (fileId: string, fileName: string, s3Key?: string) => void;
   onUploadStateChange?: (isUploading: boolean) => void;
   maxFileSize?: number;
   accept?: string;
@@ -126,7 +126,7 @@ const BulkFileUpload = ({
 
       if (result?.id) {
         setUploadedFile({ id: result.id, name: file.name });
-        onFileUploaded?.(result.id, file.name);
+        onFileUploaded?.(result.id, file.name, result.s3Key);
       }
     } catch {
       renderNotification(
