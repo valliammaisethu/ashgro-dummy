@@ -56,8 +56,6 @@ const IndividualClub = () => {
         isSuccess={isSuccess}
         isFetching={isFetching}
         records={[clubData?.club]}
-        useGridSkeleton
-        skeletonRows={16}
       >
         <Card className={styles.card}>
           <div className={styles.leftSide}>

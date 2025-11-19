@@ -39,16 +39,21 @@ const DeleteModal = (props: DeleteModalProps) => {
   const handleDelete = async () => {
     const path = generatePath(ApiRoutes.MEMBER_DETAILS, { id: member?.id });
 
-    await deleteStaffMemberMutate(path, {
-      onSuccess: () => {
-        queryClient.refetchQueries({
-          queryKey: [QueryKeys.GET_MEMBERS, clubId],
-        });
-
-        navigateToMembers();
-        toggleVisibility();
+    await deleteStaffMemberMutate(
+      {
+        path: path,
       },
-    });
+      {
+        onSuccess: () => {
+          queryClient.refetchQueries({
+            queryKey: [QueryKeys.GET_MEMBERS, clubId],
+          });
+
+          navigateToMembers();
+          toggleVisibility();
+        },
+      },
+    );
   };
 
   return (

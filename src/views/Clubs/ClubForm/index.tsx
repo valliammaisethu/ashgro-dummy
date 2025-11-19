@@ -62,7 +62,8 @@ const ClubForm = (props: ClubFormProps) => {
   // TODO: Fix the form issue and remove useEffect here
   useEffect(() => {
     if (clubId) methods.reset(defaultValues);
-  }, [clubId, defaultValues, methods]);
+    else methods.reset({});
+  }, [clubId, defaultValues, methods, open]);
 
   const { mutateAsync, isPending: isAdding } = useMutation(addClub());
   const { mutateAsync: editMutateAsync, isPending: isEditing } = useMutation(
@@ -109,7 +110,7 @@ const ClubForm = (props: ClubFormProps) => {
       cancelButtonProps={{
         className: "d-none",
       }}
-      loading={isFetchingClubData}
+      loading={Boolean(clubId) && isFetchingClubData}
       closeModal={modalClose}
       okText={clubData?.club?.id ? Buttons.SAVE_CHANGES : Buttons.ADD_CLUB}
       okButtonProps={{

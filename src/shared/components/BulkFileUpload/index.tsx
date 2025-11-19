@@ -1,46 +1,48 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { RcFile } from "antd/es/upload";
+import clsx from "clsx";
 
 import { AttachmentService } from "src/services/AttachmentService/attachment.service";
 import { AttachmentPayload } from "src/models/attachment.model";
 import { AttachmentTypes } from "src/enums/attachmentTypes.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
+import { INPUT_TYPE } from "src/enums/inputType";
 import { renderNotification } from "src/shared/utils/renderNotification";
-
-import styles from "./bulkFileUpload.module.scss";
 import { excelAccept, fiveMb } from "src/constants/sharedComponents";
 import { uploadMessages } from "src/constants/notificationMessages";
-import { INPUT_TYPE } from "src/enums/inputType";
-import UploadArea, { UploadAreaProps } from "./UploadArea";
+import UploadArea from "./UploadArea";
 
-export { UploadArea };
-export type { UploadAreaProps };
+import styles from "./bulkFileUpload.module.scss";
 
 interface BulkFileUploadProps {
   onFileUploaded?: (fileId: string, fileName: string) => void;
   onUploadStateChange?: (isUploading: boolean) => void;
+  onChangeFile?: () => void;
   maxFileSize?: number;
   accept?: string;
   validTypes?: string[];
   attachmentType?: AttachmentTypes;
-  renderUploadArea: (
-    props: Omit<
-      UploadAreaProps,
-      | "className"
-      | "uploadingClassName"
-      | "uploadedClassName"
-      | "inputPlaceholder"
-    >,
-  ) => React.ReactNode;
+  inputPlaceholder?: string;
+  className?: string;
+  isUploadingClassName?: string;
+  isUploadedClassName?: string;
+  uploadingClassName?: string;
+  uploadedClassName?: string;
 }
 
 const BulkFileUpload = ({
   onFileUploaded,
   onUploadStateChange,
+  onChangeFile: onChangeFileProp,
   maxFileSize = fiveMb,
   accept = excelAccept,
-  attachmentType = AttachmentTypes.EMAIL_ATTACHMENT,
-  renderUploadArea,
+  attachmentType = AttachmentTypes.BULK_IMPORT,
+  inputPlaceholder,
+  className,
+  isUploadingClassName,
+  isUploadedClassName,
+  uploadingClassName,
+  uploadedClassName,
 }: BulkFileUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -76,11 +78,10 @@ const BulkFileUpload = ({
     setUploadProgress(0);
     setCurrentFileName(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
+    onChangeFileProp?.();
   };
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -144,17 +145,26 @@ const BulkFileUpload = ({
     onUploadStateChange?.(isUploading);
   }, [isUploading, onUploadStateChange]);
 
+  const computedClassName = clsx(className, {
+    [isUploadingClassName || ""]: isUploading,
+    [isUploadedClassName || ""]: uploadedFile !== null,
+  });
+
   return (
     <div className={styles.bulkFileUpload}>
-      {renderUploadArea({
-        onClick: handleClick,
-        isUploading,
-        uploadProgress,
-        uploadedFile,
-        currentFileName,
-        onCancelUpload: handleCancelUpload,
-        onChangeFile: handleChangeFile,
-      })}
+      <UploadArea
+        onClick={handleClick}
+        isUploading={isUploading}
+        uploadProgress={uploadProgress}
+        uploadedFile={uploadedFile}
+        currentFileName={currentFileName}
+        onCancelUpload={handleCancelUpload}
+        onChangeFile={handleChangeFile}
+        inputPlaceholder={inputPlaceholder}
+        className={computedClassName}
+        uploadingClassName={uploadingClassName}
+        uploadedClassName={uploadedClassName}
+      />
       <input
         ref={fileInputRef}
         type={INPUT_TYPE.FILE}

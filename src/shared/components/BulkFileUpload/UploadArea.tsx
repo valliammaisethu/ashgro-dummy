@@ -1,4 +1,4 @@
-import React, { Fragment, MouseEvent } from "react";
+import React, { MouseEvent } from "react";
 import { IconDocumentUpload } from "obra-icons-react";
 
 import Button from "src/shared/components/Button";
@@ -6,7 +6,9 @@ import { Buttons } from "src/enums/buttons.enum";
 import { Colors } from "src/enums/colors.enum";
 import excelIcon from "src/assets/images/excelIcon.webp";
 
-import styles from "./bulkFileUpload.module.scss";
+import styles from "../../../views/BulkImport/bulkImport.module.scss";
+import ConditionalRenderComponent from "../ConditionalRenderComponent";
+import { imageAlts } from "src/constants/imageAlts";
 
 export interface UploadAreaProps {
   onClick: () => void;
@@ -50,48 +52,66 @@ const UploadArea: React.FC<UploadAreaProps> = ({
       className={className}
       onClick={!isUploading && !uploadedFile ? onClick : undefined}
     >
-      {!isUploading && !uploadedFile && (
-        <Fragment>
-          <Button
-            className={styles.documentUploadBtn}
-            icon={
-              <IconDocumentUpload
-                color={Colors.MODAL_CLOSE_ICON}
-                strokeWidth={1.5}
-                size={20}
-              />
-            }
-          />
-          <div>{inputPlaceholder}</div>
-        </Fragment>
-      )}
+      <ConditionalRenderComponent
+        visible={!isUploading && !uploadedFile}
+        hideFallback
+      >
+        <Button
+          className={styles.iconButton}
+          icon={
+            <IconDocumentUpload
+              color={Colors.MODAL_CLOSE_ICON}
+              strokeWidth={1.5}
+              size={20}
+            />
+          }
+        />
+        <div className={styles.uploadText}>{inputPlaceholder}</div>
+      </ConditionalRenderComponent>
 
-      {isUploading && currentFileName && (
-        <Fragment>
-          <div className={uploadingClassName}>
-            <div>
-              <img src={excelIcon} alt="Excel" />
-              <span>{currentFileName}</span>
-            </div>
-            <div>
-              <div style={{ width: `${uploadProgress}%` }} />
-            </div>
+      <ConditionalRenderComponent
+        visible={isUploading && !!currentFileName}
+        hideFallback
+      >
+        <div className={uploadingClassName}>
+          <div className={styles.uploadingFileInfo}>
+            <img
+              src={excelIcon}
+              alt={imageAlts.excelIcon}
+              className={styles.uploadingFileIcon}
+            />
+            <span className={styles.uploadingFileName}>{currentFileName}</span>
           </div>
-          <div>
-            <Button onClick={handleCancelUpload}>
-              {Buttons.CANCEL_UPLOAD}
-            </Button>
+          <div className={styles.progressBarContainer}>
+            <div
+              className={styles.progressBar}
+              style={{ width: `${uploadProgress}%` }}
+            />
           </div>
-        </Fragment>
-      )}
-
-      {uploadedFile && !isUploading && (
-        <div className={uploadedClassName}>
-          <img src={excelIcon} alt="Excel" />
-          <div>{uploadedFile.name}</div>
-          <Button onClick={handleChangeFile}>{Buttons.CHANGE}</Button>
         </div>
-      )}
+        <div className={styles.cancelButtonContainer}>
+          <Button className={styles.cancelButton} onClick={handleCancelUpload}>
+            {Buttons.CANCEL_UPLOAD}
+          </Button>
+        </div>
+      </ConditionalRenderComponent>
+
+      <ConditionalRenderComponent
+        visible={Boolean(uploadedFile) && !isUploading}
+        hideFallback
+      >
+        <div className={uploadedClassName}>
+          <img
+            className={styles.uploadingFileIcon}
+            src={excelIcon}
+            alt={imageAlts.excelIcon}
+          />
+          <div className={styles.fileName}>{uploadedFile?.name}</div>
+          <Button className={styles.changeButton} onClick={handleChangeFile}>
+            {Buttons.CHANGE}
+          </Button>
+        </div>
+      </ConditionalRenderComponent>
     </div>
   );
 };

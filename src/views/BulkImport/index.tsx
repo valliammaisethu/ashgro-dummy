@@ -4,9 +4,7 @@ import { IconArrowRight, IconDownload } from "obra-icons-react";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
-import BulkFileUpload, {
-  UploadArea,
-} from "src/shared/components/BulkFileUpload";
+import BulkFileUpload from "src/shared/components/BulkFileUpload";
 import {
   importDescription,
   inputPlaceholder,
@@ -56,22 +54,13 @@ const BulkImportModal = (props: BulkImportModalProps) => {
               <BulkFileUpload
                 onFileUploaded={handleFileUploaded}
                 onUploadStateChange={setIsUploading}
-                renderUploadArea={(props) => (
-                  <UploadArea
-                    {...props}
-                    onChangeFile={() => {
-                      props.onChangeFile();
-                      handleChangeFile();
-                    }}
-                    inputPlaceholder={inputPlaceholder}
-                    className={clsx(styles.footerContent, {
-                      [styles.isUploadingContent]: props.isUploading,
-                      [styles.uploadedFooter]: props.uploadedFile,
-                    })}
-                    uploadingClassName={styles.uploadingContainer}
-                    uploadedClassName={styles.uploadedFooterContent}
-                  />
-                )}
+                onChangeFile={handleChangeFile}
+                inputPlaceholder={inputPlaceholder}
+                className={styles.footerContent}
+                isUploadingClassName={styles.isUploadingContent}
+                isUploadedClassName={styles.uploadedFooter}
+                uploadingClassName={styles.uploadingContainer}
+                uploadedClassName={styles.uploadedFooterContent}
               />
             </div>
             {isUploaded && (

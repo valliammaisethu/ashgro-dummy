@@ -9,9 +9,13 @@ import { DateFormats } from "src/enums/dateFormats.enum";
 import { MeetingPopoverContentProps } from "src/shared/types/calender";
 import Button from "src/shared/components/Button";
 import BookedChatbotIcon from "../atoms/BookedChatbotIcon";
+import { SLOT_STATUS } from "src/enums/calender.enum";
+import { CommonService } from "src/services/CommonService.ts/common.service";
+import { useMutation } from "@tanstack/react-query";
+import { generatePath } from "react-router-dom";
+import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 
 import styles from "./meetingPreview.module.scss";
-import { SLOT_STATUS } from "src/enums/calender.enum";
 
 const { CANCEL_BTN, RESCHEDULE } = BOOK_MEETING_CONSTANTS;
 const { HH_MM_A, DDD_MMM_DO } = DateFormats;
@@ -21,6 +25,19 @@ const MeetingPopoverContent: React.FC<MeetingPopoverContentProps> = ({
   onCancel,
   onReschedule,
 }) => {
+  const { deleteResource } = CommonService();
+
+  const { mutateAsync, isPending } = useMutation(deleteResource());
+
+  const handleCancelEvent = async () => {
+    const path = generatePath(ApiRoutes.CANCEL_MEETING, {
+      slotId: event?.id,
+    });
+    await mutateAsync({
+      path: path,
+    });
+    onCancel?.();
+  };
   return (
     <div className={styles.meetingPreviewCard}>
       <div className={styles.header}>
@@ -66,7 +83,8 @@ const MeetingPopoverContent: React.FC<MeetingPopoverContentProps> = ({
         <Button
           type={ButtonTypes.LINK}
           className={styles.actionBtn}
-          onClick={onCancel}
+          onClick={handleCancelEvent}
+          loading={isPending}
         >
           {CANCEL_BTN}
         </Button>

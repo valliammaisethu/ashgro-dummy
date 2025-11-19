@@ -61,4 +61,6 @@ export enum QueryKeys {
   GET_CLUB_PROFILE = "getClubProfile",
 
   GET_CALENDER_SLOTS_AND_EVENTS = "getCanderSlotsAndEvents",
+  GET_MEMBERS_META_LIST = "getMembersMetaList",
+  GET_PROSPECTS_META_LIST = "getProspectsMetaList",
 }

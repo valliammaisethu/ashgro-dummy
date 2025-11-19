@@ -9,7 +9,7 @@ export class ProspectsListingParams extends QueryParams {
   leadStatusIds?: string[];
 
   @serializable(list(primitive()))
-  leadSourcesIds?: string[];
+  leadSourceIds?: string[];
 
   @serializable
   followUpStartDate?: string;

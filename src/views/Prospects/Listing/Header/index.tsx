@@ -4,10 +4,10 @@ import { IconEmail, IconUserAdd, IconDocumentUpload } from "obra-icons-react";
 import SearchField from "src/shared/components/SearchField";
 import Button from "src/shared/components/Button";
 import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
-
-import styles from "../listing.module.scss";
 import { ProspectListingHeaderProps } from "src/shared/types/prospects.type";
 import { bulkImportProspects } from "../constants";
+
+import styles from "../listing.module.scss";
 
 const Header = ({
   onAddProspect,
@@ -39,7 +39,7 @@ const Header = ({
           <Button
             onClick={onBulkMail}
             className={styles.bulkUploadButton}
-            icon={<IconEmail size={20} />}
+            icon={<IconEmail className={styles.bulkMailIcon} size={20} />}
             disabled={!selectedEmails}
           >
             {Buttons.BULK_MAIL}

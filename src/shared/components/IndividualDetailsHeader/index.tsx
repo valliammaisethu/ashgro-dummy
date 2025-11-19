@@ -1,35 +1,45 @@
 import React from "react";
-import { IconEmail } from "obra-icons-react";
+import { IconCalendarSelectedDate, IconEmail } from "obra-icons-react";
 
 import Button from "src/shared/components/Button";
-import { ButtonTypes } from "src/enums/buttons.enum";
-import { ButtonNames } from "./constant";
+import BackButton from "../Back";
+import { headerConstants } from "src/views/Prospects/IndividualProspect/constants";
+import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
 
 import styles from "./IndividualDetailsHeader.module.scss";
-import BackButton from "../Back";
 
 interface IndividualDetailsHeaderProps {
   navigateBack?: () => void;
   onEmailClick?: () => void;
+  isPending?: boolean;
 }
-
-const { EMAIL } = ButtonNames;
 
 const IndividualDetailsHeader = ({
   navigateBack,
   onEmailClick,
+  isPending,
 }: IndividualDetailsHeaderProps) => {
   return (
     <div className={styles.header}>
       <div className={styles.leftSide}>{navigateBack && <BackButton />}</div>
       <div className={styles.rightSide}>
+        <Button
+          tooltip={{
+            title: headerConstants.bookAMeeting,
+          }}
+          className={styles.meetingButton}
+        >
+          <IconCalendarSelectedDate />
+        </Button>
         {onEmailClick && (
           <Button
             icon={<IconEmail strokeWidth={1.5} />}
             type={ButtonTypes.LINK}
             onClick={onEmailClick}
+            className={styles.emailButton}
+            disabled={isPending}
           >
-            {EMAIL}
+            {Buttons.SEND_EMAIL}
           </Button>
         )}
       </div>

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import Modal from "src/shared/components/Modal";
@@ -43,8 +43,14 @@ const TemplateModal = ({
     },
   });
 
-  const { watch } = methods;
+  const { watch, reset } = methods;
   const emailTemplateWatch = watch(fields.emailTemplate);
+
+  useEffect(() => {
+    if (!isOpen) {
+      reset();
+    }
+  }, [isOpen, reset]);
 
   const handleNewEmailClick = useCallback(() => {
     toggleEmailModal(EmailModalEnum.EMAIL);
@@ -68,9 +74,13 @@ const TemplateModal = ({
       cancelButtonProps={{
         className: "d-none",
       }}
-      footer={[]}
+      handleOk={handleNextClick}
       closeModal={closeModal}
       visible={isOpen}
+      okText={Buttons.NEXT}
+      okButtonProps={{
+        disabled: !emailTemplateOptions.length || !emailTemplateWatch,
+      }}
       onCancel={closeModal}
       rootClassName={styles.emailTemplateModal}
     >
@@ -91,16 +101,6 @@ const TemplateModal = ({
           className={styles.newEmailButton}
         >
           {Buttons.NEW_EMAIL}
-        </Button>
-      </div>
-      <div className={styles.modalFooter}>
-        <Button
-          onClick={handleNextClick}
-          type={ButtonTypes.DEFAULT}
-          className={styles.okButton}
-          disabled={!emailTemplateOptions.length || !emailTemplateWatch}
-        >
-          {Buttons.NEXT}
         </Button>
       </div>
     </Modal>

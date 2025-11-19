@@ -3,19 +3,3 @@
 .bulkFileUpload {
   width: 100%;
 }
-.documentUploadBtn {
-  border-radius: 1.4rem;
-  width: 4.4rem;
-  height: 4.4rem;
-  background-color: $search-bg;
-
-  &:global(.ant-btn.ant-btn-icon-only) {
-    width: 4.4rem;
-  }
-
-  &:global(
-      .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
-    ):hover {
-    background-color: $search-bg;
-  }
-}

@@ -11,7 +11,7 @@ export const TABLE_HEADERS = {
 } as const;
 
 export const deleteProspectDescription = (prospectName: string) =>
-  `Are you sure you want to permanently delete ${prospectName} to a member? This action is not reversible.`;
+  `Are you sure you want to permanently delete ${prospectName}? This action is not reversible.`;
 
 export const deleteProspectTitle = "Delete Prospect?";
 
