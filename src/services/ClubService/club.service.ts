@@ -5,7 +5,6 @@ import {
 } from "@tanstack/react-query";
 import { generatePath } from "react-router-dom";
 import { deserialize, serialize } from "serializr";
-import { SharedComponentsConstants } from "src/constants/sharedComponents";
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
 import {
@@ -53,7 +52,6 @@ export const ClubService = () => {
     queryFn: async () => {
       const { data } = await axiosInstance.get(GET_CLUBS_ROUTE, {
         params: serialize(QueryParams, params),
-        baseURL: SharedComponentsConstants.MOCKURL,
       });
       return deserialize(ClubListReponse, data?.data);
     },
@@ -66,9 +64,6 @@ export const ClubService = () => {
     queryFn: async () => {
       const { data } = await axiosInstance.get(
         generatePath(GET_CLUB_PROFILE_ROUTE, { id }),
-        {
-          baseURL: SharedComponentsConstants.MOCKURL,
-        },
       );
       return deserialize(ClubData, data?.data);
     },
@@ -82,9 +77,7 @@ export const ClubService = () => {
   > => ({
     mutationKey: [ADD_CLUB],
     mutationFn: async (body: ClubFormData) => {
-      const { data } = await axiosInstance.post(GET_CLUBS_ROUTE, body, {
-        baseURL: SharedComponentsConstants.MOCKURL,
-      });
+      const { data } = await axiosInstance.post(GET_CLUBS_ROUTE, body);
       return deserialize(ResponseModel, data);
     },
     onSuccess: (response) =>
@@ -102,9 +95,6 @@ export const ClubService = () => {
       const { data } = await axiosInstance.put(
         generatePath(GET_CLUB_PROFILE_ROUTE, { id }),
         body,
-        {
-          baseURL: SharedComponentsConstants.MOCKURL,
-        },
       );
       return deserialize(ResponseModel, data);
     },
@@ -127,9 +117,6 @@ export const ClubService = () => {
       const { data } = await axiosInstance.patch(
         generatePath(GET_CLUB_PROFILE_ROUTE, { id }),
         body,
-        {
-          baseURL: SharedComponentsConstants.MOCKURL,
-        },
       );
       return deserialize(ClubChatbotStatusResponse, data);
     },

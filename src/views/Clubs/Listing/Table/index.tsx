@@ -51,6 +51,10 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
     navigateToInvidualClub(clubId);
   };
 
+  const getStatusLabel = (statusValue?: string) => {
+    return ClubStatusOptions.find((opt) => opt.value === statusValue)?.label;
+  };
+
   return (
     <div className={styles.tableContainer}>
       <ListHeader
@@ -95,7 +99,7 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
                 options={ClubStatusOptions}
                 onEditClick={handleEditClick(club.id || "")}
                 selectWidth={140}
-                selectedValue={club.status}
+                selectedValue={getStatusLabel(club.status)}
               />
             </div>
           ))}

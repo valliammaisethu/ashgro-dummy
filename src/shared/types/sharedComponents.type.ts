@@ -284,3 +284,17 @@ export interface FileUploadProps {
   initialFiles?: UploadedFile[];
   deleteOnRemove?: boolean;
 }
+
+export interface StatusOption {
+  id?: string;
+  statusName?: string;
+  color?: string;
+}
+
+export interface StatusDropdownProps<T = StatusOption> {
+  value?: string;
+  options: T[];
+  onChange: (value: string) => void;
+  loading?: boolean;
+  onClick?: (e: React.MouseEvent) => void;
+}

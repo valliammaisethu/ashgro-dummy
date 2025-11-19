@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Card, Col, Row, Select } from "antd";
+import { Card, Col, Row } from "antd";
 import {
   IconEdit,
   IconCakeAlt,
@@ -27,10 +27,7 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
 
 import styles from "./details.module.scss";
-import {
-  fallbackHandler,
-  findValueByLabel,
-} from "src/shared/utils/commonHelpers";
+import { fallbackHandler } from "src/shared/utils/commonHelpers";
 import MembersForm from "../MembersForm";
 import { MemberShipService } from "src/services/SettingsService/memberShip.service";
 import { defaultCountryCode } from "src/constants/common";
@@ -43,10 +40,10 @@ import { formatDate } from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { formatAndSetPhoneNumber } from "src/shared/utils/phoneNumberUtils";
 import { getPhoneNumber } from "src/views/Prospects/IndividualProspect/utils";
-import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
 import { EmailTemplate } from "src/models/meta.model";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import TemplateModal from "src/views/Email/TemplateModal";
+import StatusDropdown from "src/shared/components/StatusDropdown";
 
 const {
   footer: {
@@ -60,7 +57,6 @@ const {
   feesAndDuesLabel,
   joinedDate,
   memberDetailsLabel,
-  statusPlaceholder,
 } = detailsConstants;
 
 const { GET_MEMBERS } = QueryKeys;
@@ -174,22 +170,18 @@ const Details = () => {
             <Col span={14} className={styles.leftSide}>
               <Row justify={Justify.END} gutter={[10, 0]}>
                 <Col>
-                  <Select
-                    value={findValueByLabel(
-                      memberShipStatusesOptions,
-                      data?.membershipStatus,
-                    )}
-                    className={styles.statusSelect}
-                    placeholder={statusPlaceholder}
+                  <StatusDropdown
+                    value={data?.membershipStatus}
+                    options={
+                      memberShipStatusesOptions?.map((option) => ({
+                        statusName: option.label,
+                        id: option.value,
+                        color: option.color,
+                      })) || []
+                    }
                     onChange={handleStatusChange}
                     loading={isUpdatingStatus}
-                  >
-                    {memberShipStatusesOptions?.map(({ id, label = "" }) => (
-                      <Select.Option key={id} value={id}>
-                        <StatusTag label={label} />
-                      </Select.Option>
-                    ))}
-                  </Select>
+                  />
                 </Col>
                 <Col>
                   <Button

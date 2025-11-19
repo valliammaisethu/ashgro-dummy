@@ -135,9 +135,20 @@ const Members = () => {
   const handleNavigateToDetails = (id?: string) => () =>
     navigateToMemberDetails(id);
 
-  const handlePageChange = useCallback((newPage: number) => {
+  const handleMemberStatusChange =
+    (memberId?: string) => (statusName: string) => {
+      const status = memberShipStatusesOptions.find(
+        (opt) => opt.label === statusName,
+      );
+      handleStatusChange(memberId, status?.value);
+    };
+
+  const handleMemberEdit = (member: Member) => () => handleEditClick(member);
+
+  const handleMemberDelete = (member: Member) => () => setDeleteItem(member);
+
+  const handlePageChange = (newPage: number) => () =>
     setQueryParams((prev) => ({ ...prev, page: newPage }));
-  }, []);
 
   const handleSelectAll = useCallback(
     (checked: boolean) => {
@@ -265,10 +276,6 @@ const Members = () => {
           >
             <div className={styles.listContainer}>
               {data?.members?.map((item) => {
-                const selectedValue = memberShipStatusesOptions.find(
-                  (opt) => opt.label === item.membershipStatus,
-                )?.value;
-
                 return (
                   <div
                     key={item.id}
@@ -305,14 +312,12 @@ const Members = () => {
 
                     <Actions
                       selectWidth={200}
-                      selectedValue={selectedValue}
+                      selectedValue={item.membershipStatus}
                       options={memberShipStatusesOptions}
-                      onSelectChange={(value) =>
-                        handleStatusChange(item.id, value)
-                      }
+                      onSelectChange={handleMemberStatusChange(item.id)}
                       selectLoading={updatingMemberId === item.id}
-                      onEditClick={() => handleEditClick(item)}
-                      onDeleteClick={() => setDeleteItem(item)}
+                      onEditClick={handleMemberEdit(item)}
+                      onDeleteClick={handleMemberDelete(item)}
                     />
                   </div>
                 );

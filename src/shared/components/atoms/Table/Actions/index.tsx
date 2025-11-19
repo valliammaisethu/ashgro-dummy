@@ -1,6 +1,5 @@
 import React from "react";
-import { Select } from "antd";
-import { IconEdit, IconDelete, IconChevronDown } from "obra-icons-react";
+import { IconEdit, IconDelete } from "obra-icons-react";
 import clsx from "clsx";
 
 import { Colors } from "src/enums/colors.enum";
@@ -8,11 +7,12 @@ import { stopPropagation } from "src/shared/utils/eventUtils";
 import { hoverActionBtnClass } from "./constants";
 
 import styles from "./actions.module.scss";
-import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
+import StatusDropdown from "src/shared/components/StatusDropdown";
 
 interface Option {
   label?: string;
   value?: string;
+  color?: string;
 }
 
 interface ActionsProps {
@@ -34,9 +34,7 @@ const Actions: React.FC<ActionsProps> = ({
   onEditClick,
   onDeleteClick,
   showSelect = true,
-  selectPlaceholder = "Select an option",
   selectLoading = false,
-  selectWidth = 200,
 }) => {
   const handleSelectChange = (value: string) => {
     onSelectChange?.(value);
@@ -56,21 +54,18 @@ const Actions: React.FC<ActionsProps> = ({
     <div className={styles.actionContainer}>
       {showSelect && (
         <div onClick={stopPropagation} className={styles.statusCol}>
-          <Select
+          <StatusDropdown
             value={selectedValue}
-            placeholder={selectPlaceholder}
-            className={styles.statusSelect}
-            style={{ width: selectWidth }}
+            options={
+              options?.map((option) => ({
+                statusName: option.label,
+                id: option.value,
+                color: option.color,
+              })) || []
+            }
             onChange={handleSelectChange}
             loading={selectLoading}
-            suffixIcon={<IconChevronDown size={20} />}
-          >
-            {options?.map(({ value, label = "" }) => (
-              <Select.Option key={value} value={value}>
-                <StatusTag label={label} />
-              </Select.Option>
-            ))}
-          </Select>
+          />
         </div>
       )}
       <div className={clsx(styles.actions, hoverActionBtnClass)}>

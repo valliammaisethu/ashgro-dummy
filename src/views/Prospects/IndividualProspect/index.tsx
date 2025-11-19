@@ -2,11 +2,10 @@ import React, { Fragment, useState } from "react";
 import { IconDelete, IconEdit } from "obra-icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { Select } from "antd";
 
 import Header from "./Header";
-import StatusTag from "../Listing/Atoms/StatusTag";
 import ProspectForm from "../ProspectForm";
+import StatusDropdown from "../../../shared/components/StatusDropdown";
 import Card from "src/shared/components/Card";
 import Button from "src/shared/components/Button";
 import ProspectInfo from "./components/ProspectInfo";
@@ -124,21 +123,12 @@ const IndividualProspect = () => {
         <Card className={styles.card}>
           <div className={styles.leftSide}>
             <div className={styles.header}>
-              <Select
-                value={data?.prospect?.leadStatus || undefined}
-                className={styles.statusSelect}
-                placeholder="Select a status"
+              <StatusDropdown
+                value={data?.prospect?.leadStatus}
+                options={leadStatusOptions?.leadStatuses || []}
                 onChange={handleStatusChange}
                 loading={isUpdatingStatus}
-              >
-                {leadStatusOptions?.leadStatuses?.map(
-                  ({ id, statusName = "" }) => (
-                    <Select.Option key={id} value={statusName}>
-                      <StatusTag label={statusName} />
-                    </Select.Option>
-                  ),
-                )}
-              </Select>
+              />
               <Button
                 onClick={handleEdit}
                 icon={<IconEdit strokeWidth={1.5} />}

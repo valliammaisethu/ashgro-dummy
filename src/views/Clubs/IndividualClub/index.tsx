@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { IconChevronDown, IconEdit } from "obra-icons-react";
+import { IconEdit } from "obra-icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { Select } from "antd";
 
 import Header from "./Header";
 import ClubInfo from "./components/ClubInfo";
@@ -12,7 +11,6 @@ import Button from "src/shared/components/Button";
 import Card from "src/shared/components/Card";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import Switch from "src/shared/components/Switch";
-import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
 import { stopPropagation } from "src/shared/utils/eventUtils";
 import ClubForm from "../ClubForm";
 import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
@@ -20,6 +18,7 @@ import { ClubService } from "src/services/ClubService/club.service";
 import { Colors } from "src/enums/colors.enum";
 
 import styles from "./individualClub.module.scss";
+import StatusDropdown from "src/shared/components/StatusDropdown";
 
 const IndividualClub = () => {
   const { id = "" } = useParams();
@@ -70,19 +69,17 @@ const IndividualClub = () => {
                   className={styles.statusSwitch}
                 />
                 <div onClick={stopPropagation} className={styles.statusCol}>
-                  <Select
+                  <StatusDropdown
                     value={clubData?.club?.status}
-                    className={styles.statusSelect}
-                    style={{ width: 140 }}
+                    options={
+                      ClubStatusOptions?.map((option) => ({
+                        statusName: option.label,
+                        id: option.value,
+                        color: option.color,
+                      })) || []
+                    }
                     onChange={handleStatusChange}
-                    suffixIcon={<IconChevronDown size={20} />}
-                  >
-                    {ClubStatusOptions?.map(({ value, label = "" }) => (
-                      <Select.Option key={value} value={value}>
-                        <StatusTag label={label} />
-                      </Select.Option>
-                    ))}
-                  </Select>
+                  />
                 </div>
               </div>
               <div className={styles.actionButtons}>
