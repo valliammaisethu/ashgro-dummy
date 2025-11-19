@@ -100,6 +100,7 @@
                 color: $ashgro-gold;
                 font-size: 1.4rem;
                 font-family: $font-secondary;
+                padding-right: 0.4rem;
               }
 
               .date {
@@ -429,4 +430,7 @@
       box-shadow: none;
     }
   }
+}
+.calendarIcon {
+  cursor: pointer;
 }
