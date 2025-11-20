@@ -14,19 +14,19 @@ import ConditionalRender from "src/shared/components/ConditionalRender";
 import Switch from "src/shared/components/Switch";
 import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
 import { stopPropagation } from "src/shared/utils/eventUtils";
+import ClubForm from "../ClubForm";
 import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
+import { ClubService } from "src/services/ClubService/club.service";
 import { Colors } from "src/enums/colors.enum";
-import AddClub from "../AddClub";
 
 import styles from "./individualClub.module.scss";
-import { ClubService } from "src/services/ClubService/club.service";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
 
 const IndividualClub = () => {
   const { id = "" } = useParams();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const queryClient = useQueryClient();
-  const { getClubProfile, updateChatbotStatus, editClub } = ClubService();
+  const { getClubProfile, updateStatus } = ClubService();
 
   const {
     data: clubData,
@@ -35,23 +35,11 @@ const IndividualClub = () => {
     isFetching,
   } = useQuery(getClubProfile(id));
 
-  const { mutateAsync: updateChatbotStatusMutate, isPending: isUpdatePending } =
-    useMutation(updateChatbotStatus(id));
-
-  const { mutateAsync: editClubMutate, isPending: isStatusUpdatePending } =
-    useMutation(editClub(id));
+  const { mutateAsync: updateClubStatusMutate, isPending: isUpdatePending } =
+    useMutation(updateStatus());
 
   const handleChatbotStatusChange = async (value: boolean) =>
-    await updateChatbotStatusMutate(
-      { chatbotEnabled: value },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: [QueryKeys.GET_CLUB_PROFILE],
-          });
-        },
-      },
-    );
+    await updateClubStatusMutate({ chatbotEnabled: value, id });
 
   const handleEdit = () => {
     setIsEditModalOpen(true);
@@ -66,8 +54,8 @@ const IndividualClub = () => {
   };
 
   const handleStatusChange = async (value: string) => {
-    await editClubMutate(
-      { status: value, clubCountryCode: "" },
+    await updateClubStatusMutate(
+      { status: value, id },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
@@ -86,8 +74,6 @@ const IndividualClub = () => {
         isSuccess={isSuccess}
         isFetching={isFetching}
         records={[clubData?.club]}
-        useGridSkeleton
-        skeletonRows={16}
       >
         <Card className={styles.card}>
           <div className={styles.leftSide}>
@@ -110,7 +96,7 @@ const IndividualClub = () => {
                     style={{ width: 140 }}
                     onChange={handleStatusChange}
                     suffixIcon={<IconChevronDown size={20} />}
-                    loading={isStatusUpdatePending}
+                    loading={isUpdatePending}
                   >
                     {ClubStatusOptions?.map(({ value, label = "" }) => (
                       <Select.Option key={value} value={value}>
@@ -144,7 +130,7 @@ const IndividualClub = () => {
           </div>
         </Card>
       </ConditionalRender>
-      <AddClub
+      <ClubForm
         onClose={handleCloseEditModal}
         open={isEditModalOpen}
         clubId={id}

@@ -4,7 +4,7 @@ import styles from "../../individualProspect.module.scss";
 
 interface IconTextProps {
   icon: React.ReactNode;
-  text: string;
+  text?: string;
   className?: string;
 }
 

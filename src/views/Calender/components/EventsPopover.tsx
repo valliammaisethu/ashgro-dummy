@@ -5,7 +5,7 @@ import { IconCircleClose } from "obra-icons-react";
 
 import { formatTimeRange } from "../utils/calendarUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
-import { EventsPopoverProps } from "src/shared/types/calender";
+import { CalendarEvent, EventsPopoverProps } from "src/shared/types/calender";
 import MeetingPreview from "./MeetingPreview";
 
 import styles from "../DateCell/dateCell.module.scss";
@@ -14,8 +14,12 @@ const EventsPopover: React.FC<EventsPopoverProps> = ({
   date,
   displayEvents = [],
   onClose,
+  onRescheduleEvent,
 }) => {
-  //TODO: need to handle past days here
+  const handleReschedule = (event: CalendarEvent) => () => {
+    onRescheduleEvent(event);
+    onClose();
+  };
 
   return (
     <div className={styles.popoverContent}>
@@ -30,13 +34,11 @@ const EventsPopover: React.FC<EventsPopoverProps> = ({
         {displayEvents?.map((event) => (
           <div key={event.id} className={styles.popoverEvent}>
             {!event?.resource?.chatbot ? (
-              <>
-                <MeetingPreview
-                  event={{ ...event, date }}
-                  onReschedule={() => {}}
-                  isMorePopup
-                />
-              </>
+              <MeetingPreview
+                event={{ ...event, date }}
+                onReschedule={handleReschedule({ ...event, date })}
+                isMorePopup
+              />
             ) : (
               <div className={clsx(styles.eventTitle, styles.chatbotTime)}>
                 <p>{formatTimeRange(event.start, event.end)}</p>

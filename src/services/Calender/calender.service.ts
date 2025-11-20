@@ -1,0 +1,41 @@
+import { UseQueryOptions } from "@tanstack/react-query";
+import { deserialize } from "serializr";
+
+import { QueryKeys } from "src/enums/cacheEvict.enum";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import axiosInstance from "src/interceptor/axiosInstance";
+import { CalendarData } from "src/models/calender.model";
+import { ResponseModel } from "src/models/response.model";
+import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
+import { CalendarEvent } from "src/shared/types/calender";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { mapCalendarDaysToEvents } from "src/views/Calender/utils/calendarUtils";
+
+const { GET_CALENDER_SLOTS_AND_EVENTS } = QueryKeys;
+const { CALENDER_EVENTS_AND_SLOTS } = ApiRoutes;
+
+export const CalenderService = () => {
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
+  const calenderEventsAndSlotsList = (
+    month?: string,
+  ): UseQueryOptions<CalendarEvent[], ResponseModel, CalendarEvent[]> => {
+    return {
+      queryKey: [GET_CALENDER_SLOTS_AND_EVENTS, month, clubId],
+      queryFn: async () => {
+        const response = await axiosInstance.get(CALENDER_EVENTS_AND_SLOTS, {
+          params: { month, clubId },
+        });
+
+        const calendarResponse = deserialize(CalendarData, response?.data);
+
+        return mapCalendarDaysToEvents(calendarResponse?.days);
+      },
+      enabled: !!clubId && !!month,
+    };
+  };
+
+  return {
+    calenderEventsAndSlotsList,
+  };
+};

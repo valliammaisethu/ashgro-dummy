@@ -567,6 +567,9 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   display: flex;
   flex-direction: column;
 }
+.ant-spin {
+  color: $ashgro-gold;
+}
 .ant-modal .ant-modal-header {
   border-radius: 1.6rem;
   padding: 2.4rem 1.6rem;
@@ -795,4 +798,9 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   &.ant-picker-focused .ant-picker-input {
     background-color: $input-background;
   }
+}
+
+.ant-popover-inner-content {
+  background-color: $ashgro-white;
+  border-radius: 12px;
 }

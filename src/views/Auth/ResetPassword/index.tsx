@@ -1,6 +1,7 @@
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
+import queryString from "query-string";
 
 import logo from "src/assets/images/logo.webp";
 import { imageAlts } from "src/constants/imageAlts";
@@ -21,6 +22,8 @@ import { validationSchema } from "./validation";
 import PasswordValidation from "./PasswordValidation";
 
 import styles from "./resetPassword.module.scss";
+import { useLocation } from "react-router-dom";
+import { renderNotification } from "src/shared/utils/renderNotification";
 
 const { confirmPassword, newPassword } = fields;
 const {
@@ -35,6 +38,10 @@ const ResetPassword = () => {
   const methods = useForm({
     validationSchema: validationSchema,
   });
+
+  const { search } = useLocation();
+  const { tempToken = "" } = queryString.parse(search);
+
   const password = methods.watch(newPassword);
   const { navigateToLogin } = useRedirect();
   const {
@@ -45,10 +52,20 @@ const ResetPassword = () => {
 
   const { mutateAsync, isPending } = useMutation(resetPassword());
 
-  const handleSubmit = (values: FieldValues) =>
-    mutateAsync(values, {
-      onSuccess: navigateToLogin,
+  const handleSubmit = (values: FieldValues) => {
+    const payload = {
+      ...values,
+      token: tempToken as string,
+    };
+
+    mutateAsync(payload, {
+      onSuccess: (response) => {
+        const { title, description } = response;
+        renderNotification(title, description);
+        navigateToLogin();
+      },
     });
+  };
 
   return (
     <div className={styles.resetPasswordContainer}>

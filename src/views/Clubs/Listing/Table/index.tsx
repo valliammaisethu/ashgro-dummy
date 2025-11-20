@@ -25,12 +25,12 @@ import styles from "../../clubs.module.scss";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
 
 const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
-  const { getClubs, updateChatbotStatus, editClub } = ClubService();
+  const { getClubs, updateStatus } = ClubService();
   const [currentPage, setCurrentPage] = useState(1);
   const [updatingClubId, setUpdatingClubId] = useState<string>("");
-  const [updatingStatusClubId, setUpdatingStatusClubId] = useState<string>("");
   const { navigateToInvidualClub } = useRedirect();
   const queryClient = useQueryClient();
+
   const {
     data: clubsData,
     isPending,
@@ -38,43 +38,55 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
     isFetching,
   } = useQuery(getClubs());
 
-  const { mutateAsync: updateChatbotStatusMutate, isPending: isUpdatePending } =
-    useMutation(updateChatbotStatus(updatingClubId));
-
-  const { mutateAsync: editClubMutate, isPending: isStatusUpdatePending } =
-    useMutation(editClub(updatingStatusClubId));
-
   const handlePageChange = useCallback((newPage: number) => {
     setCurrentPage(newPage);
   }, []);
 
-  const handleChatbotStatusChange = async (clubId: string, value: boolean) => {
+  const { mutateAsync, isPending: isUpdatePending } =
+    useMutation(updateStatus());
+
+  const handleChatbotStatusChange = async (clubId = "", value: boolean) => {
     setUpdatingClubId(clubId);
-    await updateChatbotStatusMutate(
-      { chatbotEnabled: value },
+
+    await mutateAsync(
+      { chatbotEnabled: value, id: clubId },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: [QueryKeys.GET_CLUBS],
           });
+          setUpdatingClubId("");
+        },
+        onError: () => {
+          setUpdatingClubId("");
         },
       },
     );
   };
 
   const handleStatusChange = async (clubId = "", value: string) => {
-    setUpdatingStatusClubId(clubId);
-    await editClubMutate(
-      { status: value, clubCountryCode: "" },
+    setUpdatingClubId(clubId);
+    await mutateAsync(
+      { status: value, id: clubId },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: [QueryKeys.GET_CLUBS],
           });
+          setUpdatingClubId("");
+        },
+        onError: () => {
+          setUpdatingClubId("");
         },
       },
     );
   };
+  const handleEditClick = useCallback((clubId?: string) => {
+    return () => {
+      if (!clubId) return;
+      onEditClub(clubId);
+    };
+  }, []);
 
   const handleRowClick = (clubId = "", e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -119,7 +131,7 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
                   className={styles.switch}
                   name={`switch-${index}`}
                   onChange={(value) =>
-                    handleChatbotStatusChange(club.id || "", value)
+                    handleChatbotStatusChange(club.id, value)
                   }
                   loading={isUpdatePending && updatingClubId === club.id}
                 />
@@ -127,13 +139,11 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
 
               <Actions
                 options={ClubStatusOptions}
-                onEditClick={() => onEditClub(club.id || "")}
                 onSelectChange={(value) => handleStatusChange(club.id, value)}
+                onEditClick={handleEditClick(club.id)}
                 selectWidth={140}
                 selectedValue={club.status}
-                selectLoading={
-                  isStatusUpdatePending && updatingStatusClubId === club.id
-                }
+                selectLoading={isUpdatePending && updatingClubId === club.id}
               />
             </div>
           ))}

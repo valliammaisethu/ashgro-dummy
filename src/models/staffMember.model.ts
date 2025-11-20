@@ -62,7 +62,7 @@ export class StaffDataResponse extends ResponseModel {
 
 export class StaffMembersListingParams extends QueryParams {
   @serializable(list(primitive()))
-  departmentIds: string[] = [];
+  staffDepartmentIds: string[] = [];
 }
 
 export class StaffMemberListData {

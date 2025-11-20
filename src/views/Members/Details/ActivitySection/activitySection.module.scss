@@ -8,6 +8,9 @@
   .activityCount {
     font-size: 2rem;
     font-weight: 400;
+    color: $ashgro-navy;
+    font-family: $font-primary;
+    letter-spacing: 0.05rem;
   }
 
   .addButton {
@@ -16,19 +19,16 @@
     background-color: $search-bg;
     color: $filter-icon;
 
-    &:hover {
+    &:global(
+      .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+    ) {
       background-color: $search-bg;
       color: $filter-icon;
     }
-  }
-
-  .addButton {
-    background-color: $add-icon-bg;
-    color: $ashgro-white;
 
     &:hover {
-      background-color: $add-icon-bg;
-      color: $ashgro-white;
+      background-color: $search-bg;
+      color: $filter-icon;
     }
   }
 }

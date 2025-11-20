@@ -268,9 +268,6 @@ const ProspectsListing = () => {
             records={data?.prospects}
             isPending={isPending}
             isSuccess={isSuccess}
-            useGridSkeleton
-            skeletonCols={1}
-            skeletonRows={13}
           >
             <div className={styles.tableBody}>
               {data?.prospects?.filter(Boolean).map((prospect) => (
@@ -339,6 +336,7 @@ const ProspectsListing = () => {
         onClose={handleNewEmailModalClose}
         selectedEmails={emailRecipients}
         selectedTemplate={selectedTemplate}
+        isBulkEmail
       />
     </div>
   );

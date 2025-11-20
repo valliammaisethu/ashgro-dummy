@@ -34,8 +34,13 @@ export const getLeadDetails = (
   ];
 };
 
-export const getPhoneNumber = (countryCode = "", contactNumber = "") =>
-  `${fillEmptyData(countryCode)} ${fillEmptyData(contactNumber)}`.trim();
+export const getPhoneNumber = (
+  countryCode?: string,
+  contactNumber?: string,
+) => {
+  if (!contactNumber) return "";
+  return `${fillEmptyData(countryCode)} ${fillEmptyData(contactNumber)}`.trim();
+};
 
 export const getFeesAndDues = (
   monthlyDues: number | string = 0,

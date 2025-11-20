@@ -282,4 +282,7 @@ export interface FileUploadProps {
   maxFileSizeClassName?: string;
   attachmentClassName?: string;
   initialFiles?: UploadedFile[];
+  deleteOnRemove?: boolean;
 }
+
+export type QueryKeyType = readonly unknown[];

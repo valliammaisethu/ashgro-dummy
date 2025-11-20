@@ -8,9 +8,15 @@ interface Props {
   icon?: ReactElement;
   size?: LoaderSizes.SMALL | LoaderSizes.LARGE | LoaderSizes.DEFAULT;
   tip?: string;
+  loading?: boolean;
 }
 
-const Loader: React.FC<Props> = ({ icon, size, tip }: Props) => {
+const Loader: React.FC<Props> = ({
+  icon,
+  size,
+  tip,
+  loading = true,
+}: Props) => {
   const antIcon = icon ? (
     icon
   ) : (
@@ -22,6 +28,7 @@ const Loader: React.FC<Props> = ({ icon, size, tip }: Props) => {
         indicator={antIcon}
         size={size ? size : LoaderSizes.DEFAULT}
         tip={tip}
+        spinning={loading}
       />
     </div>
   );

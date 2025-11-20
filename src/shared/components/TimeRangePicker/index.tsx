@@ -50,7 +50,6 @@ const TimeRangePicker: FC<TimeRangePickerFieldProps> = ({
         value={parseTimeRangeValue(value, format)}
         onChange={handleChange}
         onBlur={onBlur}
-        use12Hours
         format={format}
         minuteStep={5}
         placeholder={placeholder}
