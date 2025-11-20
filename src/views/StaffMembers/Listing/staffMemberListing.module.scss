@@ -6,7 +6,7 @@
 
   .rowContainer {
     display: grid;
-    grid-template-columns: 50% 20% 25% 05%;
+    grid-template-columns: 35% 27% 32% 05%;
     align-items: center;
     padding: 2rem 3.2rem;
     background-color: $ashgro-white;
@@ -29,7 +29,7 @@
 
   .rowItem {
     width: 45rem;
-    padding-left: 1rem;
+    text-align: center;
     align-items: flex-start;
     color: $ashgro-navy;
     font-weight: 600;
