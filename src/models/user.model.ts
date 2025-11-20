@@ -29,6 +29,15 @@ export class UserData {
 
   @serializable
   clubName?: string;
+
+  @serializable
+  email?: string;
+
+  @serializable
+  phone?: string;
+
+  @serializable
+  profilePicUrl?: string;
 }
 
 export class TokenData {

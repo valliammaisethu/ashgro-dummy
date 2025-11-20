@@ -23,6 +23,8 @@ export enum Buttons {
   ADD_TEMPLATE = "Add Template",
   ADD_CLUB = "Add Club",
   CLEAR_SELECTION = "Clear Selection",
+  EDIT_PROFILE = "Edit Profile",
+  CHANGE_PASSWORD = "Change Password",
 }
 
 export enum HtmlButtonType {

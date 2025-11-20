@@ -1,0 +1,92 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.myProfileContent {
+  padding: 1rem;
+}
+.header {
+  @include flex-flow(row, wrap, flex-start);
+  justify-content: space-between;
+
+  .avatar {
+    margin-left: 8rem;
+  }
+}
+.body {
+  text-align: center;
+  .name {
+    margin-top: 0.8rem;
+    color: $ashgro-navy;
+    font-family: $font-primary;
+    font-size: 1.6rem;
+  }
+  .email {
+    margin-top: 1rem;
+    @include flex-container(normal, center, row, 0.4rem);
+    font-size: 1.4rem;
+    color: $ashgro-blue;
+  }
+  .phone {
+    text-align: center;
+    margin-top: 0.8rem;
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    @include flex-container(center, center, row, 0.4rem);
+  }
+  .divider {
+    &:global(.ant-divider) {
+      margin: 1.6rem;
+    }
+  }
+  .buttons {
+    @include flex-container(center, center, column, 1.6rem);
+
+    .editButton {
+      border-radius: 3.6rem;
+      background-color: $ashgro-navy;
+      height: 3.6rem;
+      width: 15.2rem;
+      color: $ashgro-white;
+      font-weight: 500;
+      font-size: 1.4rem;
+
+      &:hover {
+        background-color: rgba($ashgro-navy, 0.7);
+        color: $ashgro-white;
+      }
+    }
+    .changePassword {
+      background-color: transparent;
+      border-color: $gold-bold;
+      color: $gold-text;
+      font-weight: 500;
+
+      &:hover {
+        background-color: transparent;
+        color: $gold-text;
+
+        &:global(
+          .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+        ) {
+          border-color: $gold-bold;
+        }
+      }
+    }
+  }
+}
+
+.myProfilePopover {
+  &:global(.ant-popover .ant-popover-inner) {
+    border-radius: 1.6rem;
+    min-height: 29.7rem;
+    min-width: 25.6rem;
+  }
+}
+
+.customAvatar {
+  // targetting span directly because of css modules
+  span {
+    font-weight: 400;
+    font-size: 1.8rem;
+  }
+}
