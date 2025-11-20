@@ -5,7 +5,6 @@ import clsx from "clsx";
 
 import { InputStatus } from "src/enums/inputStatus.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
-import { AutoComplete } from "src/enums/autoComplete.enum";
 import { PasswordFieldProps } from "src/shared/types/sharedComponents.type";
 import { passwordSuffix } from "./atoms";
 import Error from "../Error";
@@ -36,8 +35,6 @@ const PasswordField: FC<PasswordFieldProps> = ({ name, label, ...rest }) => {
         type={showPassword ? INPUT_TYPE.TEXT : INPUT_TYPE.PASSWORD}
         status={fieldState.error ? InputStatus.ERROR : undefined}
         suffix={passwordSuffix(showPassword, togglePasswordVisibility)}
-        autoComplete={AutoComplete.OFF}
-        autoCorrect={AutoComplete.OFF}
         spellCheck={false}
       />
 
