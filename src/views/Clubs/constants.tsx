@@ -7,7 +7,7 @@ export const clubListingHeaders = [
 
 export const membersText = (count: number) => `${count} Members`;
 
-export const clubHeaderColumnGrid = "51% 15% 15% 15%";
+export const clubHeaderColumnGrid = "45% 15% 17% 15%";
 
 export const VALIDATION_REGEX = {
   ALPHABETS_ONLY: /^[A-Za-z\s]+$/,

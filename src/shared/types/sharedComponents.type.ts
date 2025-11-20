@@ -31,7 +31,7 @@ import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
 import { AttachmentTypes } from "src/enums/attachmentTypes.enum";
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
-  phoneCodeName: string;
+  phoneCodeName?: string;
   label?: string;
   required?: boolean;
 }

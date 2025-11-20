@@ -27,6 +27,9 @@ export enum Buttons {
   CHANGE = "Change",
   IMPORT = "Import",
   ADD_FILE = "Add File",
+  CLEAR_SELECTION = "Clear Selection",
+  EDIT_PROFILE = "Edit Profile",
+  CHANGE_PASSWORD = "Change Password",
 }
 
 export enum HtmlButtonType {

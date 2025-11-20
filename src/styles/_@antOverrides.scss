@@ -803,3 +803,8 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   background-color: $ashgro-white;
   border-radius: 12px;
 }
+
+.ant-btn-color-link.ant-btn-variant-link:disabled {
+  border-color: unset;
+  color: unset;
+}

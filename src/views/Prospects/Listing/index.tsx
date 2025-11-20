@@ -253,6 +253,11 @@ const ProspectsListing = () => {
     setUpdatingProspectId(undefined);
   };
 
+  const handleClearSelections = useCallback(() => {
+    setSelectedProspects([]);
+    setIsAllSelected(false);
+  }, []);
+
   useEffect(() => {
     if (clubId && queryParams.clubId !== clubId) {
       setQueryParams((prev) => ({ ...prev, clubId }));
@@ -265,8 +270,9 @@ const ProspectsListing = () => {
         onFilter={toggleDrawerVisibility}
         onSearch={handleSearch}
         onAddProspect={showForm}
-        filtersActive={filtersActive}
         onBulkMail={toggleEmailTemplateModal}
+        onClear={handleClearSelections}
+        filtersActive={filtersActive}
         selectedEmails={selectedProspects.length}
         onBulkImport={toggleBulkUpload}
       />

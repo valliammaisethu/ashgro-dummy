@@ -1,10 +1,16 @@
 import React from "react";
-import { IconEmail, IconUserAdd, IconDocumentUpload } from "obra-icons-react";
+import {
+  IconEmail,
+  IconUserAdd,
+  IconDocumentUpload,
+  IconClose,
+} from "obra-icons-react";
 
 import SearchField from "src/shared/components/SearchField";
 import Button from "src/shared/components/Button";
 import { importMembers } from "../constant";
 import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
+import { Colors } from "src/enums/colors.enum";
 import { MembersHeaderProps } from "src/shared/types/members.type";
 
 import styles from "../members.module.scss";
@@ -13,6 +19,7 @@ const Header = ({
   onAddMember,
   onSearch,
   onFilter,
+  onClear,
   onBulkMail,
   onBulkImport,
   filtersActive,
@@ -27,25 +34,35 @@ const Header = ({
         filtersActive={filtersActive}
       />
       <div className={styles.actions}>
-        <Button
-          icon={<IconDocumentUpload size={20} />}
-          className={styles.filterButton}
-          onClick={onBulkImport}
-          tooltip={{
-            title: importMembers,
-          }}
-        />
-        <div>
+        {!selectedEmails && (
           <Button
-            onClick={onBulkMail}
-            className={styles.bulkUploadButton}
-            icon={<IconEmail className={styles.bulkMailIcon} size={20} />}
-            disabled={!selectedEmails}
-          >
-            {Buttons.BULK_MAIL}
-          </Button>
-        </div>
-        <div>
+            icon={<IconDocumentUpload size={20} />}
+            className={styles.filterButton}
+            onClick={onBulkImport}
+            tooltip={{
+              title: importMembers,
+            }}
+          />
+        )}
+        {Boolean(selectedEmails) && (
+          <div onClick={onClear} className={styles.clearSelection}>
+            <IconClose
+              strokeWidth={1.75}
+              color={Colors.ASHGRO_NAVY}
+              size={20}
+            />
+            {Buttons.CLEAR_SELECTION}
+          </div>
+        )}
+        <Button
+          onClick={onBulkMail}
+          className={styles.bulkUploadButton}
+          icon={<IconEmail className={styles.bulkMailIcon} size={20} />}
+          disabled={!selectedEmails}
+        >
+          {Buttons.BULK_MAIL}
+        </Button>
+        {!selectedEmails && (
           <Button
             className={styles.addMemberButton}
             type={ButtonTypes.SECONDARY}
@@ -54,7 +71,7 @@ const Header = ({
           >
             {Buttons.ADD_MEMBER}
           </Button>
-        </div>
+        )}
       </div>
     </div>
   );
