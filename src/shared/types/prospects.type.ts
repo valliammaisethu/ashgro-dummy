@@ -8,6 +8,7 @@ export interface ProspectListingHeaderProps {
   onAddProspect: () => void;
   onSearch: (searchTerm: string) => void;
   onFilter: () => void;
+  onClear: () => void;
   filtersActive: boolean;
   onBulkMail: () => void;
   selectedEmails: number;
