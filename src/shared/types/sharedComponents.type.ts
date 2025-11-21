@@ -286,3 +286,5 @@ export interface FileUploadProps {
   initialFiles?: UploadedFile[];
   deleteOnRemove?: boolean;
 }
+
+export type QueryKeyType = readonly unknown[];

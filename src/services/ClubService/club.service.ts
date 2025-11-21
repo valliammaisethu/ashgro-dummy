@@ -8,23 +8,22 @@ import { deserialize, serialize } from "serializr";
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
 import {
-  ClubChatbotStatus,
-  ClubChatbotStatusResponse,
   ClubData,
   ClubFormData,
   ClubListReponse,
+  ClubStatus,
+  ClubStatusResponse,
 } from "src/models/club.model";
 import { QueryParams } from "src/models/queryParams.model";
 import { ResponseModel } from "src/models/response.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
+import { QueryKeyType } from "src/shared/types/sharedComponents.type";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
 const { GET_CLUBS, GET_CLUB_PROFILE } = QueryKeys;
 const { GET_CLUBS: GET_CLUBS_ROUTE, GET_CLUB_PROFILE: GET_CLUB_PROFILE_ROUTE } =
   ApiRoutes;
 const { ADD_CLUB, EDIT_CLUB, EDIT_CHATBOT } = MutationKeys;
-
-type QueryKeyType = readonly unknown[];
 
 const handleSuccess =
   (queryClient: ReturnType<typeof useQueryClient>) =>
@@ -105,25 +104,23 @@ export const ClubService = () => {
       }),
   });
 
-  const updateChatbotStatus = (
-    id: string,
-  ): UseMutationOptions<
-    ClubChatbotStatusResponse,
-    ClubChatbotStatusResponse,
-    ClubChatbotStatus
+  const updateStatus = (): UseMutationOptions<
+    ClubStatusResponse,
+    ClubStatusResponse,
+    ClubStatus
   > => ({
-    mutationKey: [EDIT_CHATBOT, id],
-    mutationFn: async (body: ClubChatbotStatus) => {
+    mutationKey: [EDIT_CHATBOT],
+    mutationFn: async (body: ClubStatus) => {
       const { data } = await axiosInstance.patch(
-        generatePath(GET_CLUB_PROFILE_ROUTE, { id }),
+        generatePath(GET_CLUB_PROFILE_ROUTE, { id: body.id }),
         body,
       );
-      return deserialize(ClubChatbotStatusResponse, data);
+      return deserialize(ClubStatusResponse, data);
     },
     onSuccess: (response) =>
       handleSuccess(queryClient)({
         response,
-        invalidateKeys: [[GET_CLUBS], [GET_CLUB_PROFILE, id]],
+        invalidateKeys: [[GET_CLUBS], [GET_CLUB_PROFILE]],
       }),
   });
 
@@ -132,6 +129,6 @@ export const ClubService = () => {
     getClubProfile,
     addClub,
     editClub,
-    updateChatbotStatus,
+    updateStatus,
   };
 };
