@@ -1,9 +1,9 @@
 import { ClubProfile } from "src/models/club.model";
 
-export interface AddClubModalProps {
+export interface ClubFormProps {
   open: boolean;
   onClose: () => void;
-  clubId?: string;
+  clubId: string;
 }
 
 export interface ClubListingHeaderProps {

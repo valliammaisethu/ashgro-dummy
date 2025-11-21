@@ -5,3 +5,29 @@
   @include flex-container(space-between, center, row);
   width: 100%;
 }
+
+.rightSide {
+  @include flex-flow(row, nowrap, center);
+  gap: 1.6rem;
+}
+
+.emailButton {
+  &:global(.ant-btn.ant-btn-link) {
+    background-color: transparent;
+    border-radius: 3.6rem;
+    padding: 2rem;
+  }
+}
+
+.meetingButton {
+  border-radius: 1.4rem;
+  background-color: $search-bg;
+  color: $filter-icon;
+  padding: 2rem 1rem;
+
+  &:hover {
+    border-radius: 1.4rem;
+    background-color: $search-bg !important;
+    color: $filter-icon !important;
+  }
+}

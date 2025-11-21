@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-query";
 import { generatePath } from "react-router-dom";
 import { deserialize, serialize } from "serializr";
+import { deleteStaffMessages } from "src/constants/notificationMessages";
 
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
@@ -59,8 +60,8 @@ export const StaffMembersService = () => {
       );
       return deserialize(ResponseModel, response?.data);
     },
-    onSuccess: (response) => {
-      const { title, description } = response;
+    onSuccess: () => {
+      const { title, description } = deleteStaffMessages;
       renderNotification(title, description, NotificationTypes.ERROR);
       queryClient.invalidateQueries({
         queryKey: [GET_STAFF_MEMBER_DETAILS, clubId],

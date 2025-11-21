@@ -102,13 +102,6 @@
 .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {
   border-color: transparent;
 }
-.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):not(
-    [class*="Button"]
-  ):not([class*="button"]):hover {
-  background: unset;
-  color: unset;
-  border-color: unset;
-}
 
 .ant-input-outlined:hover {
   background-color: $input-background;
@@ -567,6 +560,9 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   display: flex;
   flex-direction: column;
 }
+.ant-spin {
+  color: $ashgro-gold;
+}
 .ant-modal .ant-modal-header {
   border-radius: 1.6rem;
   padding: 2.4rem 1.6rem;
@@ -795,4 +791,9 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   &.ant-picker-focused .ant-picker-input {
     background-color: $input-background;
   }
+}
+
+.ant-popover-inner-content {
+  background-color: $ashgro-white;
+  border-radius: 12px;
 }

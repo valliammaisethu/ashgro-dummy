@@ -1,13 +1,15 @@
 import React, { Fragment } from "react";
 import { Divider, Modal as AntModal } from "antd";
+import clsx from "clsx";
 import { IconCircleClose } from "obra-icons-react";
+
+import { ModalFooter } from "./atoms";
 import { Colors } from "src/enums/colors.enum";
 import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { ModalProps } from "src/shared/types/sharedComponents.type";
+import { defaultModalWidth } from "src/constants/sharedComponents";
 
 import styles from "./Modal.module.scss";
-import { defaultModalWidth } from "src/constants/sharedComponents";
-import { ModalFooter } from "./atoms";
 
 const Modal: React.FC<ModalProps> = ({
   children,
@@ -30,6 +32,9 @@ const Modal: React.FC<ModalProps> = ({
   styles: modalStyles,
   destroyOnHidden,
   loading,
+  renderHeader = true,
+  closeIcon,
+  closable,
   destroyOnClose,
   bodyStyle,
 }: ModalProps) => {
@@ -49,34 +54,47 @@ const Modal: React.FC<ModalProps> = ({
   );
 
   return (
-    <div className={styles.modalContainer}>
-      <AntModal
-        width={width}
-        rootClassName={rootClassName}
-        destroyOnHidden={destroyOnHidden}
-        destroyOnClose={destroyOnClose ?? true}
-        centered={centered}
-        bodyStyle={bodyStyle}
-        styles={modalStyles}
-        open={visible}
-        loading={loading}
-        onOk={handleOk ?? closeModal}
-        onCancel={onCancel ?? closeModal}
-        confirmLoading={confirmLoading}
-        footer={footer === undefined ? defaultFooter : footer}
-        title={
+    <AntModal
+      width={width}
+      rootClassName={clsx(styles.modalContainer, rootClassName, {
+        [styles.noHeaderModal]: !renderHeader,
+      })}
+      destroyOnHidden={destroyOnHidden}
+      destroyOnClose={destroyOnClose ?? true}
+      centered={centered}
+      bodyStyle={bodyStyle}
+      styles={modalStyles}
+      open={visible}
+      closable={closable}
+      loading={loading}
+      onOk={handleOk ?? closeModal}
+      onCancel={onCancel ?? closeModal}
+      confirmLoading={confirmLoading}
+      footer={footer === undefined ? defaultFooter : footer}
+      title={
+        renderHeader ? (
           <Fragment>
             {title}
             <Divider className={styles.titleDivider} />
           </Fragment>
-        }
-        closeIcon={
-          <IconCircleClose color={Colors.MODAL_CLOSE_ICON} size={20} />
-        }
-      >
-        {children}
-      </AntModal>
-    </div>
+        ) : (
+          <></>
+        )
+      }
+      closeIcon={
+        closeIcon ? (
+          closeIcon
+        ) : (
+          <IconCircleClose
+            strokeWidth={1.25}
+            color={Colors.MODAL_CLOSE_ICON}
+            size={20}
+          />
+        )
+      }
+    >
+      {children}
+    </AntModal>
   );
 };
 

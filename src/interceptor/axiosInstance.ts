@@ -12,7 +12,7 @@ import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 
 declare module "axios" {
   export interface AxiosRequestConfig {
-    silent?: boolean;
+    suppressNotifications?: boolean;
   }
 }
 
@@ -44,7 +44,7 @@ export const getHeaders = <T extends AxiosRequestHeaders>(
     ...defaultHeaders,
     "Content-Type": defaultHeaders["Content-Type"] ?? "application/json",
     Authorization:
-      defaultHeaders.Authorization === null ? undefined : `Bearer ${token}`,
+      defaultHeaders.Authorization ?? (token ? `Bearer ${token}` : undefined),
   };
   return headers;
 };
@@ -70,7 +70,7 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const { response, config } = error;
 
-    const isSilent = config?.silent ?? false;
+    const shouldSupressNotifications = config?.suppressNotifications ?? false;
 
     if (!response) {
       Notification({
@@ -134,7 +134,7 @@ axiosInstance.interceptors.response.use(
 
         config.headers["Authorization"] = `Bearer ${newAccessToken}`;
         return axiosInstance(config);
-      } catch (error) {
+      } catch {
         clearLocalStorage();
       }
     }
@@ -145,7 +145,7 @@ axiosInstance.interceptors.response.use(
 
     switch (status) {
       case 403:
-        if (!isSilent) {
+        if (!shouldSupressNotifications) {
           Notification({
             title: errorTitle || forbidden.title,
             description: forbidden.description,
@@ -155,7 +155,7 @@ axiosInstance.interceptors.response.use(
         break;
 
       case 404:
-        if (!isSilent) {
+        if (!shouldSupressNotifications) {
           Notification({
             title: errorTitle || notFound.title,
             description: notFound.description,
@@ -165,7 +165,7 @@ axiosInstance.interceptors.response.use(
         break;
 
       case 422:
-        if (!isSilent) {
+        if (!shouldSupressNotifications) {
           Notification({
             title: errorTitle || failed.title,
             description: errorMessage,
@@ -176,7 +176,7 @@ axiosInstance.interceptors.response.use(
 
       case 500:
       default:
-        if (!isSilent) {
+        if (!shouldSupressNotifications) {
           Notification({
             title: errorTitle || serverError.title,
             description: errorMessage,

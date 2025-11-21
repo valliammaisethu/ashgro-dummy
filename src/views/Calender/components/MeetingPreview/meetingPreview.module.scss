@@ -32,6 +32,7 @@
       font-weight: 600;
       font-size: 1.4rem;
       margin-bottom: 0.8rem;
+      @include flex-container;
     }
   }
 
@@ -66,7 +67,7 @@
 
 .eventCard {
   padding: 0.8rem 1rem;
-  width: max-content;
+  width: 18rem;
   background-color: $search-bg;
   border-radius: 8px;
   color: $ashgro-white;
@@ -84,7 +85,6 @@
   .eventTime {
     font-size: 1.2rem;
     font-weight: 400;
-
     &.chatbotSlotTime {
       color: $activity-title;
     }
@@ -111,5 +111,10 @@
   cursor: pointer;
   @include flex-container;
   justify-content: start;
+  gap: 1rem;
+}
+
+.timeSlot {
+  @include flex-container;
   gap: 1rem;
 }

@@ -8,9 +8,10 @@ export interface ProspectListingHeaderProps {
   onAddProspect: () => void;
   onSearch: (searchTerm: string) => void;
   onFilter: () => void;
-  filtersActive: boolean;
   onBulkMail: () => void;
+  onBulkImport: () => void;
   selectedEmails: number;
+  filtersActive: boolean;
 }
 
 export interface ProspectFormProps {
@@ -23,6 +24,7 @@ export interface ProspectFormProps {
 export interface IndividualProspectHeaderProps {
   onConvert: () => void;
   onEmail: () => void;
+  isFetchingProfile: boolean;
 }
 
 export interface MemberConversionModalProps {

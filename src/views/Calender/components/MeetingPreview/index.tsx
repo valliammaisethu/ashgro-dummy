@@ -11,18 +11,24 @@ import { stopPropagation } from "src/shared/utils/eventUtils";
 import { Colors } from "src/enums/colors.enum";
 import { MEETING_PREVIEW_POPOVER_PROPS } from "../../constants";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+import { checkDate } from "src/shared/utils/dateUtils";
+import { DateType } from "src/enums/dateType.enum";
+import BookedChatbotIcon from "../atoms/BookedChatbotIcon";
 
 import styles from "./meetingPreview.module.scss";
+import { SLOT_STATUS } from "src/enums/calender.enum";
+
+const { ASHGRO_GOLD, ASHGRO_GREY } = Colors;
 
 const MeetingPreview: React.FC<MeetingPreviewProps> = ({
   event,
   isMorePopup = false,
-  isPastDate,
-  onCancel,
   onReschedule,
   onClose,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const isPastDate = checkDate(event?.date, DateType.PAST) as boolean;
 
   const openPopup = (e: MouseEvent) => {
     stopPropagation(e);
@@ -35,8 +41,6 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
     afterAction?.();
     onClose?.();
   };
-
-  const handleCancelClick = (e: MouseEvent) => closePopup(e, onCancel);
 
   const handleRescheduleClick = (e: MouseEvent) =>
     closePopup(e, () => onReschedule?.(event));
@@ -53,7 +57,7 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
         <ConditionalRenderComponent visible={!isPastDate} hideFallback>
           <MeetingPopoverContent
             event={event}
-            onCancel={handleCancelClick}
+            onCancel={() => setIsOpen(false)}
             onReschedule={handleRescheduleClick}
           />
         </ConditionalRenderComponent>
@@ -67,7 +71,10 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
                 [styles.meetingDetails]: isMorePopup,
               })}
             >
-              <IconUsers color={Colors.ASHGRO_GOLD} size={17} />
+              <IconUsers
+                color={isPastDate ? ASHGRO_GREY : ASHGRO_GOLD}
+                size={17}
+              />
               <p>{event.title}</p>
             </div>
 
@@ -76,8 +83,18 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
                 [styles.meetingDetails]: isMorePopup,
               })}
             >
-              <IconClock4Alt color={Colors.ASHGRO_GOLD} size={17} />
-              <p>{formatTimeRange(event.start, event.end)}</p>
+              <IconClock4Alt
+                color={isPastDate ? ASHGRO_GREY : ASHGRO_GOLD}
+                size={17}
+              />
+              <p className={styles.timeSlot}>
+                {formatTimeRange(event.start, event.end)}
+
+                <BookedChatbotIcon
+                  isBooked={event?.resource?.status == SLOT_STATUS.BOOKED}
+                  isPastDate={isPastDate}
+                />
+              </p>
             </div>
           </div>
         ) : (
@@ -87,8 +104,14 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
             })}
           >
             <div className={styles.eventTitle}>{event.title}</div>
-            <div className={clsx(styles.eventTime)}>
+
+            <div className={clsx(styles.eventTime, styles.timeSlot)}>
               {formatTimeRange(event.start, event.end)}
+
+              <BookedChatbotIcon
+                isBooked={event?.resource?.status == SLOT_STATUS.BOOKED}
+                isPastDate={isPastDate}
+              />
             </div>
           </div>
         )}

@@ -1,7 +1,6 @@
 import { UseMutationOptions, UseQueryOptions } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { deserialize, serialize } from "serializr";
-import { SharedComponentsConstants } from "src/constants/sharedComponents";
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
 import {
@@ -21,6 +20,7 @@ const { GET_PROSPECT_EMAIL_RECIPIENTS, GET_MEMBER_EMAIL_RECIPIENTS } =
 const {
   SEND_EMAIL: SEND_EMAIL_ROUTE,
   VERIFY_EMAIL: VERIFY_EMAIL_ROUTE,
+
   PROSPECT_EMAIL_RECIPIENTS,
   MEMBER_EMAIL_RECIPIENTS,
 } = ApiRoutes;
@@ -75,7 +75,7 @@ export const EmailService = () => {
 
   const validateEmail = (): UseMutationOptions<
     ResponseModel,
-    AxiosError,
+    AxiosError<ResponseModel>,
     EmailModel
   > => ({
     mutationKey: [VERIFY_EMAIL],
@@ -86,8 +86,7 @@ export const EmailService = () => {
         serializedData,
 
         {
-          baseURL: SharedComponentsConstants.MOCKURL,
-          silent: true,
+          suppressNotifications: true,
         },
       );
       return deserialize(ResponseModel, data);

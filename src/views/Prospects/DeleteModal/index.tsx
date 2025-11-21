@@ -40,31 +40,29 @@ const DeleteModal = (props: DeleteModalProps) => {
     });
 
   return (
-    <div>
-      <Modal
-        title={deleteProspectTitle}
-        visible={visible}
-        width={defaultModalWidth}
-        centered
-        closeModal={toggleVisibility}
-        rootClassName={styles.deleteModal}
-        footer={[
-          <div className={styles.footer} key={Buttons.DELETE_PERMANENTLY}>
-            <Button
-              loading={isPending}
-              onClick={handleDelete}
-              className={styles.deleteButton}
-            >
-              {Buttons.DELETE_PERMANENTLY}
-            </Button>
-          </div>,
-        ]}
-      >
-        <span className={styles.deleteModalDescription}>
-          {deleteProspectDescription(prospectName)}
-        </span>
-      </Modal>
-    </div>
+    <Modal
+      title={deleteProspectTitle}
+      visible={visible}
+      width={defaultModalWidth}
+      centered
+      closeModal={toggleVisibility}
+      rootClassName={styles.deleteModal}
+      footer={[
+        <div className={styles.footer} key={Buttons.DELETE_PERMANENTLY}>
+          <Button
+            loading={isPending}
+            onClick={handleDelete}
+            className={styles.deleteButton}
+          >
+            {Buttons.DELETE_PERMANENTLY}
+          </Button>
+        </div>,
+      ]}
+    >
+      <span className={styles.deleteModalDescription}>
+        {deleteProspectDescription(prospectName)}
+      </span>
+    </Modal>
   );
 };
 

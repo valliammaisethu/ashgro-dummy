@@ -24,6 +24,7 @@ const InputField: FC<InputFieldProps> = ({
   type = INPUT_TYPE.TEXT,
   suffix,
   required = false,
+  onChange: customOnChange,
   ...rest
 }) => {
   const { control } = useFormContext<FieldValues>();
@@ -32,10 +33,15 @@ const InputField: FC<InputFieldProps> = ({
     fieldState,
   } = useController({ name, control });
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(e);
+    customOnChange?.(e);
+  };
+
   const inputProps: InputProps = {
     id: name,
     value,
-    onChange,
+    onChange: handleChange,
     onBlur,
     ...rest,
     status: fieldState.error ? InputStatus.ERROR : undefined,

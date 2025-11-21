@@ -13,6 +13,7 @@ import InputField from "src/shared/components/InputField";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { AuthService } from "src/services/AuthService/auth.service";
+import useRedirect from "src/shared/hooks/useRedirect";
 
 import styles from "./forgotPassword.module.scss";
 
@@ -26,11 +27,14 @@ const { CONFIRM_EMAIL } = Buttons;
 const { loginLogo } = imageAlts;
 
 const ForgotPassword = () => {
+  const { navigateToLogin } = useRedirect();
+
   const { forgotPassword } = AuthService();
 
   const { mutateAsync, isPending } = useMutation(forgotPassword());
 
-  const handleSubmit = (values: FieldValues) => mutateAsync(values);
+  const handleSubmit = (values: FieldValues) =>
+    mutateAsync(values, { onSuccess: navigateToLogin });
 
   return (
     <div className={styles.forgotPasswordContainer}>

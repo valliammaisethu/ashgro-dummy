@@ -3,24 +3,16 @@ import { CheckboxChangeEvent } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 
-import { TABLE_HEADERS } from "./constants";
-import {
-  toggleAllSelections,
-  toggleSingleSelection,
-  areAllProspectsSelected,
-  areSomeProspectsSelected,
-  areFiltersActive,
-} from "./helpers";
-import Header from "./Header";
+import { getFullName } from "src/shared/utils/helpers";
 import Checkbox from "src/shared/components/Checkbox";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import ProspectRow from "./Components/ProspectRow";
-import { getFullName } from "src/shared/utils/helpers";
-import ProspectForm from "../ProspectForm";
+import Pagination from "src/shared/components/Pagination";
 import useRedirect from "src/shared/hooks/useRedirect";
 import useDrawer from "src/shared/hooks/useDrawer";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { BulkModes } from "src/enums/bulkModes";
 import {
   ProspectsList,
   ProspectsListingParams,
@@ -30,15 +22,25 @@ import { MetaService } from "src/services/MetaService/meta.service";
 import { SelectedProspect } from "src/shared/types/prospects.type";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import { EmailService } from "src/services/EmailService/email.service";
-import DeleteModal from "../DeleteModal";
-import Pagination from "src/shared/components/Pagination";
 import TemplateModal from "src/views/Email/TemplateModal";
 import NewEmailModal from "src/views/Email/NewEmailModal";
+import BulkImportModal from "src/views/BulkImport";
+import BulkInProgressModal from "src/views/BulkImport/InProgressModal";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import Filters from "../Filters";
+import DeleteModal from "../DeleteModal";
+import ProspectForm from "../ProspectForm";
+import { TABLE_HEADERS } from "./constants";
+import {
+  toggleAllSelections,
+  toggleSingleSelection,
+  areAllProspectsSelected,
+  areSomeProspectsSelected,
+  areFiltersActive,
+} from "./helpers";
+import Header from "./Header";
 
 import styles from "./listing.module.scss";
-
 const ProspectsListing = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER).clubId;
 
@@ -92,6 +94,24 @@ const ProspectsListing = () => {
     visible: newEmailModalVisible,
     toggleVisibility: toggleNewEmailModal,
   } = useDrawer();
+
+  const { visible: bulkUploadVisible, toggleVisibility: toggleBulkUpload } =
+    useDrawer();
+
+  const {
+    visible: bulkInProgressVisible,
+    toggleVisibility: toggleBulkInProgress,
+    hide: hideBulkInProgress,
+  } = useDrawer();
+
+  const handleOnBulkImport = () => {
+    toggleBulkUpload();
+    toggleBulkInProgress();
+
+    setTimeout(() => {
+      hideBulkInProgress();
+    }, 3000);
+  };
 
   const handleSelectAll = useCallback(
     (checked = false) => {
@@ -248,6 +268,7 @@ const ProspectsListing = () => {
         filtersActive={filtersActive}
         onBulkMail={toggleEmailTemplateModal}
         selectedEmails={selectedProspects.length}
+        onBulkImport={toggleBulkUpload}
       />
       <div className={styles.prospectList}>
         <div className={styles.tableContainer}>
@@ -268,9 +289,6 @@ const ProspectsListing = () => {
             records={data?.prospects}
             isPending={isPending}
             isSuccess={isSuccess}
-            useGridSkeleton
-            skeletonCols={1}
-            skeletonRows={13}
           >
             <div className={styles.tableBody}>
               {data?.prospects?.filter(Boolean).map((prospect) => (
@@ -339,7 +357,15 @@ const ProspectsListing = () => {
         onClose={handleNewEmailModalClose}
         selectedEmails={emailRecipients}
         selectedTemplate={selectedTemplate}
+        isBulkEmail
       />
+      <BulkImportModal
+        visible={bulkUploadVisible}
+        onClose={toggleBulkUpload}
+        importMode={BulkModes.PROSPECTS}
+        onImport={handleOnBulkImport}
+      />
+      <BulkInProgressModal visible={bulkInProgressVisible} />
     </div>
   );
 };

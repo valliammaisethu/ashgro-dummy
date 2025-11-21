@@ -1,12 +1,15 @@
 import { Col, Divider, Row } from "antd";
-import React, { ChangeEvent, useEffect, useMemo } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useMemo } from "react";
 import { FieldValues } from "react-hook-form";
 import { IconCalendarWait } from "obra-icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { EmailService } from "src/services/EmailService/email.service";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { useDebouncedEmailValidation } from "src/shared/hooks/useDebouncedEmailValidation";
+import {
+  EmailValidationError,
+  useDebouncedEmailValidation,
+} from "src/shared/hooks/useDebouncedEmailValidation";
 
 import { Justify } from "src/enums/align.enum";
 import Form from "src/shared/components/Form";
@@ -78,16 +81,9 @@ const MembersForm = ({
   const { mutateAsync: editMemberMutate, isPending: isEditPending } =
     useMutation(updateMemberDetails());
 
-  const { mutateAsync: validateMutateAsync, error } =
-    useMutation(validateEmail());
+  const { mutateAsync: validateMutateAsync } = useMutation(validateEmail());
 
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
-
-  const { handleEmailChange: debouncedEmailChange } =
-    useDebouncedEmailValidation({
-      validateMutateAsync,
-      clubId,
-    });
 
   const { data, isFetching, refetch } = useQuery(MembersDetails(id));
 
@@ -103,6 +99,25 @@ const MembersForm = ({
   const { data: activityTypesData } = useQuery(getActivityTypes());
 
   const { setValue, watch, handleSubmit, setError, clearErrors } = methods;
+
+  const handleEmailValidationError = useCallback(
+    (error: EmailValidationError) => {
+      if (error?.response?.data?.description) {
+        setError(FIELD_NAMES.EMAIL_ADDRESS, {
+          type: "manual",
+          message: error.response.data.description,
+        });
+      }
+    },
+    [setError],
+  );
+
+  const { handleEmailChange: debouncedEmailChange } =
+    useDebouncedEmailValidation({
+      validateMutateAsync,
+      clubId,
+      onError: handleEmailValidationError,
+    });
 
   const activityTypeOptions = useMemo(
     () => mapToSelectOptionsDynamic(activityTypesData?.activityTypes),
@@ -138,6 +153,7 @@ const MembersForm = ({
 
   const handleEmailChange = (email: string) => {
     clearErrors(FIELD_NAMES.EMAIL_ADDRESS);
+    if (!email) return;
     debouncedEmailChange(email);
   };
 
@@ -206,22 +222,14 @@ const MembersForm = ({
     methods.reset({});
     handleModalVisibility?.();
   };
-  // TODO: Fix the form issue and remove useEffect here
-  useEffect(() => {
-    methods.reset(formValues);
-  }, [data]);
 
   useEffect(() => {
-    const responseError = error as {
-      response?: { data?: { description?: string } };
-    };
-    if (responseError?.response?.data?.description) {
-      setError(FIELD_NAMES.EMAIL_ADDRESS, {
-        type: "manual",
-        message: responseError.response.data.description,
-      });
+    if (id && isOpen && data) {
+      methods.reset(formValues);
+    } else {
+      methods.reset({});
     }
-  }, [error, setError]);
+  }, [id, data, isOpen, methods.reset]);
 
   return (
     <div>
@@ -282,7 +290,6 @@ const MembersForm = ({
                   placeholder={PLACEHOLDERS.JOIN_DATE}
                   label={LABELS.JOIN_DATE}
                   name={FIELD_NAMES.JOIN_DATE}
-                  format={DateFormats.DD_MMM__YYYY}
                   disabledDate={disableFutureAndToday}
                 />
               </Col>

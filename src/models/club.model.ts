@@ -23,7 +23,7 @@ export class ClubFormData {
   contactNumber?: string;
 
   @serializable
-  clubCountryCode = "+1";
+  clubCountryCode?: string = "+1";
 
   @serializable
   address?: string;
@@ -33,9 +33,12 @@ export class ClubFormData {
 
   @serializable(object(ProfileDetails))
   adminDetails?: ProfileDetails;
+
+  @serializable
+  status?: string;
 }
 
-export class ClubProfile extends ProfileDetails {
+export class ClubProfile {
   @serializable
   id?: string;
 
@@ -44,6 +47,12 @@ export class ClubProfile extends ProfileDetails {
 
   @serializable
   name = "";
+
+  @serializable
+  email = "";
+
+  @serializable
+  contactNumber = "";
 
   @serializable
   address = "";
@@ -64,6 +73,9 @@ export class ClubProfile extends ProfileDetails {
   clubCountryCode = "+1";
 
   @serializable
+  attachmentId?: string;
+
+  @serializable
   notes?: string;
 
   @serializable(object(ProfileDetails))
@@ -75,7 +87,7 @@ export class ClubData {
   club = new ClubProfile();
 }
 
-export class ClubListData extends ProfileDetails {
+export class ClubListData {
   @serializable
   id?: string;
 
@@ -83,7 +95,7 @@ export class ClubListData extends ProfileDetails {
   logoUrl?: string;
 
   @serializable
-  name = "";
+  name?: string;
 
   @serializable
   address = "";
@@ -109,16 +121,6 @@ export class ClubListReponse {
   pagination?: Pagination;
 }
 
-export class ClubChatbotStatus {
-  @serializable
-  chatbotEnabled?: boolean;
-}
-
-export class ClubChatbotStatusResponse extends ResponseModel {
-  @serializable(object(ClubProfile))
-  data?: ClubProfile;
-}
-
 export class ClubEmailValidation {
   @serializable
   email?: string;
@@ -130,4 +132,19 @@ export class ClubEmailValidation {
 export class ClubEmailValidationResponse extends ResponseModel {
   @serializable
   isValid?: boolean;
+}
+export class ClubStatus {
+  @serializable
+  chatbotEnabled?: boolean;
+
+  @serializable
+  status?: string;
+
+  @serializable
+  id?: string;
+}
+
+export class ClubStatusResponse extends ResponseModel {
+  @serializable(object(ClubProfile))
+  data?: ClubProfile;
 }

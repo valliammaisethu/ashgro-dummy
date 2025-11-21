@@ -1,6 +1,9 @@
-import { serializable } from "serializr";
+import { alias, serializable } from "serializr";
 
 export class ProfileDetails {
+  @serializable(alias("id"))
+  id?: string;
+
   @serializable
   firstName = "";
 

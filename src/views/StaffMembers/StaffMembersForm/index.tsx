@@ -1,11 +1,14 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { Col, Divider, Row } from "antd";
 import { FieldValues } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { EmailService } from "src/services/EmailService/email.service";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { useDebouncedEmailValidation } from "src/shared/hooks/useDebouncedEmailValidation";
+import {
+  EmailValidationError,
+  useDebouncedEmailValidation,
+} from "src/shared/hooks/useDebouncedEmailValidation";
 
 import DatePicker from "src/shared/components/DatePicker";
 import Form from "src/shared/components/Form";
@@ -32,7 +35,6 @@ import { StaffMembersService } from "src/services/StaffMembersService/staffMembe
 import { defaultModalWidth } from "src/constants/sharedComponents";
 import { Justify } from "src/enums/align.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
-import { DateFormats } from "src/enums/dateFormats.enum";
 
 import styles from "./staffMembersForm.module.scss";
 
@@ -74,15 +76,27 @@ const StaffMembersForm = ({
   const { mutateAsync: eddStaffMemberMutate, isPending: isEditPending } =
     useMutation(editStaffMember());
 
-  const { mutateAsync: validateMutateAsync, error } =
-    useMutation(validateEmail());
+  const { mutateAsync: validateMutateAsync } = useMutation(validateEmail());
 
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
+  const handleEmailValidationError = useCallback(
+    (error: EmailValidationError) => {
+      if (error?.response?.data?.description) {
+        setError(FIELD_NAMES.EMAIL_ADDRESS, {
+          type: "manual",
+          message: error.response.data.description,
+        });
+      }
+    },
+    [setError],
+  );
 
   const { handleEmailChange: debouncedEmailChange } =
     useDebouncedEmailValidation({
       validateMutateAsync,
       clubId,
+      onError: handleEmailValidationError,
     });
 
   const { data: staffDepartments, isPending } = useQuery(staffMembersList());
@@ -115,6 +129,7 @@ const StaffMembersForm = ({
 
   const handleEmailChange = (email: string) => {
     clearErrors(FIELD_NAMES.EMAIL_ADDRESS);
+    if (!email) return;
     debouncedEmailChange(email);
   };
 
@@ -138,18 +153,6 @@ const StaffMembersForm = ({
   useEffect(() => {
     methods.reset(formValues);
   }, [data]);
-
-  useEffect(() => {
-    const responseError = error as {
-      response?: { data?: { description?: string } };
-    };
-    if (responseError.response?.data?.description) {
-      setError(FIELD_NAMES.EMAIL_ADDRESS, {
-        type: "manual",
-        message: responseError?.response.data.description,
-      });
-    }
-  }, [error, setError]);
 
   return (
     <div>
@@ -212,7 +215,6 @@ const StaffMembersForm = ({
                   placeholder={PLACEHOLDERS.TITLE}
                   label={LABELS.TITLE}
                   name={FIELD_NAMES.TITLE}
-                  required
                 />
               </Col>
 
@@ -240,7 +242,6 @@ const StaffMembersForm = ({
                   label={LABELS.BIRTH_DATE}
                   name={FIELD_NAMES.BIRTH_DATE}
                   disabledDate={disableFutureAndToday}
-                  format={DateFormats.DD_MMM__YYYY}
                 />
               </Col>
               <Col span={12}>
@@ -249,7 +250,6 @@ const StaffMembersForm = ({
                   label={LABELS.WORK_ANNIVERSARY}
                   name={FIELD_NAMES.WORK_ANNIVERSARY}
                   disabledDate={disableFutureAndToday}
-                  format={DateFormats.DD_MMM__YYYY}
                 />
               </Col>
               <Col span={24}>

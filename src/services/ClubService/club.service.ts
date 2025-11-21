@@ -1,23 +1,23 @@
 import {
-  QueryClient,
   UseMutationOptions,
+  useQueryClient,
   UseQueryOptions,
 } from "@tanstack/react-query";
 import { generatePath } from "react-router-dom";
 import { deserialize, serialize } from "serializr";
-import { SharedComponentsConstants } from "src/constants/sharedComponents";
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
 import {
-  ClubChatbotStatus,
-  ClubChatbotStatusResponse,
   ClubData,
   ClubFormData,
   ClubListReponse,
+  ClubStatus,
+  ClubStatusResponse,
 } from "src/models/club.model";
 import { QueryParams } from "src/models/queryParams.model";
 import { ResponseModel } from "src/models/response.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
+import { QueryKeyType } from "src/shared/types/sharedComponents.type";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
 const { GET_CLUBS, GET_CLUB_PROFILE } = QueryKeys;
@@ -25,7 +25,25 @@ const { GET_CLUBS: GET_CLUBS_ROUTE, GET_CLUB_PROFILE: GET_CLUB_PROFILE_ROUTE } =
   ApiRoutes;
 const { ADD_CLUB, EDIT_CLUB, EDIT_CHATBOT } = MutationKeys;
 
-export const ClubService = (queryClient?: QueryClient) => {
+const handleSuccess =
+  (queryClient: ReturnType<typeof useQueryClient>) =>
+  ({
+    response,
+    invalidateKeys = [],
+  }: {
+    response: ResponseModel;
+    invalidateKeys?: QueryKeyType[];
+  }) => {
+    const { title, description } = response;
+    renderNotification(title, description);
+
+    invalidateKeys.forEach((key) => {
+      queryClient.invalidateQueries({ queryKey: key });
+    });
+  };
+
+export const ClubService = () => {
+  const queryClient = useQueryClient();
   const getClubs = (
     params = new QueryParams(),
   ): UseQueryOptions<ClubListReponse, ResponseModel, ClubListReponse> => ({
@@ -33,7 +51,6 @@ export const ClubService = (queryClient?: QueryClient) => {
     queryFn: async () => {
       const { data } = await axiosInstance.get(GET_CLUBS_ROUTE, {
         params: serialize(QueryParams, params),
-        baseURL: SharedComponentsConstants.MOCKURL,
       });
       return deserialize(ClubListReponse, data?.data);
     },
@@ -46,82 +63,65 @@ export const ClubService = (queryClient?: QueryClient) => {
     queryFn: async () => {
       const { data } = await axiosInstance.get(
         generatePath(GET_CLUB_PROFILE_ROUTE, { id }),
-        {
-          baseURL: SharedComponentsConstants.MOCKURL,
-        },
       );
-      const result = deserialize(ClubData, data?.data);
-      return result || new ClubData();
+      return deserialize(ClubData, data?.data);
     },
     enabled: !!id,
   });
 
-  const addClub = (
-    onClose?: () => void,
-  ): UseMutationOptions<ResponseModel, ResponseModel, ClubFormData> => ({
+  const addClub = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    ClubFormData
+  > => ({
     mutationKey: [ADD_CLUB],
     mutationFn: async (body: ClubFormData) => {
-      const { data } = await axiosInstance.post(GET_CLUBS_ROUTE, body, {
-        baseURL: SharedComponentsConstants.MOCKURL,
-      });
+      const { data } = await axiosInstance.post(GET_CLUBS_ROUTE, body);
       return deserialize(ResponseModel, data);
     },
-    onSuccess: (response) => {
-      const { title, description } = response;
-      renderNotification(title, description);
-      queryClient?.invalidateQueries({ queryKey: [GET_CLUBS] });
-      onClose?.();
-    },
+    onSuccess: (response) =>
+      handleSuccess(queryClient)({
+        response,
+        invalidateKeys: [[GET_CLUBS]],
+      }),
   });
 
   const editClub = (
     id?: string,
-    onClose?: () => void,
   ): UseMutationOptions<ResponseModel, ResponseModel, ClubFormData> => ({
     mutationKey: [EDIT_CLUB],
     mutationFn: async (body: ClubFormData) => {
       const { data } = await axiosInstance.put(
         generatePath(GET_CLUB_PROFILE_ROUTE, { id }),
         body,
-        {
-          baseURL: SharedComponentsConstants.MOCKURL,
-        },
       );
       return deserialize(ResponseModel, data);
     },
-    onSuccess: (response) => {
-      const { title, description } = response;
-      renderNotification(title, description);
-      queryClient?.invalidateQueries({ queryKey: [GET_CLUBS] });
-      queryClient?.invalidateQueries({ queryKey: [GET_CLUB_PROFILE, id] });
-      onClose?.();
-    },
+    onSuccess: (response) =>
+      handleSuccess(queryClient)({
+        response,
+        invalidateKeys: [[GET_CLUBS], [GET_CLUB_PROFILE, id]],
+      }),
   });
 
-  const updateChatbotStatus = (
-    id: string,
-  ): UseMutationOptions<
-    ClubChatbotStatusResponse,
-    ClubChatbotStatusResponse,
-    ClubChatbotStatus
+  const updateStatus = (): UseMutationOptions<
+    ClubStatusResponse,
+    ClubStatusResponse,
+    ClubStatus
   > => ({
-    mutationKey: [EDIT_CHATBOT, id],
-    mutationFn: async (body: ClubChatbotStatus) => {
+    mutationKey: [EDIT_CHATBOT],
+    mutationFn: async (body: ClubStatus) => {
       const { data } = await axiosInstance.patch(
-        generatePath(GET_CLUB_PROFILE_ROUTE, { id }),
+        generatePath(GET_CLUB_PROFILE_ROUTE, { id: body.id }),
         body,
-        {
-          baseURL: SharedComponentsConstants.MOCKURL,
-        },
       );
-      return deserialize(ClubChatbotStatusResponse, data);
+      return deserialize(ClubStatusResponse, data);
     },
-    onSuccess: (response) => {
-      const { title, description } = response;
-      renderNotification(title, description);
-      queryClient?.invalidateQueries({ queryKey: [GET_CLUBS] });
-      queryClient?.invalidateQueries({ queryKey: [GET_CLUB_PROFILE, id] });
-    },
+    onSuccess: (response) =>
+      handleSuccess(queryClient)({
+        response,
+        invalidateKeys: [[GET_CLUBS], [GET_CLUB_PROFILE]],
+      }),
   });
 
   return {
@@ -129,6 +129,6 @@ export const ClubService = (queryClient?: QueryClient) => {
     getClubProfile,
     addClub,
     editClub,
-    updateChatbotStatus,
+    updateStatus,
   };
 };

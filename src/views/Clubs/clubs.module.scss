@@ -57,14 +57,22 @@
   &:hover :global(.actions-icons) {
     opacity: 1;
   }
+  &:hover {
+    background-color: $table-row-hover;
+  }
+}
+.switchCol {
+  text-align: center;
 }
 
 .badge {
   justify-self: center;
 }
 
+.switchCol,
 .switch {
   justify-self: center;
+  text-align: center;
 }
 
 .statusSelect {

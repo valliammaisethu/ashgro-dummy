@@ -7,8 +7,8 @@ import {
 } from "obra-icons-react";
 import { Col, Row } from "antd";
 import clsx from "clsx";
-import { generatePath, useParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 import Card from "src/shared/components/Card";
 import ConditionalRender from "src/shared/components/ConditionalRender";
@@ -18,26 +18,20 @@ import ImageFrame from "src/shared/components/atoms/ImageFrame";
 import { StaffMembersService } from "src/services/StaffMembersService/staffMembers.service";
 import { getFullName } from "src/shared/utils/helpers";
 import { Colors } from "src/enums/colors.enum";
-import DeleteModal from "src/shared/components/DeleteModal";
 import { footerLabels } from "./constants";
 import { Justify } from "src/enums/align.enum";
 import StaffMembersForm from "../StaffMembersForm";
 import useRedirect from "src/shared/hooks/useRedirect";
 import { fallbackHandler } from "src/shared/utils/commonHelpers";
-import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
-import { CommonService } from "src/services/CommonService.ts/common.service";
-import { localStorageHelper } from "src/shared/utils/localStorageHelper";
-import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { QueryKeys } from "src/enums/cacheEvict.enum";
 
 import styles from "./details.module.scss";
+import DeleteModal from "../DeleteModal";
+import useDrawer from "src/shared/hooks/useDrawer";
 
 const { birthData, department, title, workAnniversary } = footerLabels;
 
 const Details = () => {
   const { id = "" } = useParams();
-  const queryClient = useQueryClient();
-  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
 
   const [isEditForm, setIsEditForm] = useState(false);
 
@@ -49,26 +43,6 @@ const Details = () => {
     staffMembersDeatils(id),
   );
 
-  const { deleteResource } = CommonService();
-
-  const { mutateAsync, isPending: isDeletingPending } =
-    useMutation(deleteResource());
-
-  // TODO: To reduce redundancy
-  const handleDelete = async () => {
-    const path = generatePath(ApiRoutes.STAFF_MEMBER_DETAILS, { id });
-
-    await mutateAsync(path, {
-      onSuccess: () => {
-        queryClient.refetchQueries({
-          queryKey: [QueryKeys.GET_STAFF_MEMBER_LIST, clubId],
-        });
-
-        navigateToStaffMemberList();
-      },
-    });
-  };
-
   const footer = [
     { label: department, value: data?.staffDepartment },
     { label: title, value: data?.title },
@@ -77,6 +51,8 @@ const Details = () => {
   ];
 
   const handleModalVisibility = () => setIsEditForm((prev) => !prev);
+
+  const { toggleVisibility, visible } = useDrawer();
 
   return (
     <>
@@ -97,14 +73,11 @@ const Details = () => {
                 className={styles.editButton}
               />
             </Col>
-            <Col>
-              <DeleteModal
-                title={"Staff Member"}
-                description={getFullName(data?.firstName, data?.lastName)}
-                onDelete={handleDelete}
-                loading={isDeletingPending}
-              />
-            </Col>
+            <DeleteModal
+              visible={visible}
+              toggleVisibility={toggleVisibility}
+              staffMember={data}
+            />
           </Row>
 
           <div className={styles.detailsContainer}>

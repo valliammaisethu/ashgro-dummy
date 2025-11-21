@@ -3,17 +3,19 @@ import { IconEmail, IconUserAdd, IconDocumentUpload } from "obra-icons-react";
 
 import SearchField from "src/shared/components/SearchField";
 import Button from "src/shared/components/Button";
+import { importMembers } from "../constant";
 import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
+import { MembersHeaderProps } from "src/shared/types/members.type";
 
 import styles from "../members.module.scss";
-import { MembersHeaderProps } from "src/shared/types/members.type";
 
 const Header = ({
   onAddMember,
   onSearch,
   onFilter,
-  filtersActive,
   onBulkMail,
+  onBulkImport,
+  filtersActive,
   selectedEmails,
 }: MembersHeaderProps) => {
   return (
@@ -28,12 +30,16 @@ const Header = ({
         <Button
           icon={<IconDocumentUpload size={20} />}
           className={styles.filterButton}
+          onClick={onBulkImport}
+          tooltip={{
+            title: importMembers,
+          }}
         />
         <div>
           <Button
             onClick={onBulkMail}
             className={styles.bulkUploadButton}
-            icon={<IconEmail size={20} />}
+            icon={<IconEmail className={styles.bulkMailIcon} size={20} />}
             disabled={!selectedEmails}
           >
             {Buttons.BULK_MAIL}
