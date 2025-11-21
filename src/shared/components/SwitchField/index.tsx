@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Switch } from "antd";
 import { useController, useFormContext, FieldValues } from "react-hook-form";
 
@@ -13,10 +13,10 @@ const SwitchField = ({ name, ...props }: SwitchFieldProps) => {
   } = useController({ name, control });
 
   return (
-    <div>
+    <Fragment>
       <Switch {...props} checked={value} onChange={onChange} />
       {error && <Error message={error.message} />}
-    </div>
+    </Fragment>
   );
 };
 

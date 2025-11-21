@@ -9,18 +9,20 @@ import {
 import SearchField from "src/shared/components/SearchField";
 import Button from "src/shared/components/Button";
 import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
+import { Colors } from "src/enums/colors.enum";
 import { ProspectListingHeaderProps } from "src/shared/types/prospects.type";
+import { bulkImportProspects } from "../constants";
 
 import styles from "../listing.module.scss";
-import { Colors } from "src/enums/colors.enum";
 
 const Header = ({
   onAddProspect,
   onSearch,
   onFilter,
   onClear,
-  filtersActive,
+  onBulkImport,
   onBulkMail,
+  filtersActive,
   selectedEmails,
 }: ProspectListingHeaderProps) => {
   return (
@@ -46,6 +48,10 @@ const Header = ({
           <Button
             icon={<IconDocumentUpload size={20} />}
             className={styles.filterButton}
+            onClick={onBulkImport}
+            tooltip={{
+              title: bulkImportProspects,
+            }}
           />
         )}
         <Button

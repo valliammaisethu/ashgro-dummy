@@ -9,9 +9,10 @@ export interface ProspectListingHeaderProps {
   onSearch: (searchTerm: string) => void;
   onFilter: () => void;
   onClear: () => void;
-  filtersActive: boolean;
   onBulkMail: () => void;
+  onBulkImport: () => void;
   selectedEmails: number;
+  filtersActive: boolean;
 }
 
 export interface ProspectFormProps {

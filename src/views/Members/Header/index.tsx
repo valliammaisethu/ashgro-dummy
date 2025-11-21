@@ -8,6 +8,7 @@ import {
 
 import SearchField from "src/shared/components/SearchField";
 import Button from "src/shared/components/Button";
+import { importMembers } from "../constant";
 import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
 import { Colors } from "src/enums/colors.enum";
 import { MembersHeaderProps } from "src/shared/types/members.type";
@@ -20,6 +21,7 @@ const Header = ({
   onFilter,
   onClear,
   onBulkMail,
+  onBulkImport,
   selectedEmails,
   filtersActive,
 }: MembersHeaderProps) => {
@@ -46,6 +48,10 @@ const Header = ({
           <Button
             icon={<IconDocumentUpload size={20} />}
             className={styles.filterButton}
+            onClick={onBulkImport}
+            tooltip={{
+              title: importMembers,
+            }}
           />
         )}
         <Button
