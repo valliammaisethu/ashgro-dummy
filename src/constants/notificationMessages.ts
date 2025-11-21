@@ -17,3 +17,7 @@ export const invalidEmailMessages = {
   title: "Invalid Email!",
   description: "Please enter a valid email address.",
 };
+
+export const uploadMessages = {
+  failedTitle: "Failed to upload file",
+};

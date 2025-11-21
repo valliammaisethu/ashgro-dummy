@@ -42,6 +42,9 @@ import { EmailTemplate } from "src/models/meta.model";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 
 import styles from "./membersListing.module.scss";
+import BulkImportModal from "src/views/BulkImport";
+import { BulkModes } from "src/enums/bulkModes";
+import BulkInProgressModal from "src/views/BulkImport/InProgressModal";
 
 interface ModalState {
   open: boolean;
@@ -77,6 +80,26 @@ const Members = () => {
     visible: newEmailModalVisible,
     toggleVisibility: toggleNewEmailModal,
   } = useDrawer();
+
+  const {
+    visible: bulkImportModalVisible,
+    toggleVisibility: toggleImportModal,
+  } = useDrawer();
+
+  const {
+    visible: bulkInProgressVisible,
+    toggleVisibility: toggleBulkInProgress,
+    hide: hideBulkInProgress,
+  } = useDrawer();
+
+  const handleOnBulkImport = () => {
+    toggleImportModal();
+    toggleBulkInProgress();
+
+    setTimeout(() => {
+      hideBulkInProgress();
+    }, 3000);
+  };
 
   const { navigateToMemberDetails } = useRedirect();
 
@@ -229,11 +252,12 @@ const Members = () => {
     <div>
       <Header
         filtersActive={filtersActive}
+        selectedEmails={selectedMembers.length}
         onFilter={toggleMemberFilters}
         onSearch={handleSearch}
         onAddMember={() => handleModalVisibility(VisibilityType.ADD)}
         onBulkMail={toggleEmailTemplateModal}
-        selectedEmails={selectedMembers.length}
+        onBulkImport={toggleImportModal}
       />
       <MemberFilters
         toggleVisibility={toggleMemberFilters}
@@ -355,6 +379,13 @@ const Members = () => {
         selectedTemplate={selectedTemplate}
         isBulkEmail
       />
+      <BulkImportModal
+        visible={bulkImportModalVisible}
+        importMode={BulkModes.MEMBERS}
+        onClose={toggleImportModal}
+        onImport={handleOnBulkImport}
+      />
+      <BulkInProgressModal visible={bulkInProgressVisible} />
     </div>
   );
 };

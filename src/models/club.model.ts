@@ -33,6 +33,9 @@ export class ClubFormData {
 
   @serializable(object(ProfileDetails))
   adminDetails?: ProfileDetails;
+
+  @serializable
+  status?: string;
 }
 
 export class ClubProfile {
@@ -92,7 +95,7 @@ export class ClubListData {
   logoUrl?: string;
 
   @serializable
-  name = "";
+  name?: string;
 
   @serializable
   address = "";
@@ -118,12 +121,18 @@ export class ClubListReponse {
   pagination?: Pagination;
 }
 
-export class ClubChatbotStatus {
+export class ClubStatus {
   @serializable
   chatbotEnabled?: boolean;
+
+  @serializable
+  status?: string;
+
+  @serializable
+  id?: string;
 }
 
-export class ClubChatbotStatusResponse extends ResponseModel {
+export class ClubStatusResponse extends ResponseModel {
   @serializable(object(ClubProfile))
   data?: ClubProfile;
 }
