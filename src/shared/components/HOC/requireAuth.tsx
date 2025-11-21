@@ -16,7 +16,7 @@ const RequireAuth = ({ children }: { children: JSX.Element }) => {
       if (!authenticated && location.pathname !== NavigationRoutes.LOGIN) {
         return navigate(NavigationRoutes.LOGIN);
       }
-    }, [props]);
+    }, [authenticated, location.pathname, navigate]);
 
     if (allowedRoles?.length) {
       const { user } = props;

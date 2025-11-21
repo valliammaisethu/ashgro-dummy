@@ -19,3 +19,5 @@ export enum PageListingDirections {
   PREV = "prev",
   NEXT = "next",
 }
+
+export const bulkImportProspects = "Bulk Import Prospects";

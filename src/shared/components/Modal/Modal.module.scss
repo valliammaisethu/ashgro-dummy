@@ -39,3 +39,11 @@
     }
   }
 }
+
+.modalContainer {
+  &.noHeaderModal {
+    :global(.ant-modal-header) {
+      display: none;
+    }
+  }
+}

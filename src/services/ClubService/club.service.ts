@@ -5,7 +5,6 @@ import {
 } from "@tanstack/react-query";
 import { generatePath } from "react-router-dom";
 import { deserialize, serialize } from "serializr";
-
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
 import {
