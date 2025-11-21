@@ -1,14 +1,15 @@
 import React, { Fragment } from "react";
 import { Divider, Modal as AntModal } from "antd";
+import clsx from "clsx";
 import { IconCircleClose } from "obra-icons-react";
+
+import { ModalFooter } from "./atoms";
 import { Colors } from "src/enums/colors.enum";
 import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { ModalProps } from "src/shared/types/sharedComponents.type";
+import { defaultModalWidth } from "src/constants/sharedComponents";
 
 import styles from "./Modal.module.scss";
-import { defaultModalWidth } from "src/constants/sharedComponents";
-import { ModalFooter } from "./atoms";
-import clsx from "clsx";
 
 const Modal: React.FC<ModalProps> = ({
   children,
@@ -84,7 +85,11 @@ const Modal: React.FC<ModalProps> = ({
         closeIcon ? (
           closeIcon
         ) : (
-          <IconCircleClose color={Colors.MODAL_CLOSE_ICON} size={20} />
+          <IconCircleClose
+            strokeWidth={1.25}
+            color={Colors.MODAL_CLOSE_ICON}
+            size={20}
+          />
         )
       }
     >

@@ -1,10 +1,6 @@
-import React, { MouseEvent, useState } from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
-import {
-  IconArrowRight,
-  IconDocumentUpload,
-  IconDownload,
-} from "obra-icons-react";
+import { IconArrowRight, IconDownload } from "obra-icons-react";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
@@ -18,7 +14,6 @@ import {
 import excelIcon from "src/assets/images/excelIcon.webp";
 import ashgroLogo from "src/assets/images/homeLogo.webp";
 import { Buttons } from "src/enums/buttons.enum";
-import { Colors } from "src/enums/colors.enum";
 import { BulkImportModalProps } from "src/shared/types/bulkImport.type";
 
 import styles from "./bulkImport.module.scss";
@@ -28,12 +23,15 @@ const BulkImportModal = (props: BulkImportModalProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
 
-  const handleFileUploaded = (_fileId: string, _fileName: string) =>
-    setIsUploaded(true);
+  const handleFileUploaded = () => setIsUploaded(true);
 
   const handleClose = () => {
     onClose();
     setIsUploading(false);
+    setIsUploaded(false);
+  };
+
+  const handleChangeFile = () => {
     setIsUploaded(false);
   };
 
@@ -56,109 +54,13 @@ const BulkImportModal = (props: BulkImportModalProps) => {
               <BulkFileUpload
                 onFileUploaded={handleFileUploaded}
                 onUploadStateChange={setIsUploading}
-                renderUploadArea={({
-                  onClick,
-                  isUploading,
-                  uploadProgress,
-                  uploadedFile,
-                  currentFileName,
-                  onCancelUpload,
-                  onChangeFile,
-                }) => {
-                  const cancelUpload = (e: MouseEvent) => {
-                    e.stopPropagation();
-                    onCancelUpload();
-                  };
-
-                  const handleChange = (e: MouseEvent) => {
-                    e.stopPropagation();
-                    onChangeFile();
-                    setIsUploaded(false);
-                  };
-                  return (
-                    <>
-                      <div
-                        className={clsx(styles.footerContent, {
-                          [styles.isUploadingContent]: isUploading,
-                          [styles.uploadedFooter]: uploadedFile,
-                        })}
-                        onClick={
-                          !isUploading && !uploadedFile ? onClick : undefined
-                        }
-                      >
-                        {!isUploading && !uploadedFile && (
-                          <>
-                            <Button
-                              icon={
-                                <IconDocumentUpload
-                                  color={Colors.MODAL_CLOSE_ICON}
-                                  strokeWidth={1.25}
-                                  size={20}
-                                />
-                              }
-                              className={styles.iconButton}
-                            />
-                            <div className={styles.uploadText}>
-                              {inputPlaceholder}
-                            </div>
-                          </>
-                        )}
-                        {isUploading && currentFileName && (
-                          <>
-                            <div
-                              className={clsx(styles.uploadingContainer, {
-                                [styles.isUploadingContainer]: isUploading,
-                              })}
-                            >
-                              <div className={styles.uploadingFileInfo}>
-                                <img
-                                  className={styles.excelIcon}
-                                  src={excelIcon}
-                                />
-                                <span className={styles.uploadingFileName}>
-                                  {currentFileName}
-                                </span>
-                              </div>
-                              <div className={styles.progressBarContainer}>
-                                <div
-                                  className={styles.progressBar}
-                                  style={{ width: `${uploadProgress}%` }}
-                                />
-                              </div>
-                            </div>
-                            <div className={styles.cancelButtonContainer}>
-                              <Button
-                                onClick={cancelUpload}
-                                className={styles.cancelButton}
-                              >
-                                {Buttons.CANCEL_UPLOAD}
-                              </Button>
-                            </div>
-                          </>
-                        )}
-                        {uploadedFile && !isUploading && (
-                          <div
-                            className={clsx(styles.uploadedFooterContent, {
-                              [styles.uploadedFooterContent]:
-                                uploadedFile && !isUploading,
-                            })}
-                          >
-                            <img className={styles.excelIcon} src={excelIcon} />
-                            <div className={styles.fileName}>
-                              {uploadedFile.name}
-                            </div>
-                            <Button
-                              onClick={handleChange}
-                              className={styles.changeButton}
-                            >
-                              {Buttons.CHANGE}
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  );
-                }}
+                onChangeFile={handleChangeFile}
+                inputPlaceholder={inputPlaceholder}
+                className={styles.footerContent}
+                isUploadingClassName={styles.isUploadingContent}
+                isUploadedClassName={styles.uploadedFooter}
+                uploadingClassName={styles.uploadingContainer}
+                uploadedClassName={styles.uploadedFooterContent}
               />
             </div>
             {isUploaded && (

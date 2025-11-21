@@ -21,6 +21,7 @@ import Label from "src/shared/components/Label";
 import { ActivityService } from "src/services/ActivityService/activity.service";
 import { ActivityPayload } from "src/models/activity.model";
 import { useParams } from "react-router-dom";
+import { DateFormats } from "src/enums/dateFormats.enum";
 
 interface AddActivityProps {
   isOpen: boolean;
@@ -45,7 +46,7 @@ const AddActivity = ({ isOpen, onClose, handleRefetch }: AddActivityProps) => {
 
   const createdAt = now.format("YYYY-MM-DDTHH:mm:ss");
 
-  const formattedCreatedAt = now.format("YYYY-MM-DD hh:mm A");
+  const formattedCreatedAt = now.format(DateFormats.HH_MM_A__DD_MMM_YYYY);
 
   const handleSubmit = async (data: ActivityPayload) => {
     await addActivityAsync({ ...data, createdAt, id });

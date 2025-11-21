@@ -1,63 +1,135 @@
 import { Col, Divider, Row } from "antd";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { FieldValues } from "react-hook-form";
+
 import Form from "src/shared/components/Form";
 import Modal from "src/shared/components/Modal";
 import ProfilePictureInput from "src/shared/components/ProfilePictureInput";
-import { AddClubModalProps } from "src/shared/types/clubs.type";
-import { clubFormValidationSchema } from "src/views/Clubs/AddClub/clubFormValidation";
-
-import styles from "./addClub.module.scss";
 import Switch from "src/shared/components/Switch";
 import InputField from "src/shared/components/InputField";
 import DatePicker from "src/shared/components/DatePicker";
 import PhoneNumberField from "src/shared/components/PhoneNumberInput";
 import TextArea from "src/shared/components/TextArea";
-
-import { fields, labels, placeholders, titles } from "./constants";
+import useForm from "src/shared/components/UseForm";
+import { ClubFormProps } from "src/shared/types/clubs.type";
+import { stripPhoneCode, addPhoneCode } from "src/shared/utils/parser";
+import {
+  convertDateToApiFormat,
+  convertDateToDisplayFormat,
+} from "src/shared/utils/dateUtils";
+import { clubFormValidationSchema } from "src/views/Clubs/ClubForm/clubFormValidation";
 import { Align } from "src/enums/align.enum";
-import { convertDateToDisplayFormat } from "src/shared/utils/dateUtils";
+import { DateFormats } from "src/enums/dateFormats.enum";
 import { Buttons } from "src/enums/buttons.enum";
+import { fields, labels, placeholders, titles } from "./constants";
+import { ClubService } from "src/services/ClubService/club.service";
 
-const AddClub = (props: AddClubModalProps) => {
-  const { onClose, open, clubData } = props;
+import styles from "./clubForm.module.scss";
 
-  const handleSubmit = () => {
-    // TODO: Add API call to save club data
+const ClubForm = (props: ClubFormProps) => {
+  const { onClose, open, clubId } = props;
+
+  const { addClub, getClubProfile, editClub } = ClubService();
+
+  const { data: clubData, isPending: isFetchingClubData } = useQuery(
+    getClubProfile(clubId),
+  );
+
+  const defaultValues = useMemo(() => {
+    if (!clubId) return {};
+
+    return {
+      ...clubData?.club,
+      notes: clubData?.club?.notes,
+      contactNumber: stripPhoneCode(clubData?.club?.contactNumber),
+      onboardingDate: convertDateToDisplayFormat(
+        clubData?.club?.onboardingDate,
+      ),
+      adminDetails: {
+        ...clubData?.club?.adminDetails,
+        contactNumber: stripPhoneCode(
+          clubData?.club?.adminDetails?.contactNumber,
+        ),
+      },
+    };
+  }, [clubId, clubData]);
+
+  const methods = useForm({
+    defaultValues: clubId ? defaultValues : {},
+    validationSchema: clubFormValidationSchema,
+  });
+  // TODO: Fix the form issue and remove useEffect here
+  useEffect(() => {
+    if (clubId) methods.reset(defaultValues);
+    else methods.reset({});
+  }, [clubId, defaultValues, methods, open]);
+
+  const { mutateAsync, isPending: isAdding } = useMutation(addClub());
+  const { mutateAsync: editMutateAsync, isPending: isEditing } = useMutation(
+    editClub(clubId),
+  );
+
+  const modalClose = () => {
+    methods.reset({});
+    onClose();
   };
 
-  const defaultValues = {
-    ...clubData,
-    onboardingDate: convertDateToDisplayFormat(clubData?.onboardingDate),
+  const formSubmit = async (values: FieldValues) => {
+    const formValues = {
+      ...values,
+      onboardingDate: convertDateToApiFormat(
+        values.onboardingDate,
+        DateFormats.DD_MMM_YYYY,
+      ),
+      contactNumber: addPhoneCode(values.contactNumber, values.clubCountryCode),
+      adminDetails: {
+        ...values.adminDetails,
+        contactNumber: addPhoneCode(
+          values.adminDetails.contactNumber,
+          values.adminDetails.countryCode,
+        ),
+      },
+    };
+    if (clubData?.club?.id) {
+      await editMutateAsync(formValues, {
+        onSuccess: modalClose,
+      });
+    } else {
+      await mutateAsync(formValues, {
+        onSuccess: modalClose,
+      });
+    }
   };
 
   return (
     <Modal
       rootClassName={styles.addClubModal}
-      title={clubData ? titles.editTitle : titles.modalTitle}
+      title={clubId ? titles.editTitle : titles.modalTitle}
       visible={open}
       cancelButtonProps={{
         className: "d-none",
       }}
-      onCancel={onClose}
-      okText={Buttons.ADD_CLUB}
-      onOk={handleSubmit}
+      loading={Boolean(clubId) && isFetchingClubData}
+      closeModal={modalClose}
+      okText={clubData?.club?.id ? Buttons.SAVE_CHANGES : Buttons.ADD_CLUB}
+      okButtonProps={{
+        loading: clubData?.club?.id ? isEditing : isAdding,
+      }}
+      handleOk={methods.handleSubmit(formSubmit)}
       styles={{
         body: { height: 650 },
         content: { height: 730 },
       }}
     >
-      <Form
-        onSubmit={handleSubmit}
-        validationSchema={clubFormValidationSchema}
-        defaultValues={defaultValues}
-      >
+      <Form methods={methods}>
         <ProfilePictureInput isClubUpload name={fields.profilePicture} />
         <Divider />
         <div className={styles.chatbot}>
           <span className={styles.sectionTitle}>
             {titles.misc.chatbotStatus}
           </span>
-          <Switch name={fields.chatbotSwitch} />
+          <Switch name={fields.chatbotEnabled} />
         </div>
         <Divider />
 
@@ -87,7 +159,7 @@ const AddClub = (props: AddClubModalProps) => {
             <InputField
               required
               label={labels.clubEmail}
-              name={fields.clubEmail}
+              name={fields.email}
               placeholder={placeholders.clubEmail}
             />
           </Col>
@@ -96,7 +168,7 @@ const AddClub = (props: AddClubModalProps) => {
             <PhoneNumberField
               label={labels.clubPhone}
               placeholder={placeholders.phone}
-              name={fields.clubPhoneNumber}
+              name={fields.contactNumber}
               phoneCodeName={fields.clubPhoneCountryCode}
             />
           </Col>
@@ -160,7 +232,7 @@ const AddClub = (props: AddClubModalProps) => {
           <Col span={24}>
             <TextArea
               label={labels.notesDescription}
-              name={fields.notesDescription}
+              name={fields.notes}
               placeholder={placeholders.notesDescription}
               rootClassName={styles.notesInput}
             />
@@ -171,4 +243,4 @@ const AddClub = (props: AddClubModalProps) => {
   );
 };
 
-export default AddClub;
+export default ClubForm;

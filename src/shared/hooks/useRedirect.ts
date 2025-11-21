@@ -12,6 +12,7 @@ const {
   CLUB_STAFF,
   MEMBERS,
   DASHBOARD,
+  INDIVIDUAL_CLUB,
 } = NavigationRoutes;
 
 const useRedirect = () => {
@@ -42,6 +43,9 @@ const useRedirect = () => {
 
   const navigateToMembers = () => navigate(MEMBERS);
 
+  const navigateToInvidualClub = (id?: string) =>
+    navigate(generatePath(INDIVIDUAL_CLUB, { id }));
+
   return {
     navigateToHome,
     navigateToDashboard,
@@ -54,6 +58,7 @@ const useRedirect = () => {
     navigateToStaffMemberDetails,
     navigateToStaffMemberList,
     navigateToMembers,
+    navigateToInvidualClub,
   };
 };
 

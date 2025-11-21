@@ -1,11 +1,17 @@
 import React from "react";
-import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  BrowserRouter,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 
 import AppLayout from "../shared/components/AppLayout";
 import Home from "../views/Home";
 import { TopBarProvider } from "../shared/contexts/TopBarContext";
 import NotFound from "../shared/components/FallbackPage";
-import { AppRoutes } from "./routeConstants/appRoutes";
+import { AppRoutes, NavigationRoutes } from "./routeConstants/appRoutes";
 import { RouterProps } from "../shared/types/route.type";
 import AuthWrapper from "../views/Auth/AuthWrapper";
 import AppComponents from "../views/AppComponents";
@@ -18,9 +24,48 @@ import MemberDetails from "src/views/Members/Details";
 import RoleGuard from "src/shared/components/RoleGuard";
 import { RoleNames } from "src/enums/roleNames.enum";
 import Clubs from "src/views/Clubs";
+import IndividualClub from "src/views/Clubs/IndividualClub";
 import SettingsWrapper from "src/views/Settings";
 import DashboardWrapper from "src/views/Dashboard";
 import Calender from "src/views/Calender";
+import { AuthContext } from "src/context/AuthContext";
+
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const { authenticated } = AuthContext();
+  const location = useLocation();
+
+  if (!authenticated) {
+    return (
+      <Navigate
+        to={NavigationRoutes.LOGIN}
+        state={{ from: location.pathname + location.search }}
+        replace
+      />
+    );
+  }
+
+  return children;
+};
+
+const AuthRoute = ({ children }: { children: JSX.Element }) => {
+  const { authenticated } = AuthContext();
+
+  if (authenticated) {
+    return <Navigate to={NavigationRoutes.DASHBOARD} replace />;
+  }
+
+  return children;
+};
+
+const RootRedirect = () => {
+  const { authenticated } = AuthContext();
+
+  if (!authenticated) {
+    return <Navigate to={NavigationRoutes.LOGIN} replace />;
+  }
+
+  return <Navigate to={AppRoutes.DASHBOARD} replace />;
+};
 
 const AppRouter = () => {
   const children: RouterProps[] = [
@@ -42,15 +87,13 @@ const AppRouter = () => {
         </RoleGuard>
       ),
     },
-  ];
-
-  const routes: RouterProps[] = [
-    { path: AppRoutes.AUTH, component: <AuthWrapper /> },
-    { path: AppRoutes.APP_COMPONENTS, component: <AppComponents /> },
     {
-      path: AppRoutes.HOME,
-      component: <AppLayout />,
-      children,
+      path: AppRoutes.INDIVIDUAL_CLUB,
+      component: (
+        <RoleGuard allowedRoles={[RoleNames.SUPER_ADMIN]}>
+          <IndividualClub />
+        </RoleGuard>
+      ),
     },
   ];
 
@@ -58,26 +101,44 @@ const AppRouter = () => {
     <BrowserRouter>
       <TopBarProvider>
         <Routes>
+          <Route path="/" element={<RootRedirect />} />
+
           <Route
-            path="/"
-            element={<Navigate to={AppRoutes.DASHBOARD} replace />}
+            path={AppRoutes.AUTH}
+            element={
+              <AuthRoute>
+                <AuthWrapper />
+              </AuthRoute>
+            }
           />
 
-          {routes.map((route) => (
-            <Route key={route.path} path={route.path} element={route.component}>
-              {route.children && (
-                <Route element={<Home />}>
-                  {route.children.map((child) => (
-                    <Route
-                      key={child.path}
-                      path={child.path}
-                      element={child.component}
-                    />
-                  ))}
-                </Route>
-              )}
+          <Route
+            path={AppRoutes.APP_COMPONENTS}
+            element={
+              <ProtectedRoute>
+                <AppComponents />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path={AppRoutes.HOME}
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route element={<Home />}>
+              {children.map((child) => (
+                <Route
+                  key={child.path}
+                  path={child.path}
+                  element={child.component}
+                />
+              ))}
             </Route>
-          ))}
+          </Route>
 
           <Route path="*" element={<NotFound />} />
         </Routes>

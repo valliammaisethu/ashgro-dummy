@@ -7,6 +7,7 @@ import excelIcon from "src/assets/images/excelIcon.webp";
 import ashgroLogo from "src/assets/images/homeLogo.webp";
 import uploadingArrow from "src/assets/images/gradientArrow.webp";
 import { inProgress, inProgressDescription } from "../constants";
+import { imageAlts } from "src/constants/imageAlts";
 
 import styles from "./InProgressModal.module.scss";
 
@@ -23,11 +24,23 @@ const BulkInProgressModal = (props: BulkInProgressModalProps) => {
       <div className={styles.body}>
         <div className={styles.iconsContainer}>
           <Button className={styles.iconButton}>
-            <img src={excelIcon} className={styles.excelIcon} />
+            <img
+              alt={imageAlts.excelIcon}
+              src={excelIcon}
+              className={styles.excelIcon}
+            />
           </Button>
-          <img className={styles.uploadingArrow} src={uploadingArrow} />
+          <img
+            alt={imageAlts.uploadArrow}
+            className={styles.uploadingArrow}
+            src={uploadingArrow}
+          />
           <Button className={styles.iconButton}>
-            <img className={styles.excelIcon} src={ashgroLogo} />
+            <img
+              alt={imageAlts.ashgroLogo}
+              className={styles.excelIcon}
+              src={ashgroLogo}
+            />
           </Button>
         </div>
         <div className={styles.inProgressText}>

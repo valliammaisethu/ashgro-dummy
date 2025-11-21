@@ -3,10 +3,7 @@
 
 .body {
   padding: 2.5rem 15.2rem 0 15.2rem;
-  display: flex;
-  justify-content: center;
-  flex-flow: column;
-  align-items: center;
+  @include flex-container(center, center, column);
 }
 .iconsContainer {
   @include flex-flow(row, wrap, center);
@@ -22,7 +19,7 @@
     width: 4.4rem;
   }
   &:hover {
-    background-color: $search-bg !important;
+    background-color: $search-bg;
   }
 }
 .excelIcon {

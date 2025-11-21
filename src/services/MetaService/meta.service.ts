@@ -4,6 +4,7 @@ import { deserialize, serialize } from "serializr";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
+import { BaseSettingsModel } from "src/models/common.model";
 import {
   ActivityTypesData,
   EmailTemplatesData,
@@ -16,6 +17,8 @@ import {
   MembershipStatusParams,
   MembershipStatusData,
 } from "src/models/meta.model";
+import { Pagination } from "src/models/pagination.model";
+import { QueryParams } from "src/models/queryParams.model";
 import { ResponseModel } from "src/models/response.model";
 import { UserData } from "src/models/user.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
@@ -175,4 +178,28 @@ export const MetaService = () => {
     getEmailTemplates,
     getStaffDepartments,
   };
+};
+
+export const getMembersMetaList = async (params: Partial<QueryParams>) => {
+  const { data } = await axiosInstance.get(ApiRoutes.MEMBERS_META_LIST, {
+    params: serialize(QueryParams, params),
+  });
+
+  const members = deserialize(BaseSettingsModel, data.members as unknown[]);
+
+  const meta = deserialize(Pagination, data?.pagination);
+
+  return { data: members, meta };
+};
+
+export const getProspectssMetaList = async (params: Partial<QueryParams>) => {
+  const { data } = await axiosInstance.get(ApiRoutes.PROSPECTS_META_LIST, {
+    params: serialize(QueryParams, params),
+  });
+
+  const prospects = deserialize(BaseSettingsModel, data.prospects as unknown[]);
+
+  const meta = deserialize(Pagination, data?.pagination);
+
+  return { data: prospects, meta };
 };
