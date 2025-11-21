@@ -27,6 +27,9 @@ import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 
 import styles from "./individualProspect.module.scss";
+import TemplateModal from "src/views/Email/TemplateModal";
+import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
+import { EmailTemplate } from "src/models/meta.model";
 
 const IndividualProspect = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
@@ -47,7 +50,7 @@ const IndividualProspect = () => {
   const [selectedEmail, setSelectedEmail] = useState<SelectedEmailModel>(
     new SelectedEmailModel(),
   );
-
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
   const { visible, toggleVisibility } = useDrawer();
 
   const { visible: deleteModalVisible, toggleVisibility: toggleDeleteModal } =
@@ -61,6 +64,11 @@ const IndividualProspect = () => {
     toggleVisibility: toggleMemberConversionModal,
   } = useDrawer();
 
+  const {
+    visible: templateModalVisible,
+    toggleVisibility: toggleTemplateModal,
+  } = useDrawer();
+
   const handleEdit = () => {
     setIsEdit(true);
     toggleVisibility();
@@ -69,15 +77,6 @@ const IndividualProspect = () => {
   const handleConvertToMember = () => toggleMemberConversionModal();
 
   const handleRefetch = () => refetch();
-
-  const handleEmailModal = () => {
-    setSelectedEmail({
-      email: data?.prospect?.email,
-      id: String(data?.prospect?.id),
-      name: data?.prospect?.firstName,
-    });
-    toggleEmailModal();
-  };
 
   const handleStatusChange = async (statusName: string) => {
     const selectedStatus = leadStatusOptions?.leadStatuses?.find(
@@ -95,16 +94,32 @@ const IndividualProspect = () => {
     }
   };
 
+  const handleEmailTemplateModal = (
+    type: EmailModalEnum,
+    template?: EmailTemplate,
+  ) => {
+    setSelectedTemplate(type === EmailModalEnum.EMAIL ? undefined : template);
+    setSelectedEmail({
+      email: data?.prospect?.email,
+      id: String(data?.prospect?.id),
+      name: data?.prospect?.firstName,
+    });
+    toggleTemplateModal();
+    toggleEmailModal();
+  };
+
   return (
     <div className={styles.individualProspect}>
-      <Header onEmail={handleEmailModal} onConvert={handleConvertToMember} />
+      <Header
+        isFetchingProfile={isFetching}
+        onEmail={toggleTemplateModal}
+        onConvert={handleConvertToMember}
+      />
       <ConditionalRender
         isPending={isPending}
         isSuccess={isSuccess}
         isFetching={isFetching}
         records={[data?.prospect]}
-        useGridSkeleton
-        skeletonRows={16}
       >
         <Card className={styles.card}>
           <div className={styles.leftSide}>
@@ -136,7 +151,11 @@ const IndividualProspect = () => {
               />
             </div>
             <div className={styles.content}>
-              <ProspectInfo data={data?.prospect} />
+              <ProspectInfo
+                data={data?.prospect}
+                onRefetch={handleRefetch}
+                clubId={clubId}
+              />
               <div className={styles.bottom}>
                 <DetailSection
                   title={PROSPECT_LABELS.leadDetails}
@@ -187,10 +206,16 @@ const IndividualProspect = () => {
           data?.prospect?.lastName,
         )}
       />
+      <TemplateModal
+        isOpen={templateModalVisible}
+        onClose={toggleTemplateModal}
+        toggleEmailModal={handleEmailTemplateModal}
+      />
       <NewEmailModal
         selectedEmails={[selectedEmail]}
         isOpen={emailModalVisible}
         onClose={toggleEmailModal}
+        selectedTemplate={selectedTemplate}
       />
     </div>
   );

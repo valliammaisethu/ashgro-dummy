@@ -6,6 +6,7 @@ import React, {
   Dispatch,
   SetStateAction,
   PropsWithChildren,
+  useEffect,
 } from "react";
 import { UserData, TokenData } from "src/models/user.model";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
@@ -19,13 +20,28 @@ export interface AuthState {
 
 type SetAuthState = Dispatch<SetStateAction<AuthState>>;
 
-const storedUser = localStorageHelper.getItem(LocalStorageKeys.USER);
-const storedToken = localStorageHelper.getItem(LocalStorageKeys.TOKEN);
+const getInitialValues = (): AuthState => {
+  const storedUser = localStorageHelper.getItem(LocalStorageKeys.USER);
+  const rawToken = localStorage.getItem(LocalStorageKeys.TOKEN);
 
-const initialValues: AuthState = {
-  authenticated: !!storedToken,
-  user: storedUser || new UserData(),
-  token: storedToken || new TokenData(),
+  let parsedToken = null;
+  if (rawToken) {
+    try {
+      parsedToken = JSON.parse(rawToken);
+    } catch {
+      parsedToken = rawToken;
+    }
+  }
+
+  const hasToken = Boolean(
+    parsedToken && String(parsedToken).trim().length > 0,
+  );
+
+  return {
+    authenticated: hasToken,
+    user: storedUser || new UserData(),
+    token: parsedToken || new TokenData(),
+  };
 };
 
 const AuthContent = createContext<[AuthState, SetAuthState] | undefined>(
@@ -39,6 +55,27 @@ const AuthContext = () => {
   }
 
   const [auth, setAuth] = context;
+
+  const rawToken = localStorage.getItem(LocalStorageKeys.TOKEN);
+
+  let parsedToken = null;
+  if (rawToken) {
+    try {
+      parsedToken = JSON.parse(rawToken);
+    } catch {
+      parsedToken = rawToken;
+    }
+  }
+
+  const actualAuthenticated = Boolean(
+    parsedToken && String(parsedToken).trim().length > 0,
+  );
+
+  useEffect(() => {
+    if (auth.authenticated !== actualAuthenticated) {
+      setAuth(getInitialValues());
+    }
+  }, [auth.authenticated, actualAuthenticated, setAuth]);
 
   const setAuthenticated = (user?: UserData, token?: TokenData) => {
     const newAuth = {
@@ -66,16 +103,17 @@ const AuthContext = () => {
 
   return {
     ...auth,
+    authenticated: actualAuthenticated,
     setAuthenticated,
     resetAuthState,
   };
 };
 
 export const AuthProvider = ({
-  values = initialValues,
+  values,
   children,
 }: PropsWithChildren<{ values?: AuthState }>) => {
-  const [auth, setAuth] = useState<AuthState>(values);
+  const [auth, setAuth] = useState<AuthState>(values || getInitialValues());
 
   const value = useMemo(
     () => [auth, setAuth] as [AuthState, SetAuthState],

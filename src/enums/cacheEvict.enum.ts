@@ -60,4 +60,11 @@ export enum QueryKeys {
   GET_MEMBERS = "getMembers",
   GET_STAFF_MEMBER_LIST = "getStaffMemberList",
   DOWNLOAD_TEMPLATE = "downloadTemplate",
+
+  GET_CLUBS = "getClubs",
+  GET_CLUB_PROFILE = "getClubProfile",
+
+  GET_CALENDER_SLOTS_AND_EVENTS = "getCanderSlotsAndEvents",
+  GET_MEMBERS_META_LIST = "getMembersMetaList",
+  GET_PROSPECTS_META_LIST = "getProspectsMetaList",
 }

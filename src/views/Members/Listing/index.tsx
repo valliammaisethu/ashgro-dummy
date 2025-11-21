@@ -143,9 +143,13 @@ const Members = () => {
     memberId?: string,
     membershipStatusId?: string,
   ) => {
+    if (!memberId || !membershipStatusId) return;
+
     setUpdatingMemberId(memberId);
     try {
       await updateMemberStatusMutate({ memberId, membershipStatusId });
+    } catch {
+      // do nothing
     } finally {
       setUpdatingMemberId(undefined);
     }
@@ -282,9 +286,6 @@ const Members = () => {
             records={data?.members}
             isPending={isPending}
             isSuccess={isSuccess}
-            useGridSkeleton
-            skeletonCols={1}
-            skeletonRows={13}
           >
             <div className={styles.listContainer}>
               {data?.members?.map((item) => {
@@ -376,6 +377,7 @@ const Members = () => {
         onClose={handleNewEmailModalClose}
         selectedEmails={emailRecipients}
         selectedTemplate={selectedTemplate}
+        isBulkEmail
       />
       <BulkImportModal
         visible={bulkImportModalVisible}

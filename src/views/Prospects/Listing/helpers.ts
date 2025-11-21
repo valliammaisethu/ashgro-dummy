@@ -68,8 +68,8 @@ export const areFiltersActive = (
     queryParams.leadStatusIds.length > 0;
 
   const hasLeadSource =
-    Array.isArray(queryParams.leadSourcesIds) &&
-    queryParams.leadSourcesIds.length > 0;
+    Array.isArray(queryParams.leadSourceIds) &&
+    queryParams.leadSourceIds.length > 0;
 
   return hasDateRange || hasLeadStatus || hasLeadSource;
 };

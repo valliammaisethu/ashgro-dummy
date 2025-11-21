@@ -63,7 +63,7 @@ export const AttachmentService = () => {
   });
 
   const getAttachmentPreview = (
-    attachmentId: string,
+    attachmentId = "",
   ): UseQueryOptions<string, ResponseModel, string> => ({
     queryKey: [GET_ATTACHMENT_PREVIEW, attachmentId],
     queryFn: async () => {

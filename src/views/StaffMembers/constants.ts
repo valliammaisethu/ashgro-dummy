@@ -1,15 +1,15 @@
 export const staffMembersConstants = {
   filterTitle: "Departments",
-  field: "departmentIds",
+  field: "staffDepartmentIds",
 };
-
+export const clulbHeaderGrid = "38% 28% 25% 05%";
 export const staffMemberHeaders = ["Club Staff", "Department", "Title"];
 
 export const FORM_CONSTANTS = {
   ADD_TITLE: "New Staff",
   EDIT_TITLE: "Edit Staff",
   ADD_BTN_TXT: "Add Staff",
-  EDIT_BTN_TXT: "Edit Staff",
+  EDIT_BTN_TXT: "Save Changes",
 
   LABELS: {
     PROFILE_PICTURE: "Profile Picture",
@@ -54,7 +54,7 @@ export const FORM_CONSTANTS = {
 export const memberHeaders = ["Members", "Join Date", "Member Status"];
 
 export const deleteModalConstants = {
-  title: "Delete Staff",
+  title: "Delete Staff?",
   description:
     "Are you sure you want to permanently delete %s? This action is not reversible.",
 };

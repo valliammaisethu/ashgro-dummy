@@ -57,4 +57,7 @@ export class LoginResponse extends ResponseModel {
 export class ResetPassword {
   @serializable
   newPassword?: string;
+
+  @serializable
+  token?: string;
 }

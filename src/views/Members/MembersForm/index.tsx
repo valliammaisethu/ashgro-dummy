@@ -185,10 +185,14 @@ const MembersForm = ({
     methods.reset({});
     handleModalVisibility?.();
   };
-  // TODO: Fix the form issue and remove useEffect here
+
   useEffect(() => {
-    methods.reset(formValues);
-  }, [data]);
+    if (id && isOpen && data) {
+      methods.reset(formValues);
+    } else {
+      methods.reset({});
+    }
+  }, [id, data, isOpen, methods.reset]);
 
   return (
     <div>
@@ -249,7 +253,6 @@ const MembersForm = ({
                   placeholder={PLACEHOLDERS.JOIN_DATE}
                   label={LABELS.JOIN_DATE}
                   name={FIELD_NAMES.JOIN_DATE}
-                  format={DateFormats.DD_MMM__YYYY}
                   disabledDate={disableFutureAndToday}
                 />
               </Col>
