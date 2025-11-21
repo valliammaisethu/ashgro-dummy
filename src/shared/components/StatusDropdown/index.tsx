@@ -16,7 +16,9 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
   onClick = (e) => e.stopPropagation(),
   loading = false,
 }) => {
-  const selectedOption = options.find((option) => option.statusName === value);
+  const selectedOption = options.find(
+    (option) => option.id === value || option.statusName === value,
+  );
 
   const menuItems: MenuProps["items"] = options.map((option) => ({
     key: option.id || option.statusName || "",
@@ -39,7 +41,7 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
         </span>
       </div>
     ),
-    onClick: () => onChange(option.statusName || ""),
+    onClick: () => onChange(option.id || option.statusName || ""),
   }));
 
   return (
@@ -81,7 +83,10 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
               <span className={styles.placeholder}>{selectStatus}</span>
             )}
           </div>
-          <IconChevronDown className={styles.chevron} />
+          <IconChevronDown
+            className={styles.chevron}
+            color={selectedOption?.color}
+          />
         </Button>
       </Dropdown>
     </div>

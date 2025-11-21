@@ -11,7 +11,8 @@ export interface MembersHeaderProps {
   onAddMember?: () => void;
   onSearch: (searchTerm: string) => void;
   onFilter: () => void;
-  filtersActive: boolean;
   onBulkMail?: () => void;
+  onBulkImport?: () => void;
+  filtersActive: boolean;
   selectedEmails?: number;
 }

@@ -7,11 +7,6 @@ export const clubListingHeaders = [
 
 export const membersText = (count: number) => `${count} Members`;
 
-export const clubStatuses = [
-  { value: "active", label: "Active" },
-  { value: "inactive", label: "Inactive" },
-];
-
 export const clubHeaderColumnGrid = "51% 15% 15% 15%";
 
 export const VALIDATION_REGEX = {

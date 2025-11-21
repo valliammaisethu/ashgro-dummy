@@ -1,30 +1,31 @@
 import React, { useState } from "react";
 import { IconEdit } from "obra-icons-react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
 import Header from "./Header";
 import ClubInfo from "./components/ClubInfo";
 import ContactDetails from "./components/ContactDetails";
 import NotesSection from "./components/NotesSection";
+import ClubForm from "../ClubForm";
+import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
 import Button from "src/shared/components/Button";
 import Card from "src/shared/components/Card";
+import StatusDropdown from "src/shared/components/StatusDropdown";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import Switch from "src/shared/components/Switch";
 import { stopPropagation } from "src/shared/utils/eventUtils";
-import ClubForm from "../ClubForm";
-import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
 import { ClubService } from "src/services/ClubService/club.service";
 import { Colors } from "src/enums/colors.enum";
+import { updateClubCache } from "src/shared/utils/cacheUtils";
 
 import styles from "./individualClub.module.scss";
-import StatusDropdown from "src/shared/components/StatusDropdown";
 
 const IndividualClub = () => {
   const { id = "" } = useParams();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-  const { getClubProfile } = ClubService();
+  const queryClient = useQueryClient();
+  const { getClubProfile, updateStatus } = ClubService();
 
   const {
     data: clubData,
@@ -32,6 +33,26 @@ const IndividualClub = () => {
     isSuccess,
     isFetching,
   } = useQuery(getClubProfile(id));
+
+  const {
+    mutateAsync: updateChatbotStatusMutate,
+    isPending: isChatbotUpdatePending,
+  } = useMutation(updateStatus());
+
+  const {
+    mutateAsync: updateClubStatusMutate,
+    isPending: isStatusUpdatePending,
+  } = useMutation(updateStatus());
+
+  const handleChatbotStatusChange = async (value: boolean) =>
+    await updateChatbotStatusMutate(
+      { chatbotEnabled: value, id },
+      {
+        onSuccess: () => {
+          updateClubCache(queryClient, id, { chatbotEnabled: value });
+        },
+      },
+    );
 
   const handleEdit = () => {
     setIsEditModalOpen(true);
@@ -45,7 +66,16 @@ const IndividualClub = () => {
     // TODO: Need to do integration
   };
 
-  const handleStatusChange = async () => {};
+  const handleStatusChange = async (value: string) => {
+    await updateClubStatusMutate(
+      { status: value, id },
+      {
+        onSuccess: () => {
+          updateClubCache(queryClient, id, { status: value });
+        },
+      },
+    );
+  };
 
   return (
     <div className={styles.individualClub}>
@@ -67,6 +97,8 @@ const IndividualClub = () => {
                   name={clubStatusField}
                   checked={clubData?.club?.chatbotEnabled}
                   className={styles.statusSwitch}
+                  onChange={handleChatbotStatusChange}
+                  loading={isChatbotUpdatePending}
                 />
                 <div onClick={stopPropagation} className={styles.statusCol}>
                   <StatusDropdown
@@ -79,6 +111,7 @@ const IndividualClub = () => {
                       })) || []
                     }
                     onChange={handleStatusChange}
+                    loading={isStatusUpdatePending}
                   />
                 </div>
               </div>

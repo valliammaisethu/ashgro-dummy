@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   clubHeaderColumnGrid,
@@ -20,13 +20,16 @@ import { ClubService } from "src/services/ClubService/club.service";
 import { extractNameParts } from "src/shared/utils/parser";
 import useRedirect from "src/shared/hooks/useRedirect";
 import { stopPropagation } from "src/shared/utils/eventUtils";
+import { updateClubCache } from "src/shared/utils/cacheUtils";
 
 import styles from "../../clubs.module.scss";
 
 const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
-  const { getClubs } = ClubService();
+  const { getClubs, updateStatus } = ClubService();
   const [currentPage, setCurrentPage] = useState(1);
+  const [updatingClubId, setUpdatingClubId] = useState<string>("");
   const { navigateToInvidualClub } = useRedirect();
+  const queryClient = useQueryClient();
 
   const {
     data: clubsData,
@@ -39,7 +42,49 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
     setCurrentPage(newPage);
   }, []);
 
-  const handleEditClick = useCallback((clubId: string) => {
+  const {
+    mutateAsync: updateChatbotStatusMutate,
+    isPending: isChatbotUpdatePending,
+  } = useMutation(updateStatus());
+
+  const {
+    mutateAsync: updateClubStatusMutate,
+    isPending: isStatusUpdatePending,
+  } = useMutation(updateStatus());
+
+  const handleChatbotStatusChange = async (clubId = "", value: boolean) => {
+    setUpdatingClubId(clubId);
+
+    await updateChatbotStatusMutate(
+      { chatbotEnabled: value, id: clubId },
+      {
+        onSuccess: () => {
+          updateClubCache(queryClient, clubId, { chatbotEnabled: value });
+          setUpdatingClubId("");
+        },
+        onError: () => {
+          setUpdatingClubId("");
+        },
+      },
+    );
+  };
+
+  const handleStatusChange = async (clubId = "", value: string) => {
+    setUpdatingClubId(clubId);
+    await updateClubStatusMutate(
+      { status: value, id: clubId },
+      {
+        onSuccess: () => {
+          updateClubCache(queryClient, clubId, { status: value });
+          setUpdatingClubId("");
+        },
+        onError: () => {
+          setUpdatingClubId("");
+        },
+      },
+    );
+  };
+  const handleEditClick = useCallback((clubId?: string) => {
     return () => {
       if (!clubId) return;
       onEditClub(clubId);
@@ -49,10 +94,6 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
   const handleRowClick = (clubId = "", e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     navigateToInvidualClub(clubId);
-  };
-
-  const getStatusLabel = (statusValue?: string) => {
-    return ClubStatusOptions.find((opt) => opt.value === statusValue)?.label;
   };
 
   return (
@@ -92,14 +133,22 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
                   checked={club.chatbotEnabled}
                   className={styles.switch}
                   name={`switch-${index}`}
+                  onChange={(value) =>
+                    handleChatbotStatusChange(club.id, value)
+                  }
+                  loading={isChatbotUpdatePending && updatingClubId === club.id}
                 />
               </div>
 
               <Actions
                 options={ClubStatusOptions}
-                onEditClick={handleEditClick(club.id || "")}
+                onSelectChange={(value) => handleStatusChange(club.id, value)}
+                onEditClick={handleEditClick(club.id)}
                 selectWidth={140}
-                selectedValue={getStatusLabel(club.status)}
+                selectedValue={club.status}
+                selectLoading={
+                  isStatusUpdatePending && updatingClubId === club.id
+                }
               />
             </div>
           ))}

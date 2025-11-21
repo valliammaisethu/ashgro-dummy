@@ -9,4 +9,7 @@ export class ResponseModel {
 
   @serializable
   success?: boolean;
+
+  @serializable
+  error?: string;
 }
