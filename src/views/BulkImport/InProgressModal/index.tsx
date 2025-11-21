@@ -7,9 +7,9 @@ import excelIcon from "src/assets/images/excelIcon.webp";
 import ashgroLogo from "src/assets/images/homeLogo.webp";
 import uploadingArrow from "src/assets/images/gradientArrow.webp";
 import { inProgress, inProgressDescription } from "../constants";
+import { imageAlts } from "src/constants/imageAlts";
 
 import styles from "./InProgressModal.module.scss";
-import { imageAlts } from "src/constants/imageAlts";
 
 const BulkInProgressModal = (props: BulkInProgressModalProps) => {
   const { visible } = props;
