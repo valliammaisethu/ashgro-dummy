@@ -288,3 +288,20 @@ export interface FileUploadProps {
 }
 
 export type QueryKeyType = readonly unknown[];
+
+export interface UploadAreaProps {
+  onFileUploaded?: (fileId: string, fileName: string) => void;
+  attachmentType?: string;
+  maxSizeMB?: number;
+  mainText?: string;
+  subText?: string;
+}
+
+export interface UploadAreaState {
+  isUploading: boolean;
+  uploadingFileName: string;
+  isUploaded: boolean;
+  isError?: boolean;
+  errorText?: string;
+  fileId: string;
+}

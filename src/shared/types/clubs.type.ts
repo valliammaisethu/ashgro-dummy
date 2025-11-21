@@ -23,6 +23,7 @@ export interface ClubFormState {
   clubId: string | null;
 }
 export interface ClubDetailsHeaderProps {
+  isFetching?: boolean;
   onChatbotQuestions?: () => void;
 }
 
