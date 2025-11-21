@@ -102,13 +102,6 @@
 .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {
   border-color: transparent;
 }
-.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):not(
-    [class*="Button"]
-  ):not([class*="button"]):hover {
-  background: unset;
-  color: unset;
-  border-color: unset;
-}
 
 .ant-input-outlined:hover {
   background-color: $input-background;
