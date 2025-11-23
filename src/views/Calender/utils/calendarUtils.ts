@@ -43,7 +43,7 @@ export const formatTimeRange = (start?: Date | string, end?: Date | string) => {
   return validStart || validEnd || "";
 };
 
-export const isPastDate = (date: Date) => {
+export const isPastDate = (date: Date | string) => {
   const today = dayjs().startOf(DAY);
   return dayjs(date).startOf(DAY).isBefore(today, DAY);
 };
@@ -68,8 +68,16 @@ export const mapCalendarDaysToEvents = (
         bookedUserType,
         bookedUserId,
       }) => {
-        if (!id || !title || !startTime || !endTime || !slotType || !date)
-          return;
+        const isNotValid =
+          !id ||
+          !title ||
+          !startTime ||
+          !endTime ||
+          !slotType ||
+          !date ||
+          (isPastDate(date) && slotType === CHATBOT && status !== BOOKED);
+
+        if (isNotValid) return;
 
         events.push({
           id,
