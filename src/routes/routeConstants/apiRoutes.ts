@@ -26,7 +26,9 @@ export const ApiRoutes = {
   STAFF_MEMBER_DETAILS: "/staffs/:id",
   MEMBERS_LIST: "/members",
   MEMBER_DETAILS: "/members/:id",
+
   SEND_EMAIL: "/email",
+  VERIFY_EMAIL: "/clubs/validation/email",
   PROSPECT_EMAIL_RECIPIENTS: "/prospects/recipients",
   MEMBER_EMAIL_RECIPIENTS: "/members/recipients",
   // TODO: Check with BE and avoid redundancy in api endpoint
@@ -61,4 +63,5 @@ export const ApiRoutes = {
   CANCEL_MEETING: "calendar/:slotId",
   MEMBERS_META_LIST: "/members/minimal",
   PROSPECTS_META_LIST: "/prospects/minimal",
+  CHAT_BOT_SLOTS: "calendar/chatbotSlots",
 };

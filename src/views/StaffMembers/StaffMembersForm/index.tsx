@@ -1,7 +1,14 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { Col, Divider, Row } from "antd";
 import { FieldValues } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { EmailService } from "src/services/EmailService/email.service";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import {
+  EmailValidationError,
+  useDebouncedEmailValidation,
+} from "src/shared/hooks/useDebouncedEmailValidation";
 
 import DatePicker from "src/shared/components/DatePicker";
 import Form from "src/shared/components/Form";
@@ -55,11 +62,12 @@ const StaffMembersForm = ({
   const methods = useForm({
     validationSchema: validationSchema,
   });
-  const { handleSubmit } = methods;
+  const { handleSubmit, setError, clearErrors } = methods;
 
   const { staffMembersList } = StaffDepartmentService();
   const { addStaffMember, staffMembersDeatils, editStaffMember } =
     StaffMembersService();
+  const { validateEmail } = EmailService();
 
   const { data, refetch, isFetching } = useQuery(staffMembersDeatils(id));
 
@@ -67,6 +75,30 @@ const StaffMembersForm = ({
     useMutation(addStaffMember());
   const { mutateAsync: eddStaffMemberMutate, isPending: isEditPending } =
     useMutation(editStaffMember());
+
+  const { mutateAsync: validateMutateAsync } = useMutation(validateEmail());
+
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
+  const handleEmailValidationError = useCallback(
+    (error: EmailValidationError) => {
+      if (error?.response?.data?.description) {
+        setError(FIELD_NAMES.EMAIL_ADDRESS, {
+          type: "manual",
+          message: error.response.data.description,
+        });
+      }
+    },
+    [setError],
+  );
+
+  const { handleEmailChange: debouncedEmailChange } =
+    useDebouncedEmailValidation({
+      validateMutateAsync,
+      clubId,
+      onError: handleEmailValidationError,
+    });
+
   const { data: staffDepartments, isPending } = useQuery(staffMembersList());
 
   const handleFormSubmit = async (values: FieldValues) => {
@@ -93,6 +125,12 @@ const StaffMembersForm = ({
   const handleFormVisibility = () => {
     methods.reset({});
     handleModalVisibility?.();
+  };
+
+  const handleEmailChange = (email: string) => {
+    clearErrors(FIELD_NAMES.EMAIL_ADDRESS);
+    if (!email) return;
+    debouncedEmailChange(email);
   };
 
   const formValues = useMemo(() => {
@@ -177,7 +215,6 @@ const StaffMembersForm = ({
                   placeholder={PLACEHOLDERS.TITLE}
                   label={LABELS.TITLE}
                   name={FIELD_NAMES.TITLE}
-                  required
                 />
               </Col>
 
@@ -188,6 +225,7 @@ const StaffMembersForm = ({
                   name={FIELD_NAMES.EMAIL_ADDRESS}
                   type={INPUT_TYPE.EMAIL}
                   required
+                  onChange={(e) => handleEmailChange(e.target.value)}
                 />
               </Col>
               <Col span={12}>

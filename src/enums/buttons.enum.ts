@@ -23,6 +23,7 @@ export enum Buttons {
   ADD_TEMPLATE = "Add Template",
   ADD_CLUB = "Add Club",
   CLEAR_SELECTION = "Clear Selection",
+  ADD_SLOTS = "Add Slot(s)",
   DOWNLOAD_TEMPLATE = "Download Template",
   CANCEL_UPLOAD = "Cancel Upload",
   CHANGE = "Change",

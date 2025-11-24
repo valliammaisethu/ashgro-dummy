@@ -9,6 +9,9 @@ export class EmailModel {
 
   @serializable
   firstName?: string;
+
+  @serializable
+  clubId?: string;
 }
 
 export class SendEmail {
