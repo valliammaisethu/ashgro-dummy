@@ -10,12 +10,16 @@ import { ClubDetailsHeaderProps } from "src/shared/types/clubs.type";
 
 import styles from "../individualClub.module.scss";
 
-const Header: React.FC<ClubDetailsHeaderProps> = ({ onChatbotQuestions }) => {
+const Header: React.FC<ClubDetailsHeaderProps> = ({
+  onChatbotQuestions,
+  onSettings,
+}) => {
   return (
     <div className={styles.header}>
       <BackButton />
       <div className={styles.headerRight}>
         <Button
+          onClick={onSettings}
           icon={
             <IconSettings color={Colors.MODAL_CLOSE_ICON} strokeWidth={1.5} />
           }

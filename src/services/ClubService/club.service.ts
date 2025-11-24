@@ -13,6 +13,8 @@ import {
   ClubListReponse,
   ClubStatus,
   ClubStatusResponse,
+  ClubGeneralSettings,
+  ClubGeneralSettingsResponse,
 } from "src/models/club.model";
 import { QueryParams } from "src/models/queryParams.model";
 import { ResponseModel } from "src/models/response.model";
@@ -124,11 +126,32 @@ export const ClubService = () => {
       }),
   });
 
+  const updateGeneralSettings = (): UseMutationOptions<
+    ClubGeneralSettingsResponse,
+    ClubGeneralSettingsResponse,
+    ClubGeneralSettings
+  > => ({
+    mutationKey: [EDIT_CHATBOT],
+    mutationFn: async (body: ClubGeneralSettings) => {
+      const { data } = await axiosInstance.patch(
+        generatePath(GET_CLUB_PROFILE_ROUTE, { id: body.id }),
+        body,
+      );
+      return deserialize(ClubGeneralSettingsResponse, data);
+    },
+    onSuccess: (response) =>
+      handleSuccess(queryClient)({
+        response,
+        invalidateKeys: [[GET_CLUBS], [GET_CLUB_PROFILE]],
+      }),
+  });
+
   return {
     getClubs,
     getClubProfile,
     addClub,
     editClub,
     updateStatus,
+    updateGeneralSettings,
   };
 };

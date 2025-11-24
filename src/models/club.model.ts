@@ -36,6 +36,18 @@ export class ClubFormData {
 
   @serializable
   status?: string;
+
+  @serializable
+  webFormsEnabled?: boolean;
+
+  @serializable
+  bulkEmailEnabled?: boolean;
+
+  @serializable
+  emailTemplatesAllowed?: number;
+
+  @serializable
+  customChartsAllowed?: number;
 }
 
 export class ClubProfile {
@@ -80,6 +92,18 @@ export class ClubProfile {
 
   @serializable(object(ProfileDetails))
   adminDetails = new ProfileDetails();
+
+  @serializable
+  webFormsEnabled?: boolean;
+
+  @serializable
+  bulkEmailEnabled?: boolean;
+
+  @serializable
+  emailTemplatesAllowed?: number;
+
+  @serializable
+  customChartsAllowed?: number;
 }
 
 export class ClubData {
@@ -145,6 +169,28 @@ export class ClubStatus {
 }
 
 export class ClubStatusResponse extends ResponseModel {
+  @serializable(object(ClubProfile))
+  data?: ClubProfile;
+}
+
+export class ClubGeneralSettings {
+  @serializable
+  webFormsEnabled?: boolean;
+
+  @serializable
+  bulkEmailEnabled?: boolean;
+
+  @serializable
+  emailTemplatesAllowed?: number;
+
+  @serializable
+  customChartsAllowed?: number;
+
+  @serializable
+  id?: string;
+}
+
+export class ClubGeneralSettingsResponse extends ResponseModel {
   @serializable(object(ClubProfile))
   data?: ClubProfile;
 }

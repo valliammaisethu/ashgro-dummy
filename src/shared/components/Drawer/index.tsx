@@ -1,33 +1,43 @@
 import React from "react";
 import { Drawer as AntdDrawer } from "antd";
+import { IconCircleClose } from "obra-icons-react";
+
 import { DrawerProps } from "src/shared/types/sharedComponents.type";
 import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
-import { IconCircleClose } from "obra-icons-react";
 import { Colors } from "src/enums/colors.enum";
-import styles from "./drawer.module.scss";
-import Button from "../Button";
-import { Buttons } from "src/enums/buttons.enum";
+import { DrawerFooter } from "./atoms";
 
 const Drawer = (props: DrawerProps) => {
-  const { footer, onClose, ...rest } = props;
+  const {
+    footer,
+    onClose,
+    cancelText,
+    okText,
+    cancelButtonProps,
+    okButtonProps,
+    okButtonType,
+    okButtonHtmlType,
+    confirmLoading,
+    handleOk,
+    ...rest
+  } = props;
 
   const renderFooter = () => {
-    if (footer === null || !footer) return null;
+    if (footer === null) return null;
     if (footer !== undefined) return footer;
 
     return (
-      <div className={styles.drawerFooter}>
-        <div className={styles.cancelButton}>
-          <Button className={styles.cancelButton} onClick={onClose}>
-            {Buttons.CLEAR_FILTERS}
-          </Button>
-        </div>
-        <div>
-          <Button className={styles.confirmButton}>
-            {Buttons.APPLY_FILTERS}
-          </Button>
-        </div>
-      </div>
+      <DrawerFooter
+        cancelText={cancelText}
+        okText={okText}
+        cancelButtonProps={cancelButtonProps}
+        okButtonProps={okButtonProps}
+        okButtonType={okButtonType}
+        okButtonHtmlType={okButtonHtmlType}
+        confirmLoading={confirmLoading}
+        onClose={onClose}
+        handleOk={handleOk}
+      />
     );
   };
 
