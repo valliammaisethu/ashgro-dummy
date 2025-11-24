@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import { IconArrowRight, IconDownload } from "obra-icons-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
@@ -48,13 +48,16 @@ const BulkImportModal = (props: BulkImportModalProps) => {
     useMutation(bulkUploadMembers());
   const { mutate: uploadProspects, isPending: isProspectsUploading } =
     useMutation(bulkUploadProspects());
-  const { refetch: refetchTemplate, isFetching: isDownloading } = useQuery(
-    downloadTemplate(clubId, getTemplateEntity()),
-  );
+  const { mutate: downloadTemplateMutate, isPending: isDownloading } =
+    useMutation({
+      ...downloadTemplate(),
+      onSuccess: (data) => {
+        downloadTemplateFile(data, getTemplateEntity());
+      },
+    });
 
-  const handleDownloadTemplate = async () => {
-    const { data } = await refetchTemplate();
-    if (data) downloadTemplateFile(data, getTemplateEntity());
+  const handleDownloadTemplate = () => {
+    downloadTemplateMutate({ clubId, entity: getTemplateEntity() });
   };
 
   const handleFileUploaded = (s3Key: string) => {

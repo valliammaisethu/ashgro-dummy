@@ -7,6 +7,8 @@ import { formatTimeRange } from "../utils/calendarUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { CalendarEvent, EventsPopoverProps } from "src/shared/types/calender";
 import MeetingPreview from "./MeetingPreview";
+import { SLOT_STATUS } from "src/enums/calender.enum";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 import styles from "../DateCell/dateCell.module.scss";
 
@@ -33,17 +35,23 @@ const EventsPopover: React.FC<EventsPopoverProps> = ({
       <div className={styles.popoverEventsScroll}>
         {displayEvents?.map((event) => (
           <div key={event.id} className={styles.popoverEvent}>
-            {!event?.resource?.chatbot ? (
+            <ConditionalRenderComponent
+              visible={
+                !event?.resource?.chatbot ||
+                event?.resource?.status === SLOT_STATUS.BOOKED
+              }
+              fallback={
+                <div className={clsx(styles.eventTitle, styles.chatbotTime)}>
+                  <p>{formatTimeRange(event.start, event.end)}</p>
+                </div>
+              }
+            >
               <MeetingPreview
                 event={{ ...event, date }}
                 onReschedule={handleReschedule({ ...event, date })}
                 isMorePopup
               />
-            ) : (
-              <div className={clsx(styles.eventTitle, styles.chatbotTime)}>
-                <p>{formatTimeRange(event.start, event.end)}</p>
-              </div>
-            )}
+            </ConditionalRenderComponent>
           </div>
         ))}
       </div>

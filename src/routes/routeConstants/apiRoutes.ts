@@ -22,10 +22,14 @@ export const ApiRoutes = {
 
   MEMBERSHIP_STATUS: "settings/:id/membershipStatuses",
   MEMBERSHIP_TYPE_STATUS: "settings/:id/membershipCategories",
+
   MEMBERS: "members",
+
   STAFF_MEMBER_DETAILS: "/staffs/:id",
+
   MEMBERS_LIST: "/members",
   MEMBER_DETAILS: "/members/:id",
+
   SEND_EMAIL: "/email",
   PROSPECT_EMAIL_RECIPIENTS: "/prospects/recipients",
   MEMBER_EMAIL_RECIPIENTS: "/members/recipients",
@@ -51,6 +55,7 @@ export const ApiRoutes = {
   EMAIL_TEMPLATE_DETAIL: "/settings/:id/emailTemplate/:emailTemplateId",
   EMAIL_TEMPLATES_SETTINGS: "/settings/:clubId/emailTemplate",
   UPDATE_EMAIL_TEMPLATE_SETTINGS: "/settings/:clubId/emailTemplate/:id",
+
   STAFF_MEMBERS: "/staffs",
 
   GET_CLUBS: "/clubs",
@@ -65,4 +70,6 @@ export const ApiRoutes = {
   BULK_IMPORT_MEMBERS: "/members/import",
   BULK_IMPORT_PROSPECTS: "/prospects/import",
   DOWNLOAD_TEMPLATE: "/clubs/:id/downloadTemplate",
+
+  CHAT_BOT_SLOTS: "calendar/chatbotSlots",
 };
