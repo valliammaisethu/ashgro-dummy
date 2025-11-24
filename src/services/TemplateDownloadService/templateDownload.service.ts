@@ -1,5 +1,6 @@
 import { UseMutationOptions } from "@tanstack/react-query";
 import { generatePath } from "react-router-dom";
+import { ResponseTypes } from "src/enums/responseTypes.enum";
 
 import { TemplateEntity } from "src/enums/templateEntity.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
@@ -22,7 +23,7 @@ export const TemplateDownloadService = () => {
       const url = generatePath(DOWNLOAD_TEMPLATE, { id: clubId });
       const { data } = await axiosInstance.get(url, {
         params: { entity },
-        responseType: "blob",
+        responseType: ResponseTypes.BLOB,
       });
       return data;
     },

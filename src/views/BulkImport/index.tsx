@@ -22,7 +22,6 @@ import { BulkImportModalProps } from "src/shared/types/bulkImport.type";
 import { BulkUploadService } from "src/services/BulkUploadService/bulkUpload.service";
 import { TemplateDownloadService } from "src/services/TemplateDownloadService/templateDownload.service";
 import { downloadTemplateFile } from "src/services/TemplateDownloadService/utils";
-import { BulkUploadParams } from "src/models/bulkUpload.model";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 
 import styles from "./bulkImport.module.scss";
@@ -33,7 +32,7 @@ const BulkImportModal = (props: BulkImportModalProps) => {
   const [isUploaded, setIsUploaded] = useState(false);
   const [uploadedS3Key, setUploadedS3Key] = useState<string>("");
 
-  const { bulkUploadMembers, bulkUploadProspects } = BulkUploadService();
+  const { bulkUpload } = BulkUploadService();
   const { downloadTemplate } = TemplateDownloadService();
 
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
@@ -44,10 +43,9 @@ const BulkImportModal = (props: BulkImportModalProps) => {
       : TemplateEntity.PROSPECT;
   };
 
-  const { mutate: uploadMembers, isPending: isMembersUploading } =
-    useMutation(bulkUploadMembers());
-  const { mutate: uploadProspects, isPending: isProspectsUploading } =
-    useMutation(bulkUploadProspects());
+  const { mutate: upload, isPending: isBulkUploading } =
+    useMutation(bulkUpload());
+
   const { mutate: downloadTemplateMutate, isPending: isDownloading } =
     useMutation({
       ...downloadTemplate(),
@@ -68,26 +66,19 @@ const BulkImportModal = (props: BulkImportModalProps) => {
   const handleImport = () => {
     if (!uploadedS3Key || !clubId) return;
 
-    const params: BulkUploadParams = {
-      s3Key: uploadedS3Key,
-      clubId: clubId,
-    };
-
-    if (importMode === BulkModes.MEMBERS) {
-      uploadMembers(params, {
+    upload(
+      {
+        s3Key: uploadedS3Key,
+        clubId: clubId,
+        entity: getTemplateEntity(),
+      },
+      {
         onSuccess: () => {
           onImport?.();
           handleClose();
         },
-      });
-    } else if (importMode === BulkModes.PROSPECTS) {
-      uploadProspects(params, {
-        onSuccess: () => {
-          onImport?.();
-          handleClose();
-        },
-      });
-    }
+      },
+    );
   };
 
   const handleClose = () => {
@@ -132,10 +123,8 @@ const BulkImportModal = (props: BulkImportModalProps) => {
             {isUploaded && (
               <Button
                 onClick={handleImport}
-                disabled={
-                  !isUploaded || isMembersUploading || isProspectsUploading
-                }
-                loading={isMembersUploading || isProspectsUploading}
+                disabled={!isUploaded || isBulkUploading}
+                loading={isBulkUploading}
                 className={styles.importButton}
               >
                 {Buttons.IMPORT}

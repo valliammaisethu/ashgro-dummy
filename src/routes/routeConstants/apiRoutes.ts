@@ -67,8 +67,7 @@ export const ApiRoutes = {
   MEMBERS_META_LIST: "/members/minimal",
   PROSPECTS_META_LIST: "/prospects/minimal",
 
-  BULK_IMPORT_MEMBERS: "/members/import",
-  BULK_IMPORT_PROSPECTS: "/prospects/import",
+  BULK_IMPORT: "/:entity/import",
   DOWNLOAD_TEMPLATE: "/clubs/:id/downloadTemplate",
 
   CHAT_BOT_SLOTS: "calendar/chatbotSlots",

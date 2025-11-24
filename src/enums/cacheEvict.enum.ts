@@ -30,8 +30,7 @@ export enum MutationKeys {
   EDIT_CLUB = "editClub",
   EDIT_CHATBOT = "editChatbot",
 
-  BULK_UPLOAD_MEMBERS = "bulkUploadMembers",
-  BULK_UPLOAD_PROSPECTS = "bulkUploadProspects",
+  BULK_UPLOAD = "bulkUpload",
 }
 
 export enum QueryKeys {
