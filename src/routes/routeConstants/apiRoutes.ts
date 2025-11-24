@@ -61,4 +61,5 @@ export const ApiRoutes = {
   CANCEL_MEETING: "calendar/:slotId",
   MEMBERS_META_LIST: "/members/minimal",
   PROSPECTS_META_LIST: "/prospects/minimal",
+  CHAT_BOT_SLOTS: "calendar/chatbotSlots",
 };

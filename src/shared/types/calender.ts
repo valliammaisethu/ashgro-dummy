@@ -1,5 +1,9 @@
+import { Dayjs } from "dayjs";
 import { ReactNode } from "react";
 import { ToolbarProps as AntdToolbarProps } from "react-big-calendar";
+
+import { DateFormats } from "src/enums/dateFormats.enum";
+import { TimeRangeItem } from "src/models/calender.model";
 
 export interface CalendarEvent {
   id?: string;
@@ -39,6 +43,7 @@ export interface BookMeetingProps {
 
 export interface ToolbarProps extends AntdToolbarProps {
   onBookMeeting?: () => void;
+  onChatBotSlotClick?: () => void;
 }
 
 export interface MeetingPreviewProps {
@@ -60,4 +65,33 @@ export interface BookingFormState {
   visible: boolean;
   selectedDate?: Date | null;
   selectedEvent?: CalendarEvent | null;
+}
+
+export interface ChatbotSlotProps {
+  isOpen: boolean;
+  onClose: () => void;
+  selectedDate?: string;
+  availableSlots?: CalendarEvent[];
+}
+
+export interface OccupiedRange {
+  start: number;
+  end: number;
+}
+
+export interface OverlapTimeRange {
+  startMinutes: number;
+  endMinutes: number;
+  disabledRanges: OccupiedRange[];
+}
+
+export interface DisableTimeRange {
+  current: Dayjs | null;
+  disabledRanges: OccupiedRange[];
+}
+
+export interface GetOccupiedRangesParams {
+  timeRanges?: TimeRangeItem[];
+  currentIndex: number;
+  format?: DateFormats;
 }
