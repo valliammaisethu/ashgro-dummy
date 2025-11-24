@@ -1,15 +1,11 @@
 import React from "react";
-import {
-  IconEmail,
-  IconUserAdd,
-  IconDocumentUpload,
-  IconClose,
-} from "obra-icons-react";
 
 import SearchField from "src/shared/components/SearchField";
-import Button from "src/shared/components/Button";
-import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
-import { Colors } from "src/enums/colors.enum";
+import BulkImportButton from "src/shared/components/atoms/Buttons/BulkImportButton";
+import BulkMailButton from "src/shared/components/atoms/Buttons/BulkMailButton";
+import ClearSelectionButton from "src/shared/components/atoms/Buttons/ClearSelectionButton";
+import AddUserButton from "src/shared/components/atoms/Buttons/AddUserButton";
+import { Buttons } from "src/enums/buttons.enum";
 import { ProspectListingHeaderProps } from "src/shared/types/prospects.type";
 import { bulkImportProspects } from "../constants";
 
@@ -34,44 +30,16 @@ const Header = ({
         filtersActive={filtersActive}
       />
       <div className={styles.actions}>
-        {Boolean(selectedEmails) && (
-          <div onClick={onClear} className={styles.clearSelection}>
-            <IconClose
-              strokeWidth={1.75}
-              color={Colors.ASHGRO_NAVY}
-              size={20}
-            />
-            {Buttons.CLEAR_SELECTION}
-          </div>
-        )}
+        {Boolean(selectedEmails) && <ClearSelectionButton onClick={onClear} />}
         {!selectedEmails && (
-          <Button
-            icon={<IconDocumentUpload size={20} />}
-            className={styles.filterButton}
+          <BulkImportButton
             onClick={onBulkImport}
-            tooltip={{
-              title: bulkImportProspects,
-            }}
+            tooltip={bulkImportProspects}
           />
         )}
-        <Button
-          onClick={onBulkMail}
-          className={styles.bulkUploadButton}
-          icon={<IconEmail className={styles.bulkMailIcon} size={20} />}
-          disabled={!selectedEmails}
-        >
-          {Buttons.BULK_MAIL}
-        </Button>
-
+        <BulkMailButton onClick={onBulkMail} disabled={!selectedEmails} />
         {!selectedEmails && (
-          <Button
-            className={styles.addProspectButton}
-            type={ButtonTypes.SECONDARY}
-            icon={<IconUserAdd size={20} />}
-            onClick={onAddProspect}
-          >
-            {Buttons.ADD_PROSPECT}
-          </Button>
+          <AddUserButton onClick={onAddProspect} label={Buttons.ADD_PROSPECT} />
         )}
       </div>
     </div>

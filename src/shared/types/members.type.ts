@@ -13,7 +13,7 @@ export interface MembersHeaderProps {
   onFilter: () => void;
   onClear: () => void;
   onBulkMail?: () => void;
-  onBulkImport?: () => void;
+  onBulkImport: () => void;
   filtersActive: boolean;
   selectedEmails?: number;
 }
