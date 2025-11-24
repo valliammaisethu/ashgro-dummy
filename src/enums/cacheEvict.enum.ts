@@ -16,6 +16,8 @@ export enum MutationKeys {
   DELETE_RESOURCE = "deleteResource",
 
   SEND_EMAIL = "sendEmail",
+  VERIFY_EMAIL = "verifyEmail",
+
   ADD_LEAD_SOURCE_OR_STATUS = "addLeadOrStatus",
   EDIT_LEAD_SOURCE_OR_STATUS = "editLeadOrStatus",
   DELETE_LEAD = "deleteLead",
