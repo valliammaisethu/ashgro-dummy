@@ -31,6 +31,8 @@ export enum MutationKeys {
   ADD_CLUB = "addClub",
   EDIT_CLUB = "editClub",
   EDIT_CHATBOT = "editChatbot",
+
+  BULK_UPLOAD = "bulkUpload",
 }
 
 export enum QueryKeys {
@@ -58,6 +60,7 @@ export enum QueryKeys {
   GET_EMAIL_TEMPLATE_DETAIL = "getEmailTemplateDetail",
   GET_MEMBERS = "getMembers",
   GET_STAFF_MEMBER_LIST = "getStaffMemberList",
+  DOWNLOAD_TEMPLATE = "downloadTemplate",
 
   GET_CLUBS = "getClubs",
   GET_CLUB_PROFILE = "getClubProfile",

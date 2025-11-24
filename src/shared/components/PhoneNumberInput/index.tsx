@@ -23,8 +23,25 @@ const PhoneNumberField = ({
 
   const phoneValue = watch(name);
 
-  const formatAndSetPhoneNumber = (input: string) => {
+  const formatAndSetPhoneNumber = (
+    input: string,
+    previousValue: string | undefined,
+  ) => {
     const raw = getDigitsOnly(input);
+    const prevRaw = getDigitsOnly(previousValue ?? "");
+
+    // If user deleted a formatting char, remove last digit instead
+    if (raw && prevRaw && raw === prevRaw) {
+      const trimmed = raw.slice(0, -1);
+      if (!trimmed) {
+        setValue(name, undefined);
+        return;
+      }
+      const formatted = new AsYouType("US").input(trimmed);
+      setValue(name, formatted, { shouldValidate: true });
+      return;
+    }
+
     if (!raw) {
       setValue(name, undefined);
       return;
@@ -34,7 +51,7 @@ const PhoneNumberField = ({
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    formatAndSetPhoneNumber(e.target.value);
+    formatAndSetPhoneNumber(e.target.value, phoneValue);
 
   return (
     <div className={styles.wrapper}>
