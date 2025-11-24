@@ -1,18 +1,15 @@
 import React from "react";
-import {
-  IconEmail,
-  IconUserAdd,
-  IconDocumentUpload,
-  IconClose,
-} from "obra-icons-react";
+import { IconEmail, IconUserAdd, IconClose } from "obra-icons-react";
 
 import SearchField from "src/shared/components/SearchField";
 import Button from "src/shared/components/Button";
+import { importMembers } from "../constant";
 import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
 import { Colors } from "src/enums/colors.enum";
 import { MembersHeaderProps } from "src/shared/types/members.type";
 
 import styles from "../members.module.scss";
+import BulkImportButton from "src/shared/components/atoms/BulkImportButton";
 
 const Header = ({
   onAddMember,
@@ -20,6 +17,7 @@ const Header = ({
   onFilter,
   onClear,
   onBulkMail,
+  onBulkImport,
   selectedEmails,
   filtersActive,
 }: MembersHeaderProps) => {
@@ -43,10 +41,7 @@ const Header = ({
           </div>
         )}
         {!selectedEmails && (
-          <Button
-            icon={<IconDocumentUpload size={20} />}
-            className={styles.filterButton}
-          />
+          <BulkImportButton onClick={onBulkImport} tooltip={importMembers} />
         )}
         <Button
           onClick={onBulkMail}

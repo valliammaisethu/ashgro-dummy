@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  IconEmail,
-  IconUserAdd,
-  IconDocumentUpload,
-  IconClose,
-} from "obra-icons-react";
+import { IconEmail, IconUserAdd, IconClose } from "obra-icons-react";
 
 import SearchField from "src/shared/components/SearchField";
 import Button from "src/shared/components/Button";
@@ -13,14 +8,17 @@ import { ProspectListingHeaderProps } from "src/shared/types/prospects.type";
 
 import styles from "../listing.module.scss";
 import { Colors } from "src/enums/colors.enum";
+import BulkImportButton from "src/shared/components/atoms/BulkImportButton";
+import { bulkImportProspects } from "../constants";
 
 const Header = ({
   onAddProspect,
   onSearch,
   onFilter,
   onClear,
-  filtersActive,
+  onBulkImport,
   onBulkMail,
+  filtersActive,
   selectedEmails,
 }: ProspectListingHeaderProps) => {
   return (
@@ -43,9 +41,9 @@ const Header = ({
           </div>
         )}
         {!selectedEmails && (
-          <Button
-            icon={<IconDocumentUpload size={20} />}
-            className={styles.filterButton}
+          <BulkImportButton
+            onClick={onBulkImport}
+            tooltip={bulkImportProspects}
           />
         )}
         <Button

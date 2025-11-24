@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IconChevronDown, IconEdit } from "obra-icons-react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { Select } from "antd";
 
@@ -20,12 +20,13 @@ import { ClubService } from "src/services/ClubService/club.service";
 import { Colors } from "src/enums/colors.enum";
 
 import styles from "./individualClub.module.scss";
+import { QueryKeys } from "src/enums/cacheEvict.enum";
 
 const IndividualClub = () => {
   const { id = "" } = useParams();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-  const { getClubProfile } = ClubService();
+  const queryClient = useQueryClient();
+  const { getClubProfile, updateStatus } = ClubService();
 
   const {
     data: clubData,
@@ -33,6 +34,19 @@ const IndividualClub = () => {
     isSuccess,
     isFetching,
   } = useQuery(getClubProfile(id));
+
+  const {
+    mutateAsync: updateChatbotStatusMutate,
+    isPending: isChatbotUpdatePending,
+  } = useMutation(updateStatus());
+
+  const {
+    mutateAsync: updateClubStatusMutate,
+    isPending: isStatusUpdatePending,
+  } = useMutation(updateStatus());
+
+  const handleChatbotStatusChange = async (value: boolean) =>
+    await updateChatbotStatusMutate({ chatbotEnabled: value, id });
 
   const handleEdit = () => {
     setIsEditModalOpen(true);
@@ -46,7 +60,18 @@ const IndividualClub = () => {
     // TODO: Need to do integration
   };
 
-  const handleStatusChange = async () => {};
+  const handleStatusChange = async (value: string) => {
+    await updateClubStatusMutate(
+      { status: value, id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: [QueryKeys.GET_CLUB_PROFILE],
+          });
+        },
+      },
+    );
+  };
 
   return (
     <div className={styles.individualClub}>
@@ -68,6 +93,8 @@ const IndividualClub = () => {
                   name={clubStatusField}
                   checked={clubData?.club?.chatbotEnabled}
                   className={styles.statusSwitch}
+                  onChange={handleChatbotStatusChange}
+                  loading={isChatbotUpdatePending}
                 />
                 <div onClick={stopPropagation} className={styles.statusCol}>
                   <Select
@@ -76,6 +103,7 @@ const IndividualClub = () => {
                     style={{ width: 140 }}
                     onChange={handleStatusChange}
                     suffixIcon={<IconChevronDown size={20} />}
+                    loading={isStatusUpdatePending}
                   >
                     {ClubStatusOptions?.map(({ value, label = "" }) => (
                       <Select.Option key={value} value={value}>
