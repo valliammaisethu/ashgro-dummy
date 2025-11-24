@@ -2,6 +2,7 @@ export enum MutationKeys {
   LOGIN = "login",
   FORGOT_PASSWORD = "forgotPassword",
   RESET_PASSWORD = "resetPassword",
+  CHANGE_PASSWORD = "changePassword",
   LOGOUT = "logout",
   ATTACHMENT_UPLOAD = "attachmentUpload",
   ATTACHMENT_DELETE = "attachmentDelete",

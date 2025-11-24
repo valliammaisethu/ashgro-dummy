@@ -23,18 +23,25 @@ import {
 } from "src/shared/types/myProfile.type";
 import { myProfileConstants } from "./constants";
 import EditProfile from "./EditProfile";
+import ChangePassword from "./ChangePassword";
 
 import styles from "./myProfile.module.scss";
 
 const MyProfileContent: React.FC<MyProfileContentProps> = ({
   onClose,
   onCloseEditProfile,
+  onCloseChangePassword,
 }) => {
   const user = localStorageHelper.getItem(LocalStorageKeys.USER);
 
   const handleEditProfileForm = () => {
     onClose();
     onCloseEditProfile();
+  };
+
+  const handleChangePassword = () => {
+    onClose();
+    onCloseChangePassword();
   };
 
   return (
@@ -74,7 +81,10 @@ const MyProfileContent: React.FC<MyProfileContentProps> = ({
           <Button onClick={handleEditProfileForm} className={styles.editButton}>
             {Buttons.EDIT_PROFILE}
           </Button>
-          <Button className={clsx(styles.editButton, styles.changePassword)}>
+          <Button
+            onClick={handleChangePassword}
+            className={clsx(styles.editButton, styles.changePassword)}
+          >
             {Buttons.CHANGE_PASSWORD}
           </Button>
         </div>
@@ -87,6 +97,7 @@ const MyProfile = () => {
   const [profileState, setProfileState] = useState<ProfileState>({
     editProfileVisible: false,
     myProfileVisible: false,
+    changePasswordVisible: false,
   });
 
   const handleMyProfile = () =>
@@ -101,6 +112,12 @@ const MyProfile = () => {
       editProfileVisible: !prev.editProfileVisible,
     }));
 
+  const handleChangePassword = () =>
+    setProfileState((prev) => ({
+      ...prev,
+      changePasswordVisible: !prev.changePasswordVisible,
+    }));
+
   return (
     <Fragment>
       <Popover
@@ -113,6 +130,7 @@ const MyProfile = () => {
         content={
           <MyProfileContent
             onCloseEditProfile={handleEditProfile}
+            onCloseChangePassword={handleChangePassword}
             onClose={handleMyProfile}
           />
         }
@@ -122,6 +140,10 @@ const MyProfile = () => {
       <EditProfile
         onClose={handleEditProfile}
         visible={profileState.editProfileVisible}
+      />
+      <ChangePassword
+        onClose={handleChangePassword}
+        visible={profileState.changePasswordVisible}
       />
     </Fragment>
   );

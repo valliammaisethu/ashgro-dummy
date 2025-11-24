@@ -5,6 +5,7 @@ import axiosInstance from "src/interceptor/axiosInstance";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { MutationKeys } from "src/enums/cacheEvict.enum";
 import {
+  ChangePassword,
   LoginRequest,
   LoginResponse,
   ResetPassword,
@@ -15,11 +16,18 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import { logoutMessages } from "src/constants/sharedComponents";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
-const { USER_LOGIN, FORGOT_PASSWORD, RESET_PASSWORD, USER_LOGOUT } = ApiRoutes;
+const {
+  USER_LOGIN,
+  FORGOT_PASSWORD,
+  RESET_PASSWORD,
+  CHANGE_PASSWORD,
+  USER_LOGOUT,
+} = ApiRoutes;
 const {
   LOGIN,
   FORGOT_PASSWORD: FORGOT_PASSWORD_KEY,
   RESET_PASSWORD: RESET_PASSWORD_KEY,
+  CHANGE_PASSWORD: CHANGE_PASSWORD_KEY,
   LOGOUT,
 } = MutationKeys;
 
@@ -94,6 +102,22 @@ export const AuthService = () => {
     },
   });
 
+  const changePassword = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    ChangePassword
+  > => ({
+    mutationKey: [CHANGE_PASSWORD_KEY],
+    mutationFn: async (payload: ChangePassword) => {
+      const serializedData = serialize(ChangePassword, payload);
+      const response = await axiosInstance.patch(CHANGE_PASSWORD, {
+        user: serializedData,
+      });
+
+      return deserialize(ResponseModel, response.data);
+    },
+  });
+
   const logout = () => ({
     mutationKey: [LOGOUT],
     mutationFn: async () => {
@@ -108,5 +132,5 @@ export const AuthService = () => {
     },
   });
 
-  return { loginUser, forgotPassword, resetPassword, logout };
+  return { loginUser, forgotPassword, resetPassword, changePassword, logout };
 };

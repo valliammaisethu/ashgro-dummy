@@ -9,6 +9,6 @@ export const passwordSuffix = (
   togglePasswordVisibility: MouseEventHandler,
 ) => (
   <span className={styles.passwordIcon} onClick={togglePasswordVisibility}>
-    {showPassword ? <IconEye /> : <IconEyeOff />}
+    {showPassword ? <IconEye size={20} /> : <IconEyeOff size={20} />}
   </span>
 );
