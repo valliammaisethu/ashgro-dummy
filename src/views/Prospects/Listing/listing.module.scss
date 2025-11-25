@@ -83,26 +83,6 @@
   }
 }
 
-.filterButton {
-  &:global(.ant-btn) {
-    background-color: $search-bg;
-    color: $filter-icon;
-    border: 1px solid $search-bg;
-    border-radius: 1.4rem;
-    height: 4.4rem;
-    width: 4.4rem;
-  }
-}
-
-.filterButton:global(
-    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
-  ):hover {
-  background-color: $search-bg;
-  color: $filter-icon;
-  border: 1px solid $search-bg;
-  border-radius: 1.4rem;
-}
-
 .header {
   @include flex-container(space-between, center, row);
 }

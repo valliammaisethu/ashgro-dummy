@@ -20,7 +20,7 @@ export const FORM_CONSTANTS = {
     BIRTH_DATE: "Birth Date",
     RESIDENTIAL_ADDRESS: "Residential Address",
     STAFF_DEPARTMENT: "Department",
-    TITLE: "title",
+    TITLE: "Title",
     WORK_ANNIVERSARY: "Work Anniversary",
   },
 

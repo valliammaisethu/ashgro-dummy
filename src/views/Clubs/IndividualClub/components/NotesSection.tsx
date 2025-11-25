@@ -11,7 +11,7 @@ const NotesSection: React.FC<ClubInfoProps> = ({ data }) => {
 
   return (
     <ConditionalRender
-      records={notes ? [notes] : []}
+      records={[notes]}
       isPending={false}
       isSuccess={true}
       className={styles.emptyWrapper}

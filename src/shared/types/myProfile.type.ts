@@ -1,6 +1,5 @@
 export interface MyProfileContentProps {
-  onClose: () => void;
-  onCloseEditProfile: () => void;
+  onOpenEditProfile: () => void;
 }
 
 export interface EditProfileProps {

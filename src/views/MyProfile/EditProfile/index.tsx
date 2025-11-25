@@ -1,19 +1,19 @@
 import React from "react";
-import Modal from "src/shared/components/Modal";
+import { Col, Divider, Row } from "antd";
+import { FieldValues } from "react-hook-form";
 
-import { EditProfileProps } from "src/shared/types/myProfile.type";
 import { fields, labels, myProfileConstants, placeholders } from "../constants";
-import { Buttons } from "src/enums/buttons.enum";
+import { EditProfileProps } from "src/shared/types/myProfile.type";
 import Form from "src/shared/components/Form";
 import ProfilePictureInput from "src/shared/components/ProfilePictureInput";
-import { Col, Divider, Row } from "antd";
+import Modal from "src/shared/components/Modal";
 import InputField from "src/shared/components/InputField";
-import { INPUT_TYPE } from "src/enums/inputType";
 import PhoneNumberField from "src/shared/components/PhoneNumberInput";
-import { FieldValues } from "react-hook-form";
 import useForm from "src/shared/components/UseForm";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { Buttons } from "src/enums/buttons.enum";
+import { INPUT_TYPE } from "src/enums/inputType";
 
 const { editProfile } = myProfileConstants;
 const { email, firstName, lastName, phoneNumber } = labels;
@@ -35,7 +35,7 @@ const EditProfile = (props: EditProfileProps) => {
   const { onClose, visible } = props;
   const user = localStorageHelper.getItem(LocalStorageKeys.USER);
   const methods = useForm({
-    values: {
+    defaultValues: {
       [firstNameName]: user?.firstName,
       [lastNameName]: user?.lastName,
       [emailName]: user?.email,

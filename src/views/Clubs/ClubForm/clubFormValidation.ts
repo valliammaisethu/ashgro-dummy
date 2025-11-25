@@ -88,3 +88,5 @@ export const clubFormValidationSchema = yup.object().shape({
     countryCode: yup.string().optional().notRequired(),
   }),
 });
+
+export type ClubFormType = yup.InferType<typeof clubFormValidationSchema>;
