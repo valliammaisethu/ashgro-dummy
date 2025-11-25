@@ -53,6 +53,9 @@ export class ChatbotPayload {
 
   @serializable
   slotId?: number;
+
+  @serializable
+  isSlotBooking?: boolean;
 }
 
 export class ChatbotProfile {

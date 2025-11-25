@@ -7,7 +7,7 @@
 
   const BASE = "https://constitutional-violet-swift.rootquotient.revolte.io/chatbot";
 
-  const BASE_API_URL = `https://molecular-tan-reptile.rootquotient.revolte.io/api/v1/chatbot?clubId=${clubId}`;
+  const BASE_API_URL = `https://molecular-tan-reptile.rootquotient.revolte.io/api/v1/chatbot/${clubId}`;
 
   const IFRAME_URL = `${BASE}/?clubId=${encodeURIComponent(
     clubId
