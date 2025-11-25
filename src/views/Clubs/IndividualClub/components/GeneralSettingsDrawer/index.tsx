@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import Drawer from "src/shared/components/Drawer";
@@ -34,15 +34,14 @@ const GeneralSettingsDrawer: React.FC<GeneralSettingsDrawerProps> = ({
     },
   });
 
-  React.useEffect(() => {
-    if (open) {
+  useEffect(() => {
+    if (open)
       methods.reset({
         webFormsEnabled: webFormsEnabled ?? false,
         bulkEmailEnabled: bulkEmailEnabled ?? false,
         emailTemplatesAllowed: emailTemplatesAllowed ?? 0,
         customChartsAllowed: customChartsAllowed ?? 0,
       });
-    }
   }, [
     open,
     webFormsEnabled,
@@ -52,9 +51,7 @@ const GeneralSettingsDrawer: React.FC<GeneralSettingsDrawerProps> = ({
     methods,
   ]);
 
-  const handleFormSubmit = (data: GeneralSettingsData) => {
-    onSave(data, clubId);
-  };
+  const handleFormSubmit = (data: GeneralSettingsData) => onSave(data, clubId);
 
   return (
     <Drawer

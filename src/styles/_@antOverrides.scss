@@ -68,6 +68,12 @@
   &:disabled {
     opacity: 50%;
   }
+  &:hover {
+    opacity: 70%;
+    &:disabled {
+      opacity: 50%;
+    }
+  }
 
   /* Primary button - only apply gold styles when it's explicitly a primary button */
   &.ant-btn-primary {
@@ -793,4 +799,9 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 .ant-popover-inner-content {
   background-color: $ashgro-white;
   border-radius: 12px;
+}
+
+.ant-btn-color-link.ant-btn-variant-link:disabled {
+  border-color: unset;
+  color: unset;
 }

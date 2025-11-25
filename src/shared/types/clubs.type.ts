@@ -1,5 +1,7 @@
 import { ClubSettingsTypes } from "src/enums/clubSettingsTypes.enum";
+import { Dispatch, SetStateAction } from "react";
 import { ClubProfile } from "src/models/club.model";
+import { QueryParams } from "src/models/queryParams.model";
 
 export interface ClubFormProps {
   open: boolean;
@@ -9,10 +11,13 @@ export interface ClubFormProps {
 
 export interface ClubListingHeaderProps {
   onAddClub?: () => void;
+  onSearch: (searchTerm: string) => void;
 }
 
 export interface ClubListingTableProps {
   onEditClub: (clubId: string) => void;
+  queryParams: QueryParams;
+  setQueryParams: Dispatch<SetStateAction<QueryParams>>;
 }
 
 export interface ClubInfoProps {
@@ -24,6 +29,7 @@ export interface ClubFormState {
   clubId: string | null;
 }
 export interface ClubDetailsHeaderProps {
+  isFetching?: boolean;
   onChatbotQuestions?: () => void;
   onSettings?: () => void;
 }

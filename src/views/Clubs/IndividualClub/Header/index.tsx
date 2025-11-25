@@ -9,31 +9,35 @@ import { ButtonTypes } from "src/enums/buttons.enum";
 import { ClubDetailsHeaderProps } from "src/shared/types/clubs.type";
 
 import styles from "../individualClub.module.scss";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 const Header: React.FC<ClubDetailsHeaderProps> = ({
+  isFetching,
   onChatbotQuestions,
   onSettings,
 }) => {
   return (
-    <div className={styles.header}>
-      <BackButton />
-      <div className={styles.headerRight}>
-        <Button
-          onClick={onSettings}
-          icon={
-            <IconSettings color={Colors.MODAL_CLOSE_ICON} strokeWidth={1.5} />
-          }
-          className={styles.settingsButton}
-        />
-        <Button
-          onClick={onChatbotQuestions}
-          className={styles.chatbotButton}
-          type={ButtonTypes.SECONDARY}
-        >
-          {headerConstants.chatbotQuestions}
-        </Button>
+    <ConditionalRenderComponent hideFallback visible={!isFetching}>
+      <div className={styles.header}>
+        <BackButton />
+        <div className={styles.headerRight}>
+          <Button
+            onClick={onSettings}
+            icon={
+              <IconSettings color={Colors.MODAL_CLOSE_ICON} strokeWidth={1.5} />
+            }
+            className={styles.settingsButton}
+          />
+          <Button
+            onClick={onChatbotQuestions}
+            className={styles.chatbotButton}
+            type={ButtonTypes.LINK}
+          >
+            {headerConstants.chatbotQuestions}
+          </Button>
+        </div>
       </div>
-    </div>
+    </ConditionalRenderComponent>
   );
 };
 

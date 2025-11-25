@@ -29,7 +29,6 @@ export const DrawerFooter: React.FC<DrawerFooterProps> = ({
 }) => {
   const handleOkClick = handleOk ?? onClose;
 
-  // Extract specific props to avoid spreading them
   const {
     className: cancelClassName,
     onClick: cancelOnClick,
@@ -44,7 +43,6 @@ export const DrawerFooter: React.FC<DrawerFooterProps> = ({
     ...restOkProps
   } = okButtonProps;
 
-  // Merge classNames
   const finalCancelClassName = [styles.cancelButton, cancelClassName]
     .filter(Boolean)
     .join(" ");
@@ -53,7 +51,6 @@ export const DrawerFooter: React.FC<DrawerFooterProps> = ({
     .filter(Boolean)
     .join(" ");
 
-  // Normalize loading prop to boolean
   const cancelLoadingValue =
     typeof cancelLoading === "boolean"
       ? cancelLoading

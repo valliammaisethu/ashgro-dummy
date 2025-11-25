@@ -51,10 +51,9 @@
     padding: 0.9rem 2.1rem;
     color: $ashgro-black;
     font-size: 1.4rem;
-    border: 1px solid;
+    border: 1px solid $incrementer-border;
     border-left: 0;
     border-right: 0;
-    border-color: $incrementer-border;
   }
 
   .decrementer {

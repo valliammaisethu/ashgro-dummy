@@ -1,11 +1,13 @@
 import React from "react";
-import { IconEmail, IconUserAdd, IconDocumentUpload } from "obra-icons-react";
 
 import SearchField from "src/shared/components/SearchField";
-import Button from "src/shared/components/Button";
-import { importMembers } from "../constant";
-import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
+import BulkImportButton from "src/shared/components/atoms/Buttons/BulkImportButton";
+import BulkMailButton from "src/shared/components/atoms/Buttons/BulkMailButton";
+import ClearSelectionButton from "src/shared/components/atoms/Buttons/ClearSelectionButton";
+import AddUserButton from "src/shared/components/atoms/Buttons/AddUserButton";
+import { Buttons } from "src/enums/buttons.enum";
 import { MembersHeaderProps } from "src/shared/types/members.type";
+import { importMembers } from "../constant";
 
 import styles from "../members.module.scss";
 
@@ -13,10 +15,11 @@ const Header = ({
   onAddMember,
   onSearch,
   onFilter,
+  onClear,
   onBulkMail,
   onBulkImport,
-  filtersActive,
   selectedEmails,
+  filtersActive,
 }: MembersHeaderProps) => {
   return (
     <div className={styles.header}>
@@ -27,34 +30,14 @@ const Header = ({
         filtersActive={filtersActive}
       />
       <div className={styles.actions}>
-        <Button
-          icon={<IconDocumentUpload size={20} />}
-          className={styles.filterButton}
-          onClick={onBulkImport}
-          tooltip={{
-            title: importMembers,
-          }}
-        />
-        <div>
-          <Button
-            onClick={onBulkMail}
-            className={styles.bulkUploadButton}
-            icon={<IconEmail className={styles.bulkMailIcon} size={20} />}
-            disabled={!selectedEmails}
-          >
-            {Buttons.BULK_MAIL}
-          </Button>
-        </div>
-        <div>
-          <Button
-            className={styles.addMemberButton}
-            type={ButtonTypes.SECONDARY}
-            icon={<IconUserAdd size={20} />}
-            onClick={onAddMember}
-          >
-            {Buttons.ADD_MEMBER}
-          </Button>
-        </div>
+        {Boolean(selectedEmails) && <ClearSelectionButton onClick={onClear} />}
+        {!selectedEmails && (
+          <BulkImportButton onClick={onBulkImport} tooltip={importMembers} />
+        )}
+        <BulkMailButton onClick={onBulkMail} disabled={!selectedEmails} />
+        {!selectedEmails && (
+          <AddUserButton onClick={onAddMember} label={Buttons.ADD_MEMBER} />
+        )}
       </div>
     </div>
   );

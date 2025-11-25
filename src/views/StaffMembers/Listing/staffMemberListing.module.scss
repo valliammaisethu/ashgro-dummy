@@ -2,16 +2,17 @@
 @import "src/styles/_helpers.scss";
 
 .listContainer {
-  margin-top: 1rem;
+  margin-top: 2rem;
 
   .rowContainer {
     display: grid;
-    grid-template-columns: 35% 27% 32% 05%;
+    grid-template-columns: 44% 29% 32% 05%;
     align-items: center;
     padding: 2rem 3.2rem;
     background-color: $ashgro-white;
     margin-bottom: 0.6rem;
     cursor: pointer;
+    margin-top: 0.6rem;
 
     :global(.actions-icons) {
       opacity: 0;
@@ -28,9 +29,6 @@
   }
 
   .rowItem {
-    width: 45rem;
-    text-align: center;
-    align-items: flex-start;
     color: $ashgro-navy;
     font-weight: 600;
     font-family: $font-secondary;

@@ -5,6 +5,7 @@ export const ApiRoutes = {
   REFRESH: "/auth/refresh",
   FORGOT_PASSWORD: "/auth/forgotPassword",
   RESET_PASSWORD: "/auth/resetPassword",
+  CHANGE_PASSWORD: "/auth/changePassword",
   ATTACHMENTS: "/attachments",
   ATTACHMENTS_SPECIFIC: "/attachments/:id",
   PROSPECTS: "/prospects",
