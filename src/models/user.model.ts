@@ -29,6 +29,15 @@ export class UserData {
 
   @serializable
   clubName?: string;
+
+  @serializable
+  email?: string;
+
+  @serializable
+  phone?: string;
+
+  @serializable
+  profilePicUrl?: string;
 }
 
 export class TokenData {
@@ -60,4 +69,15 @@ export class ResetPassword {
 
   @serializable
   token?: string;
+}
+
+export class ChangePassword {
+  @serializable
+  currentPassword?: string;
+
+  @serializable
+  newPassword?: string;
+
+  @serializable
+  confirmPassword?: string;
 }

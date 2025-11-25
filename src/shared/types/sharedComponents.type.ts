@@ -31,7 +31,7 @@ import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
 import { AttachmentTypes } from "src/enums/attachmentTypes.enum";
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
-  phoneCodeName: string;
+  phoneCodeName?: string;
   label?: string;
   required?: boolean;
 }
@@ -289,6 +289,22 @@ export interface FileUploadProps {
 
 export type QueryKeyType = readonly unknown[];
 
+export interface UploadAreaProps {
+  onFileUploaded?: (fileId: string, fileName: string) => void;
+  attachmentType?: string;
+  maxSizeMB?: number;
+  mainText?: string;
+  subText?: string;
+}
+
+export interface UploadAreaState {
+  isUploading: boolean;
+  uploadingFileName: string;
+  isUploaded: boolean;
+  isError?: boolean;
+  errorText?: string;
+  fileId: string;
+}
 export interface BulkImportButtonProps {
   onClick: () => void;
   tooltip: string;

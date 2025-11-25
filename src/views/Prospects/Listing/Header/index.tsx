@@ -1,11 +1,11 @@
 import React from "react";
 
+import { Buttons } from "src/enums/buttons.enum";
 import SearchField from "src/shared/components/SearchField";
 import BulkImportButton from "src/shared/components/atoms/Buttons/BulkImportButton";
 import BulkMailButton from "src/shared/components/atoms/Buttons/BulkMailButton";
 import ClearSelectionButton from "src/shared/components/atoms/Buttons/ClearSelectionButton";
 import AddUserButton from "src/shared/components/atoms/Buttons/AddUserButton";
-import { Buttons } from "src/enums/buttons.enum";
 import { ProspectListingHeaderProps } from "src/shared/types/prospects.type";
 import { bulkImportProspects } from "../constants";
 

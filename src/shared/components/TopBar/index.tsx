@@ -14,6 +14,7 @@ import { useUserRole } from "src/shared/hooks/useUserRole";
 import { clubAdminRoutes, superAdminRoutes } from "./constants";
 
 import styles from "./topBar.module.scss";
+import MyProfile from "src/views/MyProfile";
 
 const TopBar = () => {
   const navigate = useNavigate();
@@ -61,6 +62,7 @@ const TopBar = () => {
 
       <div className={styles.topBarEnd}>
         {!isSuperAdmin && <div className={styles.clubName}>{clubName}</div>}
+        {isSuperAdmin && <MyProfile />}
         <IconLogOut className={styles.logoutIcon} onClick={handleLogOut} />
       </div>
     </div>

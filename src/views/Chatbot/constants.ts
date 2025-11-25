@@ -10,14 +10,14 @@ export const CHATBOT_CONSTANTS = {
   closeEvent: "CLOSE_CHATBOT",
   expandEvent: "EXPAND_MAX",
   resizeEvent: "RESIZE_HEIGHT",
-  iconColor: "0F131C",
+  iconColor: "#0F131C",
   profileAlt: "profile",
 };
 
 export const apiResonse = {
   name: "Pine Valley Golf",
   profileIcon:
-    "https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg?w=740&q=80",
+    "https://img.freepik.com/free-vector/logo-template_460848-8735.jpg?semt=ais_hybrid&w=740&q=80",
 };
 
 export const CHAT_TYPE = {

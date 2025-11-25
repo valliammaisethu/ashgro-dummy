@@ -42,6 +42,8 @@ export const clubFormValidationSchema = yup.object().shape({
     .max(MAX_LENGTHS.ADDRESS, ERROR_MESSAGES.MAX_LENGTH.ADDRESS)
     .trim(),
 
+  clubDomain: yup.string().required(ERROR_MESSAGES.REQUIRED.CLUB_DOMAIN),
+
   notes: yup
     .string()
     .max(MAX_LENGTHS.NOTES, ERROR_MESSAGES.MAX_LENGTH.NOTES)
