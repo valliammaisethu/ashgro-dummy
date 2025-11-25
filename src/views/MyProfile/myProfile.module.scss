@@ -1,7 +1,8 @@
 @import "src/styles/_variables.scss";
 @import "src/styles/_helpers.scss";
 
-.myProfileIcon {
+.myProfileIcon,
+.closeIcon {
   cursor: pointer;
 }
 .myProfileContent {

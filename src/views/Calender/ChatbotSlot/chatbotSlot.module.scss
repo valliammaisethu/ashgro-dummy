@@ -1,0 +1,41 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.sectionTitle {
+  color: $add-icon-bg;
+  font-size: 1.6rem;
+  font-family: $font-secondary;
+  padding-bottom: 1.2rem;
+  @include flex-container;
+
+  &.timeRangeSection {
+    margin-top: 2.4rem;
+  }
+}
+
+.footer {
+  @include flex-container;
+  justify-content: end;
+  padding: 1.6rem;
+  background-color: $modal-footer-bg;
+
+  .addSlotsBtn {
+    border-radius: 3.6rem;
+    padding: 2rem;
+  }
+}
+
+.timeRangeLabel {
+  @include flex-container;
+  padding: 0 1rem 0.3rem;
+  user-select: none;
+}
+
+.addField {
+  color: $ashgro-black;
+  font-weight: 400;
+  @include flex-container;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}

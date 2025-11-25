@@ -23,11 +23,16 @@ export const ApiRoutes = {
 
   MEMBERSHIP_STATUS: "settings/:id/membershipStatuses",
   MEMBERSHIP_TYPE_STATUS: "settings/:id/membershipCategories",
+
   MEMBERS: "members",
+
   STAFF_MEMBER_DETAILS: "/staffs/:id",
+
   MEMBERS_LIST: "/members",
   MEMBER_DETAILS: "/members/:id",
+
   SEND_EMAIL: "/email",
+  VERIFY_EMAIL: "/clubs/validation/email",
   PROSPECT_EMAIL_RECIPIENTS: "/prospects/recipients",
   MEMBER_EMAIL_RECIPIENTS: "/members/recipients",
   // TODO: Check with BE and avoid redundancy in api endpoint
@@ -52,6 +57,7 @@ export const ApiRoutes = {
   EMAIL_TEMPLATE_DETAIL: "/settings/:id/emailTemplate/:emailTemplateId",
   EMAIL_TEMPLATES_SETTINGS: "/settings/:clubId/emailTemplate",
   UPDATE_EMAIL_TEMPLATE_SETTINGS: "/settings/:clubId/emailTemplate/:id",
+
   STAFF_MEMBERS: "/staffs",
 
   GET_CLUBS: "/clubs",
@@ -62,4 +68,9 @@ export const ApiRoutes = {
   CANCEL_MEETING: "calendar/:slotId",
   MEMBERS_META_LIST: "/members/minimal",
   PROSPECTS_META_LIST: "/prospects/minimal",
+
+  BULK_IMPORT: "/:entity/import",
+  DOWNLOAD_TEMPLATE: "/clubs/:id/downloadTemplate",
+
+  CHAT_BOT_SLOTS: "calendar/chatbotSlots",
 };

@@ -1,97 +1,17 @@
-import { Divider, Popover } from "antd";
-import {
-  IconCall,
-  IconCircleClose,
-  IconEmail,
-  IconUser,
-} from "obra-icons-react";
+import { Popover } from "antd";
+import { IconUser } from "obra-icons-react";
 import React, { Fragment, useState } from "react";
-import clsx from "clsx";
 
-import AvatarFallback from "src/shared/components/AvatarFallback";
-import Button from "src/shared/components/Button";
-import { Colors } from "src/enums/colors.enum";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { Trigger } from "src/enums/trigger.enum";
 import { Placement } from "src/enums/placement.enum";
-import { Buttons } from "src/enums/buttons.enum";
-import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { localStorageHelper } from "src/shared/utils/localStorageHelper";
-import { getFullName } from "src/shared/utils/helpers";
-import {
-  MyProfileContentProps,
-  ProfileState,
-} from "src/shared/types/myProfile.type";
-import { myProfileConstants } from "./constants";
+import { ProfileState } from "src/shared/types/myProfile.type";
+import { MyProfileContent } from "./Content";
 import EditProfile from "./EditProfile";
 import ChangePassword from "./ChangePassword";
+import { ModalType } from "./constants";
 
 import styles from "./myProfile.module.scss";
-
-const MyProfileContent: React.FC<MyProfileContentProps> = ({
-  onClose,
-  onCloseEditProfile,
-  onCloseChangePassword,
-}) => {
-  const user = localStorageHelper.getItem(LocalStorageKeys.USER);
-
-  const handleEditProfileForm = () => {
-    onClose();
-    onCloseEditProfile();
-  };
-
-  const handleChangePassword = () => {
-    onClose();
-    onCloseChangePassword();
-  };
-
-  return (
-    <div className={styles.myProfileContent}>
-      <div className={styles.header}>
-        <div className={styles.avatar}>
-          <AvatarFallback
-            backgroundColor={Colors.ASHGRO_NAVY}
-            src={user?.profilePicUrl}
-            name={getFullName(user?.firstName, user?.lastName)}
-            className={styles.customAvatar}
-          />
-        </div>
-        <IconCircleClose
-          size={20}
-          strokeWidth={1.5}
-          color={Colors.MODAL_CLOSE_ICON}
-          onClick={onClose}
-          className={styles.myProfileIcon}
-        />
-      </div>
-      <div className={styles.body}>
-        <div className={styles.name}>
-          {myProfileConstants.hi} {getFullName(user?.firstName, user?.lastName)}
-          !
-        </div>
-        <div className={styles.email}>
-          <IconEmail color={Colors.ASHGRO_GOLD} size={16} />
-          {user.email}
-        </div>
-        <div className={styles.phone}>
-          <IconCall size={16} color={Colors.ASHGRO_GOLD} />
-          {user?.phone}
-        </div>
-        <Divider className={styles.divider}></Divider>
-        <div className={styles.buttons}>
-          <Button onClick={handleEditProfileForm} className={styles.editButton}>
-            {Buttons.EDIT_PROFILE}
-          </Button>
-          <Button
-            onClick={handleChangePassword}
-            className={clsx(styles.editButton, styles.changePassword)}
-          >
-            {Buttons.CHANGE_PASSWORD}
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const MyProfile = () => {
   const [profileState, setProfileState] = useState<ProfileState>({
@@ -118,6 +38,12 @@ const MyProfile = () => {
       changePasswordVisible: !prev.changePasswordVisible,
     }));
 
+  const handleOpenModal = (type: ModalType) => {
+    handleMyProfile();
+    if (type === ModalType.EDIT_PROFILE) handleEditProfile();
+    else if (type === ModalType.CHANGE_PASSWORD) handleChangePassword();
+  };
+
   return (
     <Fragment>
       <Popover
@@ -127,26 +53,29 @@ const MyProfile = () => {
         open={profileState.myProfileVisible}
         onOpenChange={handleMyProfile}
         trigger={Trigger.CLICK}
-        content={
-          <MyProfileContent
-            onCloseEditProfile={handleEditProfile}
-            onCloseChangePassword={handleChangePassword}
-            onClose={handleMyProfile}
-          />
-        }
+        content={<MyProfileContent onOpenModal={handleOpenModal} />}
       >
         <IconUser className={styles.myProfileIcon} />
       </Popover>
-      <EditProfile
-        onClose={handleEditProfile}
-        visible={profileState.editProfileVisible}
-      />
-      <ChangePassword
-        onClose={handleChangePassword}
+      <ConditionalRenderComponent
+        hideFallback
         visible={profileState.changePasswordVisible}
-      />
+      >
+        <ChangePassword
+          onClose={handleChangePassword}
+          visible={profileState.changePasswordVisible}
+        />
+      </ConditionalRenderComponent>
+      <ConditionalRenderComponent
+        visible={profileState.editProfileVisible}
+        hideFallback
+      >
+        <EditProfile
+          onClose={handleEditProfile}
+          visible={profileState.editProfileVisible}
+        />
+      </ConditionalRenderComponent>
     </Fragment>
   );
 };
-
 export default MyProfile;

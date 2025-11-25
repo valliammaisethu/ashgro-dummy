@@ -17,6 +17,8 @@ export enum MutationKeys {
   DELETE_RESOURCE = "deleteResource",
 
   SEND_EMAIL = "sendEmail",
+  VERIFY_EMAIL = "verifyEmail",
+
   ADD_LEAD_SOURCE_OR_STATUS = "addLeadOrStatus",
   EDIT_LEAD_SOURCE_OR_STATUS = "editLeadOrStatus",
   DELETE_LEAD = "deleteLead",
@@ -30,6 +32,9 @@ export enum MutationKeys {
   ADD_CLUB = "addClub",
   EDIT_CLUB = "editClub",
   EDIT_CHATBOT = "editChatbot",
+
+  CHATBOT = "chatbotResponse",
+  BULK_UPLOAD = "bulkUpload",
 }
 
 export enum QueryKeys {
@@ -57,6 +62,7 @@ export enum QueryKeys {
   GET_EMAIL_TEMPLATE_DETAIL = "getEmailTemplateDetail",
   GET_MEMBERS = "getMembers",
   GET_STAFF_MEMBER_LIST = "getStaffMemberList",
+  DOWNLOAD_TEMPLATE = "downloadTemplate",
 
   GET_CLUBS = "getClubs",
   GET_CLUB_PROFILE = "getClubProfile",

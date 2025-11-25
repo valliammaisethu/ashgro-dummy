@@ -121,6 +121,18 @@ export class ClubListReponse {
   pagination?: Pagination;
 }
 
+export class ClubEmailValidation {
+  @serializable
+  email?: string;
+
+  @serializable
+  clubId?: string;
+}
+
+export class ClubEmailValidationResponse extends ResponseModel {
+  @serializable
+  isValid?: boolean;
+}
 export class ClubStatus {
   @serializable
   chatbotEnabled?: boolean;

@@ -1,7 +1,7 @@
+import { ModalType } from "src/views/MyProfile/constants";
+
 export interface MyProfileContentProps {
-  onClose: () => void;
-  onCloseEditProfile: () => void;
-  onCloseChangePassword: () => void;
+  onOpenModal: (type: ModalType) => void;
 }
 
 export interface EditProfileProps {
