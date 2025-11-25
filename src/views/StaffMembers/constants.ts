@@ -2,7 +2,7 @@ export const staffMembersConstants = {
   filterTitle: "Departments",
   field: "staffDepartmentIds",
 };
-export const clulbHeaderGrid = "38% 28% 25% 05%";
+export const clulbHeaderGrid = "32% 28% 25% 05%";
 export const staffMemberHeaders = ["Club Staff", "Department", "Title"];
 
 export const FORM_CONSTANTS = {
@@ -20,7 +20,7 @@ export const FORM_CONSTANTS = {
     BIRTH_DATE: "Birth Date",
     RESIDENTIAL_ADDRESS: "Residential Address",
     STAFF_DEPARTMENT: "Department",
-    TITLE: "title",
+    TITLE: "Title",
     WORK_ANNIVERSARY: "Work Anniversary",
   },
 

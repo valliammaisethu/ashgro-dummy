@@ -1,19 +1,18 @@
-import { IconUserAdd } from "obra-icons-react";
 import React, { useMemo } from "react";
-import Button from "src/shared/components/Button";
-import SearchField from "src/shared/components/SearchField";
-import { ClubStaffHeaderProps } from "src/shared/types/clubStaff.type";
+import { useQuery } from "@tanstack/react-query";
 
-import styles from "../../staffMembers.module.scss";
-import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
+import SearchField from "src/shared/components/SearchField";
 import Form from "src/shared/components/Form";
 import SelectField from "src/shared/components/SelectField";
+import AddUserButton from "src/shared/components/atoms/Buttons/AddUserButton";
+import { Buttons } from "src/enums/buttons.enum";
+import { ClubStaffHeaderProps } from "src/shared/types/clubStaff.type";
 import { staffMembersConstants } from "../../constants";
 import { MetaService } from "src/services/MetaService/meta.service";
-import { useQuery } from "@tanstack/react-query";
 import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
 
-const { SECONDARY } = ButtonTypes;
+import styles from "../../staffMembers.module.scss";
+
 const { ADD_STAFF } = Buttons;
 const { field, filterTitle } = staffMembersConstants;
 
@@ -48,14 +47,7 @@ const Header = (props: ClubStaffHeaderProps) => {
           showSelectedCount
           onChange={handleDepartmentChange}
         />
-        <Button
-          className={styles.addStaffButton}
-          type={SECONDARY}
-          icon={<IconUserAdd size={20} />}
-          onClick={onStaffAdd}
-        >
-          {ADD_STAFF}
-        </Button>
+        <AddUserButton onClick={onStaffAdd} label={ADD_STAFF} />
       </Form>
     </div>
   );

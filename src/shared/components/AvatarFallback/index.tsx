@@ -9,7 +9,7 @@ import styles from "./avatarFallback.module.scss";
 const AvatarFallback: React.FC<AvatarWithFallbackProps> = ({
   src,
   name,
-  size = 40,
+  size = 56,
   className = "",
   backgroundColor = Colors.ASHGRO_GOLD,
 }) => {

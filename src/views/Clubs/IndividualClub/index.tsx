@@ -37,11 +37,18 @@ const IndividualClub = () => {
     isFetching,
   } = useQuery(getClubProfile(id));
 
-  const { mutateAsync: updateClubStatusMutate, isPending: isUpdatePending } =
-    useMutation(updateStatus());
+  const {
+    mutateAsync: updateChatbotStatusMutate,
+    isPending: isChatbotUpdatePending,
+  } = useMutation(updateStatus());
+
+  const {
+    mutateAsync: updateClubStatusMutate,
+    isPending: isStatusUpdatePending,
+  } = useMutation(updateStatus());
 
   const handleChatbotStatusChange = async (value: boolean) =>
-    await updateClubStatusMutate({ chatbotEnabled: value, id });
+    await updateChatbotStatusMutate({ chatbotEnabled: value, id });
 
   const handleEdit = () => {
     setIsEditModalOpen(true);
@@ -96,7 +103,7 @@ const IndividualClub = () => {
                   checked={clubData?.club?.chatbotEnabled}
                   className={styles.statusSwitch}
                   onChange={handleChatbotStatusChange}
-                  loading={isUpdatePending}
+                  loading={isChatbotUpdatePending}
                 />
                 <div onClick={stopPropagation} className={styles.statusCol}>
                   <Select
@@ -105,7 +112,7 @@ const IndividualClub = () => {
                     style={{ width: 140 }}
                     onChange={handleStatusChange}
                     suffixIcon={<IconChevronDown size={20} />}
-                    loading={isUpdatePending}
+                    loading={isStatusUpdatePending}
                   >
                     {ClubStatusOptions?.map(({ value, label = "" }) => (
                       <Select.Option key={value} value={value}>

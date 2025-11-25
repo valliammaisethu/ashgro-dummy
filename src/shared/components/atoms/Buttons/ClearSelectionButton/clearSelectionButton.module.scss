@@ -1,0 +1,11 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.clearSelection {
+  margin-top: 0.4rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  display: flex;
+  @include flex-flow(row, wrap, normal, 0.8rem);
+  cursor: pointer;
+}

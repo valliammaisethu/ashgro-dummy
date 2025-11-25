@@ -33,6 +33,7 @@ export const AttachmentService = () => {
       const savedAttachment = data?.data?.savedAttachment;
       const attachmentId = savedAttachment?.id;
       const fileName = savedAttachment?.fileName;
+      const s3Key = savedAttachment?.s3Key;
 
       if (presignedUrl && file) {
         try {
@@ -47,7 +48,7 @@ export const AttachmentService = () => {
         }
       }
 
-      return { id: attachmentId, fileName };
+      return { id: attachmentId, fileName, s3Key };
     },
   });
 
