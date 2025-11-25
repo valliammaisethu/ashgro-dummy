@@ -136,3 +136,11 @@ export class ClubStatusResponse extends ResponseModel {
   @serializable(object(ClubProfile))
   data?: ClubProfile;
 }
+
+export class ClubKnowledgeBasePayload {
+  @serializable
+  attachmentId?: string;
+
+  @serializable
+  id?: string;
+}
