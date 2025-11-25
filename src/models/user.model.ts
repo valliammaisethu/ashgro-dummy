@@ -70,3 +70,14 @@ export class ResetPassword {
   @serializable
   token?: string;
 }
+
+export class ChangePassword {
+  @serializable
+  currentPassword?: string;
+
+  @serializable
+  newPassword?: string;
+
+  @serializable
+  confirmPassword?: string;
+}

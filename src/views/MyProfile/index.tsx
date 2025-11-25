@@ -2,19 +2,22 @@ import { Popover } from "antd";
 import { IconUser } from "obra-icons-react";
 import React, { Fragment, useState } from "react";
 
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { Trigger } from "src/enums/trigger.enum";
 import { Placement } from "src/enums/placement.enum";
 import { ProfileState } from "src/shared/types/myProfile.type";
 import { MyProfileContent } from "./Content";
 import EditProfile from "./EditProfile";
+import ChangePassword from "./ChangePassword";
+import { ModalType } from "./constants";
 
 import styles from "./myProfile.module.scss";
-import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 const MyProfile = () => {
   const [profileState, setProfileState] = useState<ProfileState>({
     editProfileVisible: false,
     myProfileVisible: false,
+    changePasswordVisible: false,
   });
 
   const handleMyProfile = () =>
@@ -29,9 +32,16 @@ const MyProfile = () => {
       editProfileVisible: !prev.editProfileVisible,
     }));
 
-  const handleOpenEditProfile = () => {
+  const handleChangePassword = () =>
+    setProfileState((prev) => ({
+      ...prev,
+      changePasswordVisible: !prev.changePasswordVisible,
+    }));
+
+  const handleOpenModal = (type: ModalType) => {
     handleMyProfile();
-    handleEditProfile();
+    if (type === ModalType.EDIT_PROFILE) handleEditProfile();
+    else if (type === ModalType.CHANGE_PASSWORD) handleChangePassword();
   };
 
   return (
@@ -43,13 +53,22 @@ const MyProfile = () => {
         open={profileState.myProfileVisible}
         onOpenChange={handleMyProfile}
         trigger={Trigger.CLICK}
-        content={<MyProfileContent onOpenEditProfile={handleOpenEditProfile} />}
+        content={<MyProfileContent onOpenModal={handleOpenModal} />}
       >
         <IconUser className={styles.myProfileIcon} />
       </Popover>
       <ConditionalRenderComponent
         hideFallback
+        visible={profileState.changePasswordVisible}
+      >
+        <ChangePassword
+          onClose={handleChangePassword}
+          visible={profileState.changePasswordVisible}
+        />
+      </ConditionalRenderComponent>
+      <ConditionalRenderComponent
         visible={profileState.editProfileVisible}
+        hideFallback
       >
         <EditProfile
           onClose={handleEditProfile}

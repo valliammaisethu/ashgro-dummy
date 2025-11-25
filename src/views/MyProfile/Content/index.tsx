@@ -10,14 +10,17 @@ import AvatarFallback from "src/shared/components/AvatarFallback";
 import Button from "src/shared/components/Button";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { getFullName } from "src/shared/utils/helpers";
-import { myProfileConstants } from "../constants";
+import { myProfileConstants, ModalType } from "../constants";
 import { MyProfileContentProps } from "src/shared/types/myProfile.type";
 
 import styles from "../myProfile.module.scss";
 
 export const MyProfileContent = (props: MyProfileContentProps) => {
-  const { onOpenEditProfile } = props;
+  const { onOpenModal } = props;
   const user = localStorageHelper.getItem(LocalStorageKeys.USER) ?? {};
+
+  const handleEditProfile = () => onOpenModal(ModalType.EDIT_PROFILE);
+  const handleChangePassword = () => onOpenModal(ModalType.CHANGE_PASSWORD);
 
   return (
     <div className={styles.myProfileContent}>
@@ -52,10 +55,13 @@ export const MyProfileContent = (props: MyProfileContentProps) => {
         </div>
         <Divider className={styles.divider} />
         <div className={styles.buttons}>
-          <Button onClick={onOpenEditProfile} className={styles.editButton}>
+          <Button onClick={handleEditProfile} className={styles.editButton}>
             {Buttons.EDIT_PROFILE}
           </Button>
-          <Button className={clsx(styles.editButton, styles.changePassword)}>
+          <Button
+            onClick={handleChangePassword}
+            className={clsx(styles.editButton, styles.changePassword)}
+          >
             {Buttons.CHANGE_PASSWORD}
           </Button>
         </div>

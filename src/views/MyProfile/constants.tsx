@@ -4,6 +4,11 @@ export const myProfileConstants = {
   editProfile: "Edit Profile",
 };
 
+export enum ModalType {
+  EDIT_PROFILE = "editProfile",
+  CHANGE_PASSWORD = "changePassword",
+}
+
 export const fields = {
   firstName: "firstName",
   lastName: "lastName",
