@@ -58,13 +58,8 @@ const IndividualClub = () => {
     setIsEditModalOpen(false);
   };
 
-  const handleChatbotQuestions = () => {
-    setIsChatbotModalOpen(true);
-  };
-
-  const handleCloseChatbotModal = () => {
-    setIsChatbotModalOpen(false);
-  };
+  const handleChatbotQuestionsModal = () =>
+    setIsChatbotModalOpen((prev) => !prev);
 
   const handleStatusChange = async (value: string) => {
     await updateClubStatusMutate(
@@ -83,7 +78,7 @@ const IndividualClub = () => {
     <div className={styles.individualClub}>
       <Header
         isFetching={isFetching}
-        onChatbotQuestions={handleChatbotQuestions}
+        onChatbotQuestions={handleChatbotQuestionsModal}
       />
       <ConditionalRender
         isPending={isPending}
@@ -153,7 +148,7 @@ const IndividualClub = () => {
       />
       <ChatbotQuestionsModal
         open={isChatbotModalOpen}
-        onClose={handleCloseChatbotModal}
+        onClose={handleChatbotQuestionsModal}
       />
     </div>
   );
