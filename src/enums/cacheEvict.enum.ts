@@ -33,6 +33,7 @@ export enum MutationKeys {
   EDIT_CHATBOT = "editChatbot",
 
   CHATBOT = "chatbotResponse",
+  CHATBOT_PROFILE = "chatbotProfileResponse",
   BULK_UPLOAD = "bulkUpload",
 }
 

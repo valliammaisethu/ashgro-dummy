@@ -35,8 +35,9 @@
       border-radius: 50%;
     }
     .profileName {
-      font-weight: 500;
+      font-weight: 600;
       font-size: 20px;
+      color: black;
     }
   }
 
@@ -94,11 +95,11 @@
     background: #f7f4ed;
     padding: 16px 20px;
     border-radius: 32px;
-    max-width: 90%;
+    max-width: 80%;
     font-size: 14px;
     line-height: 20px;
     font-family: "Reddit Sans", sans-serif;
-    color: black;
+    color: #0f131c;
   }
 
   .userMessage {
