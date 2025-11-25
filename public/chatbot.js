@@ -45,8 +45,8 @@
   }
 
   (async () => {
-    // const data = await checkIsValidHost(BASE_API_URL);
-    const data = { success: true };
+    const data = await checkIsValidHost(BASE_API_URL);
+
     if (data?.success) initializeChatbot();
   })();
 
