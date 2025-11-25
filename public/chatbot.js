@@ -136,7 +136,7 @@
           z-index:999999997;
         ">
           <video 
-            src="./assets/profile.mp4"
+             src="https://constitutional-violet-swift.rootquotient.revolte.io/assets/profile.mp4"
             autoplay muted loop playsinline
             style="width: 100%; height: 100%; object-fit: cover;"
           ></video>
@@ -156,12 +156,14 @@
         </div>
       `
     );
+    launcher.id = "rqt-chatbot-launcher";
 
     document.body.appendChild(launcher);
 
     const showIframe = () => {
       if (!iframe) {
         iframe = create("iframe", getIframeStyle());
+        iframe.id = "rqt-chatbot-iframe";
         iframe.src = IFRAME_URL;
         document.body.appendChild(iframe);
       }
