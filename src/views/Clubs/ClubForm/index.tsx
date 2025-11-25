@@ -34,6 +34,7 @@ import { ClubService } from "src/services/ClubService/club.service";
 import { EmailService } from "src/services/EmailService/email.service";
 
 import styles from "./clubForm.module.scss";
+import { INPUT_TYPE } from "src/enums/inputType";
 
 const ClubForm = (props: ClubFormProps) => {
   const { onClose, open, clubId } = props;
@@ -212,6 +213,7 @@ const ClubForm = (props: ClubFormProps) => {
               label={labels.clubEmail}
               name={fields.email}
               placeholder={placeholders.clubEmail}
+              type={INPUT_TYPE.EMAIL}
               onChange={(e) => handleClubEmailChange(e.target.value)}
             />
           </Col>
@@ -222,6 +224,14 @@ const ClubForm = (props: ClubFormProps) => {
               placeholder={placeholders.phone}
               name={fields.contactNumber}
               phoneCodeName={fields.clubPhoneCountryCode}
+            />
+          </Col>
+          <Col span={12}>
+            <InputField
+              label={labels.clubDomain}
+              placeholder={placeholders.clubDomain}
+              name={fields.clubDomain}
+              required
             />
           </Col>
 
@@ -263,6 +273,7 @@ const ClubForm = (props: ClubFormProps) => {
               name={fields.primaryEmail}
               label={labels.primaryEmail}
               placeholder={placeholders.email}
+              type={INPUT_TYPE.EMAIL}
               required
               onChange={(e) => handlePrimaryEmailChange(e.target.value)}
             />
