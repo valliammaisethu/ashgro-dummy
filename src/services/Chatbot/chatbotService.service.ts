@@ -36,9 +36,7 @@ export const ChatbotService = () => {
   > => ({
     queryKey: [CHATBOT_PROFILE],
     queryFn: async () => {
-      const { data } = await axiosInstance.get("/chatbot/profile", {
-        params: { id },
-      });
+      const { data } = await axiosInstance.get(`/chatbot/${id}/profile`);
 
       return deserialize(ChatbotProfileResposne, data);
     },
