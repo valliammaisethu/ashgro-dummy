@@ -4,4 +4,6 @@ export const imageAlts = {
   ashgroLogo: "ashgro-logo",
   uploadArrow: "upload-arrow",
   chatbotIcon: "chatbot-icon",
+  loaderIcon: "loader-icon",
+  renewIcon: "renew-icon",
 };

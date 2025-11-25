@@ -30,6 +30,7 @@ export enum Buttons {
   CANCEL_UPLOAD = "Cancel Upload",
   CHANGE = "Change",
   IMPORT = "Import",
+  ADD_FILE = "Add File",
 }
 
 export enum HtmlButtonType {
