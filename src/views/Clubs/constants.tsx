@@ -31,6 +31,7 @@ export const ERROR_MESSAGES = {
     FIRST_NAME: "First name is required",
     LAST_NAME: "Last name is required",
     PRIMARY_EMAIL: "Primary contact email is required",
+    CLUB_DOMAIN: "Club's domain is required",
   },
   INVALID: {
     ALPHABETS_ONLY: "must contain only alphabets",
