@@ -47,7 +47,6 @@ const Profile: React.FC<ProfileProps> = ({
         <AvatarFallback
           src={profilePictureUrl}
           name={getFullName(firstName, lastName)}
-          size={40}
           className={styles.avatar}
         />
         <div className={styles.info}>

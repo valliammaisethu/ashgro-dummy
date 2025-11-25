@@ -2,7 +2,7 @@
 @import "src/styles/_helpers.scss";
 
 .prospectList {
-  margin-top: 2.4rem;
+  margin-top: 2rem;
 }
 
 .prospectCard {
@@ -83,26 +83,6 @@
   }
 }
 
-.filterButton {
-  &:global(.ant-btn) {
-    background-color: $search-bg;
-    color: $filter-icon;
-    border: 1px solid $search-bg;
-    border-radius: 1.4rem;
-    height: 4.4rem;
-    width: 4.4rem;
-  }
-}
-
-.filterButton:global(
-    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
-  ):hover {
-  background-color: $search-bg;
-  color: $filter-icon;
-  border: 1px solid $search-bg;
-  border-radius: 1.4rem;
-}
-
 .header {
   @include flex-container(space-between, center, row);
 }
@@ -133,7 +113,7 @@
   font-size: 1.4rem;
   color: $ashgro-gold;
   font-family: $font-secondary;
-  border-radius: 2rem;
+  border-radius: 2rem 2rem 0 0;
 }
 
 .tableBody {
@@ -166,16 +146,18 @@
 }
 
 .checkboxCol {
-  display: flex;
-  align-items: center;
+  @include flex-flow(row, wrap, center);
+  padding-left: 1.2rem;
 }
 
 .prospectCol,
 .dateCol,
 .sourceCol,
 .statusCol {
-  display: flex;
-  align-items: center;
+  @include flex-flow(row, wrap, center);
+}
+.prospectCol {
+  padding-left: 1.2rem;
 }
 
 .prospectInfo {
@@ -192,9 +174,7 @@
 }
 
 .details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+  @include flex-flow(column, wrap, normal, 0.6rem);
 }
 
 .name {
@@ -374,4 +354,13 @@
       padding-left: 0.5rem;
     }
   }
+}
+
+.clearSelection {
+  margin-top: 0.4rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  display: flex;
+  @include flex-flow(row, wrap, normal, 0.8rem);
+  cursor: pointer;
 }
