@@ -134,7 +134,7 @@ const Chatbot = () => {
 
   const handleSlotTimeRange = (id?: number) => {
     resetIdleTimer();
-    handleBotResponse(id);
+    handleBotResponse(id, "I need to book this slot");
   };
 
   useEffect(() => {
