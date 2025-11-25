@@ -5,6 +5,7 @@ import { ClubInfoProps } from "src/shared/types/clubs.type";
 
 import styles from "../individualClub.module.scss";
 import { fallbackHandler } from "src/shared/utils/commonHelpers";
+import { getFullName } from "src/shared/utils/helpers";
 
 const ContactDetails: React.FC<ClubInfoProps> = ({ data }) => {
   const { adminDetails } = data || {};
@@ -18,7 +19,7 @@ const ContactDetails: React.FC<ClubInfoProps> = ({ data }) => {
           <div className={styles.label}>{CONTACT_TITLES.name}</div>
           <div className={styles.value}>
             {fallbackHandler(
-              `${adminDetails?.firstName} ${adminDetails?.lastName}`,
+              getFullName(adminDetails?.firstName, adminDetails?.lastName),
             )}
           </div>
         </div>

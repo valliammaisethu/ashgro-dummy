@@ -17,21 +17,21 @@ import {
   DrawerProps as AntdDrawerProps,
   ButtonProps as AntdButtonProps,
 } from "antd";
-
+import { BaseOptionType } from "antd/es/select";
+import { DefaultOptionType } from "antd/es/cascader";
 import { ButtonSize } from "antd/es/button";
+
 import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
 import { Placement } from "src/enums/placement.enum";
 import { tooltipPosition } from "src/enums/tooltipPosition";
-import { BaseOptionType } from "antd/es/select";
-import { DefaultOptionType } from "antd/es/cascader";
 import { Trigger } from "src/enums/trigger.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
 import { AttachmentTypes } from "src/enums/attachmentTypes.enum";
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
-  phoneCodeName: string;
+  phoneCodeName?: string;
   label?: string;
   required?: boolean;
 }
@@ -304,4 +304,22 @@ export interface UploadAreaState {
   isError?: boolean;
   errorText?: string;
   fileId: string;
+}
+export interface BulkImportButtonProps {
+  onClick: () => void;
+  tooltip: string;
+}
+
+export interface BulkMailButtonProps {
+  onClick?: () => void;
+  disabled?: boolean;
+}
+
+export interface ClearSelectionButtonProps {
+  onClick: () => void;
+}
+
+export interface AddUserButtonProps {
+  onClick?: () => void;
+  label: string;
 }

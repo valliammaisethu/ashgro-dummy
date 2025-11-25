@@ -2,7 +2,7 @@
 @import "src/styles/_helpers.scss";
 
 .cellContent {
-  padding: 1rem 0.5rem;
+  padding: 0.5rem;
   height: 18rem;
   width: 19.5rem;
   .cellHeader {
@@ -162,4 +162,12 @@
 
 .allowedDates {
   cursor: pointer;
+}
+
+.actionBtns {
+  @include flex-container;
+  justify-content: end;
+  .icon {
+    margin-right: 0.5rem;
+  }
 }

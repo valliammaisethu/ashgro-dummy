@@ -15,7 +15,7 @@ import UploadArea from "./UploadArea";
 import styles from "./bulkFileUpload.module.scss";
 
 interface BulkFileUploadProps {
-  onFileUploaded?: (fileId: string, fileName: string) => void;
+  onFileUploaded?: (fileId: string, fileName: string, s3Key?: string) => void;
   onUploadStateChange?: (isUploading: boolean) => void;
   onChangeFile?: () => void;
   maxFileSize?: number;
@@ -127,7 +127,7 @@ const BulkFileUpload = ({
 
       if (result?.id) {
         setUploadedFile({ id: result.id, name: file.name });
-        onFileUploaded?.(result.id, file.name);
+        onFileUploaded?.(result.id, file.name, result.s3Key);
       }
     } catch {
       renderNotification(

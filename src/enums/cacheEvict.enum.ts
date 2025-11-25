@@ -2,6 +2,7 @@ export enum MutationKeys {
   LOGIN = "login",
   FORGOT_PASSWORD = "forgotPassword",
   RESET_PASSWORD = "resetPassword",
+  CHANGE_PASSWORD = "changePassword",
   LOGOUT = "logout",
   ATTACHMENT_UPLOAD = "attachmentUpload",
   ATTACHMENT_DELETE = "attachmentDelete",
@@ -16,6 +17,8 @@ export enum MutationKeys {
   DELETE_RESOURCE = "deleteResource",
 
   SEND_EMAIL = "sendEmail",
+  VERIFY_EMAIL = "verifyEmail",
+
   ADD_LEAD_SOURCE_OR_STATUS = "addLeadOrStatus",
   EDIT_LEAD_SOURCE_OR_STATUS = "editLeadOrStatus",
   DELETE_LEAD = "deleteLead",
@@ -31,6 +34,10 @@ export enum MutationKeys {
 
   EDIT_CHATBOT = "editChatbot",
   UPLOAD_CHATBOT_KNOWLEDGE_BASE = "uploadChatbotKnowledgeBase",
+
+  CHATBOT = "chatbotResponse",
+  CHATBOT_PROFILE = "chatbotProfileResponse",
+  BULK_UPLOAD = "bulkUpload",
 }
 
 export enum QueryKeys {
@@ -58,6 +65,7 @@ export enum QueryKeys {
   GET_EMAIL_TEMPLATE_DETAIL = "getEmailTemplateDetail",
   GET_MEMBERS = "getMembers",
   GET_STAFF_MEMBER_LIST = "getStaffMemberList",
+  DOWNLOAD_TEMPLATE = "downloadTemplate",
 
   GET_CLUBS = "getClubs",
   GET_CLUB_PROFILE = "getClubProfile",

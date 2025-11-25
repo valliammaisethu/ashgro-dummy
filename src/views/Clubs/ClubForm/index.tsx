@@ -1,5 +1,5 @@
 import { Col, Divider, Row } from "antd";
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 
@@ -18,23 +18,37 @@ import {
   convertDateToApiFormat,
   convertDateToDisplayFormat,
 } from "src/shared/utils/dateUtils";
-import { clubFormValidationSchema } from "src/views/Clubs/ClubForm/clubFormValidation";
+import {
+  EmailValidationError,
+  useDebouncedEmailValidation,
+} from "src/shared/hooks/useDebouncedEmailValidation";
+import {
+  ClubFormType,
+  clubFormValidationSchema,
+} from "src/views/Clubs/ClubForm/clubFormValidation";
 import { Align } from "src/enums/align.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { Buttons } from "src/enums/buttons.enum";
 import { fields, labels, placeholders, titles } from "./constants";
 import { ClubService } from "src/services/ClubService/club.service";
+import { EmailService } from "src/services/EmailService/email.service";
 
 import styles from "./clubForm.module.scss";
+import { INPUT_TYPE } from "src/enums/inputType";
 
 const ClubForm = (props: ClubFormProps) => {
   const { onClose, open, clubId } = props;
 
   const { addClub, getClubProfile, editClub } = ClubService();
+  const { validateEmail } = EmailService();
 
   const { data: clubData, isPending: isFetchingClubData } = useQuery(
     getClubProfile(clubId),
   );
+
+  const { mutateAsync: validateMutateAsync } = useMutation(validateEmail());
+  const { mutateAsync: validatePrimaryEmailAsync } =
+    useMutation(validateEmail());
 
   const defaultValues = useMemo(() => {
     if (!clubId) return {};
@@ -55,7 +69,7 @@ const ClubForm = (props: ClubFormProps) => {
     };
   }, [clubId, clubData]);
 
-  const methods = useForm({
+  const methods = useForm<ClubFormType>({
     defaultValues: clubId ? defaultValues : {},
     validationSchema: clubFormValidationSchema,
   });
@@ -65,6 +79,44 @@ const ClubForm = (props: ClubFormProps) => {
     else methods.reset({});
   }, [clubId, defaultValues, methods, open]);
 
+  const { setError, clearErrors } = methods;
+
+  const handleEmailValidationError = useCallback(
+    (fieldName: "email" | "adminDetails.email") =>
+      (error: EmailValidationError) => {
+        if (error?.response?.data?.description) {
+          setError(fieldName, {
+            type: "manual",
+            message: error.response.data.description,
+          });
+        }
+      },
+    [setError],
+  );
+
+  const { handleEmailChange: debouncedClubEmailChange } =
+    useDebouncedEmailValidation({
+      validateMutateAsync,
+      onError: handleEmailValidationError("email"),
+    });
+
+  const { handleEmailChange: debouncedPrimaryEmailChange } =
+    useDebouncedEmailValidation({
+      validateMutateAsync: validatePrimaryEmailAsync,
+      onError: handleEmailValidationError("adminDetails.email"),
+    });
+
+  const handleClubEmailChange = (email: string) => {
+    clearErrors("email");
+    if (!email) return;
+    debouncedClubEmailChange(email);
+  };
+
+  const handlePrimaryEmailChange = (email: string) => {
+    clearErrors("adminDetails.email");
+    if (!email) return;
+    debouncedPrimaryEmailChange(email);
+  };
   const { mutateAsync, isPending: isAdding } = useMutation(addClub());
   const { mutateAsync: editMutateAsync, isPending: isEditing } = useMutation(
     editClub(clubId),
@@ -161,6 +213,8 @@ const ClubForm = (props: ClubFormProps) => {
               label={labels.clubEmail}
               name={fields.email}
               placeholder={placeholders.clubEmail}
+              type={INPUT_TYPE.EMAIL}
+              onChange={(e) => handleClubEmailChange(e.target.value)}
             />
           </Col>
 
@@ -170,6 +224,14 @@ const ClubForm = (props: ClubFormProps) => {
               placeholder={placeholders.phone}
               name={fields.contactNumber}
               phoneCodeName={fields.clubPhoneCountryCode}
+            />
+          </Col>
+          <Col span={12}>
+            <InputField
+              label={labels.clubDomain}
+              placeholder={placeholders.clubDomain}
+              name={fields.clubDomain}
+              required
             />
           </Col>
 
@@ -211,7 +273,9 @@ const ClubForm = (props: ClubFormProps) => {
               name={fields.primaryEmail}
               label={labels.primaryEmail}
               placeholder={placeholders.email}
+              type={INPUT_TYPE.EMAIL}
               required
+              onChange={(e) => handlePrimaryEmailChange(e.target.value)}
             />
           </Col>
 
