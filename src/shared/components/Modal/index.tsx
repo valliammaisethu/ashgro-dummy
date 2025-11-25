@@ -88,7 +88,7 @@ const Modal: React.FC<ModalProps> = ({
           <IconCircleClose
             strokeWidth={1.25}
             color={Colors.MODAL_CLOSE_ICON}
-            size={20}
+            size={24}
           />
         )
       }

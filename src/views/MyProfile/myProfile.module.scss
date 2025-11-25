@@ -1,6 +1,10 @@
 @import "src/styles/_variables.scss";
 @import "src/styles/_helpers.scss";
 
+.myProfileIcon,
+.closeIcon {
+  cursor: pointer;
+}
 .myProfileContent {
   padding: 1rem;
 }

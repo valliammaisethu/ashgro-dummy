@@ -11,11 +11,14 @@ import Button from "src/shared/components/Button";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { getFullName } from "src/shared/utils/helpers";
 import { myProfileConstants } from "../constants";
+import { MyProfileContentProps } from "src/shared/types/myProfile.type";
 
 import styles from "../myProfile.module.scss";
 
-export const MyProfileContent = () => {
+export const MyProfileContent = (props: MyProfileContentProps) => {
+  const { onOpenEditProfile } = props;
   const user = localStorageHelper.getItem(LocalStorageKeys.USER) ?? {};
+
   return (
     <div className={styles.myProfileContent}>
       <div className={styles.header}>
@@ -31,6 +34,7 @@ export const MyProfileContent = () => {
           size={20}
           strokeWidth={1.5}
           color={Colors.MODAL_CLOSE_ICON}
+          className={styles.closeIcon}
         />
       </div>
       <div className={styles.body}>
@@ -48,7 +52,9 @@ export const MyProfileContent = () => {
         </div>
         <Divider className={styles.divider} />
         <div className={styles.buttons}>
-          <Button className={styles.editButton}>{Buttons.EDIT_PROFILE}</Button>
+          <Button onClick={onOpenEditProfile} className={styles.editButton}>
+            {Buttons.EDIT_PROFILE}
+          </Button>
           <Button className={clsx(styles.editButton, styles.changePassword)}>
             {Buttons.CHANGE_PASSWORD}
           </Button>

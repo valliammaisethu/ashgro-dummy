@@ -23,10 +23,14 @@ import { stopPropagation } from "src/shared/utils/eventUtils";
 
 import styles from "../../clubs.module.scss";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
-const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
+const ClubListingTable = ({
+  onEditClub,
+  queryParams,
+  setQueryParams,
+}: ClubListingTableProps) => {
   const { getClubs, updateStatus } = ClubService();
-  const [currentPage, setCurrentPage] = useState(1);
   const [updatingClubId, setUpdatingClubId] = useState<string>("");
   const { navigateToInvidualClub } = useRedirect();
   const queryClient = useQueryClient();
@@ -36,11 +40,10 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
     isPending,
     isSuccess,
     isFetching,
-  } = useQuery(getClubs());
+  } = useQuery(getClubs(queryParams));
 
-  const handlePageChange = useCallback((newPage: number) => {
-    setCurrentPage(newPage);
-  }, []);
+  const handlePageChange = (page: number) => () =>
+    setQueryParams((prev) => ({ ...prev, page }));
 
   const { mutateAsync, isPending: isUpdatePending } =
     useMutation(updateStatus());
@@ -95,10 +98,12 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
 
   return (
     <div className={styles.tableContainer}>
-      <ListHeader
-        columnTemplate={clubHeaderColumnGrid}
-        headers={clubListingHeaders}
-      />
+      <ConditionalRenderComponent hideFallback visible={!isPending}>
+        <ListHeader
+          columnTemplate={clubHeaderColumnGrid}
+          headers={clubListingHeaders}
+        />
+      </ConditionalRenderComponent>
       <div className={styles.tableBody}>
         <ConditionalRender
           isFetching={isFetching}
@@ -109,7 +114,7 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
           {clubsData?.clubs?.map((club, index) => (
             <div
               onClick={(e) => handleRowClick(club.id, e)}
-              key={index}
+              key={club?.id}
               className={styles.rowContainer}
             >
               <Profile
@@ -150,7 +155,7 @@ const ClubListingTable = ({ onEditClub }: ClubListingTableProps) => {
         </ConditionalRender>
       </div>
       <Pagination
-        currentPage={currentPage ?? clubsData?.pagination?.currentPage}
+        currentPage={queryParams?.page ?? clubsData?.pagination?.currentPage}
         totalPages={clubsData?.pagination?.overallPages}
         onPageChange={handlePageChange}
         hasData={!!clubsData?.clubs && clubsData.clubs.length > 0}
