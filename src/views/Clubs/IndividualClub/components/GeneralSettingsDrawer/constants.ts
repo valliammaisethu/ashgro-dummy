@@ -12,4 +12,4 @@ export const SETTINGS_FIELD_NAMES = {
   bulkEmailEnabled: "bulkEmailEnabled",
   emailTemplatesAllowed: "emailTemplatesAllowed",
   customChartsAllowed: "customChartsAllowed",
-} as const;
+};

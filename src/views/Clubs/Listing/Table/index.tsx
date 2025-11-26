@@ -39,7 +39,6 @@ const ClubListingTable = ({
     data: clubsData,
     isPending,
     isSuccess,
-    isFetching,
   } = useQuery(getClubs(queryParams));
 
   const handlePageChange = (page: number) => () =>
@@ -106,7 +105,6 @@ const ClubListingTable = ({
       </ConditionalRenderComponent>
       <div className={styles.tableBody}>
         <ConditionalRender
-          isFetching={isFetching}
           isPending={isPending}
           isSuccess={isSuccess}
           records={clubsData?.clubs}

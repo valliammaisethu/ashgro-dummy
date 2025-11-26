@@ -1,7 +1,7 @@
 // TODO: use proper folder structure once the code moved to separate repo
 
 import React, { useState, useRef, useEffect } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { IconClose } from "obra-icons-react";
 import { Input } from "antd";
 import { SendOutlined } from "@ant-design/icons";
@@ -47,8 +47,10 @@ const Chatbot = () => {
   const [searchParams] = useSearchParams();
   const clubId = searchParams.get("clubId") ?? "";
 
-  const { getBotResponse } = ChatbotService();
+  const { getBotResponse, getClubProfile } = ChatbotService();
   const { mutateAsync, isPending: isTyping } = useMutation(getBotResponse());
+
+  const { data, isSuccess, isLoading } = useQuery(getClubProfile(clubId));
 
   const resetIdleTimer = () => {
     if (idleTimer.current) clearTimeout(idleTimer.current);
@@ -71,13 +73,21 @@ const Chatbot = () => {
     }, idleWarningTime);
   };
 
-  const handleBotResponse = async (slotId?: number) => {
+  const handleBotResponse = async (
+    slotId?: number,
+    defaultMessage?: string,
+  ) => {
     setMessages((prev) => [...prev, { typing: true, sender: BOT }]);
+    const message = slotId
+      ? String(slotId)
+      : input?.length
+        ? input
+        : defaultMessage;
     const { data } = await mutateAsync({
-      message: input,
+      message: message,
       sessionId,
       clubId,
-      slotId,
+      ...(slotId && { isSlotBooking: true }),
     });
 
     setMessages((prev) => prev.filter((m) => !m.typing));
@@ -122,20 +132,27 @@ const Chatbot = () => {
   };
 
   const handleGreeting = async () => {
-    await handleBotResponse();
+    // to use HI or Hello
+    await handleBotResponse(undefined, "hi");
     resetIdleTimer();
   };
 
   const handleSlotTimeRange = (id?: number) => {
     resetIdleTimer();
-    handleBotResponse(id);
+    handleBotResponse(id, "I need to book this slot");
   };
 
   useEffect(() => {
     scrollRef.current?.scrollTo(0, scrollRef.current.scrollHeight);
 
     const h = scrollRef.current?.scrollHeight || 0;
-    if (h > 430) window.parent.postMessage({ type: expandEvent }, "*");
+    const isMobileDevice = /Mobi|Android|iPhone|iPad|iPod/i.test(
+      navigator.userAgent,
+    );
+
+    if (!isMobileDevice && h > 430) {
+      window.parent.postMessage({ type: expandEvent }, "*");
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -147,100 +164,113 @@ const Chatbot = () => {
   }, []);
 
   return (
-    <div className={styles.chatContainer}>
-      <div className={styles.header}>
-        <div className={styles.headerProfile}>
-          <img
-            src={apiResonse.profileIcon}
-            alt={profileAlt}
-            className={styles.clubLogo}
-          />
-          <p className={styles.profileName}>{apiResonse.name}</p>
+    <>
+      {isLoading ? (
+        <div className={styles.loader}>
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
+      ) : (
+        <div className={styles.chatContainer}>
+          <div className={styles.header}>
+            <div className={styles.headerProfile}>
+              <img
+                src={data?.data?.clubLogo || apiResonse.profileIcon}
+                alt={profileAlt}
+                className={styles.clubLogo}
+              />
+              <p className={styles.profileName}>
+                {data?.data?.clubName ?? apiResonse.name}
+              </p>
+            </div>
 
-        <div onClick={closeChat} className={styles.closeIcon}>
-          <IconClose color={iconColor} size={24} strokeWidth={2.25} />
-        </div>
-      </div>
+            <div onClick={closeChat} className={styles.closeIcon}>
+              <IconClose color={iconColor} size={24} strokeWidth={2.25} />
+            </div>
+          </div>
 
-      <div className={styles.messages} ref={scrollRef}>
-        {messages.map((msg, index) => {
-          const isBot = msg.sender === BOT;
+          <div className={styles.messages} ref={scrollRef}>
+            {messages.map((msg, index) => {
+              const isBot = msg.sender === BOT;
 
-          return (
-            <div
-              key={msg.id || `typing-${index}`}
-              className={isBot ? styles.botMessage : styles.userMessage}
-            >
-              {isBot && (
-                <div className={styles.avatarWrapper}>
-                  <img
-                    src={chatbotProfile}
-                    alt={profileAlt}
-                    className={styles.avatar}
-                  />
-                </div>
-              )}
+              return (
+                <div
+                  key={msg.id || `typing-${index}`}
+                  className={isBot ? styles.botMessage : styles.userMessage}
+                >
+                  {isBot && (
+                    <div className={styles.avatarWrapper}>
+                      <img
+                        src={chatbotProfile}
+                        alt={profileAlt}
+                        className={styles.avatar}
+                      />
+                    </div>
+                  )}
 
-              {msg.typing ? (
-                <div className={styles.typingBubble}>
-                  {[...Array(3)].map((_, i) => (
-                    <span key={i}></span>
-                  ))}
-                </div>
-              ) : (
-                <div className={styles.messageTxt}>
-                  <p>{msg.text}</p>
+                  {msg.typing ? (
+                    <div className={styles.typingBubble}>
+                      {[...Array(3)].map((_, i) => (
+                        <span key={i}></span>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className={styles.messageTxt}>
+                      <p>{msg.text}</p>
 
-                  {Array.isArray(msg.slots) && msg.slots.length > 0 && (
-                    <div className={styles.slotContainer}>
-                      <div className={styles.slotGrid}>
-                        {msg.slots.map((slot) => {
-                          const isLast = msg === messages[messages.length - 1];
+                      {Array.isArray(msg.slots) && msg.slots.length > 0 && (
+                        <div className={styles.slotContainer}>
+                          <div className={styles.slotGrid}>
+                            {msg.slots.map((slot) => {
+                              const isLast =
+                                msg === messages[messages.length - 1];
 
-                          return (
-                            <p
-                              key={slot.id}
-                              className={styles.slotItem}
-                              onClick={() =>
-                                isLast && handleSlotTimeRange(slot.id)
-                              }
-                            >
-                              {slot.startTime} - {slot.endTime}
-                            </p>
-                          );
-                        })}
-                      </div>
+                              return (
+                                <p
+                                  key={slot.id}
+                                  className={styles.slotItem}
+                                  onClick={() =>
+                                    isLast && handleSlotTimeRange(slot.id)
+                                  }
+                                >
+                                  {slot.startTime} - {slot.endTime}
+                                </p>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+              );
+            })}
+          </div>
 
-      <div className={styles.inputWrapper}>
-        <Input
-          className={styles.chatInput}
-          placeholder={placeholder}
-          value={input}
-          onChange={(e) => {
-            setInput(e.target.value);
-            resetIdleTimer();
-          }}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          suffix={
-            <div
-              className={`${styles.sendBtn} ${isTyping ? styles.disabledSend : ""}`}
-              onClick={sendMessage}
-            >
-              <SendOutlined disabled={isTyping} />
-            </div>
-          }
-        />
-      </div>
-    </div>
+          <div className={styles.inputWrapper}>
+            <Input
+              className={styles.chatInput}
+              placeholder={placeholder}
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+                resetIdleTimer();
+              }}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+              suffix={
+                <div
+                  className={`${styles.sendBtn} ${isTyping ? styles.disabledSend : ""}`}
+                  onClick={sendMessage}
+                >
+                  <SendOutlined disabled={isTyping} />
+                </div>
+              }
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

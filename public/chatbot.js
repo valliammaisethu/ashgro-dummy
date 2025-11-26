@@ -6,7 +6,8 @@
   if (!clubId || !host) return;
 
   const BASE = "https://constitutional-violet-swift.rootquotient.revolte.io/chatbot";
-  const BASE_API_URL = "https://molecular-tan-reptile.rootquotient.revolte.io/api/v1/";
+
+  const BASE_API_URL = `https://molecular-tan-reptile.rootquotient.revolte.io/api/v1/chatbot/${clubId}`;
 
   const IFRAME_URL = `${BASE}/?clubId=${encodeURIComponent(
     clubId
@@ -30,6 +31,7 @@
       if (!res.ok) throw new Error("Invalid");
 
       const data = await res.json();
+
       sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
       return data;
     } catch {
@@ -44,6 +46,7 @@
 
   (async () => {
     const data = await checkIsValidHost(BASE_API_URL);
+
     if (data?.success) initializeChatbot();
   })();
 
@@ -61,7 +64,13 @@
   function initializeChatbot() {
     let iframe = null;
     let isOpen = false;
-    let lock = false;
+
+    function isMobileDevice() {
+      return (
+        /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+        (window.visualViewport?.width || window.innerWidth) <= 600
+      );
+    }
 
     const create = (tag, style, html) => {
       const el = document.createElement(tag);
@@ -70,15 +79,16 @@
       return el;
     };
 
+    let isMobile = isMobileDevice();
+
     const getIframeStyle = () => {
-      const mobile = window.innerWidth <= 600;
-      return mobile
+      return isMobileDevice()
         ? {
             position: "fixed",
             bottom: "0",
             right: "0",
-            width: "100vw",
-            height: "100vh",
+            width: "100%",
+            height: "100%",
             border: "none",
             display: "none",
             zIndex: 999999991,
@@ -122,10 +132,11 @@
           height: 80px;
           border-radius: 50%;
           overflow: hidden;
-          transform: translateY(10px);
+      ${isMobile ? "transform: none;" : "transform: translateY(10px);"}
+          z-index:999999997;
         ">
           <video 
-            src="./assets/profile.mp4"
+             src="https://constitutional-violet-swift.rootquotient.revolte.io/assets/profile.mp4"
             autoplay muted loop playsinline
             style="width: 100%; height: 100%; object-fit: cover;"
           ></video>
@@ -139,17 +150,20 @@
           font-size: 16px;
           box-shadow: 0 4px 15px rgba(0,0,0,0.15);
           font-family: 'Reddit Sans', sans-serif;
+          z-index:999999999;
         ">
           Explore with Your Concierge
         </div>
       `
     );
+    launcher.id = "rqt-chatbot-launcher";
 
     document.body.appendChild(launcher);
 
     const showIframe = () => {
       if (!iframe) {
         iframe = create("iframe", getIframeStyle());
+        iframe.id = "rqt-chatbot-iframe";
         iframe.src = IFRAME_URL;
         document.body.appendChild(iframe);
       }
@@ -175,22 +189,17 @@
     };
 
     launcher.onclick = () => {
-      if (lock) return;
-      lock = true;
-      requestAnimationFrame(() => (lock = false));
-
       isOpen ? hideIframe() : showIframe();
       isOpen = !isOpen;
     };
 
     window.addEventListener("message", (e) => {
       if (!iframe) return;
-      if (e.data?.type === "CLOSE_CHATBOT") hideIframe();
-      if (e.data?.type === "EXPAND_MAX") iframe.style.height = "98vh";
-    });
-
-    window.addEventListener("resize", () => {
-      if (iframe) Object.assign(iframe.style, getIframeStyle());
+      if (e.data?.type === "CLOSE_CHATBOT") {
+        isOpen = false;
+        hideIframe();
+      }
+      if (e.data?.type === "EXPAND_MAX") iframe.style.height = "97vh";
     });
   }
 })();

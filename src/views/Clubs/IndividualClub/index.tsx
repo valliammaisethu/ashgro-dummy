@@ -29,6 +29,7 @@ import {
 import styles from "./individualClub.module.scss";
 import WarningModal from "./components/WarningModal";
 import { ClubSettingsTypes } from "src/enums/clubSettingsTypes.enum";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 const IndividualClub = () => {
   const { id = "" } = useParams();
@@ -66,21 +67,14 @@ const IndividualClub = () => {
   const handleChatbotStatusChange = async (value: boolean) =>
     await updateChatbotStatusMutate({ chatbotEnabled: value, id });
 
-  const handleEdit = () => setIsEditModalOpen(true);
+  const handleEditModal = () => setIsEditModalOpen((prev) => !prev);
 
-  const handleCloseEditModal = () => setIsEditModalOpen(false);
-
-  const handleOpenSettings = () =>
+  const handleSettings = () => {
     setIsSettingsOpen((prev) => ({
       ...prev,
-      settingsOpen: true,
+      modalOpen: !prev,
     }));
-
-  const handleCloseSettings = () =>
-    setIsSettingsOpen((prev) => ({
-      ...prev,
-      settingsOpen: false,
-    }));
+  };
 
   const handleModalClose = () => {
     setIsSettingsOpen((prev) => ({
@@ -89,18 +83,20 @@ const IndividualClub = () => {
     }));
   };
 
-  const handleSaveSettings = async (data: GeneralSettingsData) =>
+  const handleSaveSettings = async (data: GeneralSettingsData) => {
+    if (!id) return;
     await updateGeneralSettingsMutate(
-      { ...data, id },
+      { ...data, clubId: id },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: [QueryKeys.GET_CLUB_PROFILE],
           });
-          handleCloseSettings();
+          handleSettings();
         },
       },
     );
+  };
 
   const handleChatbotQuestionsModal = () =>
     setIsChatbotModalOpen((prev) => !prev);
@@ -121,7 +117,7 @@ const IndividualClub = () => {
     <div className={styles.individualClub}>
       <Header
         isFetching={isFetching}
-        onSettings={handleOpenSettings}
+        onSettings={handleSettings}
         onChatbotQuestions={handleChatbotQuestionsModal}
       />
       <ConditionalRender
@@ -163,7 +159,7 @@ const IndividualClub = () => {
               </div>
               <div className={styles.actionButtons}>
                 <Button
-                  onClick={handleEdit}
+                  onClick={handleEditModal}
                   icon={
                     <IconEdit
                       color={Colors.MODAL_CLOSE_ICON}
@@ -185,32 +181,48 @@ const IndividualClub = () => {
           </div>
         </Card>
       </ConditionalRender>
-      <ClubForm
-        onClose={handleCloseEditModal}
-        open={isEditModalOpen}
-        clubId={id}
-      />
-      <GeneralSettingsDrawer
-        open={isSettingsOpen.settingsOpen}
-        onClose={handleCloseSettings}
-        clubId={id}
-        webFormsEnabled={clubData?.club?.webFormsEnabled}
-        bulkEmailEnabled={clubData?.club?.bulkEmailEnabled}
-        emailTemplatesAllowed={clubData?.club?.emailTemplatesAllowed}
-        customChartsAllowed={clubData?.club?.customChartsAllowed}
-        onSave={handleSaveSettings}
-        isLoading={isSettingsUpdatePending}
-      />
-      <WarningModal
-        open={isSettingsOpen.modalOpen}
-        onClose={handleModalClose}
-        onSave={() => {}}
-        type={ClubSettingsTypes.TEMPLATES}
-      />
-      <ChatbotQuestionsModal
-        open={isChatbotModalOpen}
-        onClose={handleChatbotQuestionsModal}
-      />
+      <ConditionalRenderComponent hideFallback visible={isEditModalOpen}>
+        <ClubForm
+          onClose={handleEditModal}
+          open={isEditModalOpen}
+          clubId={id}
+        />
+      </ConditionalRenderComponent>
+
+      <ConditionalRenderComponent
+        hideFallback
+        visible={isSettingsOpen.settingsOpen}
+      >
+        <GeneralSettingsDrawer
+          open={isSettingsOpen.settingsOpen}
+          onClose={handleSettings}
+          clubId={id}
+          webFormsEnabled={clubData?.club?.webFormsEnabled}
+          bulkEmailEnabled={clubData?.club?.bulkEmailEnabled}
+          emailTemplatesAllowed={clubData?.club?.emailTemplatesAllowed}
+          customChartsAllowed={clubData?.club?.customChartsAllowed}
+          onSave={handleSaveSettings}
+          isLoading={isSettingsUpdatePending}
+        />
+      </ConditionalRenderComponent>
+
+      <ConditionalRenderComponent
+        hideFallback
+        visible={isSettingsOpen.modalOpen}
+      >
+        <WarningModal
+          open={isSettingsOpen.modalOpen}
+          onClose={handleModalClose}
+          onSave={() => {}}
+          type={ClubSettingsTypes.TEMPLATES}
+        />
+      </ConditionalRenderComponent>
+      <ConditionalRenderComponent hideFallback visible={isChatbotModalOpen}>
+        <ChatbotQuestionsModal
+          open={isChatbotModalOpen}
+          onClose={handleChatbotQuestionsModal}
+        />
+      </ConditionalRenderComponent>
     </div>
   );
 };

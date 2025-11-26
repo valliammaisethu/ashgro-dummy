@@ -264,8 +264,8 @@ export interface DrawerProps extends AntdDrawerProps {
   subHeading?: string;
   cancelText?: string;
   okText?: string;
-  cancelButtonProps?: AntdButtonProps;
-  okButtonProps?: AntdButtonProps;
+  cancelButtonProps?: Omit<ButtonProps, "loading"> & { loading?: boolean };
+  okButtonProps?: Omit<ButtonProps, "loading"> & { loading?: boolean };
   okButtonType?: ButtonTypes;
   okButtonHtmlType?: HtmlButtonType;
   confirmLoading?: boolean;

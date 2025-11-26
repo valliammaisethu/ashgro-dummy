@@ -5,7 +5,7 @@ import { IconCircleClose } from "obra-icons-react";
 import { DrawerProps } from "src/shared/types/sharedComponents.type";
 import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
 import { Colors } from "src/enums/colors.enum";
-import { DrawerFooter } from "./atoms";
+import { DrawerFooter } from "./drawerFooter";
 
 const Drawer = (props: DrawerProps) => {
   const {

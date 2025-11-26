@@ -3,7 +3,24 @@ import { ProfileDetails } from "./profile.model";
 import { Pagination } from "./pagination.model";
 import { ResponseModel } from "./response.model";
 
-export class ClubFormData {
+export class ClubGeneralSettings {
+  @serializable
+  webFormsEnabled?: boolean;
+
+  @serializable
+  bulkEmailEnabled?: boolean;
+
+  @serializable
+  emailTemplatesAllowed?: number;
+
+  @serializable
+  customChartsAllowed?: number;
+
+  @serializable
+  clubId?: string;
+}
+
+export class ClubFormData extends ClubGeneralSettings {
   @serializable
   attachmentId?: string;
 
@@ -36,21 +53,9 @@ export class ClubFormData {
 
   @serializable
   status?: string;
-
-  @serializable
-  webFormsEnabled?: boolean;
-
-  @serializable
-  bulkEmailEnabled?: boolean;
-
-  @serializable
-  emailTemplatesAllowed?: number;
-
-  @serializable
-  customChartsAllowed?: number;
 }
 
-export class ClubProfile {
+export class ClubProfile extends ClubGeneralSettings {
   @serializable
   id?: string;
 
@@ -92,18 +97,6 @@ export class ClubProfile {
 
   @serializable(object(ProfileDetails))
   adminDetails = new ProfileDetails();
-
-  @serializable
-  webFormsEnabled?: boolean;
-
-  @serializable
-  bulkEmailEnabled?: boolean;
-
-  @serializable
-  emailTemplatesAllowed?: number;
-
-  @serializable
-  customChartsAllowed?: number;
 }
 
 export class ClubData {
@@ -173,21 +166,12 @@ export class ClubStatusResponse extends ResponseModel {
   data?: ClubProfile;
 }
 
-export class ClubGeneralSettings {
+export class ClubKnowledgeBasePayload {
   @serializable
-  webFormsEnabled?: boolean;
+  attachmentId?: string;
 
   @serializable
-  bulkEmailEnabled?: boolean;
-
-  @serializable
-  emailTemplatesAllowed?: number;
-
-  @serializable
-  customChartsAllowed?: number;
-
-  @serializable
-  id?: string;
+  clubId?: string;
 }
 
 export class ClubGeneralSettingsResponse extends ResponseModel {

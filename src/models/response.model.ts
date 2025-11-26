@@ -53,4 +53,19 @@ export class ChatbotPayload {
 
   @serializable
   slotId?: number;
+
+  @serializable
+  isSlotBooking?: boolean;
+}
+
+export class ChatbotProfile {
+  @serializable
+  clubName?: string;
+
+  @serializable
+  clubLogo?: string;
+}
+export class ChatbotProfileResposne extends ResponseModel {
+  @serializable(object(ChatbotProfile))
+  data?: ChatbotProfile;
 }

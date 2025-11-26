@@ -45,6 +45,7 @@ export interface GeneralSettingsData {
   bulkEmailEnabled: boolean;
   emailTemplatesAllowed: number;
   customChartsAllowed: number;
+  clubId: string;
 }
 
 export interface GeneralSettingsDrawerProps {
