@@ -1,4 +1,4 @@
-import React, { Fragment, MouseEvent } from "react";
+import React, { MouseEvent } from "react";
 import { CheckboxChangeEvent } from "antd";
 import { IconDelete, IconEdit } from "obra-icons-react";
 
@@ -98,12 +98,9 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
             <div className={styles.contact}>
               <span className={styles.email}>{email}</span>
               {contactNumber && (
-                <Fragment>
-                  <span className={styles.dot}>•</span>
-                  <span
-                    className={styles.phone}
-                  >{`${countryCode} ${contactNumber}`}</span>
-                </Fragment>
+                <span
+                  className={styles.phone}
+                >{`${countryCode} ${contactNumber}`}</span>
               )}
             </div>
           </div>

@@ -312,3 +312,12 @@
 .statusSwitch {
   margin-right: 1rem;
 }
+
+.emptyWrapper {
+  :global(.ant-empty) {
+    position: absolute;
+    left: 75%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

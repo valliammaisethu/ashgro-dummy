@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { Col, Divider, Row } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IconCalendarWait } from "obra-icons-react";
@@ -35,6 +35,13 @@ import { getDigitsOnly } from "src/shared/utils/parser";
 import { findValueByLabel } from "src/shared/utils/commonHelpers";
 
 import styles from "./prospectForm.module.scss";
+import { EmailService } from "src/services/EmailService/email.service";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import {
+  EmailValidationError,
+  useDebouncedEmailValidation,
+} from "src/shared/hooks/useDebouncedEmailValidation";
 
 const {
   MODAL_TITLE,
@@ -62,6 +69,7 @@ const ProspectForm = ({
   const queryClient = useQueryClient();
 
   const { addProspect, editProspect, viewProspect } = ProspectsService();
+  const { validateEmail } = EmailService();
 
   const { data: prospectData, isPending: isFetchingProspect } = useQuery({
     ...viewProspect(prospectId!),
@@ -70,8 +78,12 @@ const ProspectForm = ({
 
   const { mutateAsync, isPending } = useMutation(addProspect());
 
+  const { mutateAsync: validateMutateAsync } = useMutation(validateEmail());
+
   const { mutateAsync: editMutateAsync, isPending: isEditPending } =
     useMutation(editProspect());
+
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
 
   const { data: leadSourcesData } = useQuery({
     ...getLeadSources(),
@@ -150,8 +162,40 @@ const ProspectForm = ({
     defaultValues: isEdit ? defaultValues : {},
   });
 
-  const { setValue, watch, reset, handleSubmit: handleFormSubmit } = methods;
+  const {
+    setValue,
+    watch,
+    reset,
+    handleSubmit: handleFormSubmit,
+    setError,
+    clearErrors,
+  } = methods;
   const activityDateTime = watch(FIELD_NAMES.ACTIVITY_DATE_TIME);
+
+  const handleEmailValidationError = useCallback(
+    (error: EmailValidationError) => {
+      if (error?.response?.data?.description) {
+        setError(FIELD_NAMES.EMAIL_ADDRESS, {
+          type: "manual",
+          message: error.response.data.description,
+        });
+      }
+    },
+    [setError],
+  );
+
+  const { handleEmailChange: debouncedEmailChange } =
+    useDebouncedEmailValidation({
+      validateMutateAsync,
+      clubId,
+      onError: handleEmailValidationError,
+    });
+
+  const handleEmailChange = (email: string) => {
+    clearErrors(FIELD_NAMES.EMAIL_ADDRESS);
+    if (!email) return;
+    debouncedEmailChange(email);
+  };
 
   const handleActivityDescriptionChange = (value: string) => {
     setValue(FIELD_NAMES.ACTIVITY_DESCRIPTION, value);
@@ -263,9 +307,7 @@ const ProspectForm = ({
             label={LABELS.PROFILE_PICTURE}
           />
         </div>
-
         <Divider />
-
         <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
           <Col span={12}>
             <InputField
@@ -306,6 +348,7 @@ const ProspectForm = ({
               name={FIELD_NAMES.EMAIL_ADDRESS}
               type={INPUT_TYPE.EMAIL}
               required
+              onChange={(e) => handleEmailChange(e.target.value)}
             />
           </Col>
           <Col span={12}>
@@ -317,9 +360,7 @@ const ProspectForm = ({
             />
           </Col>
         </Row>
-
         <Divider />
-
         <div className={styles.sectionTitle}>{SECTION_TITLES.LEAD_DETAILS}</div>
         <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
           <Col span={12}>

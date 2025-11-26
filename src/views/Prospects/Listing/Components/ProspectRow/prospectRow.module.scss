@@ -9,7 +9,6 @@
   align-items: center;
   transition: background-color 0.2s;
   cursor: pointer;
-  border-radius: 2rem;
   margin-top: 0.6rem;
   margin-bottom: 0.6rem;
   background-color: $ashgro-white;
@@ -37,6 +36,7 @@
 .checkboxCol {
   display: flex;
   align-items: center;
+  padding-left: 1.2rem;
 }
 
 .prospectCol,
@@ -80,21 +80,30 @@
   opacity: 0.6;
   font-family: $font-secondary;
   @include flex-container(normal, center, row, 1.2rem);
+  min-height: 2rem;
+  line-height: 2rem;
 
   .email {
     color: $ashgro-blue;
     font-size: 1.4rem;
     font-family: $font-secondary;
     width: 22rem;
+    line-height: 2rem;
   }
   .phone {
     color: $ashgro-navy;
     font-size: 1.4rem;
     font-family: $font-secondary;
-  }
-  .dot {
-    color: $dot-color;
-    font-size: 2rem;
+    line-height: 2rem;
+
+    &::before {
+      content: "•";
+      color: $dot-color;
+      margin-right: 0.4rem;
+      font-size: 2rem;
+      vertical-align: middle;
+      line-height: 2rem;
+    }
   }
 }
 

@@ -16,6 +16,7 @@ export const labels = {
   clubEmail: "Email Address",
   clubPhone: "Phone Number",
   clubAddress: "Club Address",
+  clubDomain: "Club's Domain",
 
   primaryFirstName: "First Name",
   primaryLastName: "Last Name",
@@ -31,6 +32,7 @@ export const placeholders = {
   clubEmail: "Enter email address",
   phone: "Phone number",
   clubAddress: "Enter club address",
+  clubDomain: "Enter club's domain",
 
   firstName: "Enter first name",
   lastName: "Enter last name",
@@ -50,6 +52,7 @@ export const fields = {
   clubPhoneCountryCode: "clubCountryCode",
   notes: "notes",
   clubAddress: "address",
+  clubDomain: "clubDomain",
 
   primaryFirstName: "adminDetails.firstName",
   primaryLastName: "adminDetails.lastName",
