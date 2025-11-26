@@ -10,6 +10,7 @@ const AvatarFallback: React.FC<AvatarWithFallbackProps> = ({
   src,
   name,
   size = 56,
+  fontSize = 16,
   className = "",
   backgroundColor = Colors.ASHGRO_GOLD,
 }) => {
@@ -30,7 +31,12 @@ const AvatarFallback: React.FC<AvatarWithFallbackProps> = ({
         {src ? (
           <img src={src} className={styles.avatarFallbackImage} />
         ) : (
-          <span className={styles.avatarFallbackInitials}>
+          <span
+            style={{
+              fontSize,
+            }}
+            className={styles.avatarFallbackInitials}
+          >
             {getInitials(name)}
           </span>
         )}

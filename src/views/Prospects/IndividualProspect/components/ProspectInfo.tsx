@@ -18,6 +18,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { formatAndSetPhoneNumber } from "src/shared/utils/phoneNumberUtils";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import Loader from "src/shared/components/Loader";
+import AvatarFallback from "src/shared/components/AvatarFallback";
 
 interface ProspectInfoProps {
   data?: ViewProspect;
@@ -80,8 +81,14 @@ const ProspectInfo: React.FC<ProspectInfoProps> = ({
 
   return (
     <div className={styles.top}>
-      <div className={styles.left}>
-        <img src={attachmentPreview} className={styles.prospectImage} />
+      <div>
+        <AvatarFallback
+          src={attachmentPreview}
+          name={getFullName(firstName, lastName)}
+          className={styles.prospectImage}
+          size={172}
+          fontSize={72}
+        />
       </div>
       <div className={styles.right}>
         <div className={styles.name}>{getFullName(firstName, lastName)}</div>

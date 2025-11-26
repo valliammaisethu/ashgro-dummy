@@ -245,6 +245,7 @@ export interface AvatarWithFallbackProps {
   src?: string;
   name: string;
   size?: number;
+  fontSize?: number;
   className?: string;
   backgroundColor?: string;
   textColor?: string;

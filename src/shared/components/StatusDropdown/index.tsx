@@ -23,12 +23,7 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
   const menuItems: MenuProps["items"] = options.map((option) => ({
     key: option.id || option.statusName || "",
     label: (
-      <div
-        className={styles.menuItem}
-        style={{
-          backgroundColor: getStatusTagBackgroundColor(option.color),
-        }}
-      >
+      <div className={styles.menuItem}>
         <span
           className={styles.dot}
           style={{

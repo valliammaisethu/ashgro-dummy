@@ -4,6 +4,7 @@ import {
   IconCall,
   IconEdit,
   IconEmail,
+  IconDelete,
 } from "obra-icons-react";
 import { Col, Row } from "antd";
 import clsx from "clsx";
@@ -35,6 +36,8 @@ const Details = () => {
 
   const [isEditForm, setIsEditForm] = useState(false);
 
+  const [deleteStaff, setDeleteStaff] = useState(false);
+
   const { navigateToStaffMemberList } = useRedirect();
 
   const { staffMembersDeatils } = StaffMembersService();
@@ -51,6 +54,8 @@ const Details = () => {
   ];
 
   const handleModalVisibility = () => setIsEditForm((prev) => !prev);
+
+  const handleDeleteForm = () => setDeleteStaff((prev) => !prev);
 
   const { toggleVisibility, visible } = useDrawer();
 
@@ -70,6 +75,13 @@ const Details = () => {
               <Button
                 onClick={handleModalVisibility}
                 icon={<IconEdit strokeWidth={1.5} />}
+                className={styles.editButton}
+              />
+            </Col>
+            <Col>
+              <Button
+                onClick={handleDeleteForm}
+                icon={<IconDelete strokeWidth={1.5} />}
                 className={styles.editButton}
               />
             </Col>
@@ -125,6 +137,13 @@ const Details = () => {
             isOpen={isEditForm}
             handleModalVisibility={handleModalVisibility}
             id={id}
+          />
+        )}
+        {deleteStaff && (
+          <DeleteModal
+            visible={deleteStaff}
+            toggleVisibility={handleDeleteForm}
+            staffMember={data}
           />
         )}
       </ConditionalRender>
