@@ -16,6 +16,10 @@
   border-radius: 20px;
   overflow: hidden;
 
+  background-image: url("src/assets/images/chatbotBg.svg");
+  object-fit: cover;
+  z-index: -1;
+
   @media (max-width: 600px) {
     border-radius: 0;
   }
@@ -208,4 +212,47 @@
   border: 1px solid #eee;
   cursor: pointer;
   transition: 0.2s ease-in-out;
+}
+
+// loader
+.loader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  height: 100vh;
+
+  span {
+    width: 15px;
+    height: 15px;
+    background: #9e9b9b;
+    border-radius: 50%;
+    animation: typingWave 1.2s infinite ease-in-out;
+    display: inline-block;
+  }
+
+  span:nth-child(1) {
+    animation-delay: 0s;
+  }
+  span:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+}
+
+@keyframes typingWave {
+  0% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
 }

@@ -5,6 +5,9 @@ import UploadArea from "src/shared/components/UploadArea";
 import styles from "./chatbotQuestionsModal.module.scss";
 import { chatbotQuestionModalTitle } from "./constants";
 import { Buttons } from "src/enums/buttons.enum";
+import { ClubService } from "src/services/ClubService/club.service";
+import { useMutation } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 
 interface ChatbotQuestionsModalProps {
   open: boolean;
@@ -15,14 +18,31 @@ const ChatbotQuestionsModal: React.FC<ChatbotQuestionsModalProps> = ({
   open,
   onClose,
 }) => {
-  const [uploadedFileId, setUploadedFileId] = useState<string | null>(null);
+  const { uploadKnowledgeBase } = ClubService();
+  const { id = "" } = useParams();
+  const { mutateAsync: uploadFileMutate, isPending: isUploading } = useMutation(
+    uploadKnowledgeBase(),
+  );
+
+  const [uploadedFileId, setUploadedFileId] = useState<string>();
 
   const handleFileUploaded = (fileId: string) => setUploadedFileId(fileId);
 
   const handleClose = () => {
-    setUploadedFileId(null);
+    setUploadedFileId("");
     onClose();
   };
+
+  const handleUpload = async () =>
+    await uploadFileMutate(
+      {
+        attachmentId: uploadedFileId,
+        id,
+      },
+      {
+        onSuccess: handleClose,
+      },
+    );
 
   return (
     <Modal
@@ -33,9 +53,11 @@ const ChatbotQuestionsModal: React.FC<ChatbotQuestionsModalProps> = ({
       cancelButtonProps={{
         className: "d-none",
       }}
+      handleOk={handleUpload}
       okText={Buttons.ADD_FILE}
       okButtonProps={{
         disabled: !uploadedFileId,
+        loading: isUploading,
       }}
     >
       <UploadArea onFileUploaded={handleFileUploaded} maxSizeMB={5} />

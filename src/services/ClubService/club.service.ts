@@ -3,6 +3,7 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { generatePath } from "react-router-dom";
 import { deserialize, serialize } from "serializr";
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
@@ -10,6 +11,7 @@ import axiosInstance from "src/interceptor/axiosInstance";
 import {
   ClubData,
   ClubFormData,
+  ClubKnowledgeBasePayload,
   ClubListReponse,
   ClubStatus,
   ClubStatusResponse,
@@ -21,9 +23,13 @@ import { QueryKeyType } from "src/shared/types/sharedComponents.type";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
 const { GET_CLUBS, GET_CLUB_PROFILE } = QueryKeys;
-const { GET_CLUBS: GET_CLUBS_ROUTE, GET_CLUB_PROFILE: GET_CLUB_PROFILE_ROUTE } =
-  ApiRoutes;
-const { ADD_CLUB, EDIT_CLUB, EDIT_CHATBOT } = MutationKeys;
+const {
+  GET_CLUBS: GET_CLUBS_ROUTE,
+  GET_CLUB_PROFILE: GET_CLUB_PROFILE_ROUTE,
+  UPLOAD_CHATBOT_KNOWLEDGE_BASE: UPLOAD_CHATBOT_KNOWLEDGE_BASE_ROUTE,
+} = ApiRoutes;
+const { ADD_CLUB, EDIT_CLUB, EDIT_CHATBOT, UPLOAD_CHATBOT_KNOWLEDGE_BASE } =
+  MutationKeys;
 
 const handleSuccess =
   (queryClient: ReturnType<typeof useQueryClient>) =>
@@ -124,11 +130,27 @@ export const ClubService = () => {
       }),
   });
 
+  const uploadKnowledgeBase = (): UseMutationOptions<
+    ResponseModel,
+    AxiosError,
+    ClubKnowledgeBasePayload
+  > => ({
+    mutationKey: [UPLOAD_CHATBOT_KNOWLEDGE_BASE],
+    mutationFn: async (body: ClubKnowledgeBasePayload) => {
+      const { data } = await axiosInstance.post(
+        generatePath(UPLOAD_CHATBOT_KNOWLEDGE_BASE_ROUTE, { id: body.id }),
+        serialize(ClubKnowledgeBasePayload, body),
+      );
+      return deserialize(ResponseModel, data);
+    },
+  });
+
   return {
     getClubs,
     getClubProfile,
     addClub,
     editClub,
     updateStatus,
+    uploadKnowledgeBase,
   };
 };

@@ -7,7 +7,7 @@
 
   const BASE = "https://constitutional-violet-swift.rootquotient.revolte.io/chatbot";
 
-  const BASE_API_URL = `https://molecular-tan-reptile.rootquotient.revolte.io/api/v1/chatbot?clubId=${clubId}`;
+  const BASE_API_URL = `https://molecular-tan-reptile.rootquotient.revolte.io/api/v1/chatbot/${clubId}`;
 
   const IFRAME_URL = `${BASE}/?clubId=${encodeURIComponent(
     clubId
@@ -45,8 +45,8 @@
   }
 
   (async () => {
-    // const data = await checkIsValidHost(BASE_API_URL);
-    const data = { success: true };
+    const data = await checkIsValidHost(BASE_API_URL);
+
     if (data?.success) initializeChatbot();
   })();
 
