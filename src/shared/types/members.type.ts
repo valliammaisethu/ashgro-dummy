@@ -16,4 +16,5 @@ export interface MembersHeaderProps {
   onBulkImport: () => void;
   filtersActive: boolean;
   selectedEmails?: number;
+  isCheckingImportStatus?: boolean;
 }
