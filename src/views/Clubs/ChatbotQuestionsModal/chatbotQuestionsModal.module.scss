@@ -1,0 +1,10 @@
+@import "src/styles/variables";
+
+.chatbotQuestionsModal {
+  :global(.ant-modal) {
+    max-width: 53rem;
+  }
+  :global(.ant-modal-footer) {
+    margin-top: 0;
+  }
+}

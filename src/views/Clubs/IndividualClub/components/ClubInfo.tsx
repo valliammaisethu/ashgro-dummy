@@ -11,6 +11,7 @@ import { Colors } from "src/enums/colors.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
 
 import styles from "../individualClub.module.scss";
+import { fallbackHandler } from "src/shared/utils/commonHelpers";
 
 const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
   const {
@@ -44,7 +45,9 @@ const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
         <div className={styles.details}>
           <span className={styles.dateTitle}>{CLUB_LABELS.onBoardedDate}</span>
           <span className={styles.date}>
-            {formatDate(onboardingDate, DateFormats.DD_MMM__YYYY)}
+            {fallbackHandler(
+              formatDate(onboardingDate, DateFormats.DD_MMM__YYYY),
+            )}
           </span>
         </div>
         <div className={styles.contactInfo}>

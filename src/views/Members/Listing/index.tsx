@@ -253,6 +253,11 @@ const Members = () => {
     toggleNewEmailModal();
   }, [toggleNewEmailModal]);
 
+  const handleClearSelections = () => {
+    setSelectedMembers([]);
+    setIsAllSelected(false);
+  };
+
   useEffect(() => {
     if (clubId && queryParams.clubId !== clubId) {
       setQueryParams((prev) => ({ ...prev, clubId }));
@@ -266,6 +271,7 @@ const Members = () => {
         selectedEmails={selectedMembers.length}
         onFilter={toggleMemberFilters}
         onSearch={handleSearch}
+        onClear={handleClearSelections}
         onAddMember={() => handleModalVisibility(VisibilityType.ADD)}
         onBulkMail={toggleEmailTemplateModal}
         onBulkImport={toggleImportModal}

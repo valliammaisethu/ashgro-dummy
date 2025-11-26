@@ -8,6 +8,7 @@ import { StatusDropdownProps } from "src/shared/types/sharedComponents.type";
 import { getStatusTagBackgroundColor } from "src/shared/utils/helpers";
 import Button from "../Button";
 import { selectStatus } from "src/constants/sharedComponents";
+import clsx from "clsx";
 
 const StatusDropdown: React.FC<StatusDropdownProps> = ({
   value,
@@ -23,19 +24,18 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
   const menuItems: MenuProps["items"] = options.map((option) => ({
     key: option.id || option.statusName || "",
     label: (
-      <div
-        className={styles.menuItem}
-        style={{
-          backgroundColor: getStatusTagBackgroundColor(option.color),
-        }}
-      >
-        <span
+      <div className={styles.menuItem}>
+        <div
           className={styles.dot}
           style={{
-            backgroundColor: getStatusTagBackgroundColor(option.color),
-            borderColor: option.color,
+            border: `2px solid ${getStatusTagBackgroundColor(option.color)}`,
+            color: option.color,
           }}
-        />
+        >
+          <div style={{ color: option.color }} className={styles.innerDot}>
+            .
+          </div>
+        </div>
         <span className={styles.label} style={{ color: option.color }}>
           {option.statusName}
         </span>
@@ -62,15 +62,17 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
           <div className={styles.buttonContent}>
             {selectedOption && (
               <>
-                <span
+                <div
                   className={styles.dot}
                   style={{
-                    backgroundColor: getStatusTagBackgroundColor(
-                      selectedOption.color,
-                    ),
-                    borderColor: selectedOption.color,
+                    border: `2px solid ${getStatusTagBackgroundColor(selectedOption.color)}`,
+                    color: selectedOption.color,
                   }}
-                />
+                >
+                  <div className={clsx(styles.innerDot, styles.optionInnerDot)}>
+                    .
+                  </div>
+                </div>
                 <span
                   className={styles.label}
                   style={{ color: selectedOption.color }}

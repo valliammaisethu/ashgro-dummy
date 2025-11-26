@@ -10,10 +10,10 @@ import { Colors } from "src/enums/colors.enum";
 import styles from "../../clubs.module.scss";
 
 const ClubListingHeader = (props: ClubListingHeaderProps) => {
-  const { onAddClub } = props;
+  const { onAddClub, onSearch } = props;
   return (
     <div className={styles.header}>
-      <SearchField onSearch={() => {}} />
+      <SearchField onSearch={onSearch} />
       <div className={styles.addClub}>
         <IconAdd
           color={Colors.ASHGRO_WHITE}

@@ -29,6 +29,7 @@ import SettingsWrapper from "src/views/Settings";
 import DashboardWrapper from "src/views/Dashboard";
 import Calender from "src/views/Calender";
 import { AuthContext } from "src/context/AuthContext";
+import Chatbot from "src/views/Chatbot";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { authenticated } = AuthContext();
@@ -111,6 +112,8 @@ const AppRouter = () => {
               </AuthRoute>
             }
           />
+
+          <Route path={AppRoutes.CHATBOT} element={<Chatbot />} />
 
           <Route
             path={AppRoutes.APP_COMPONENTS}

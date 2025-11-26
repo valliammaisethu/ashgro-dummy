@@ -19,6 +19,7 @@ const CalendarToolbar: FC<ToolbarProps> = ({
   label,
   onNavigate,
   onBookMeeting,
+  onChatBotSlotClick,
 }) => {
   const handleNavigation = (direction: NavigateAction) => () =>
     onNavigate(direction);
@@ -56,7 +57,7 @@ const CalendarToolbar: FC<ToolbarProps> = ({
           icon={<IconAdd strokeWidth={1.5} />}
           className={styles.actionBtn}
           type={ButtonTypes.SECONDARY}
-          onClick={() => {}}
+          onClick={onChatBotSlotClick}
         >
           {CALENDAR_CONSTANTS.CHATBOT_SLOT}
         </Button>
@@ -66,3 +67,5 @@ const CalendarToolbar: FC<ToolbarProps> = ({
 };
 
 export default CalendarToolbar;
+
+// remove chatbot slots from previous days

@@ -22,7 +22,7 @@ export const fallbackHandler = (
   value?: string | number | null,
   isNumber = false,
 ) => {
-  if (value == null) {
+  if (value == null || value === "") {
     return isNumber ? 0 : "-";
   }
   return value;

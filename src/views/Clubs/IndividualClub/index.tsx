@@ -8,6 +8,7 @@ import ClubInfo from "./components/ClubInfo";
 import ContactDetails from "./components/ContactDetails";
 import NotesSection from "./components/NotesSection";
 import ClubForm from "../ClubForm";
+import ChatbotQuestionsModal from "../ChatbotQuestionsModal";
 import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
 import Button from "src/shared/components/Button";
 import Card from "src/shared/components/Card";
@@ -24,6 +25,7 @@ import styles from "./individualClub.module.scss";
 const IndividualClub = () => {
   const { id = "" } = useParams();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isChatbotModalOpen, setIsChatbotModalOpen] = useState(false);
   const queryClient = useQueryClient();
   const { getClubProfile, updateStatus } = ClubService();
 
@@ -62,9 +64,8 @@ const IndividualClub = () => {
     setIsEditModalOpen(false);
   };
 
-  const handleChatbotQuestions = () => {
-    // TODO: Need to do integration
-  };
+  const handleChatbotQuestionsModal = () =>
+    setIsChatbotModalOpen((prev) => !prev);
 
   const handleStatusChange = async (value: string) => {
     await updateClubStatusMutate(
@@ -79,7 +80,10 @@ const IndividualClub = () => {
 
   return (
     <div className={styles.individualClub}>
-      <Header onChatbotQuestions={handleChatbotQuestions} />
+      <Header
+        isFetching={isFetching}
+        onChatbotQuestions={handleChatbotQuestionsModal}
+      />
       <ConditionalRender
         isPending={isPending}
         isSuccess={isSuccess}
@@ -143,6 +147,10 @@ const IndividualClub = () => {
         onClose={handleCloseEditModal}
         open={isEditModalOpen}
         clubId={id}
+      />
+      <ChatbotQuestionsModal
+        open={isChatbotModalOpen}
+        onClose={handleChatbotQuestionsModal}
       />
     </div>
   );

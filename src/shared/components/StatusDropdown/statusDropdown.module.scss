@@ -9,6 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border: 1px solid $dropdown-border;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: $font-secondary;
@@ -35,11 +36,24 @@
 }
 
 .dot {
-  width: 1rem;
-  height: 1rem;
   border-radius: 50%;
-  flex-shrink: 0;
-  border: 2px solid;
+  text-align: center;
+  height: 1.2rem;
+  width: 1.2rem;
+  position: relative;
+
+  .innerDot {
+    position: absolute;
+    top: -4rem;
+    left: -0.033rem;
+    font-size: 4rem;
+    z-index: 10;
+
+    &.optionInnerDot {
+      top: -3.7rem;
+      left: -0.13rem;
+    }
+  }
 }
 
 .label {
@@ -79,10 +93,11 @@
     background: transparent;
     box-shadow: none;
     padding: 0.4rem;
-    border-radius: 0.8rem;
-    background: $ashgro-white;
+    border-radius: 1.7rem;
+    background: $dropdown-bg;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     min-width: 14rem;
+    border: 1px solid $dropdown-border;
   }
 
   :global(.ant-dropdown-menu-item) {
