@@ -36,4 +36,12 @@
     height: 4rem;
     background-color: $ashgro-navy;
   }
+
+  &:global(
+    .ant-btn.ant-btn-primary.ant-btn-variant-solid:not(:disabled):not(
+        .ant-btn-disabled
+      ):hover
+  ) {
+    background-color: $ashgro-navy;
+  }
 }

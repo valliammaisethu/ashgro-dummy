@@ -389,6 +389,7 @@ const Members = () => {
         selectedEmails={emailRecipients}
         selectedTemplate={selectedTemplate}
         isBulkEmail
+        handleEmailComplete={handleClearSelections}
       />
       <BulkImportModal
         visible={bulkImportModalVisible}

@@ -17,4 +17,21 @@
   font-weight: 500;
   padding: 0 1.8rem;
   height: 4rem;
+  background-color: $ashgro-navy;
+
+  &:global(.ant-btn.ant-btn-primary) {
+    border: none;
+    font-weight: 500;
+    padding: 0 1.8rem;
+    height: 4rem;
+    background-color: $ashgro-navy;
+  }
+
+  &:global(
+    .ant-btn.ant-btn-primary.ant-btn-variant-solid:not(:disabled):not(
+        .ant-btn-disabled
+      ):hover
+  ) {
+    background-color: $ashgro-navy;
+  }
 }
