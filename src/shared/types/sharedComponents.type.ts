@@ -262,6 +262,14 @@ export interface DrawerProps extends AntdDrawerProps {
   children: JSX.Element;
   placement?: DrawerPlacement;
   subHeading?: string;
+  cancelText?: string;
+  okText?: string;
+  cancelButtonProps?: Omit<ButtonProps, "loading"> & { loading?: boolean };
+  okButtonProps?: Omit<ButtonProps, "loading"> & { loading?: boolean };
+  okButtonType?: ButtonTypes;
+  okButtonHtmlType?: HtmlButtonType;
+  confirmLoading?: boolean;
+  handleOk?: () => void;
 }
 
 export interface UploadedFile {

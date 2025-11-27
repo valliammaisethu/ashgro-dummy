@@ -30,6 +30,7 @@ export enum Buttons {
   CANCEL_UPLOAD = "Cancel Upload",
   CHANGE = "Change",
   IMPORT = "Import",
+  YES_PROCEED = "Yes, Proceed",
   ADD_FILE = "Add File",
 }
 

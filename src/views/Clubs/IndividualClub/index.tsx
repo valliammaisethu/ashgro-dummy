@@ -8,6 +8,7 @@ import Header from "./Header";
 import ClubInfo from "./components/ClubInfo";
 import ContactDetails from "./components/ContactDetails";
 import NotesSection from "./components/NotesSection";
+import GeneralSettingsDrawer from "./components/GeneralSettingsDrawer";
 import Button from "src/shared/components/Button";
 import Card from "src/shared/components/Card";
 import ConditionalRender from "src/shared/components/ConditionalRender";
@@ -19,16 +20,27 @@ import ChatbotQuestionsModal from "../ChatbotQuestionsModal";
 import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
 import { ClubService } from "src/services/ClubService/club.service";
 import { Colors } from "src/enums/colors.enum";
+import { QueryKeys } from "src/enums/cacheEvict.enum";
+import {
+  ClubSettingsState,
+  GeneralSettingsData,
+} from "src/shared/types/clubs.type";
 
 import styles from "./individualClub.module.scss";
-import { QueryKeys } from "src/enums/cacheEvict.enum";
+import WarningModal from "./components/WarningModal";
+import { ClubSettingsTypes } from "src/enums/clubSettingsTypes.enum";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 const IndividualClub = () => {
   const { id = "" } = useParams();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isChatbotModalOpen, setIsChatbotModalOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<ClubSettingsState>({
+    modalOpen: false,
+    settingsOpen: false,
+  });
   const queryClient = useQueryClient();
-  const { getClubProfile, updateStatus } = ClubService();
+  const { getClubProfile, updateStatus, updateGeneralSettings } = ClubService();
 
   const {
     data: clubData,
@@ -47,21 +59,49 @@ const IndividualClub = () => {
     isPending: isStatusUpdatePending,
   } = useMutation(updateStatus());
 
+  const {
+    mutateAsync: updateGeneralSettingsMutate,
+    isPending: isSettingsUpdatePending,
+  } = useMutation(updateGeneralSettings());
+
   const handleChatbotStatusChange = async (value: boolean) =>
     await updateChatbotStatusMutate({ chatbotEnabled: value, id });
 
-  const handleEdit = () => {
-    setIsEditModalOpen(true);
+  const handleEditModal = () => setIsEditModalOpen((prev) => !prev);
+
+  const handleSettings = () => {
+    setIsSettingsOpen((prev) => ({
+      ...prev,
+      modalOpen: !prev,
+    }));
   };
 
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
+  const handleModalClose = () => {
+    setIsSettingsOpen((prev) => ({
+      ...prev,
+      modalOpen: false,
+    }));
+  };
+
+  const handleSaveSettings = async (data: GeneralSettingsData) => {
+    if (!id) return;
+    await updateGeneralSettingsMutate(
+      { ...data, clubId: id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: [QueryKeys.GET_CLUB_PROFILE],
+          });
+          handleSettings();
+        },
+      },
+    );
   };
 
   const handleChatbotQuestionsModal = () =>
     setIsChatbotModalOpen((prev) => !prev);
 
-  const handleStatusChange = async (value: string) => {
+  const handleStatusChange = async (value: string) =>
     await updateClubStatusMutate(
       { status: value, id },
       {
@@ -72,12 +112,12 @@ const IndividualClub = () => {
         },
       },
     );
-  };
 
   return (
     <div className={styles.individualClub}>
       <Header
         isFetching={isFetching}
+        onSettings={handleSettings}
         onChatbotQuestions={handleChatbotQuestionsModal}
       />
       <ConditionalRender
@@ -119,7 +159,7 @@ const IndividualClub = () => {
               </div>
               <div className={styles.actionButtons}>
                 <Button
-                  onClick={handleEdit}
+                  onClick={handleEditModal}
                   icon={
                     <IconEdit
                       color={Colors.MODAL_CLOSE_ICON}
@@ -141,15 +181,48 @@ const IndividualClub = () => {
           </div>
         </Card>
       </ConditionalRender>
-      <ClubForm
-        onClose={handleCloseEditModal}
-        open={isEditModalOpen}
-        clubId={id}
-      />
-      <ChatbotQuestionsModal
-        open={isChatbotModalOpen}
-        onClose={handleChatbotQuestionsModal}
-      />
+      <ConditionalRenderComponent hideFallback visible={isEditModalOpen}>
+        <ClubForm
+          onClose={handleEditModal}
+          open={isEditModalOpen}
+          clubId={id}
+        />
+      </ConditionalRenderComponent>
+
+      <ConditionalRenderComponent
+        hideFallback
+        visible={isSettingsOpen.settingsOpen}
+      >
+        <GeneralSettingsDrawer
+          open={isSettingsOpen.settingsOpen}
+          onClose={handleSettings}
+          clubId={id}
+          webFormsEnabled={clubData?.club?.webFormsEnabled}
+          bulkEmailEnabled={clubData?.club?.bulkEmailEnabled}
+          emailTemplatesAllowed={clubData?.club?.emailTemplatesAllowed}
+          customChartsAllowed={clubData?.club?.customChartsAllowed}
+          onSave={handleSaveSettings}
+          isLoading={isSettingsUpdatePending}
+        />
+      </ConditionalRenderComponent>
+
+      <ConditionalRenderComponent
+        hideFallback
+        visible={isSettingsOpen.modalOpen}
+      >
+        <WarningModal
+          open={isSettingsOpen.modalOpen}
+          onClose={handleModalClose}
+          onSave={() => {}}
+          type={ClubSettingsTypes.TEMPLATES}
+        />
+      </ConditionalRenderComponent>
+      <ConditionalRenderComponent hideFallback visible={isChatbotModalOpen}>
+        <ChatbotQuestionsModal
+          open={isChatbotModalOpen}
+          onClose={handleChatbotQuestionsModal}
+        />
+      </ConditionalRenderComponent>
     </div>
   );
 };
