@@ -13,6 +13,7 @@ export interface ProspectListingHeaderProps {
   onBulkImport: () => void;
   selectedEmails: number;
   filtersActive: boolean;
+  isCheckingImportStatus?: boolean;
 }
 
 export interface ProspectFormProps {

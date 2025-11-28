@@ -5,7 +5,9 @@ import { useMutation } from "@tanstack/react-query";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
-import BulkFileUpload from "src/shared/components/BulkFileUpload";
+import BulkFileUpload, {
+  UploadedFileData,
+} from "src/shared/components/BulkFileUpload";
 import {
   importDescription,
   inputPlaceholder,
@@ -19,10 +21,10 @@ import { BulkModes } from "src/enums/bulkModes";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { TemplateEntity } from "src/enums/templateEntity.enum";
 import { BulkImportModalProps } from "src/shared/types/bulkImport.type";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { BulkUploadService } from "src/services/BulkUploadService/bulkUpload.service";
 import { TemplateDownloadService } from "src/services/TemplateDownloadService/templateDownload.service";
 import { downloadTemplateFile } from "src/services/TemplateDownloadService/utils";
-import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 
 import styles from "./bulkImport.module.scss";
 
@@ -30,7 +32,7 @@ const BulkImportModal = (props: BulkImportModalProps) => {
   const { importMode, onClose, visible, onImport } = props;
   const [isUploading, setIsUploading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
-  const [uploadedS3Key, setUploadedS3Key] = useState<string>("");
+  const [uploadedFile, setUploadedFile] = useState<string>("");
 
   const { bulkUpload } = BulkUploadService();
   const { downloadTemplate } = TemplateDownloadService();
@@ -54,21 +56,20 @@ const BulkImportModal = (props: BulkImportModalProps) => {
       },
     });
 
-  const handleDownloadTemplate = () => {
+  const handleDownloadTemplate = () =>
     downloadTemplateMutate({ clubId, entity: getTemplateEntity() });
-  };
 
-  const handleFileUploaded = (s3Key: string) => {
-    setUploadedS3Key(s3Key);
+  const handleFileUploaded = (fileData: UploadedFileData) => {
+    setUploadedFile(fileData.fileId);
     setIsUploaded(true);
   };
 
   const handleImport = () => {
-    if (!uploadedS3Key || !clubId) return;
+    if (!uploadedFile || !clubId) return;
 
     upload(
       {
-        s3Key: uploadedS3Key,
+        attachmentId: uploadedFile,
         clubId: clubId,
         entity: getTemplateEntity(),
       },
@@ -85,12 +86,10 @@ const BulkImportModal = (props: BulkImportModalProps) => {
     onClose();
     setIsUploading(false);
     setIsUploaded(false);
-    setUploadedS3Key("");
+    setUploadedFile("");
   };
 
-  const handleChangeFile = () => {
-    setIsUploaded(false);
-  };
+  const handleChangeFile = () => setIsUploaded(false);
 
   return (
     <div>
