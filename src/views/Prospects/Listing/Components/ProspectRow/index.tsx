@@ -1,5 +1,5 @@
 import React, { MouseEvent } from "react";
-import { CheckboxChangeEvent, Select } from "antd";
+import { CheckboxChangeEvent } from "antd";
 import { IconDelete, IconEdit } from "obra-icons-react";
 
 import { ProspectsList } from "src/models/prospects.model";
@@ -10,12 +10,11 @@ import { fillEmptyData, getFullName } from "src/shared/utils/helpers";
 import AvatarFallback from "src/shared/components/AvatarFallback";
 import Checkbox from "src/shared/components/Checkbox";
 import { DateFormats } from "src/enums/dateFormats.enum";
-import StatusTag from "../../Atoms/StatusTag";
-import { empty } from "src/constants/sharedComponents";
 import { Colors } from "src/enums/colors.enum";
 
 import styles from "./prospectRow.module.scss";
 import { stopPropagation } from "src/shared/utils/eventUtils";
+import StatusDropdown from "src/shared/components/StatusDropdown";
 
 interface ProspectRowProps {
   prospect: ProspectsList;
@@ -115,25 +114,13 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
       <div className={styles.sourceColValue}>
         {fillEmptyData(toTitleCase(leadSource))}
       </div>
-      {leadStatus ? (
-        <div className={styles.statusCol}>
-          <Select
-            value={leadStatus}
-            className={styles.statusSelect}
-            onClick={handleSelectClick}
-            onChange={handleStatusChange}
-            loading={isUpdatingStatus}
-          >
-            {leadStatusOptions?.map(({ id, statusName = "" }) => (
-              <Select.Option key={id} value={statusName}>
-                <StatusTag label={statusName} />
-              </Select.Option>
-            ))}
-          </Select>
-        </div>
-      ) : (
-        <div className={styles.sourceColValue}>{empty}</div>
-      )}
+      <StatusDropdown
+        value={leadStatus}
+        options={leadStatusOptions || []}
+        onChange={handleStatusChange}
+        loading={isUpdatingStatus}
+        onClick={handleSelectClick}
+      />
       <div className={styles.actions}>
         <IconEdit
           onClick={(e) => handleEditClick(e, prospect)}
