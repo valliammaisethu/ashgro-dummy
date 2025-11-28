@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import {
   clubHeaderColumnGrid,
@@ -21,7 +21,6 @@ import { ClubService } from "src/services/ClubService/club.service";
 import { extractNameParts } from "src/shared/utils/parser";
 import useRedirect from "src/shared/hooks/useRedirect";
 import { stopPropagation } from "src/shared/utils/eventUtils";
-import { updateClubCache } from "src/shared/utils/cacheUtils";
 
 import styles from "../../clubs.module.scss";
 
@@ -33,13 +32,11 @@ const ClubListingTable = ({
   const { getClubs, updateStatus } = ClubService();
   const [updatingClubId, setUpdatingClubId] = useState<string>("");
   const { navigateToInvidualClub } = useRedirect();
-  const queryClient = useQueryClient();
 
   const {
     data: clubsData,
     isPending,
     isSuccess,
-    isFetching,
   } = useQuery(getClubs(queryParams));
 
   const handlePageChange = (page: number) => () =>
@@ -62,7 +59,6 @@ const ClubListingTable = ({
       { chatbotEnabled: value, id: clubId },
       {
         onSuccess: () => {
-          updateClubCache(queryClient, clubId, { chatbotEnabled: value });
           setUpdatingClubId("");
         },
         onError: () => {
@@ -78,7 +74,6 @@ const ClubListingTable = ({
       { status: value, id: clubId },
       {
         onSuccess: () => {
-          updateClubCache(queryClient, clubId, { status: value });
           setUpdatingClubId("");
         },
         onError: () => {
@@ -109,7 +104,6 @@ const ClubListingTable = ({
       </ConditionalRenderComponent>
       <div className={styles.tableBody}>
         <ConditionalRender
-          isFetching={isFetching}
           isPending={isPending}
           isSuccess={isSuccess}
           records={clubsData?.clubs}

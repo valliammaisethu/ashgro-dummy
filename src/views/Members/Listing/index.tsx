@@ -3,10 +3,8 @@ import { FieldValues } from "react-hook-form";
 import { CheckboxChangeEvent } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import Header from "../Header";
-import useDrawer from "src/shared/hooks/useDrawer";
-import MemberFilters from "../Filters";
 import { Member, MembersListingParams } from "src/models/members.model";
+import { EmailTemplate } from "src/models/meta.model";
 import {
   areFiltersActive,
   toggleAllSelections,
@@ -15,36 +13,40 @@ import {
   areSomeMembersSelected,
   SelectedMember,
 } from "../helpers";
+import { memberHeaders } from "../MembersForm/constants";
+import Header from "../Header";
+import MemberFilters from "../Filters";
+import DeleteModal from "../DeleteModal";
+import MembersForm from "../MembersForm";
+import TemplateModal from "src/views/Email/TemplateModal";
+import NewEmailModal from "src/views/Email/NewEmailModal";
+import BulkInProgressModal from "src/views/BulkImport/InProgressModal";
+import BulkImportModal from "src/views/BulkImport";
+import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
+import { SettingFormModalModel } from "src/views/Settings/constants";
 import { MembersService } from "src/services/MembersService/members.service";
 import { EmailService } from "src/services/EmailService/email.service";
-import MembersForm from "../MembersForm";
+import { BulkUploadService } from "src/services/BulkUploadService/bulkUpload.service";
+import { MemberShipService } from "src/services/SettingsService/memberShip.service";
+import { VisibilityType } from "src/enums/visibilityType.enum";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { BulkModes } from "src/enums/bulkModes";
+import { DateFormats } from "src/enums/dateFormats.enum";
+import { TemplateEntity } from "src/enums/templateEntity.enum";
 import ConditionalRender from "src/shared/components/ConditionalRender";
+import Pagination from "src/shared/components/Pagination";
 import Profile from "src/shared/components/atoms/Table/Profile";
 import Form from "src/shared/components/Form";
 import Checkbox from "src/shared/components/Checkbox";
-import { stopPropagation } from "src/shared/utils/eventUtils";
-import { MemberShipService } from "src/services/SettingsService/memberShip.service";
-import { formatDate } from "src/shared/utils/dateUtils";
-import { DateFormats } from "src/enums/dateFormats.enum";
-import useRedirect from "src/shared/hooks/useRedirect";
 import Actions from "src/shared/components/atoms/Table/Actions";
-import { SettingFormModalModel } from "src/views/Settings/constants";
-import { memberHeaders } from "../MembersForm/constants";
-import Pagination from "src/shared/components/Pagination";
+import { stopPropagation } from "src/shared/utils/eventUtils";
+import { formatDate } from "src/shared/utils/dateUtils";
+import useRedirect from "src/shared/hooks/useRedirect";
+import useDrawer from "src/shared/hooks/useDrawer";
 import { fallbackHandler } from "src/shared/utils/commonHelpers";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
-import DeleteModal from "../DeleteModal";
-import { VisibilityType } from "src/enums/visibilityType.enum";
-import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import TemplateModal from "src/views/Email/TemplateModal";
-import NewEmailModal from "src/views/Email/NewEmailModal";
-import { EmailTemplate } from "src/models/meta.model";
-import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 
 import styles from "./membersListing.module.scss";
-import BulkImportModal from "src/views/BulkImport";
-import { BulkModes } from "src/enums/bulkModes";
-import BulkInProgressModal from "src/views/BulkImport/InProgressModal";
 
 interface ModalState {
   open: boolean;
@@ -84,6 +86,7 @@ const Members = () => {
   const {
     visible: bulkImportModalVisible,
     toggleVisibility: toggleImportModal,
+    hide: hideImportModal,
   } = useDrawer();
 
   const {
@@ -92,8 +95,25 @@ const Members = () => {
     hide: hideBulkInProgress,
   } = useDrawer();
 
-  const handleOnBulkImport = () => {
-    toggleImportModal();
+  const handleBulkImportClick = () => {
+    checkBulkImportStatusMutate(
+      { clubId, entity: TemplateEntity.MEMBER },
+      {
+        onSuccess: (response) => {
+          const { data } = response;
+          if (data.canStartImport) {
+            if (selectedMembers.length > 0 || isAllSelected)
+              toggleEmailTemplateModal();
+            else toggleImportModal();
+          }
+        },
+      },
+    );
+  };
+
+  const handleBulkImportSuccess = () => {
+    // Note: The BulkImportModal will call onClose (hideImportModal) internally after success
+    // We just need to show the in-progress modal
     toggleBulkInProgress();
 
     setTimeout(() => {
@@ -106,12 +126,13 @@ const Members = () => {
   const { getStaffMembersList, updateMemberStatus } = MembersService();
   const { memberShipStatuses } = MemberShipService();
   const { getMemberEmailRecipients } = EmailService();
+  const { checkBulkImportStatus } = BulkUploadService();
 
   const { data: memberShipStatusesOptions = [] } =
     useQuery(memberShipStatuses());
   const { mutateAsync: updateMemberStatusMutate } =
     useMutation(updateMemberStatus());
-  const { data, isPending, isSuccess } = useQuery(
+  const { data, isSuccess, isLoading } = useQuery(
     getStaffMembersList(queryParams),
   );
 
@@ -119,6 +140,11 @@ const Members = () => {
     ...getMemberEmailRecipients(queryParams),
     enabled: isAllSelected,
   });
+
+  const {
+    mutate: checkBulkImportStatusMutate,
+    isPending: isCheckingBulkImportStatus,
+  } = useMutation(checkBulkImportStatus());
 
   const [updatingMemberId, setUpdatingMemberId] = useState<
     string | undefined
@@ -258,6 +284,22 @@ const Members = () => {
     setIsAllSelected(false);
   };
 
+  const handleBulkMail = () => {
+    checkBulkImportStatusMutate(
+      { clubId, entity: TemplateEntity.MEMBER },
+      {
+        onSuccess: (response) => {
+          const { data } = response;
+          if (data.canStartImport) {
+            if (selectedMembers.length > 0 || isAllSelected)
+              toggleEmailTemplateModal();
+            else toggleImportModal();
+          }
+        },
+      },
+    );
+  };
+
   useEffect(() => {
     if (clubId && queryParams.clubId !== clubId) {
       setQueryParams((prev) => ({ ...prev, clubId }));
@@ -273,8 +315,9 @@ const Members = () => {
         onSearch={handleSearch}
         onClear={handleClearSelections}
         onAddMember={() => handleModalVisibility(VisibilityType.ADD)}
-        onBulkMail={toggleEmailTemplateModal}
-        onBulkImport={toggleImportModal}
+        onBulkMail={handleBulkMail}
+        onBulkImport={handleBulkImportClick}
+        isCheckingImportStatus={isCheckingBulkImportStatus}
       />
       <MemberFilters
         toggleVisibility={toggleMemberFilters}
@@ -301,7 +344,7 @@ const Members = () => {
 
           <ConditionalRender
             records={data?.members}
-            isPending={isPending}
+            isPending={isLoading}
             isSuccess={isSuccess}
           >
             <div className={styles.listContainer}>
@@ -393,8 +436,8 @@ const Members = () => {
       <BulkImportModal
         visible={bulkImportModalVisible}
         importMode={BulkModes.MEMBERS}
-        onClose={toggleImportModal}
-        onImport={handleOnBulkImport}
+        onClose={hideImportModal}
+        onImport={handleBulkImportSuccess}
       />
       <BulkInProgressModal visible={bulkInProgressVisible} />
     </div>

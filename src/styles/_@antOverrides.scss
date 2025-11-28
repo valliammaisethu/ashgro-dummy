@@ -65,9 +65,6 @@
 /* Button */
 
 .ant-btn {
-  &::before {
-    opacity: 0;
-  }
   &:disabled {
     opacity: 50%;
   }

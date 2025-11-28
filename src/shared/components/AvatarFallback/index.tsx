@@ -5,6 +5,8 @@ import { getInitials } from "src/shared/utils/parser";
 import { Colors } from "src/enums/colors.enum";
 
 import styles from "./avatarFallback.module.scss";
+import ConditionalRenderComponent from "../ConditionalRenderComponent";
+import { imageAlts } from "src/constants/imageAlts";
 
 const AvatarFallback: React.FC<AvatarWithFallbackProps> = ({
   src,
@@ -28,18 +30,25 @@ const AvatarFallback: React.FC<AvatarWithFallbackProps> = ({
           backgroundColor: src ? "transparent" : backgroundColor,
         }}
       >
-        {src ? (
-          <img src={src} className={styles.avatarFallbackImage} />
-        ) : (
-          <span
-            style={{
-              fontSize,
-            }}
-            className={styles.avatarFallbackInitials}
-          >
-            {getInitials(name)}
-          </span>
-        )}
+        <ConditionalRenderComponent
+          visible={!!src}
+          fallback={
+            <span
+              style={{
+                fontSize,
+              }}
+              className={styles.avatarFallbackInitials}
+            >
+              {getInitials(name)}
+            </span>
+          }
+        >
+          <img
+            alt={imageAlts.avatarIcon}
+            src={src}
+            className={styles.avatarFallbackImage}
+          />
+        </ConditionalRenderComponent>
       </div>
     </div>
   );

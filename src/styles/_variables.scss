@@ -155,7 +155,7 @@ $spacer-x: 1rem;
 $spacer-y: 1rem;
 
 // Borders
-$button-stroke: #d3d3d3;
+$button-stroke: #dfd1b7;
 
 $new-lead-tag-bg: #eceeff;
 $unqualified-lead-tag-bg: #f0f0f0;
@@ -189,7 +189,8 @@ $profile-bg: linear-gradient(
   rgba(197, 162, 93, 0.3) 50%,
   #c5a25d 100%
 );
-
+$dropdown-bg: #f7f6f0;
+$dropdown-border: #9a917b1a;
 $club-row-border-bg: linear-gradient(
   151.49deg,
   rgba(246, 239, 222, 0.5) 0%,
@@ -198,3 +199,4 @@ $club-row-border-bg: linear-gradient(
 
 $light-gold: #f6efde;
 $dark-gold: #766a4c;
+$gold-bolder: #957a4b;

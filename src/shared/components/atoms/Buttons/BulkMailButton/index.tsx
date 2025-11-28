@@ -8,7 +8,7 @@ import { BulkMailButtonProps } from "src/shared/types/sharedComponents.type";
 import styles from "./bulkMailButton.module.scss";
 
 const BulkMailButton = (props: BulkMailButtonProps) => {
-  const { onClick, disabled } = props;
+  const { onClick, disabled, loading } = props;
 
   return (
     <Button
@@ -16,6 +16,7 @@ const BulkMailButton = (props: BulkMailButtonProps) => {
       className={styles.bulkMailButton}
       onClick={onClick}
       disabled={disabled}
+      loading={loading}
     >
       {Buttons.BULK_MAIL}
     </Button>

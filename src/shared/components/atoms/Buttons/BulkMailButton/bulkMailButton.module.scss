@@ -12,9 +12,14 @@
     font-weight: 600;
     font-family: $font-secondary;
     @include flex-flow(row, wrap, center);
+    gap: 0rem;
 
     :global(.ant-btn-icon) {
       padding-top: 0.3rem;
+    }
+
+    &:global(.ant-btn-loading) {
+      gap: 1rem;
     }
 
     &:hover {

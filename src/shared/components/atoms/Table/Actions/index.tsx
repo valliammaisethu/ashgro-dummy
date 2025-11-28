@@ -8,8 +8,9 @@ import { hoverActionBtnClass } from "./constants";
 
 import styles from "./actions.module.scss";
 import StatusDropdown from "src/shared/components/StatusDropdown";
+import { formatOptions } from "./utils";
 
-interface Option {
+export interface Option {
   label?: string;
   value?: string;
   color?: string;
@@ -56,13 +57,7 @@ const Actions: React.FC<ActionsProps> = ({
         <div onClick={stopPropagation} className={styles.statusCol}>
           <StatusDropdown
             value={selectedValue}
-            options={
-              options?.map((option) => ({
-                statusName: option.label,
-                id: option.value,
-                color: option.color,
-              })) || []
-            }
+            options={formatOptions(options)}
             onChange={handleSelectChange}
             loading={selectLoading}
           />
