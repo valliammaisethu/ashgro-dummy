@@ -19,7 +19,7 @@ import FileUpload from "src/shared/components/FileUpload";
 import useForm from "src/shared/components/UseForm";
 import { SelectModes } from "src/enums/selectModes.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { Buttons } from "src/enums/buttons.enum";
+import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
 import { maxFileSizeTextDescription } from "src/constants/sharedComponents";
 import { generateSelectOptions } from "../utils";
 import { addEmailValidation } from "./validation";
@@ -29,6 +29,7 @@ import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { ValidateEmail } from "src/shared/utils/helpers";
 
 import styles from "../email.module.scss";
+import Button from "src/shared/components/Button";
 
 const NewEmailModal = (props: NewEmailModalProps) => {
   const {
@@ -72,7 +73,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
     },
   });
 
-  const { reset } = methods;
+  const { reset, setValue, getValues } = methods;
 
   const { sendEmail } = EmailService();
 
@@ -81,6 +82,15 @@ const NewEmailModal = (props: NewEmailModalProps) => {
   const handleClose = () => {
     onClose();
     reset();
+  };
+
+  const handleAddName = () => {
+    const currentBody = getValues("body");
+
+    setValue("body", currentBody + "{{name}}", {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
   };
 
   const handleSubmit = async (values: FieldValues) => {
@@ -205,14 +215,21 @@ const NewEmailModal = (props: NewEmailModalProps) => {
               label={labels.subject}
             />
           </Col>
-          <Col span={24}>
-            <TextArea
-              required
-              name={fields.body}
-              label={labels.emailBody}
-              placeholder={placeholders.emailBody}
-              className={styles.emailBodyInput}
-            />
+          <Col className={styles.emailBodyContainer} span={24}>
+            <Col className={styles.addNameContainer}>
+              <Button type={ButtonTypes.LINK} onClick={handleAddName}>
+                {Buttons.ADD_NAME}
+              </Button>
+            </Col>
+            <Col span={24}>
+              <TextArea
+                required
+                name={fields.body}
+                label={labels.emailBody}
+                placeholder={placeholders.emailBody}
+                className={styles.emailBodyInput}
+              />
+            </Col>
           </Col>
           <Col className={styles.fileUploadContainer} span={24}>
             <FileUpload
