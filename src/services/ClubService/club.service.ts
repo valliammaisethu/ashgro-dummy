@@ -15,6 +15,8 @@ import {
   ClubListReponse,
   ClubStatus,
   ClubStatusResponse,
+  ClubGeneralSettings,
+  ClubGeneralSettingsResponse,
 } from "src/models/club.model";
 import { QueryParams } from "src/models/queryParams.model";
 import { ResponseModel } from "src/models/response.model";
@@ -126,10 +128,29 @@ export const ClubService = () => {
     onSuccess: (response) =>
       handleSuccess(queryClient)({
         response,
-        invalidateKeys: [],
+        invalidateKeys: [[GET_CLUBS], [GET_CLUB_PROFILE]],
       }),
   });
 
+  const updateGeneralSettings = (): UseMutationOptions<
+    ClubGeneralSettingsResponse,
+    ClubGeneralSettingsResponse,
+    ClubGeneralSettings
+  > => ({
+    mutationKey: [EDIT_CHATBOT],
+    mutationFn: async (body: ClubGeneralSettings) => {
+      const { data } = await axiosInstance.patch(
+        generatePath(GET_CLUB_PROFILE_ROUTE, { id: body.clubId }),
+        body,
+      );
+      return deserialize(ClubGeneralSettingsResponse, data);
+    },
+    onSuccess: (response) =>
+      handleSuccess(queryClient)({
+        response,
+        invalidateKeys: [[GET_CLUBS], [GET_CLUB_PROFILE]],
+      }),
+  });
   const uploadKnowledgeBase = (): UseMutationOptions<
     ResponseModel,
     AxiosError,
@@ -138,7 +159,7 @@ export const ClubService = () => {
     mutationKey: [UPLOAD_CHATBOT_KNOWLEDGE_BASE],
     mutationFn: async (body: ClubKnowledgeBasePayload) => {
       const { data } = await axiosInstance.post(
-        generatePath(UPLOAD_CHATBOT_KNOWLEDGE_BASE_ROUTE, { id: body.id }),
+        generatePath(UPLOAD_CHATBOT_KNOWLEDGE_BASE_ROUTE, { id: body.clubId }),
         serialize(ClubKnowledgeBasePayload, body),
       );
       return deserialize(ResponseModel, data);
@@ -151,6 +172,7 @@ export const ClubService = () => {
     addClub,
     editClub,
     updateStatus,
+    updateGeneralSettings,
     uploadKnowledgeBase,
   };
 };

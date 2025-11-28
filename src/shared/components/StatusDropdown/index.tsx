@@ -14,15 +14,15 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
   value,
   options,
   onChange,
-  onClick = (e) => e.stopPropagation(),
+  onClick,
   loading = false,
 }) => {
   const selectedOption = options.find(
     (option) => option.id === value || option.statusName === value,
   );
 
-  const menuItems: MenuProps["items"] = options.map((option) => ({
-    key: option.id || option.statusName || "",
+  const menuItems: MenuProps["items"] = options?.map((option) => ({
+    key: option.id ?? option.statusName ?? "",
     label: (
       <div className={styles.menuItem}>
         <div
@@ -36,12 +36,13 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
             .
           </div>
         </div>
-        <span className={styles.label} style={{ color: option.color }}>
-          {option.statusName}
-        </span>
+        <span className={styles.label}>{option.statusName}</span>
       </div>
     ),
-    onClick: () => onChange(option.id || option.statusName || ""),
+    onClick: () => {
+      if (!option.id || !option.statusName) return;
+      onChange(option.id ?? option.statusName);
+    },
   }));
 
   return (

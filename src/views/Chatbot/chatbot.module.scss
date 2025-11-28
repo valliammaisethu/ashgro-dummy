@@ -16,6 +16,10 @@
   border-radius: 20px;
   overflow: hidden;
 
+  background-image: url("src/assets/images/chatbotBg.svg");
+  object-fit: cover;
+  z-index: -1;
+
   @media (max-width: 600px) {
     border-radius: 0;
   }

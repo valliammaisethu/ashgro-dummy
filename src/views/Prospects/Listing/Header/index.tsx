@@ -20,6 +20,7 @@ const Header = ({
   onBulkMail,
   filtersActive,
   selectedEmails,
+  isCheckingImportStatus,
 }: ProspectListingHeaderProps) => {
   return (
     <div className={styles.header}>
@@ -35,6 +36,7 @@ const Header = ({
           <BulkImportButton
             onClick={onBulkImport}
             tooltip={bulkImportProspects}
+            loading={isCheckingImportStatus}
           />
         )}
         <BulkMailButton onClick={onBulkMail} disabled={!selectedEmails} />
