@@ -276,3 +276,12 @@
     color: $ashgro-white !important;
   }
 }
+
+%hideScrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
