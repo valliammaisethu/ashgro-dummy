@@ -38,6 +38,8 @@ export enum MutationKeys {
   CHATBOT = "chatbotResponse",
   CHATBOT_PROFILE = "chatbotProfileResponse",
   BULK_UPLOAD = "bulkUpload",
+
+  LEAD_FORM = "leadForm",
 }
 
 export enum QueryKeys {
@@ -73,4 +75,6 @@ export enum QueryKeys {
   GET_CALENDER_SLOTS_AND_EVENTS = "getCanderSlotsAndEvents",
   GET_MEMBERS_META_LIST = "getMembersMetaList",
   GET_PROSPECTS_META_LIST = "getProspectsMetaList",
+
+  GET_LEAD_FORM_STATUS = "getLeadFormStatus",
 }

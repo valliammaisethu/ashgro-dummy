@@ -30,6 +30,7 @@ import DashboardWrapper from "src/views/Dashboard";
 import Calender from "src/views/Calender";
 import { AuthContext } from "src/context/AuthContext";
 import Chatbot from "src/views/Chatbot";
+import LeadForm from "src/views/LeadForm";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { authenticated } = AuthContext();
@@ -114,6 +115,8 @@ const AppRouter = () => {
           />
 
           <Route path={AppRoutes.CHATBOT} element={<Chatbot />} />
+
+          <Route path={AppRoutes.LEAD_FORM} element={<LeadForm />} />
 
           <Route
             path={AppRoutes.APP_COMPONENTS}

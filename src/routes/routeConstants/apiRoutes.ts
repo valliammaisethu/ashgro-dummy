@@ -75,4 +75,7 @@ export const ApiRoutes = {
   DOWNLOAD_TEMPLATE: "/clubs/:id/downloadTemplate",
 
   CHAT_BOT_SLOTS: "calendar/chatbotSlots",
+
+  // Lead Form
+  LEAD_FORM: "/api/v1/clubs/:id/leadforms",
 };
