@@ -1,19 +1,5 @@
 import { alias, list, object, primitive, serializable } from "serializr";
 
-export class MobileCode {
-  @serializable
-  country?: string;
-
-  @serializable(alias("iso_code"))
-  isoCode?: string;
-
-  @serializable(alias("phone_code"))
-  phoneCode?: string;
-
-  @serializable
-  flag?: string;
-}
-
 export class ActivityType {
   @serializable
   id?: string;
@@ -50,6 +36,9 @@ export class LeadStatus {
 
   @serializable
   statusName?: string;
+
+  @serializable
+  color?: string;
 }
 
 export class MembershipStatus {
@@ -58,6 +47,9 @@ export class MembershipStatus {
 
   @serializable
   statusName?: string;
+
+  @serializable
+  color?: string;
 }
 
 export class EmailTemplate {

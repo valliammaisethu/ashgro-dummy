@@ -1,13 +1,12 @@
 import React from "react";
 import { FieldValues, useController, useFormContext } from "react-hook-form";
 import clsx from "clsx";
+import { IconAdd, IconSubtract } from "obra-icons-react";
 
 import { NumberIncrementerProps } from "../../types/sharedComponents.type";
+import Button from "../Button";
 
 import styles from "./numberIncrementer.module.scss";
-import { ButtonHtmlTypes } from "src/enums/buttonTypes.enum";
-import Add from "node_modules/obra-icons-react/dist/icons/Add";
-import Subtract from "node_modules/obra-icons-react/dist/icons/Subtract";
 
 const NumberIncrementer = (props: NumberIncrementerProps) => {
   // TODO: change max steps after confirming with BA
@@ -40,25 +39,23 @@ const NumberIncrementer = (props: NumberIncrementerProps) => {
         [styles.disabled]: disabled,
       })}
     >
-      <button
-        type={ButtonHtmlTypes.BUTTON}
+      <Button
         className={styles.decrementer}
         onClick={handleDecrement}
         disabled={disabled || value <= min}
       >
-        <Subtract />
-      </button>
+        <IconSubtract />
+      </Button>
 
       <div className={styles.value}>{value}</div>
 
-      <button
-        type={ButtonHtmlTypes.BUTTON}
+      <Button
         className={styles.incrementer}
         onClick={handleIncrement}
         disabled={disabled || value >= max}
       >
-        <Add />
-      </button>
+        <IconAdd />
+      </Button>
 
       {error && <div className={styles.error}>{error.message}</div>}
     </div>

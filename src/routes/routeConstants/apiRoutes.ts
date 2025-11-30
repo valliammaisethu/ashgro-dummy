@@ -73,6 +73,8 @@ export const ApiRoutes = {
 
   BULK_IMPORT: "/:entity/import",
   DOWNLOAD_TEMPLATE: "/clubs/:id/downloadTemplate",
+  CHECK_BULK_IMPORT_STATUS_PROSPECTS: "/prospects/import/status",
+  CHECK_BULK_IMPORT_STATUS_MEMBERS: "/members/import/status",
 
   CHAT_BOT_SLOTS: "calendar/chatbotSlots",
 

@@ -9,6 +9,9 @@ export class MemberShipStatus {
 
   @serializable(alias("id"))
   value?: string;
+
+  @serializable
+  color?: string;
 }
 
 export class MemberShipTypeStatus {
