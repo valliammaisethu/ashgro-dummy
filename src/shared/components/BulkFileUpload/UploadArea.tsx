@@ -2,13 +2,13 @@ import React, { MouseEvent } from "react";
 import { IconDocumentUpload } from "obra-icons-react";
 
 import Button from "src/shared/components/Button";
+import ConditionalRenderComponent from "../ConditionalRenderComponent";
+import { imageAlts } from "src/constants/imageAlts";
 import { Buttons } from "src/enums/buttons.enum";
 import { Colors } from "src/enums/colors.enum";
 import excelIcon from "src/assets/images/excelIcon.webp";
 
 import styles from "../../../views/BulkImport/bulkImport.module.scss";
-import ConditionalRenderComponent from "../ConditionalRenderComponent";
-import { imageAlts } from "src/constants/imageAlts";
 
 export interface UploadAreaProps {
   onClick: () => void;
@@ -45,6 +45,7 @@ const UploadArea: React.FC<UploadAreaProps> = ({
   const handleChangeFile = (e: MouseEvent) => {
     e.stopPropagation();
     onChangeFile();
+    onClick();
   };
 
   return (

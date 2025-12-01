@@ -8,35 +8,41 @@ import { StatusDropdownProps } from "src/shared/types/sharedComponents.type";
 import { getStatusTagBackgroundColor } from "src/shared/utils/helpers";
 import Button from "../Button";
 import { selectStatus } from "src/constants/sharedComponents";
+import clsx from "clsx";
 
 const StatusDropdown: React.FC<StatusDropdownProps> = ({
   value,
   options,
   onChange,
-  onClick = (e) => e.stopPropagation(),
+  onClick,
   loading = false,
 }) => {
   const selectedOption = options.find(
     (option) => option.id === value || option.statusName === value,
   );
 
-  const menuItems: MenuProps["items"] = options.map((option) => ({
-    key: option.id || option.statusName || "",
+  const menuItems: MenuProps["items"] = options?.map((option) => ({
+    key: option.id ?? option.statusName ?? "",
     label: (
       <div className={styles.menuItem}>
-        <span
+        <div
           className={styles.dot}
           style={{
-            backgroundColor: getStatusTagBackgroundColor(option.color),
-            borderColor: option.color,
+            border: `2px solid ${getStatusTagBackgroundColor(option.color)}`,
+            color: option.color,
           }}
-        />
-        <span className={styles.label} style={{ color: option.color }}>
-          {option.statusName}
-        </span>
+        >
+          <div style={{ color: option.color }} className={styles.innerDot}>
+            .
+          </div>
+        </div>
+        <span className={styles.label}>{option.statusName}</span>
       </div>
     ),
-    onClick: () => onChange(option.id || option.statusName || ""),
+    onClick: () => {
+      if (!option.id || !option.statusName) return;
+      onChange(option.id ?? option.statusName);
+    },
   }));
 
   return (
@@ -57,15 +63,17 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
           <div className={styles.buttonContent}>
             {selectedOption && (
               <>
-                <span
+                <div
                   className={styles.dot}
                   style={{
-                    backgroundColor: getStatusTagBackgroundColor(
-                      selectedOption.color,
-                    ),
-                    borderColor: selectedOption.color,
+                    border: `2px solid ${getStatusTagBackgroundColor(selectedOption.color)}`,
+                    color: selectedOption.color,
                   }}
-                />
+                >
+                  <div className={clsx(styles.innerDot, styles.optionInnerDot)}>
+                    .
+                  </div>
+                </div>
                 <span
                   className={styles.label}
                   style={{ color: selectedOption.color }}

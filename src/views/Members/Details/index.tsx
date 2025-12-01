@@ -84,9 +84,12 @@ const Details = () => {
   const { data: memberShipStatusesOptions = [] } =
     useQuery(memberShipStatuses());
 
-  const { data, isPending, isSuccess, isFetching, refetch } = useQuery(
-    MembersDetails(id),
-  );
+  const {
+    data,
+    isLoading: isPending,
+    isSuccess,
+    refetch,
+  } = useQuery(MembersDetails(id));
 
   const { mutateAsync: deleteStaffMemberMutate } =
     useMutation(deleteResource());
@@ -162,7 +165,6 @@ const Details = () => {
       <ConditionalRender
         isPending={isPending}
         isSuccess={isSuccess}
-        isFetching={isFetching}
         records={[data]}
       >
         <Card className={styles.card}>

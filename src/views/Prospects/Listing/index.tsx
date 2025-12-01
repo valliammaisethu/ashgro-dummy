@@ -18,10 +18,12 @@ import {
   ProspectsListingParams,
 } from "src/models/prospects.model";
 import { EmailTemplate } from "src/models/meta.model";
-import { MetaService } from "src/services/MetaService/meta.service";
 import { SelectedProspect } from "src/shared/types/prospects.type";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import { EmailService } from "src/services/EmailService/email.service";
+import { MetaService } from "src/services/MetaService/meta.service";
+import { BulkUploadService } from "src/services/BulkUploadService/bulkUpload.service";
+import { TemplateEntity } from "src/enums/templateEntity.enum";
 import TemplateModal from "src/views/Email/TemplateModal";
 import NewEmailModal from "src/views/Email/NewEmailModal";
 import BulkImportModal from "src/views/BulkImport";
@@ -63,6 +65,7 @@ const ProspectsListing = () => {
   const { getProspects, editProspect } = ProspectsService();
   const { getLeadStatuses } = MetaService();
   const { getProspectEmailRecipients } = EmailService();
+  const { checkBulkImportStatus } = BulkUploadService();
 
   const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
   const { data: leadStatusesData } = useQuery(getLeadStatuses());
@@ -73,6 +76,21 @@ const ProspectsListing = () => {
   });
 
   const { mutateAsync: updateProspectMutate } = useMutation(editProspect());
+
+  const { mutate: checkImportStatus, isPending: isCheckingImportStatus } =
+    useMutation({
+      ...checkBulkImportStatus(),
+      onSuccess: (response) => {
+        const { data } = response;
+        if (data.canStartImport) {
+          if (selectedProspects.length > 0 || isAllSelected) {
+            toggleEmailTemplateModal();
+          } else {
+            toggleBulkUpload();
+          }
+        }
+      },
+    });
 
   const leadStatusOptions = useMemo(
     () => leadStatusesData?.leadStatuses,
@@ -95,8 +113,11 @@ const ProspectsListing = () => {
     toggleVisibility: toggleNewEmailModal,
   } = useDrawer();
 
-  const { visible: bulkUploadVisible, toggleVisibility: toggleBulkUpload } =
-    useDrawer();
+  const {
+    visible: bulkUploadVisible,
+    toggleVisibility: toggleBulkUpload,
+    hide: hideBulkUpload,
+  } = useDrawer();
 
   const {
     visible: bulkInProgressVisible,
@@ -104,8 +125,13 @@ const ProspectsListing = () => {
     hide: hideBulkInProgress,
   } = useDrawer();
 
-  const handleOnBulkImport = () => {
-    toggleBulkUpload();
+  const handleBulkImportClick = () => {
+    checkImportStatus({ clubId, entity: TemplateEntity.PROSPECT });
+  };
+
+  const handleBulkImportSuccess = () => {
+    // Note: The BulkImportModal will call onClose (hideBulkUpload) internally after success
+    // We just need to show the in-progress modal
     toggleBulkInProgress();
 
     setTimeout(() => {
@@ -258,6 +284,10 @@ const ProspectsListing = () => {
     setIsAllSelected(false);
   }, []);
 
+  const handleBulkMail = useCallback(() => {
+    checkImportStatus({ clubId, entity: TemplateEntity.PROSPECT });
+  }, [clubId, checkImportStatus]);
+
   useEffect(() => {
     if (clubId && queryParams.clubId !== clubId) {
       setQueryParams((prev) => ({ ...prev, clubId }));
@@ -270,11 +300,12 @@ const ProspectsListing = () => {
         onFilter={toggleDrawerVisibility}
         onSearch={handleSearch}
         onAddProspect={showForm}
-        onBulkMail={toggleEmailTemplateModal}
+        onBulkMail={handleBulkMail}
         onClear={handleClearSelections}
         filtersActive={filtersActive}
         selectedEmails={selectedProspects.length}
-        onBulkImport={toggleBulkUpload}
+        onBulkImport={handleBulkImportClick}
+        isCheckingImportStatus={isCheckingImportStatus}
       />
       <div className={styles.prospectList}>
         <div className={styles.tableContainer}>
@@ -368,9 +399,9 @@ const ProspectsListing = () => {
       />
       <BulkImportModal
         visible={bulkUploadVisible}
-        onClose={toggleBulkUpload}
+        onClose={hideBulkUpload}
         importMode={BulkModes.PROSPECTS}
-        onImport={handleOnBulkImport}
+        onImport={handleBulkImportSuccess}
       />
       <BulkInProgressModal visible={bulkInProgressVisible} />
     </div>
