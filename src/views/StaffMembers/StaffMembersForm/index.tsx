@@ -21,9 +21,9 @@ import SelectField from "src/shared/components/SelectField";
 import TextArea from "src/shared/components/TextArea";
 import useForm from "src/shared/components/UseForm";
 import {
-  disableFutureAndToday,
   convertDateToApiFormat,
   convertDateToDisplayFormat,
+  disableFuture,
 } from "src/shared/utils/dateUtils";
 import { findValueByLabel } from "src/shared/utils/commonHelpers";
 import { getDigitsOnly } from "src/shared/utils/parser";
@@ -241,7 +241,7 @@ const StaffMembersForm = ({
                   placeholder={PLACEHOLDERS.BIRTH_DATE}
                   label={LABELS.BIRTH_DATE}
                   name={FIELD_NAMES.BIRTH_DATE}
-                  disabledDate={disableFutureAndToday}
+                  disabledDate={disableFuture}
                 />
               </Col>
               <Col span={12}>
@@ -249,7 +249,7 @@ const StaffMembersForm = ({
                   placeholder={PLACEHOLDERS.WORK_ANNIVERSARY}
                   label={LABELS.WORK_ANNIVERSARY}
                   name={FIELD_NAMES.WORK_ANNIVERSARY}
-                  disabledDate={disableFutureAndToday}
+                  disabledDate={disableFuture}
                 />
               </Col>
               <Col span={24}>

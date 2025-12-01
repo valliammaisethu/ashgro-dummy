@@ -4,6 +4,7 @@ import {
   IconCall,
   IconEdit,
   IconEmail,
+  IconDelete,
 } from "obra-icons-react";
 import { Col, Row } from "antd";
 import clsx from "clsx";
@@ -16,17 +17,17 @@ import IndividualDetailsHeader from "src/shared/components/IndividualDetailsHead
 import Button from "src/shared/components/Button";
 import ImageFrame from "src/shared/components/atoms/ImageFrame";
 import { StaffMembersService } from "src/services/StaffMembersService/staffMembers.service";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { getFullName } from "src/shared/utils/helpers";
 import { Colors } from "src/enums/colors.enum";
 import { footerLabels } from "./constants";
 import { Justify } from "src/enums/align.enum";
 import StaffMembersForm from "../StaffMembersForm";
+import DeleteModal from "../DeleteModal";
 import useRedirect from "src/shared/hooks/useRedirect";
 import { fallbackHandler } from "src/shared/utils/commonHelpers";
 
 import styles from "./details.module.scss";
-import DeleteModal from "../DeleteModal";
-import useDrawer from "src/shared/hooks/useDrawer";
 
 const { birthData, department, title, workAnniversary } = footerLabels;
 
@@ -34,6 +35,8 @@ const Details = () => {
   const { id = "" } = useParams();
 
   const [isEditForm, setIsEditForm] = useState(false);
+
+  const [deleteStaff, setDeleteStaff] = useState(false);
 
   const { navigateToStaffMemberList } = useRedirect();
 
@@ -52,7 +55,7 @@ const Details = () => {
 
   const handleModalVisibility = () => setIsEditForm((prev) => !prev);
 
-  const { toggleVisibility, visible } = useDrawer();
+  const handleDeleteForm = () => setDeleteStaff((prev) => !prev);
 
   return (
     <>
@@ -73,11 +76,13 @@ const Details = () => {
                 className={styles.editButton}
               />
             </Col>
-            <DeleteModal
-              visible={visible}
-              toggleVisibility={toggleVisibility}
-              staffMember={data}
-            />
+            <Col>
+              <Button
+                onClick={handleDeleteForm}
+                icon={<IconDelete strokeWidth={1.5} />}
+                className={styles.editButton}
+              />
+            </Col>
           </Row>
 
           <div className={styles.detailsContainer}>
@@ -127,6 +132,13 @@ const Details = () => {
             id={id}
           />
         )}
+        <ConditionalRenderComponent visible={deleteStaff} hideFallback>
+          <DeleteModal
+            visible={deleteStaff}
+            toggleVisibility={handleDeleteForm}
+            staffMember={data}
+          />
+        </ConditionalRenderComponent>
       </ConditionalRender>
     </>
   );

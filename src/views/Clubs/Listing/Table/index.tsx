@@ -118,6 +118,7 @@ const ClubListingTable = ({
                 address={club.address}
                 firstName={extractNameParts(club.name).firstName}
                 lastName={extractNameParts(club.name).lastName}
+                profilePictureUrl={club?.logoUrl}
               />
 
               <Badge

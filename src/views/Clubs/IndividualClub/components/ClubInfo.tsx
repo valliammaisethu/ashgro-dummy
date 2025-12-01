@@ -1,8 +1,6 @@
 import React from "react";
 import { IconCall, IconEmail, IconLocationMarker } from "obra-icons-react";
-import { useQuery } from "@tanstack/react-query";
 
-import { AttachmentService } from "src/services/AttachmentService/attachment.service";
 import { formatDate } from "src/shared/utils/dateUtils";
 import { ClubInfoProps } from "src/shared/types/clubs.type";
 import IconText from "src/shared/components/atoms/IconText";
@@ -12,6 +10,7 @@ import { DateFormats } from "src/enums/dateFormats.enum";
 
 import styles from "../individualClub.module.scss";
 import { fallbackHandler } from "src/shared/utils/commonHelpers";
+import AvatarFallback from "src/shared/components/AvatarFallback";
 
 const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
   const {
@@ -21,19 +20,19 @@ const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
     contactNumber,
     onboardingDate,
     email,
-    attachmentId,
+    logoUrl,
   } = data || {};
-
-  const { getAttachmentPreview } = AttachmentService();
-
-  const { data: attachmentPreview } = useQuery(
-    getAttachmentPreview(attachmentId),
-  );
 
   return (
     <div className={styles.top}>
       <div className={styles.left}>
-        <img src={attachmentPreview} className={styles.clubImage} alt={name} />
+        <AvatarFallback
+          src={logoUrl}
+          name={name ?? ""}
+          className={styles.clubImage}
+          size={172}
+          fontSize={72}
+        />
       </div>
       <div className={styles.right}>
         <div className={styles.nameContainer}>

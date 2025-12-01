@@ -6,4 +6,5 @@ export const imageAlts = {
   chatbotIcon: "chatbot-icon",
   loaderIcon: "loader-icon",
   renewIcon: "renew-icon",
+  avatarIcon: "avatar-icon",
 };

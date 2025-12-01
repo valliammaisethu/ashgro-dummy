@@ -24,11 +24,13 @@ export const formatDateTime = (date = "", format: DateFormats) =>
 export const disableFutureAndToday = (date: dayjs.Dayjs) =>
   date.isAfter(dayjs().subtract(1, "day"));
 
+export const disableFuture = (date: dayjs.Dayjs) => date.isAfter(dayjs());
+
 export const convertDateToApiFormat = (
   date: string | undefined,
   format: DateFormats = DateFormats.DD_MMM_YYYY,
 ) => {
-  if (!date) return date;
+  if (!date) return;
   const parsed = dayjs(date, format, true);
   return parsed.isValid() ? parsed.format(DateFormats.YYYY_MM_DD) : date;
 };
