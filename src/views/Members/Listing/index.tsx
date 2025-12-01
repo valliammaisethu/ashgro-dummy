@@ -186,8 +186,8 @@ const Members = () => {
 
   const handleMemberStatusChange =
     (memberId?: string) => (statusName: string) => {
-      const status = memberShipStatusesOptions.find(
-        (opt) => opt.label === statusName,
+      const status = memberShipStatusesOptions?.find(
+        (opt) => opt?.id === statusName,
       );
       handleStatusChange(memberId, status?.value);
     };
