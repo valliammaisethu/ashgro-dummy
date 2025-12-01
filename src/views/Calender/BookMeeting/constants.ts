@@ -8,8 +8,8 @@ export const BOOK_MEETING_FIELDS = {
     name: "bookedUserType",
     label: "Book For",
     options: [
-      { label: "Member", value: "MEMBER" },
-      { label: "Prospect", value: "PROSPECT" },
+      { label: "Member", value: "member" },
+      { label: "Prospect", value: "prospect" },
     ],
   },
   NAME: {
@@ -26,6 +26,10 @@ export const BOOK_MEETING_FIELDS = {
     name: "meetingTime",
     label: "Meeting Start & End Time",
     placeholder: ["Start time", "End time"] as const,
+  },
+  USER: {
+    USER_ID: "bookedUserId",
+    USER_NAME: "bookedUserName",
   },
 };
 

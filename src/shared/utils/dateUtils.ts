@@ -10,6 +10,7 @@ dayjs.extend(timezone);
 
 const { DAY } = DateUnit;
 const { FUTURE, PAST, TODAY } = DateType;
+const { HH_MM_A, HH_MM } = DateFormats;
 
 export const formatDate = (date = "", format: DateFormats, isUTC = false) => {
   if (!date) return "";
@@ -79,3 +80,6 @@ export const checkDate = (date?: string | Date | Dayjs, type?: DateType) => {
 
 export const disablePastDates = (date: dayjs.Dayjs) =>
   date.isBefore(dayjs().startOf(DAY));
+
+export const convertTo24hrs = (time12h: string) =>
+  dayjs(time12h, HH_MM_A).format(HH_MM);

@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
+import queryString from "query-string";
 
 import { SLOT_STATUS, SLOT_TYPE } from "src/enums/calender.enum";
-import { CommonSeparators } from "src/enums/commonSeparators.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { DateUnit } from "src/enums/dateUnit.enum";
 import { CalendarEventsAndSlots } from "src/models/calender.model";
@@ -9,7 +9,6 @@ import { CalendarEvent } from "src/shared/types/calender";
 
 const { HH_MM_A } = DateFormats;
 const { DAY } = DateUnit;
-const { COLON, DASH } = CommonSeparators;
 const { CHATBOT } = SLOT_TYPE;
 const { BOOKED } = SLOT_STATUS;
 
@@ -51,12 +50,14 @@ export const isPastDate = (date: Date | string) => {
 export const mapCalendarDaysToEvents = (
   days?: Record<string, CalendarEventsAndSlots[]>,
 ) => {
-  if (!days) return [];
+  if (!days || typeof days !== "object") return [];
 
   const events: CalendarEvent[] = [];
 
   Object.entries(days).forEach(([date, slots]) => {
-    slots?.forEach(
+    if (!Array.isArray(slots)) return;
+
+    slots.forEach(
       ({
         id,
         title = "",
@@ -70,7 +71,6 @@ export const mapCalendarDaysToEvents = (
       }) => {
         const isNotValid =
           !id ||
-          !title ||
           !startTime ||
           !endTime ||
           !slotType ||
@@ -97,4 +97,13 @@ export const mapCalendarDaysToEvents = (
   });
 
   return events;
+};
+
+export const updateLocationMonthQuery = (currentQuery: object, date: Date) => {
+  const month = dayjs(date).format(DateFormats.YYYY_MM);
+
+  return queryString?.stringify(
+    { ...currentQuery, month },
+    { skipNull: true, skipEmptyString: true },
+  );
 };
