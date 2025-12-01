@@ -83,3 +83,10 @@ export const disablePastDates = (date: dayjs.Dayjs) =>
 
 export const convertTo24hrs = (time12h: string) =>
   dayjs(time12h, HH_MM_A).format(HH_MM);
+
+export const disablePastAndFuture180 = (date: dayjs.Dayjs) => {
+  const today = dayjs().startOf(DAY);
+  const maxDate = today.add(180, DAY);
+
+  return date.isBefore(today) || date.isAfter(maxDate);
+};

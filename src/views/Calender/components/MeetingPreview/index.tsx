@@ -47,6 +47,11 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
 
   const handleOpenPopup = (e: MouseEvent) => openPopup(e);
 
+  const isBookedThroughBot =
+    (event?.resource?.status == SLOT_STATUS.BOOKED &&
+      event?.resource?.chatbot) ??
+    false;
+
   return (
     <Popover
       {...MEETING_PREVIEW_POPOVER_PROPS}
@@ -59,6 +64,7 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
             event={event}
             onCancel={() => setIsOpen(false)}
             onReschedule={handleRescheduleClick}
+            isBookedThroughBot={isBookedThroughBot}
           />
         </ConditionalRenderComponent>
       }
@@ -91,7 +97,7 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
                 {formatTimeRange(event.start, event.end)}
 
                 <BookedChatbotIcon
-                  isBooked={event?.resource?.status == SLOT_STATUS.BOOKED}
+                  isBooked={isBookedThroughBot}
                   isPastDate={isPastDate}
                 />
               </p>
@@ -109,7 +115,7 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
               {formatTimeRange(event.start, event.end)}
 
               <BookedChatbotIcon
-                isBooked={event?.resource?.status == SLOT_STATUS.BOOKED}
+                isBooked={isBookedThroughBot}
                 isPastDate={isPastDate}
               />
             </div>

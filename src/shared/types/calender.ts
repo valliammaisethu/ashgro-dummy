@@ -59,6 +59,7 @@ export interface MeetingPopoverContentProps {
   event: CalendarEvent;
   onCancel?: (e?: React.MouseEvent) => void;
   onReschedule: (e: React.MouseEvent) => void;
+  isBookedThroughBot: boolean;
 }
 
 export interface BookingFormState {

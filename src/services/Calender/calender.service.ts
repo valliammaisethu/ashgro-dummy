@@ -3,9 +3,10 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from "@tanstack/react-query";
+import { generatePath } from "react-router-dom";
 import { deserialize, serialize } from "serializr";
 
-import { QueryKeys } from "src/enums/cacheEvict.enum";
+import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
 import { BookMeeting, ChatbotSlotPayload } from "src/models/calender.model";
@@ -18,7 +19,13 @@ import { responseHandlers } from "src/shared/utils/responseHandlers";
 import { mapCalendarDaysToEvents } from "src/views/Calender/utils/calendarUtils";
 
 const { GET_CALENDER_SLOTS_AND_EVENTS } = QueryKeys;
-const { CALENDER_EVENTS_AND_SLOTS, CHAT_BOT_SLOTS, MEETING } = ApiRoutes;
+const {
+  CALENDER_EVENTS_AND_SLOTS,
+  CHAT_BOT_SLOTS,
+  MEETING,
+  RESCHEDULE_MEETING,
+} = ApiRoutes;
+const { BOOK_MEETING, RESCHEDULE_MEETING_KEY } = MutationKeys;
 
 export const CalenderService = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
@@ -70,7 +77,7 @@ export const CalenderService = () => {
     ResponseModel,
     BookMeeting
   > => ({
-    mutationKey: [CHAT_BOT_SLOTS],
+    mutationKey: [BOOK_MEETING],
     mutationFn: async (payload: BookMeeting) => {
       const serializedData = serialize(BookMeeting, payload);
 
@@ -83,9 +90,33 @@ export const CalenderService = () => {
     onSuccess: (response, { slotDate }) =>
       refetchCalender({ response, slotDate }),
   });
+
+  const rescheduleMeeting = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    BookMeeting
+  > => ({
+    mutationKey: [RESCHEDULE_MEETING_KEY],
+    mutationFn: async (payload: BookMeeting) => {
+      const { id, ...formData } = payload;
+      const serializedData = serialize(BookMeeting, formData);
+
+      const response = await axiosInstance.patch(
+        generatePath(RESCHEDULE_MEETING, { id }),
+        {
+          ...serializedData,
+          clubId,
+        },
+      );
+      return deserialize(ResponseModel, response?.data);
+    },
+    onSuccess: (response, { slotDate }) =>
+      refetchCalender({ response, slotDate }),
+  });
   return {
     calenderEventsAndSlotsList,
     addChatbotSlots,
     bookMeeting,
+    rescheduleMeeting,
   };
 };

@@ -16,6 +16,7 @@ export const BOOK_MEETING_FIELDS = {
     name: "name",
     label: "Name",
     placeholder: "Select Member’s Name",
+    prospectPlaceholder: "Select Prospect’s Name",
   },
   SLOT_DATE: {
     name: "slotDate",

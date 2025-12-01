@@ -41,6 +41,9 @@ export enum MutationKeys {
   CHECK_BULK_IMPORT_STATUS = "checkBulkImportStatus",
 
   LEAD_FORM = "leadForm",
+
+  BOOK_MEETING = "bookMeeting",
+  RESCHEDULE_MEETING_KEY = "rescheduleMeeting",
 }
 
 export enum QueryKeys {

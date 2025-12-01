@@ -30,7 +30,6 @@ const Modal: React.FC<ModalProps> = ({
   rootClassName,
   centered,
   styles: modalStyles,
-  destroyOnHidden,
   loading,
   renderHeader = true,
   closeIcon,
@@ -59,7 +58,6 @@ const Modal: React.FC<ModalProps> = ({
       rootClassName={clsx(styles.modalContainer, rootClassName, {
         [styles.noHeaderModal]: !renderHeader,
       })}
-      destroyOnHidden={destroyOnHidden}
       destroyOnClose={destroyOnClose ?? true}
       centered={centered}
       bodyStyle={bodyStyle}
@@ -70,6 +68,9 @@ const Modal: React.FC<ModalProps> = ({
       onOk={handleOk ?? closeModal}
       onCancel={onCancel ?? closeModal}
       confirmLoading={confirmLoading}
+      maskClosable={false}
+      keyboard={false}
+      destroyOnHidden
       footer={footer === undefined ? defaultFooter : footer}
       title={
         renderHeader ? (

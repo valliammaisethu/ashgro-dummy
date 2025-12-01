@@ -6,8 +6,11 @@ import { DateFormats } from "src/enums/dateFormats.enum";
 import { DateUnit } from "src/enums/dateUnit.enum";
 import { CalendarEventsAndSlots } from "src/models/calender.model";
 import { CalendarEvent } from "src/shared/types/calender";
+import { BOOK_MEETING_FIELDS } from "../BookMeeting/constants";
 
-const { HH_MM_A } = DateFormats;
+const { NAME, SLOT_DATE, MEETING_TIME, TYPE } = BOOK_MEETING_FIELDS;
+
+const { HH_MM_A, YYYY_MM_DD } = DateFormats;
 const { DAY } = DateUnit;
 const { CHATBOT } = SLOT_TYPE;
 const { BOOKED } = SLOT_STATUS;
@@ -106,4 +109,38 @@ export const updateLocationMonthQuery = (currentQuery: object, date: Date) => {
     { ...currentQuery, month },
     { skipNull: true, skipEmptyString: true },
   );
+};
+
+export const getMeetingDefaultValues = (
+  calendarEvent?: CalendarEvent | null,
+  selectedDate?: Date | null,
+) => {
+  const {
+    id,
+    title = "",
+    start = "",
+    end = "",
+    date = "",
+    resource = {},
+  } = calendarEvent || {};
+  const {
+    bookedUserType = "",
+    bookedUserId = "",
+    bookedUserName = "",
+  } = resource;
+
+  return {
+    title: calendarEvent?.id ? String(title) : "",
+    [TYPE.name]: bookedUserType,
+    [NAME.name]: bookedUserId,
+    [SLOT_DATE.name]: id
+      ? dayjs(date).format(YYYY_MM_DD)
+      : selectedDate
+        ? dayjs(selectedDate).format(YYYY_MM_DD)
+        : "",
+    [MEETING_TIME.name]: {
+      startTime: id ? dayjs(start).format(HH_MM_A) : "",
+      endTime: id ? dayjs(end).format(HH_MM_A) : "",
+    },
+  };
 };

@@ -1,6 +1,5 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Col, Row } from "antd";
-import dayjs from "dayjs";
 import { FieldValues } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 
@@ -11,7 +10,10 @@ import InputField from "src/shared/components/InputField";
 import RadioField from "src/shared/components/RadioField";
 import DatePicker from "src/shared/components/DatePicker";
 import TimeRangePicker from "src/shared/components/TimeRangePicker";
-import { convertTo24hrs, disablePastDates } from "src/shared/utils/dateUtils";
+import {
+  convertTo24hrs,
+  disablePastAndFuture180,
+} from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { Justify } from "src/enums/align.enum";
 import { BOOK_MEETING_FIELDS, BOOK_MEETING_META } from "./constants";
@@ -27,6 +29,8 @@ import { BookMeeting as BookMeetingModel } from "src/models/calender.model";
 import { QueryParams } from "src/models/queryParams.model";
 import { CalenderService } from "src/services/Calender/calender.service";
 import { PaginatedOptions } from "src/models/common.model";
+import { getMeetingDefaultValues } from "../utils/calendarUtils";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 import styles from "./bookMeeting.module.scss";
 
@@ -42,21 +46,16 @@ const BookMeeting = ({
   onClose,
   selectedDate,
 }: BookMeetingProps) => {
-  const dateSource = calendarEvent?.id ?? selectedDate;
-
   const methods = useForm({
     validationSchema,
-    defaultValues: {
-      slotDate: dateSource ? dayjs(dateSource).format(YYYY_MM_DD) : "",
-      title: (calendarEvent?.title as string) ?? "",
-      bookedUserType: calendarEvent?.resource?.bookedUserType ?? "",
-    },
   });
 
-  const { bookMeeting } = CalenderService();
+  const { bookMeeting, rescheduleMeeting } = CalenderService();
 
   const { mutateAsync: addMeeting, isPending: isAddMeetingLoading } =
     useMutation(bookMeeting());
+  const { mutateAsync: editMeeting, isPending: isEditMeetingLoading } =
+    useMutation(rescheduleMeeting());
 
   const {
     handleSubmit,
@@ -70,23 +69,31 @@ const BookMeeting = ({
     onClose?.();
   };
 
-  const isMembersSelected =
-    watch(TYPE.name as keyof BookMeetingModel) === TYPE.options[0].value;
+  const selectedType = watch(TYPE.name as keyof BookMeetingModel);
+  const isMembersSelected = selectedType === TYPE.options[0].value;
+
+  const isNameDisabled = !selectedType || !!calendarEvent?.id;
 
   const fetchMembersOrProspects = useCallback(
     (params: Partial<QueryParams>) =>
-      (isMembersSelected ? getProspectssMetaList : getMembersMetaList)(params),
+      (isMembersSelected ? getMembersMetaList : getProspectssMetaList)(params),
     [isMembersSelected],
   );
 
   const handleFormSubmit = async (data: FieldValues) => {
-    const paylaod = {
-      ...data,
+    const payload = {
+      slotDate: data.slotDate,
       startTime: convertTo24hrs(data.meetingTime.startTime),
       endTime: convertTo24hrs(data.meetingTime.endTime),
     };
 
-    await addMeeting(paylaod, { onSuccess: onClose });
+    const id = calendarEvent?.id;
+
+    await (id
+      ? editMeeting({ ...payload, id })
+      : addMeeting({ ...data, ...payload }));
+
+    onClose?.();
   };
 
   const handleSelectUserType = (user: PaginatedOptions) => {
@@ -95,6 +102,12 @@ const BookMeeting = ({
     setValue(USER.USER_ID, id);
     setValue(USER.USER_NAME, label);
   };
+
+  const handleUpdateUserName = () => setValue(NAME.name, "");
+
+  useEffect(() => {
+    methods.reset(getMeetingDefaultValues(calendarEvent, selectedDate));
+  }, [calendarEvent, selectedDate, isOpen]);
 
   return (
     <Modal
@@ -105,7 +118,10 @@ const BookMeeting = ({
       closeModal={handleClose}
       rootClassName={styles.bookMeeting}
       handleOk={handleSubmit(handleFormSubmit)}
-      okButtonProps={{ disabled: !isValid, loading: isAddMeetingLoading }}
+      okButtonProps={{
+        disabled: !isValid,
+        loading: isAddMeetingLoading || isEditMeetingLoading,
+      }}
     >
       <Form methods={methods}>
         <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
@@ -127,6 +143,7 @@ const BookMeeting = ({
             name={TYPE.name}
             options={TYPE.options}
             disabled={!!calendarEvent?.resource?.bookedUserType}
+            onBlur={handleUpdateUserName}
           />
         </Row>
 
@@ -134,21 +151,40 @@ const BookMeeting = ({
           <Col span={24}>
             <Row>
               <Col span={12}>
-                <PaginatedDropdown
-                  name={NAME.name}
-                  label={NAME.label}
-                  placeholder={NAME.placeholder}
-                  onPageUpdate={fetchMembersOrProspects}
-                  queryKey={[
-                    isMembersSelected
-                      ? GET_PROSPECTS_META_LIST
-                      : GET_MEMBERS_META_LIST,
-                  ]}
-                  value={methods.watch(NAME.name as keyof BookMeetingModel)}
-                  onSelect={(_, user) =>
-                    handleSelectUserType(user as PaginatedOptions)
+                <ConditionalRenderComponent
+                  visible={!calendarEvent?.id}
+                  fallback={
+                    <InputField
+                      name={NAME.name}
+                      label={NAME.label}
+                      placeholder={NAME.placeholder}
+                      value={calendarEvent?.resource?.bookedUserName}
+                      required
+                      disabled={!!calendarEvent?.title}
+                    />
                   }
-                />
+                >
+                  <PaginatedDropdown
+                    name={NAME.name}
+                    label={NAME.label}
+                    placeholder={
+                      !selectedType || isMembersSelected
+                        ? NAME.placeholder
+                        : NAME.prospectPlaceholder
+                    }
+                    onPageUpdate={fetchMembersOrProspects}
+                    queryKey={[
+                      isMembersSelected
+                        ? GET_MEMBERS_META_LIST
+                        : GET_PROSPECTS_META_LIST,
+                    ]}
+                    value={methods.watch(NAME.name as keyof BookMeetingModel)}
+                    onSelect={(_, user) =>
+                      handleSelectUserType(user as PaginatedOptions)
+                    }
+                    disabled={isNameDisabled}
+                  />
+                </ConditionalRenderComponent>
               </Col>
             </Row>
           </Col>
@@ -158,7 +194,7 @@ const BookMeeting = ({
               label={SLOT_DATE.label}
               placeholder={SLOT_DATE.placeholder}
               required
-              disabledDate={disablePastDates}
+              disabledDate={disablePastAndFuture180}
               format={YYYY_MM_DD}
               disabled={!!selectedDate}
             />
