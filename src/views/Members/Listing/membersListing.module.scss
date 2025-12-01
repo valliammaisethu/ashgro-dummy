@@ -4,7 +4,7 @@
 .listContainer {
   .headerRow {
     display: grid;
-    grid-template-columns: 55% 25% 20% 5%;
+    grid-template-columns: 55% 23% 20% 5%;
     align-items: center;
     gap: 1rem;
     padding: $table-padding;
@@ -34,7 +34,7 @@
 
   .rowContainer {
     display: grid;
-    grid-template-columns: 55% 25% 20% 5%;
+    grid-template-columns: 55% 24% 20% 5%;
     align-items: center;
     padding: 1.6rem 2rem;
     background-color: $ashgro-white;
@@ -44,6 +44,7 @@
     :global(.actions-icons) {
       opacity: 0;
       transition: opacity 0.2s ease;
+      @include flex-flow(row, wrap, center, 1.8rem);
     }
 
     &:hover :global(.actions-icons) {

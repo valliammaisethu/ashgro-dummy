@@ -39,7 +39,7 @@ const ClubListingTable = ({
     isSuccess,
   } = useQuery(getClubs(queryParams));
 
-  const handlePageChange = (page: number) => () =>
+  const handlePageChange = (page: number) =>
     setQueryParams((prev) => ({ ...prev, page }));
 
   const {
