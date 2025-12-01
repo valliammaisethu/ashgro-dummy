@@ -5,43 +5,57 @@ import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
 import { Buttons } from "src/enums/buttons.enum";
 import { replaceString } from "src/shared/utils/commonHelpers";
+import { DeleteModalProps } from "src/shared/types/sharedComponents.type";
 import { deleteDescription, deleteTitle, modalWidth } from "./constants";
 
 import styles from "./deleteModal.module.scss";
 
-interface DeleteModalProps {
-  title?: string;
-  description?: string;
-  onDelete?: () => void | Promise<void>;
-  loading?: boolean;
-}
-
 const DeleteModal = (props: DeleteModalProps) => {
-  const { title, description, onDelete, loading } = props;
+  const {
+    title,
+    description,
+    onDelete,
+    loading,
+    externalVisible,
+    externalOnClose,
+    modalWidth: externalModalWidth = modalWidth,
+  } = props;
 
-  const [isVisible, setIsVisible] = useState(false);
+  const isControlled = externalVisible !== undefined;
 
-  const handleVisiblity = () => setIsVisible((prev) => !prev);
+  const [internalVisible, setInternalVisible] = useState(false);
+  const visible = isControlled ? externalVisible : internalVisible;
+
+  const handleInternalState = () => setInternalVisible((prev) => !prev);
+
+  const handleVisibility = () => {
+    if (isControlled) externalOnClose?.();
+    else handleInternalState();
+  };
 
   const handleDelete = async () => {
     await onDelete?.();
-    handleVisiblity();
+    handleVisibility();
   };
+
   return (
     <div>
-      <Button
-        onClick={handleVisiblity}
-        icon={<IconDelete strokeWidth={1.5} />}
-        className={styles.deleteIcon}
-      />
+      {!isControlled && (
+        <Button
+          onClick={handleInternalState}
+          icon={<IconDelete strokeWidth={1.5} />}
+          className={styles.deleteIcon}
+        />
+      )}
+
       <Modal
         title={replaceString(deleteTitle, title)}
-        visible={isVisible}
-        width={modalWidth}
+        visible={visible}
+        width={externalModalWidth}
         centered
-        handleOk={handleVisiblity}
+        handleOk={handleVisibility}
         rootClassName={styles.deleteModal}
-        onCancel={handleVisiblity}
+        onCancel={handleVisibility}
         maskClosable={false}
         footer={[
           <div className={styles.footer} key={Buttons.DELETE_PERMANENTLY}>

@@ -32,6 +32,7 @@ export enum Buttons {
   IMPORT = "Import",
   YES_PROCEED = "Yes, Proceed",
   ADD_FILE = "Add File",
+  ADD_CHART = "Add Chart",
 }
 
 export enum HtmlButtonType {

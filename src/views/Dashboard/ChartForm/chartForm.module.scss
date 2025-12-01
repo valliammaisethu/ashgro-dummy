@@ -1,0 +1,21 @@
+@import "src/styles/_variables";
+
+.formLabel {
+  font-size: 1.6rem;
+  color: $add-icon-bg;
+  font-size: 1.6rem;
+  letter-spacing: 0.1px;
+  font-weight: 400;
+}
+.formRow {
+  margin-top: 1.6rem;
+}
+
+.chartFormModal {
+  :global(.ant-modal .ant-modal-body) {
+    padding: 2.4rem 3.2rem 0 3.2rem;
+  }
+  :global(.ant-modal .ant-modal-footer) {
+    margin-top: 0;
+  }
+}

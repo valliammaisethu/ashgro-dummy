@@ -348,3 +348,14 @@ export interface AddUserButtonProps {
   onClick?: () => void;
   label: string;
 }
+
+export interface DeleteModalProps {
+  title?: string;
+  description?: string;
+  onDelete?: () => void | Promise<void>;
+  loading?: boolean;
+
+  externalVisible?: boolean;
+  externalOnClose?: () => void;
+  modalWidth?: number;
+}
