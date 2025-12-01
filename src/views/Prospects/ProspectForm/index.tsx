@@ -26,7 +26,7 @@ import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
 import {
   convertDateToApiFormat,
   convertDateToDisplayFormat,
-  disableFutureAndToday,
+  disableFuture,
   formatDate,
 } from "src/shared/utils/dateUtils";
 import { ProspectFormProps } from "src/shared/types/prospects.type";
@@ -368,7 +368,7 @@ const ProspectForm = ({
               placeholder={PLACEHOLDERS.INQUIRY_DATE}
               label={LABELS.INQUIRY_DATE}
               name={FIELD_NAMES.INQUIRY_DATE}
-              disabledDate={disableFutureAndToday}
+              disabledDate={disableFuture}
               format={DateFormats.DD_MMM_YYYY}
             />
           </Col>

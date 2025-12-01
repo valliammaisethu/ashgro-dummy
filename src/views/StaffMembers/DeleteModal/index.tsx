@@ -18,6 +18,7 @@ import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import styles from "./deleteModal.module.scss";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
 import { CommonService } from "src/services/CommonService.ts/common.service";
+import useRedirect from "src/shared/hooks/useRedirect";
 
 interface DeleteModalProps {
   visible: boolean;
@@ -29,7 +30,7 @@ const DeleteModal = (props: DeleteModalProps) => {
   const { visible, toggleVisibility, staffMember } = props;
   const queryClient = useQueryClient();
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
-
+  const { navigateToStaffMemberList } = useRedirect();
   const { deleteResource: deleteStaffMember } = CommonService();
 
   const { mutateAsync, isPending } = useMutation(deleteStaffMember());
@@ -48,6 +49,7 @@ const DeleteModal = (props: DeleteModalProps) => {
             queryKey: [QueryKeys.GET_STAFF_MEMBER_LIST, clubId],
           });
           toggleVisibility();
+          navigateToStaffMemberList();
         },
       },
     );

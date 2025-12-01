@@ -395,6 +395,7 @@ const ProspectsListing = () => {
         selectedEmails={emailRecipients}
         selectedTemplate={selectedTemplate}
         isBulkEmail
+        handleEmailComplete={handleClearSelections}
       />
       <BulkImportModal
         visible={bulkUploadVisible}

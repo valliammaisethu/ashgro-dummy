@@ -47,6 +47,7 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
 
   return (
     <div onClick={onClick}>
+      {/* TODO: Change Dropdown to Select */}
       <Dropdown
         menu={{ items: menuItems }}
         trigger={[Trigger.CLICK]}

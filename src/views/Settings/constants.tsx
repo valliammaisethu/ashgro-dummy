@@ -87,8 +87,8 @@ export const LEAD_CONSTANTS = {
 };
 
 export const MEMBERSHIP_CONSTANTS = {
-  TYPE: "MemberShip Type",
-  STATUS: "MemberShip Status",
+  TYPE: "Membership Type",
+  STATUS: "Membership Status",
   MEMBERSHIP_TYPE: "memberShipStatus",
   FIELD_LABELS: {
     memberShipType: "Type",
@@ -96,8 +96,8 @@ export const MEMBERSHIP_CONSTANTS = {
   },
 
   PLACEHOLDER: {
-    memberShipType: "Enter MemberShip Type",
-    memberShipStatus: "Enter MemberShip Status",
+    memberShipType: "Enter Membership Type",
+    memberShipStatus: "Enter Membership Status",
   },
 
   MODAL_TITLE: {

@@ -16,6 +16,25 @@
   }
 }
 
+.logoutButton {
+  background-color: transparent;
+  border: 0;
+
+  &:global(.ant-btn-color-default) {
+    box-shadow: none;
+  }
+
+  &:hover {
+    background-color: transparent;
+    border: 0;
+  }
+  &:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+  ) {
+    color: unset;
+    background-color: unset;
+  }
+}
 .topBar {
   display: flex;
   justify-content: space-between;

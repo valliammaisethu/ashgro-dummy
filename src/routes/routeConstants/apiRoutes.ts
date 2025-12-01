@@ -80,4 +80,5 @@ export const ApiRoutes = {
 
   // Lead Form
   LEAD_FORM: "/api/v1/clubs/:id/leadforms",
+  GET_TRANSCRIPTS: "/clubs/:clubId/users/:id/transcripts",
 };

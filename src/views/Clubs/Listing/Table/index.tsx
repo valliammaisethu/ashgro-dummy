@@ -39,7 +39,7 @@ const ClubListingTable = ({
     isSuccess,
   } = useQuery(getClubs(queryParams));
 
-  const handlePageChange = (page: number) => () =>
+  const handlePageChange = (page: number) =>
     setQueryParams((prev) => ({ ...prev, page }));
 
   const {
@@ -118,6 +118,7 @@ const ClubListingTable = ({
                 address={club.address}
                 firstName={extractNameParts(club.name).firstName}
                 lastName={extractNameParts(club.name).lastName}
+                profilePictureUrl={club?.logoUrl}
               />
 
               <Badge

@@ -20,4 +20,5 @@ export interface NewEmailModalProps {
   selectedEmails?: SelectedEmailModel[];
   selectedTemplate?: EmailTemplate;
   isBulkEmail?: boolean;
+  handleEmailComplete?: () => void;
 }

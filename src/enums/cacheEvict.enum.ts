@@ -78,4 +78,5 @@ export enum QueryKeys {
   GET_PROSPECTS_META_LIST = "getProspectsMetaList",
 
   GET_LEAD_FORM_STATUS = "getLeadFormStatus",
+  GET_TRANSCRIPTS = "getTranscripts",
 }
