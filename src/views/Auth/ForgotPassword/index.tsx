@@ -11,7 +11,7 @@ import Button from "src/shared/components/Button";
 import Form from "src/shared/components/Form";
 import InputField from "src/shared/components/InputField";
 import { INPUT_TYPE } from "src/enums/inputType";
-import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
+import { Buttons, HtmlButtonType } from "src/enums/buttons.enum";
 import { AuthService } from "src/services/AuthService/auth.service";
 import useRedirect from "src/shared/hooks/useRedirect";
 
@@ -59,7 +59,6 @@ const ForgotPassword = () => {
               htmlType={SUBMIT}
               className={styles.submitButton}
               loading={isPending}
-              type={ButtonTypes.PRIMARY}
             >
               {CONFIRM_EMAIL}
             </Button>

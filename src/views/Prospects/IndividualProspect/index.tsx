@@ -34,9 +34,12 @@ const IndividualProspect = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
   const { viewProspect, editProspect } = ProspectsService();
   const { id = "" } = useParams();
-  const { data, isPending, isSuccess, isFetching, refetch } = useQuery(
-    viewProspect(id),
-  );
+  const {
+    data,
+    isLoading: isPending,
+    isSuccess,
+    refetch,
+  } = useQuery(viewProspect(id));
 
   const { getLeadStatuses } = MetaService();
 
@@ -79,13 +82,13 @@ const IndividualProspect = () => {
 
   const handleStatusChange = async (statusName: string) => {
     const selectedStatus = leadStatusOptions?.leadStatuses?.find(
-      (status) => status.statusName === statusName,
+      (status) => status?.id === statusName,
     );
     if (selectedStatus?.id && id) {
       await updateProspectMutate({
         prospect: {
           id,
-          leadStatusId: selectedStatus.id,
+          leadStatusId: selectedStatus?.id,
           clubId,
         },
       });
@@ -110,14 +113,13 @@ const IndividualProspect = () => {
   return (
     <div className={styles.individualProspect}>
       <Header
-        isFetchingProfile={isFetching}
+        isFetchingProfile={isPending}
         onEmail={toggleTemplateModal}
         onConvert={handleConvertToMember}
       />
       <ConditionalRender
         isPending={isPending}
         isSuccess={isSuccess}
-        isFetching={isFetching}
         records={[data?.prospect]}
       >
         <Card className={styles.card}>
@@ -169,7 +171,7 @@ const IndividualProspect = () => {
           </div>
         </Card>
       </ConditionalRender>
-      {isEdit && !isFetching ? (
+      {isEdit && !isPending ? (
         <ProspectForm
           prospectId={String(data?.prospect?.id)}
           isEdit={isEdit}

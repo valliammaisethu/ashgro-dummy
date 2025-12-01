@@ -69,11 +69,12 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   };
 
   const handleStatusChange = (statusName: string) => {
-    const selectedStatus = leadStatusOptions.find(
-      (status) => status.statusName === statusName,
+    const selectedStatus = leadStatusOptions?.find(
+      (status) => status?.id === statusName,
     );
-    if (selectedStatus?.id && prospect.id && onStatusChange) {
-      onStatusChange(prospect.id, selectedStatus.id);
+
+    if (selectedStatus?.id && prospect?.id && onStatusChange) {
+      onStatusChange(prospect?.id, selectedStatus?.id);
     }
   };
 
