@@ -14,6 +14,7 @@ import ConditionalRenderComponent from "src/shared/components/ConditionalRenderC
 const Header: React.FC<ClubDetailsHeaderProps> = ({
   isFetching,
   onChatbotQuestions,
+  onSettings,
 }) => {
   return (
     <ConditionalRenderComponent hideFallback visible={!isFetching}>
@@ -21,6 +22,7 @@ const Header: React.FC<ClubDetailsHeaderProps> = ({
         <BackButton />
         <div className={styles.headerRight}>
           <Button
+            onClick={onSettings}
             icon={
               <IconSettings color={Colors.MODAL_CLOSE_ICON} strokeWidth={1.5} />
             }

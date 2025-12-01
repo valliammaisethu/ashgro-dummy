@@ -37,6 +37,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
     selectedEmails = [],
     selectedTemplate,
     isBulkEmail = false,
+    handleEmailComplete,
   } = props;
 
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
@@ -104,6 +105,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
       {
         onSuccess: () => {
           handleClose();
+          handleEmailComplete?.();
         },
       },
     );

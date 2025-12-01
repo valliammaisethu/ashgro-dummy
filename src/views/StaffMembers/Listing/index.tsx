@@ -106,7 +106,9 @@ const StaffMembersListing = () => {
                     <div className={styles.rowItem}>
                       {fillEmptyData(item?.staffDepartment)}
                     </div>
-                    <div className={styles.rowItem}>{item?.title}</div>
+                    <div className={styles.rowItem}>
+                      {fillEmptyData(item?.title)}
+                    </div>
 
                     <Actions
                       showSelect={false}

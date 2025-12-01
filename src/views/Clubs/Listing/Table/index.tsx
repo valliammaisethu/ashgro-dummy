@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import {
   clubHeaderColumnGrid,
@@ -15,6 +15,7 @@ import Switch from "src/shared/components/Switch";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import Actions from "src/shared/components/atoms/Table/Actions";
 import Pagination from "src/shared/components/Pagination";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { ClubListingTableProps } from "src/shared/types/clubs.type";
 import { ClubService } from "src/services/ClubService/club.service";
 import { extractNameParts } from "src/shared/utils/parser";
@@ -22,8 +23,6 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import { stopPropagation } from "src/shared/utils/eventUtils";
 
 import styles from "../../clubs.module.scss";
-import { QueryKeys } from "src/enums/cacheEvict.enum";
-import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 const ClubListingTable = ({
   onEditClub,
@@ -33,31 +32,33 @@ const ClubListingTable = ({
   const { getClubs, updateStatus } = ClubService();
   const [updatingClubId, setUpdatingClubId] = useState<string>("");
   const { navigateToInvidualClub } = useRedirect();
-  const queryClient = useQueryClient();
 
   const {
     data: clubsData,
     isPending,
     isSuccess,
-    isFetching,
   } = useQuery(getClubs(queryParams));
 
-  const handlePageChange = (page: number) => () =>
+  const handlePageChange = (page: number) =>
     setQueryParams((prev) => ({ ...prev, page }));
 
-  const { mutateAsync, isPending: isUpdatePending } =
-    useMutation(updateStatus());
+  const {
+    mutateAsync: updateChatbotStatusMutate,
+    isPending: isChatbotUpdatePending,
+  } = useMutation(updateStatus());
+
+  const {
+    mutateAsync: updateClubStatusMutate,
+    isPending: isStatusUpdatePending,
+  } = useMutation(updateStatus());
 
   const handleChatbotStatusChange = async (clubId = "", value: boolean) => {
     setUpdatingClubId(clubId);
 
-    await mutateAsync(
+    await updateChatbotStatusMutate(
       { chatbotEnabled: value, id: clubId },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: [QueryKeys.GET_CLUBS],
-          });
           setUpdatingClubId("");
         },
         onError: () => {
@@ -69,13 +70,10 @@ const ClubListingTable = ({
 
   const handleStatusChange = async (clubId = "", value: string) => {
     setUpdatingClubId(clubId);
-    await mutateAsync(
+    await updateClubStatusMutate(
       { status: value, id: clubId },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: [QueryKeys.GET_CLUBS],
-          });
           setUpdatingClubId("");
         },
         onError: () => {
@@ -106,7 +104,6 @@ const ClubListingTable = ({
       </ConditionalRenderComponent>
       <div className={styles.tableBody}>
         <ConditionalRender
-          isFetching={isFetching}
           isPending={isPending}
           isSuccess={isSuccess}
           records={clubsData?.clubs}
@@ -121,6 +118,7 @@ const ClubListingTable = ({
                 address={club.address}
                 firstName={extractNameParts(club.name).firstName}
                 lastName={extractNameParts(club.name).lastName}
+                profilePictureUrl={club?.logoUrl}
               />
 
               <Badge
@@ -138,7 +136,7 @@ const ClubListingTable = ({
                   onChange={(value) =>
                     handleChatbotStatusChange(club.id, value)
                   }
-                  loading={isUpdatePending && updatingClubId === club.id}
+                  loading={isChatbotUpdatePending && updatingClubId === club.id}
                 />
               </div>
 
@@ -148,7 +146,9 @@ const ClubListingTable = ({
                 onEditClick={handleEditClick(club.id)}
                 selectWidth={140}
                 selectedValue={club.status}
-                selectLoading={isUpdatePending && updatingClubId === club.id}
+                selectLoading={
+                  isStatusUpdatePending && updatingClubId === club.id
+                }
               />
             </div>
           ))}

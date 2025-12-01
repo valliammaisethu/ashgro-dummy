@@ -16,7 +16,9 @@
     height: 4.4rem;
     border-radius: 3.2rem;
 
-    &:hover {
+    &:global(
+      .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+    ) {
       background-color: $hot-text;
       color: $ashgro-white;
     }
@@ -51,4 +53,5 @@
 
 .description {
   font-size: 1.6rem;
+  padding-left: 1.4rem;
 }

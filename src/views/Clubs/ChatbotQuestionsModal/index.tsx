@@ -37,7 +37,7 @@ const ChatbotQuestionsModal: React.FC<ChatbotQuestionsModalProps> = ({
     await uploadFileMutate(
       {
         attachmentId: uploadedFileId,
-        id,
+        clubId: id,
       },
       {
         onSuccess: handleClose,

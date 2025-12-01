@@ -29,6 +29,7 @@ import { Trigger } from "src/enums/trigger.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
 import { AttachmentTypes } from "src/enums/attachmentTypes.enum";
+
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
   phoneCodeName?: string;
@@ -245,6 +246,7 @@ export interface AvatarWithFallbackProps {
   src?: string;
   name: string;
   size?: number;
+  fontSize?: number;
   className?: string;
   backgroundColor?: string;
   textColor?: string;
@@ -262,6 +264,14 @@ export interface DrawerProps extends AntdDrawerProps {
   children: JSX.Element;
   placement?: DrawerPlacement;
   subHeading?: string;
+  cancelText?: string;
+  okText?: string;
+  cancelButtonProps?: Omit<ButtonProps, "loading"> & { loading?: boolean };
+  okButtonProps?: Omit<ButtonProps, "loading"> & { loading?: boolean };
+  okButtonType?: ButtonTypes;
+  okButtonHtmlType?: HtmlButtonType;
+  confirmLoading?: boolean;
+  handleOk?: () => void;
 }
 
 export interface UploadedFile {
@@ -287,6 +297,19 @@ export interface FileUploadProps {
   deleteOnRemove?: boolean;
 }
 
+export interface StatusOption {
+  id?: string;
+  statusName?: string;
+  color?: string;
+}
+
+export interface StatusDropdownProps<T = StatusOption> {
+  value?: string;
+  options: T[];
+  onChange: (value: string) => void;
+  loading?: boolean;
+  onClick?: (e: React.MouseEvent) => void;
+}
 export type QueryKeyType = readonly unknown[];
 
 export interface UploadAreaProps {
@@ -308,11 +331,13 @@ export interface UploadAreaState {
 export interface BulkImportButtonProps {
   onClick: () => void;
   tooltip: string;
+  loading?: boolean;
 }
 
 export interface BulkMailButtonProps {
   onClick?: () => void;
   disabled?: boolean;
+  loading?: boolean;
 }
 
 export interface ClearSelectionButtonProps {

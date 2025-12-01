@@ -20,6 +20,7 @@ const Header = ({
   onBulkImport,
   selectedEmails,
   filtersActive,
+  isCheckingImportStatus,
 }: MembersHeaderProps) => {
   return (
     <div className={styles.header}>
@@ -32,7 +33,11 @@ const Header = ({
       <div className={styles.actions}>
         {Boolean(selectedEmails) && <ClearSelectionButton onClick={onClear} />}
         {!selectedEmails && (
-          <BulkImportButton onClick={onBulkImport} tooltip={importMembers} />
+          <BulkImportButton
+            onClick={onBulkImport}
+            tooltip={importMembers}
+            loading={isCheckingImportStatus}
+          />
         )}
         <BulkMailButton onClick={onBulkMail} disabled={!selectedEmails} />
         {!selectedEmails && (

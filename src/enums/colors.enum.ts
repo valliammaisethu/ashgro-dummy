@@ -11,4 +11,6 @@ export enum Colors {
   DARK_GOLD = "#766A4C",
   LIGHT_GOLD = "#F6EFDE",
   ASHGRO_GREY = "#767676",
+  ACTIVE_GREEN = "#329A20",
+  INACTIVE_GREY = "#6A6A6A",
 }

@@ -38,6 +38,7 @@ export enum MutationKeys {
   CHATBOT = "chatbotResponse",
   CHATBOT_PROFILE = "chatbotProfileResponse",
   BULK_UPLOAD = "bulkUpload",
+  CHECK_BULK_IMPORT_STATUS = "checkBulkImportStatus",
 }
 
 export enum QueryKeys {

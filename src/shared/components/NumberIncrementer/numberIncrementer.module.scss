@@ -2,7 +2,6 @@
 
 .wrapper {
   height: 4rem;
-  border: 1px solid $incrementer-border;
   display: flex;
   justify-content: space-between;
   border-radius: 1.2rem;
@@ -20,8 +19,23 @@
     text-align: center;
     cursor: pointer;
     position: relative;
-    background: $input-background;
-    border: none;
+    height: 100%;
+    width: 100%;
+    background-color: $skeleton-bg;
+    border-color: $incrementer-border;
+    border-radius: 1.2rem;
+
+    &:global(.ant-btn-color-default) {
+      box-shadow: none;
+    }
+
+    &:global(
+        .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
+      ):hover {
+      background-color: $skeleton-bg;
+      color: unset;
+      border-color: $incrementer-border;
+    }
 
     i::before {
       color: $ashgro-black;
@@ -37,9 +51,16 @@
     padding: 0.9rem 2.1rem;
     color: $ashgro-black;
     font-size: 1.4rem;
+    border: 1px solid $incrementer-border;
+    border-left: 0;
+    border-right: 0;
   }
 
   .decrementer {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 0;
+
     &::after {
       content: "";
       width: 0.1rem;
@@ -55,6 +76,9 @@
   }
 
   .incrementer {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
     &::before {
       content: "";
       width: 0.1rem;

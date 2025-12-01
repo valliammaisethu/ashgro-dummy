@@ -3,7 +3,24 @@ import { ProfileDetails } from "./profile.model";
 import { Pagination } from "./pagination.model";
 import { ResponseModel } from "./response.model";
 
-export class ClubFormData {
+export class ClubGeneralSettings {
+  @serializable
+  webFormsEnabled?: boolean;
+
+  @serializable
+  bulkEmailEnabled?: boolean;
+
+  @serializable
+  emailTemplatesAllowed?: number;
+
+  @serializable
+  customChartsAllowed?: number;
+
+  @serializable
+  clubId?: string;
+}
+
+export class ClubFormData extends ClubGeneralSettings {
   @serializable
   attachmentId?: string;
 
@@ -38,7 +55,7 @@ export class ClubFormData {
   status?: string;
 }
 
-export class ClubProfile {
+export class ClubProfile extends ClubGeneralSettings {
   @serializable
   id?: string;
 
@@ -154,5 +171,10 @@ export class ClubKnowledgeBasePayload {
   attachmentId?: string;
 
   @serializable
-  id?: string;
+  clubId?: string;
+}
+
+export class ClubGeneralSettingsResponse extends ResponseModel {
+  @serializable(object(ClubProfile))
+  data?: ClubProfile;
 }
