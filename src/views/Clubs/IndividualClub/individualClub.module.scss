@@ -347,3 +347,63 @@
     transform: translate(-50%, -50%);
   }
 }
+
+.unlockButton {
+  width: 16.4rem;
+  height: 4.4rem;
+  border-radius: 3.6rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: $ashgro-white;
+  background-color: $ashgro-navy;
+
+  &:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+  ) {
+    background-color: $ashgro-navy;
+    color: $ashgro-white;
+  }
+}
+
+.unlockModalTitle {
+  color: $ashgro-navy;
+  font-weight: 700;
+  font-family: $font-primary;
+  font-size: 2.2rem;
+  letter-spacing: 0.1px;
+}
+.unlockModalText {
+  margin-top: 1.2rem;
+  color: $modal-description-text;
+  font-size: 1.6rem;
+}
+
+.unlockClubFooter {
+  @include flex-container(flex-end, center, row, 2.4rem);
+
+  .cancelButton,
+  .unlockButton {
+    width: 16rem;
+    height: 4rem;
+    border-radius: 3.2rem;
+    background-color: $ashgro-light-grey;
+    color: $ashgro-black;
+    font-size: 1.4rem;
+    font-weight: 400;
+  }
+
+  .unlockButton {
+    color: $ashgro-white;
+    background-color: $ashgro-navy;
+  }
+
+  .cancelButton {
+    &:global(
+      .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+    ) {
+      background-color: $ashgro-light-grey;
+      color: $ashgro-black;
+      opacity: 70%;
+    }
+  }
+}
