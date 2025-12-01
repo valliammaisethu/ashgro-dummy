@@ -100,21 +100,25 @@ export const MetaService = () => {
     };
   };
 
-  const getMembershipCategories = (): UseQueryOptions<
+  const getMembershipCategories = (
+    id?: string,
+  ): UseQueryOptions<
     MembershipCategoriesData,
     ResponseModel,
     MembershipCategoriesData
   > => {
+    const selectedClubId = id || clubId;
+
     return {
-      queryKey: [GET_MEMBERSHIP_CATEGORIES_KEY, clubId],
+      queryKey: [GET_MEMBERSHIP_CATEGORIES_KEY, selectedClubId],
       queryFn: async () => {
         const { data } = await axiosInstance.get(
-          generatePath(GET_MEMBERSHIP_CATEGORIES, { id: clubId }),
+          generatePath(GET_MEMBERSHIP_CATEGORIES, { id: selectedClubId }),
         );
 
         return deserialize(MembershipCategoriesData, data?.data);
       },
-      enabled: !!clubId,
+      enabled: !!selectedClubId,
     };
   };
 

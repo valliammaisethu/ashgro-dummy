@@ -61,4 +61,6 @@ export const AppRoutes = {
   INDIVIDUAL_CLUB: "/home/clubs/:id",
 
   CHATBOT: "/chatbot",
+
+  LEAD_FORM: "/leadForm/:id?",
 };

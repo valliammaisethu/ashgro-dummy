@@ -77,5 +77,8 @@ export const ApiRoutes = {
   CHECK_BULK_IMPORT_STATUS_MEMBERS: "/members/import/status",
 
   CHAT_BOT_SLOTS: "calendar/chatbotSlots",
+
+  // Lead Form
+  LEAD_FORM: "/api/v1/clubs/:id/leadforms",
   GET_TRANSCRIPTS: "/clubs/:clubId/users/:id/transcripts",
 };
