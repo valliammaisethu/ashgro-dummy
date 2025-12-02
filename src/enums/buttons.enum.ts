@@ -13,6 +13,8 @@ export enum Buttons {
   YES_CONVERT = "Yes, Convert",
   APPLY_FILTERS = "Apply Filters",
   CLEAR_FILTERS = "Clear Filters",
+  SELECT_ALL = "Select all",
+  UNSELECT_ALL = "Unselect all",
   CLEAR = "Clear",
   NEXT = "Next",
   NEW_EMAIL = "New Email",

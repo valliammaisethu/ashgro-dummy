@@ -7,8 +7,4 @@ export const xAxisTypesOptions = [
   { label: "Membership Status", value: XAxisTypes.MEMBERSHIP_STATUS },
   { label: "Staff Department", value: XAxisTypes.STAFF_DEPARTMENT },
   { label: "Sales Activity", value: XAxisTypes.SALES_ACTIVITY },
-  {
-    label: "Tour Booking to Conversion Rate",
-    value: XAxisTypes.TOUR_BOOKING_TO_CONVERSION_RATE,
-  },
 ];

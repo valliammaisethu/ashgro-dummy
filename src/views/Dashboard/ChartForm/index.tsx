@@ -11,12 +11,10 @@ import {
 } from "./constants";
 import { chartformValidation } from "./validation";
 import { xAxisTypesOptions } from "src/constants/chartOptions";
-import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { XAxisTypes } from "src/enums/charts.enum";
 import { Buttons } from "src/enums/buttons.enum";
 import { ChartFormProps } from "src/shared/types/dashboard.type";
 import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
-import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import InputField from "src/shared/components/InputField";
 import Form from "src/shared/components/Form";
 import useForm from "src/shared/components/UseForm";
@@ -52,9 +50,6 @@ const ChartForm = (props: ChartFormProps) => {
   //   };
   // }, []);
 
-  const isChatbotEnabled =
-    localStorageHelper.getItem(LocalStorageKeys.USER).isChatbotEnabled ?? true;
-
   const methods = useForm({
     validationSchema: chartformValidation,
     // TODO: Edit Integration
@@ -62,10 +57,6 @@ const ChartForm = (props: ChartFormProps) => {
   });
 
   const selectedType = methods.watch("type");
-
-  const isConversionTypeChart =
-    isChatbotEnabled &&
-    selectedType === XAxisTypes.TOUR_BOOKING_TO_CONVERSION_RATE;
 
   const {
     formState: { isDirty, isValid },
@@ -186,7 +177,7 @@ const ChartForm = (props: ChartFormProps) => {
               placeholder={labelPlaceholder}
               name={labelField}
               required
-              disabled={isConversionTypeChart || !selectedType}
+              disabled={!selectedType}
               options={dynamicLabelOptions}
             />
           </Col>

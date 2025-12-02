@@ -683,10 +683,11 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 
 .ant-picker-range {
   .ant-picker-input {
-    border: 1px solid $ashgro-input-border;
+    border: 1px solid $incrementer-border;
     padding: 1rem;
     border-radius: 1.2rem;
-    width: 20.4rem;
+    height: 4rem;
+    min-width: 21rem;
   }
 }
 .ant-picker-range .ant-picker-range-separator {
@@ -830,4 +831,12 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 
 .ant-input-outlined:focus-within {
   background: $ashgro-cream;
+}
+.ant-drawer,
+.ant-picker {
+  font-family: $font-secondary;
+}
+.ant-picker .ant-picker-input > input {
+  font-size: 1.2rem;
+  font-weight: 400;
 }

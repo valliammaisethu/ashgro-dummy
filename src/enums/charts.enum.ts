@@ -5,5 +5,4 @@ export enum XAxisTypes {
   MEMBERSHIP_STATUS = "membershipStatus",
   STAFF_DEPARTMENT = "staffDepartment",
   SALES_ACTIVITY = "salesActivity",
-  TOUR_BOOKING_TO_CONVERSION_RATE = "tourBookingToConversionRate",
 }
