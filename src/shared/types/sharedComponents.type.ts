@@ -359,3 +359,8 @@ export interface DeleteModalProps {
   externalOnClose?: () => void;
   modalWidth?: number;
 }
+
+export interface DashboardStatsCardProps {
+  title: string;
+  value: string | number;
+}

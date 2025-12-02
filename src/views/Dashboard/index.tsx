@@ -5,7 +5,11 @@ import { useUserRole } from "src/shared/hooks/useUserRole";
 import DashboardHeader from "./Header";
 import ChartForm from "./ChartForm";
 import ChartFilters from "./Filters";
-import { deleteModalDescription, deleteModalTitle } from "./constants";
+import {
+  deleteModalDescription,
+  deleteModalTitle,
+  getDashboardStats,
+} from "./constants";
 import { xAxisLabel } from "./ChartForm/constants";
 import { ChartState } from "src/shared/types/dashboard.type";
 import { XAxisTypes } from "src/enums/charts.enum";
@@ -14,10 +18,18 @@ import DeleteModal from "src/shared/components/DeleteModal";
 import { replaceString } from "src/shared/utils/commonHelpers";
 
 import styles from "./dashboard.module.scss";
+import StatsCard from "./StatsCard";
+import { DashboardStats } from "src/models/dashboardStats.model";
 
 const DashboardWrapper = () => {
   const SuperAdminDashboard = () => {
-    return <div>SuperAdminDashboard</div>;
+    return (
+      <div className={styles.superAdminDashboard}>
+        {getDashboardStats(new DashboardStats()).map((stat) => (
+          <StatsCard key={stat.label} title={stat.label} value={stat.value} />
+        ))}
+      </div>
+    );
   };
 
   const ClubAdminDashboard = () => {

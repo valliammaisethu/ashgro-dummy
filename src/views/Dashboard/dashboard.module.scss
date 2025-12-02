@@ -1,6 +1,10 @@
 @import "src/styles/_variables";
 @import "src/styles/_helpers";
 
+.superAdminDashboard {
+  @include flex-flow(row, wrap, normal, 4.1rem);
+}
+
 .addChartButton {
   position: relative;
   background-color: $ashgro-navy;
