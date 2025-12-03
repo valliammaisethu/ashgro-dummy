@@ -1,13 +1,16 @@
-import { BulkModes } from "src/enums/bulkModes";
+export const importDescription = `Import %s from XLS file`;
 
-export const importDescription = (type: BulkModes) =>
-  `Import ${type} from XLS file`;
+export const importTitle = `Import %s`;
 
-export const importTitle = (type: BulkModes) => `Import ${type}`;
+export const chatbotKnowlegeBaseTitle = "Chatbot Knowledge Base";
+
+export const chatbotKnowlegeBaseDescription = "Upload Chatbot Knowledge Base";
 
 export const maxSizeDescription = "Upload a file with maximum size of 5MB";
 
 export const inputPlaceholder = "Click to upload a XLS file";
+
+export const chatbotKnowlegeBaseInput = "Click to upload file";
 
 export const inProgress = "Import In Progress";
 

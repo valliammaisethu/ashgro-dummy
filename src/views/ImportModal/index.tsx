@@ -5,48 +5,68 @@ import { useMutation } from "@tanstack/react-query";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
-import BulkFileUpload, {
-  UploadedFileData,
-} from "src/shared/components/BulkFileUpload";
 import {
   importDescription,
   inputPlaceholder,
   maxSizeDescription,
   importTitle,
+  chatbotKnowlegeBaseTitle,
+  chatbotKnowlegeBaseDescription,
+  chatbotKnowlegeBaseInput,
 } from "./constants";
 import excelIcon from "src/assets/images/excelIcon.webp";
+import wordIcon from "src/assets/images/wordIcon.webp";
+import pdfIcon from "src/assets/images/pdfIcon.webp";
 import ashgroLogo from "src/assets/images/homeLogo.webp";
 import { Buttons } from "src/enums/buttons.enum";
-import { BulkModes } from "src/enums/bulkModes";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { ImportModes } from "src/enums/importModes.enum";
 import { TemplateEntity } from "src/enums/templateEntity.enum";
-import { BulkImportModalProps } from "src/shared/types/bulkImport.type";
+import { ImportModalProps } from "src/shared/types/importModes.type";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { BulkUploadService } from "src/services/BulkUploadService/bulkUpload.service";
 import { TemplateDownloadService } from "src/services/TemplateDownloadService/templateDownload.service";
 import { downloadTemplateFile } from "src/services/TemplateDownloadService/utils";
 
-import styles from "./bulkImport.module.scss";
+import styles from "./importModal.module.scss";
+import { replaceString } from "src/shared/utils/commonHelpers";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+import { UploadedFileData } from "src/shared/types/sharedComponents.type";
+import ImportFileUpload from "src/shared/components/ImportFileUpload";
+import { docsPdfAccept, excelAccept } from "src/constants/sharedComponents";
+import { ClubService } from "src/services/ClubService/club.service";
+import { useParams } from "react-router-dom";
 
-const BulkImportModal = (props: BulkImportModalProps) => {
+const ImportModal = (props: ImportModalProps) => {
   const { importMode, onClose, visible, onImport } = props;
   const [isUploading, setIsUploading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<string>("");
 
+  const isKnowledgeBaseImport =
+    importMode === ImportModes.CHATBOT_KNOWLEDGE_BASE;
+
+  const { id: adminClubId = "" } = useParams();
+
   const { bulkUpload } = BulkUploadService();
+  const { uploadKnowledgeBase } = ClubService();
   const { downloadTemplate } = TemplateDownloadService();
 
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
 
   const getTemplateEntity = (): TemplateEntity => {
-    return importMode === BulkModes.MEMBERS
+    return importMode === ImportModes.MEMBERS
       ? TemplateEntity.MEMBER
       : TemplateEntity.PROSPECT;
   };
 
   const { mutate: upload, isPending: isBulkUploading } =
     useMutation(bulkUpload());
+
+  const {
+    mutate: uploadChatbotKnowledgeBaseMutate,
+    isPending: isUploadingKnowledgeBase,
+  } = useMutation(uploadKnowledgeBase());
 
   const { mutate: downloadTemplateMutate, isPending: isDownloading } =
     useMutation({
@@ -65,12 +85,27 @@ const BulkImportModal = (props: BulkImportModalProps) => {
   };
 
   const handleImport = () => {
+    if (isKnowledgeBaseImport) {
+      if (!uploadedFile || !adminClubId) return;
+      uploadChatbotKnowledgeBaseMutate(
+        {
+          attachmentId: uploadedFile,
+          clubId: adminClubId,
+        },
+        {
+          onSuccess: () => {
+            onImport?.();
+            handleClose();
+          },
+        },
+      );
+      return;
+    }
     if (!uploadedFile || !clubId) return;
-
     upload(
       {
         attachmentId: uploadedFile,
-        clubId: clubId,
+        clubId,
         entity: getTemplateEntity(),
       },
       {
@@ -95,7 +130,11 @@ const BulkImportModal = (props: BulkImportModalProps) => {
     <div>
       <Modal
         rootClassName={styles.bulkImportModal}
-        title={importTitle(importMode)}
+        title={
+          isKnowledgeBaseImport
+            ? chatbotKnowlegeBaseTitle
+            : replaceString(importTitle, importMode)
+        }
         onCancel={handleClose}
         visible={visible}
         width={800}
@@ -107,11 +146,16 @@ const BulkImportModal = (props: BulkImportModalProps) => {
                 [styles.uploadedFooter]: isUploaded && !isUploading,
               })}
             >
-              <BulkFileUpload
+              <ImportFileUpload
                 onFileUploaded={handleFileUploaded}
                 onUploadStateChange={setIsUploading}
                 onChangeFile={handleChangeFile}
-                inputPlaceholder={inputPlaceholder}
+                accept={isKnowledgeBaseImport ? docsPdfAccept : excelAccept}
+                inputPlaceholder={
+                  isKnowledgeBaseImport
+                    ? chatbotKnowlegeBaseInput
+                    : inputPlaceholder
+                }
                 className={styles.footerContent}
                 isUploadingClassName={styles.isUploadingContent}
                 isUploadedClassName={styles.uploadedFooter}
@@ -123,7 +167,7 @@ const BulkImportModal = (props: BulkImportModalProps) => {
               <Button
                 onClick={handleImport}
                 disabled={!isUploaded || isBulkUploading}
-                loading={isBulkUploading}
+                loading={isBulkUploading || isUploadingKnowledgeBase}
                 className={styles.importButton}
               >
                 {Buttons.IMPORT}
@@ -134,9 +178,23 @@ const BulkImportModal = (props: BulkImportModalProps) => {
       >
         <div className={styles.modalBody}>
           <div className={styles.iconsContainer}>
-            <Button className={styles.iconButton}>
-              <img src={excelIcon} className={styles.excelIcon} />
-            </Button>
+            <ConditionalRenderComponent
+              visible={!isKnowledgeBaseImport}
+              fallback={
+                <div className={styles.chatKnowledgeBaseIcons}>
+                  <Button className={styles.iconButton}>
+                    <img src={wordIcon} className={styles.excelIcon} />
+                  </Button>
+                  <Button className={styles.iconButton}>
+                    <img src={pdfIcon} className={styles.excelIcon} />
+                  </Button>
+                </div>
+              }
+            >
+              <Button className={styles.iconButton}>
+                <img src={excelIcon} className={styles.excelIcon} />
+              </Button>
+            </ConditionalRenderComponent>
             <IconArrowRight />
             <Button className={styles.iconButton}>
               <img className={styles.excelIcon} src={ashgroLogo} />
@@ -144,26 +202,36 @@ const BulkImportModal = (props: BulkImportModalProps) => {
           </div>
           <div className={styles.description}>
             <span className={styles.importDescription}>
-              {importDescription(importMode)}
+              <ConditionalRenderComponent
+                fallback={replaceString(importDescription, importMode)}
+                visible={isKnowledgeBaseImport}
+              >
+                {chatbotKnowlegeBaseDescription}
+              </ConditionalRenderComponent>
             </span>
             <span className={styles.uploadDescription}>
               {maxSizeDescription}
             </span>
           </div>
-          <div
-            className={styles.templateDownload}
-            onClick={handleDownloadTemplate}
-            style={{ cursor: isDownloading ? "not-allowed" : "pointer" }}
+          <ConditionalRenderComponent
+            visible={!isKnowledgeBaseImport}
+            hideFallback
           >
-            <IconDownload />
-            <span>
-              {isDownloading ? "Downloading..." : Buttons.DOWNLOAD_TEMPLATE}
-            </span>
-          </div>
+            <div
+              className={styles.templateDownload}
+              onClick={handleDownloadTemplate}
+              style={{ cursor: isDownloading ? "not-allowed" : "pointer" }}
+            >
+              <IconDownload />
+              <span>
+                {isDownloading ? "Downloading..." : Buttons.DOWNLOAD_TEMPLATE}
+              </span>
+            </div>
+          </ConditionalRenderComponent>
         </div>
       </Modal>
     </div>
   );
 };
 
-export default BulkImportModal;
+export default ImportModal;

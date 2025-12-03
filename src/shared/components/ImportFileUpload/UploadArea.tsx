@@ -3,12 +3,11 @@ import { IconDocumentUpload } from "obra-icons-react";
 
 import Button from "src/shared/components/Button";
 import ConditionalRenderComponent from "../ConditionalRenderComponent";
-import { imageAlts } from "src/constants/imageAlts";
 import { Buttons } from "src/enums/buttons.enum";
 import { Colors } from "src/enums/colors.enum";
-import excelIcon from "src/assets/images/excelIcon.webp";
 
-import styles from "../../../views/BulkImport/bulkImport.module.scss";
+import styles from "../../../views/ImportModal/importModal.module.scss";
+import { renderUploadingIcon } from "src/shared/utils/importUtils";
 
 export interface UploadAreaProps {
   onClick: () => void;
@@ -47,6 +46,7 @@ const UploadArea: React.FC<UploadAreaProps> = ({
     onChangeFile();
     onClick();
   };
+  const uploadingIcon = renderUploadingIcon(currentFileName || "");
 
   return (
     <div
@@ -76,11 +76,13 @@ const UploadArea: React.FC<UploadAreaProps> = ({
       >
         <div className={uploadingClassName}>
           <div className={styles.uploadingFileInfo}>
-            <img
-              src={excelIcon}
-              alt={imageAlts.excelIcon}
-              className={styles.uploadingFileIcon}
-            />
+            {uploadingIcon && (
+              <img
+                src={uploadingIcon.src}
+                alt={uploadingIcon.alt}
+                className={styles.uploadingFileIcon}
+              />
+            )}
             <span className={styles.uploadingFileName}>{currentFileName}</span>
           </div>
           <div className={styles.progressBarContainer}>
@@ -102,11 +104,13 @@ const UploadArea: React.FC<UploadAreaProps> = ({
         hideFallback
       >
         <div className={uploadedClassName}>
-          <img
-            className={styles.uploadingFileIcon}
-            src={excelIcon}
-            alt={imageAlts.excelIcon}
-          />
+          {uploadingIcon && (
+            <img
+              src={uploadingIcon.src}
+              alt={uploadingIcon.alt}
+              className={styles.uploadingFileIcon}
+            />
+          )}
           <div className={styles.fileName}>{uploadedFile?.name}</div>
           <Button className={styles.changeButton} onClick={handleChangeFile}>
             {Buttons.CHANGE}
