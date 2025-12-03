@@ -14,6 +14,10 @@ import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { Buttons } from "src/enums/buttons.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
+import { useMutation } from "@tanstack/react-query";
+import { ClubService } from "src/services/ClubService/club.service";
+import { CountryCode } from "src/enums/countryCodes.enum";
+import { stripPhoneCode } from "src/shared/utils/parser";
 
 const { editProfile } = myProfileConstants;
 const { email, firstName, lastName, phoneNumber } = labels;
@@ -33,21 +37,41 @@ const {
 
 const EditProfile = (props: EditProfileProps) => {
   const { onClose, visible } = props;
+
   const user = localStorageHelper.getItem(LocalStorageKeys.USER);
+
+  const { updateClubProfile } = ClubService();
+
+  const { mutateAsync: updateProfileMutate, isPending: isUpdatePending } =
+    useMutation(updateClubProfile());
+
   const methods = useForm({
     defaultValues: {
       [firstNameName]: user?.firstName,
       [lastNameName]: user?.lastName,
       [emailName]: user?.email,
       [phoneNumberName]: user?.phoneNumber,
-      [attachmentId]: user?.profilePicUrl,
+      [attachmentId]: user?.attachmentId,
     },
   });
 
-  const { handleSubmit: formSubmit } = methods;
+  const {
+    handleSubmit: formSubmit,
+    formState: { isDirty, isValid },
+  } = methods;
 
   const handleSubmit = (values: FieldValues) => {
-    // TODO: Integration
+    updateProfileMutate(
+      {
+        ...values,
+        phoneNumber: stripPhoneCode(values.phoneNumber),
+        countryCode: CountryCode.USA,
+        id: user?.id,
+      },
+      {
+        onSuccess: onClose,
+      },
+    );
   };
 
   return (
@@ -58,6 +82,10 @@ const EditProfile = (props: EditProfileProps) => {
       onCancel={onClose}
       handleOk={formSubmit(handleSubmit)}
       okText={Buttons.SAVE_CHANGES}
+      okButtonProps={{
+        loading: isUpdatePending,
+        disabled: !isDirty || !isValid,
+      }}
       cancelButtonProps={{
         className: "d-none",
       }}

@@ -7,6 +7,7 @@ import { AxiosError } from "axios";
 import { generatePath } from "react-router-dom";
 import { deserialize, serialize } from "serializr";
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
 import {
   ClubData,
@@ -18,10 +19,12 @@ import {
   ClubGeneralSettings,
   ClubGeneralSettingsResponse,
 } from "src/models/club.model";
+import { ProfileDetails } from "src/models/profile.model";
 import { QueryParams } from "src/models/queryParams.model";
 import { ResponseModel } from "src/models/response.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { QueryKeyType } from "src/shared/types/sharedComponents.type";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
 const { GET_CLUBS, GET_CLUB_PROFILE } = QueryKeys;
@@ -29,9 +32,15 @@ const {
   GET_CLUBS: GET_CLUBS_ROUTE,
   GET_CLUB_PROFILE: GET_CLUB_PROFILE_ROUTE,
   UPLOAD_CHATBOT_KNOWLEDGE_BASE: UPLOAD_CHATBOT_KNOWLEDGE_BASE_ROUTE,
+  UPDATE_CLUB_PROFILE: UPDATE_CLUB_PROFILE_ROUTE,
 } = ApiRoutes;
-const { ADD_CLUB, EDIT_CLUB, EDIT_CHATBOT, UPLOAD_CHATBOT_KNOWLEDGE_BASE } =
-  MutationKeys;
+const {
+  ADD_CLUB,
+  EDIT_CLUB,
+  EDIT_CHATBOT,
+  UPLOAD_CHATBOT_KNOWLEDGE_BASE,
+  UPDATE_CLUB_PROFILE,
+} = MutationKeys;
 
 const handleSuccess =
   (queryClient: ReturnType<typeof useQueryClient>) =>
@@ -166,6 +175,36 @@ export const ClubService = () => {
     },
   });
 
+  const updateClubProfile = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    ProfileDetails
+  > => ({
+    mutationKey: [UPDATE_CLUB_PROFILE],
+    mutationFn: async (body: ProfileDetails) => {
+      const { data } = await axiosInstance.post(
+        generatePath(UPDATE_CLUB_PROFILE_ROUTE, { id: body.id }),
+        serialize(ProfileDetails, body),
+        {
+          baseURL:
+            "https://a89f515f-6ac1-462a-a278-7207247932f1.mock.pstmn.io/api/v1",
+        },
+      );
+      return deserialize(ResponseModel, data);
+    },
+    onSuccess: (response, variables) => {
+      handleSuccess(queryClient)({
+        response,
+      });
+      const oldUser = localStorageHelper.getItem(LocalStorageKeys.USER);
+      const updatedUser = {
+        ...oldUser,
+        ...variables,
+      };
+      localStorageHelper.setItem(LocalStorageKeys.USER, updatedUser);
+    },
+  });
+
   return {
     getClubs,
     getClubProfile,
@@ -174,5 +213,6 @@ export const ClubService = () => {
     updateStatus,
     updateGeneralSettings,
     uploadKnowledgeBase,
+    updateClubProfile,
   };
 };

@@ -5,19 +5,19 @@ export class ProfileDetails {
   id?: string;
 
   @serializable
-  firstName = "";
+  firstName?: string;
 
   @serializable
-  lastName = "";
+  lastName?: string;
 
   @serializable
-  email = "";
+  email?: string;
 
   @serializable
   phoneNumber?: string;
 
   @serializable
-  countryCode = "+1";
+  countryCode?: string = "+1";
 
   @serializable
   profilePicture?: string;
@@ -26,8 +26,11 @@ export class ProfileDetails {
   address?: string;
 
   @serializable
-  contactNumber = "";
+  contactNumber?: string;
 
   @serializable
-  attachmentId = "";
+  attachmentId?: string;
+
+  @serializable
+  emailId?: string;
 }

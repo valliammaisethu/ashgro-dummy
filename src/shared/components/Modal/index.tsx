@@ -30,12 +30,10 @@ const Modal: React.FC<ModalProps> = ({
   rootClassName,
   centered,
   styles: modalStyles,
-  destroyOnHidden,
   loading,
   renderHeader = true,
   closeIcon,
   closable,
-  destroyOnClose,
   bodyStyle,
 }: ModalProps) => {
   const defaultFooter = (
@@ -59,8 +57,8 @@ const Modal: React.FC<ModalProps> = ({
       rootClassName={clsx(styles.modalContainer, rootClassName, {
         [styles.noHeaderModal]: !renderHeader,
       })}
-      destroyOnHidden={destroyOnHidden}
-      destroyOnClose={destroyOnClose ?? true}
+      destroyOnHidden
+      destroyOnClose
       centered={centered}
       bodyStyle={bodyStyle}
       styles={modalStyles}

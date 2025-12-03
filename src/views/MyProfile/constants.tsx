@@ -12,7 +12,7 @@ export enum ModalType {
 export const fields = {
   firstName: "firstName",
   lastName: "lastName",
-  email: "email",
+  email: "emailId",
   phoneNumber: "phoneNumber",
   attachmentId: "attachmentId",
 };
