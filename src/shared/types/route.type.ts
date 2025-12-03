@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { NavigateFunction } from "react-router-dom";
 
 interface SingleRoute {
   path?: string;
@@ -11,4 +12,11 @@ export interface RouterProps {
   path: string;
   component: ReactNode;
   children?: SingleRoute[];
+}
+
+export interface NavigateToSelectedMonth {
+  navigate: NavigateFunction;
+  pathname: string;
+  query: object;
+  date: Date;
 }

@@ -18,3 +18,9 @@ export class StaffMemberSettings extends BaseSettingsModel {
   @serializable(alias("name"))
   label?: string;
 }
+
+// TODO: TO rename StaffMemberSettings and use
+export class PaginatedOptions extends BaseSettingsModel {
+  @serializable(alias("name"))
+  label?: string;
+}

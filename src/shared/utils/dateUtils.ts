@@ -10,6 +10,7 @@ dayjs.extend(timezone);
 
 const { DAY } = DateUnit;
 const { FUTURE, PAST, TODAY } = DateType;
+const { HH_MM_A, HH_MM } = DateFormats;
 
 export const formatDate = (date = "", format: DateFormats, isUTC = false) => {
   if (!date) return "";
@@ -24,11 +25,13 @@ export const formatDateTime = (date = "", format: DateFormats) =>
 export const disableFutureAndToday = (date: dayjs.Dayjs) =>
   date.isAfter(dayjs().subtract(1, "day"));
 
+export const disableFuture = (date: dayjs.Dayjs) => date.isAfter(dayjs());
+
 export const convertDateToApiFormat = (
   date: string | undefined,
   format: DateFormats = DateFormats.DD_MMM_YYYY,
 ) => {
-  if (!date) return date;
+  if (!date) return;
   const parsed = dayjs(date, format, true);
   return parsed.isValid() ? parsed.format(DateFormats.YYYY_MM_DD) : date;
 };
@@ -77,3 +80,13 @@ export const checkDate = (date?: string | Date | Dayjs, type?: DateType) => {
 
 export const disablePastDates = (date: dayjs.Dayjs) =>
   date.isBefore(dayjs().startOf(DAY));
+
+export const convertTo24hrs = (time12h: string) =>
+  dayjs(time12h, HH_MM_A).format(HH_MM);
+
+export const disablePastAndFuture180 = (date: dayjs.Dayjs) => {
+  const today = dayjs().startOf(DAY);
+  const maxDate = today.add(180, DAY);
+
+  return date.isBefore(today) || date.isAfter(maxDate);
+};

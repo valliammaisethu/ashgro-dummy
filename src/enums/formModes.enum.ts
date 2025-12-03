@@ -3,3 +3,7 @@ export enum FormModes {
   ON_CHANGE = "onChange",
   ON_SUBMIT = "onSubmit",
 }
+
+export enum TriggerType {
+  MANUAL = "manual",
+}

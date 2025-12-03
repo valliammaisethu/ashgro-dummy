@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { IconChevronDown, IconEdit } from "obra-icons-react";
+import { IconEdit } from "obra-icons-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { Select } from "antd";
 
 import Header from "./Header";
 import ClubInfo from "./components/ClubInfo";
@@ -13,11 +12,12 @@ import Button from "src/shared/components/Button";
 import Card from "src/shared/components/Card";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import Switch from "src/shared/components/Switch";
-import StatusTag from "src/views/Prospects/Listing/Atoms/StatusTag";
 import { stopPropagation } from "src/shared/utils/eventUtils";
 import ClubForm from "../ClubForm";
 import ChatbotQuestionsModal from "../ChatbotQuestionsModal";
+import UnlockClubModal from "./components/UnlockClubModal";
 import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
+import StatusDropdown from "src/shared/components/StatusDropdown";
 import { ClubService } from "src/services/ClubService/club.service";
 import { Colors } from "src/enums/colors.enum";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
@@ -25,11 +25,11 @@ import {
   ClubSettingsState,
   GeneralSettingsData,
 } from "src/shared/types/clubs.type";
-
-import styles from "./individualClub.module.scss";
 import WarningModal from "./components/WarningModal";
 import { ClubSettingsTypes } from "src/enums/clubSettingsTypes.enum";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+
+import styles from "./individualClub.module.scss";
 
 const IndividualClub = () => {
   const { id = "" } = useParams();
@@ -38,15 +38,16 @@ const IndividualClub = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState<ClubSettingsState>({
     modalOpen: false,
     settingsOpen: false,
+    unlockModalOpen: false,
   });
   const queryClient = useQueryClient();
-  const { getClubProfile, updateStatus, updateGeneralSettings } = ClubService();
+  const { getClubProfile, updateStatus, updateGeneralSettings, unlockClub } =
+    ClubService();
 
   const {
     data: clubData,
-    isPending,
+    isLoading: isPending,
     isSuccess,
-    isFetching,
   } = useQuery(getClubProfile(id));
 
   const {
@@ -64,6 +65,9 @@ const IndividualClub = () => {
     isPending: isSettingsUpdatePending,
   } = useMutation(updateGeneralSettings());
 
+  const { mutateAsync: unlockClubMutate, isPending: isUnlockPending } =
+    useMutation(unlockClub(id));
+
   const handleChatbotStatusChange = async (value: boolean) =>
     await updateChatbotStatusMutate({ chatbotEnabled: value, id });
 
@@ -72,14 +76,21 @@ const IndividualClub = () => {
   const handleSettings = () => {
     setIsSettingsOpen((prev) => ({
       ...prev,
-      modalOpen: !prev,
+      modalOpen: !prev.settingsOpen,
     }));
   };
 
   const handleModalClose = () => {
     setIsSettingsOpen((prev) => ({
       ...prev,
-      modalOpen: false,
+      modalOpen: !prev.modalOpen,
+    }));
+  };
+
+  const handleUnlockModal = () => {
+    setIsSettingsOpen((prev) => ({
+      ...prev,
+      unlockModalOpen: !prev.unlockModalOpen,
     }));
   };
 
@@ -102,28 +113,20 @@ const IndividualClub = () => {
     setIsChatbotModalOpen((prev) => !prev);
 
   const handleStatusChange = async (value: string) =>
-    await updateClubStatusMutate(
-      { status: value, id },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: [QueryKeys.GET_CLUB_PROFILE],
-          });
-        },
-      },
-    );
+    await updateClubStatusMutate({ status: value, id });
 
   return (
     <div className={styles.individualClub}>
       <Header
-        isFetching={isFetching}
+        isClubLocked={clubData?.club?.isClubLocked}
+        isFetching={isPending}
         onSettings={handleSettings}
         onChatbotQuestions={handleChatbotQuestionsModal}
+        onUnlockClub={handleUnlockModal}
       />
       <ConditionalRender
         isPending={isPending}
         isSuccess={isSuccess}
-        isFetching={isFetching}
         records={[clubData?.club]}
       >
         <Card className={styles.card}>
@@ -141,20 +144,18 @@ const IndividualClub = () => {
                   loading={isChatbotUpdatePending}
                 />
                 <div onClick={stopPropagation} className={styles.statusCol}>
-                  <Select
+                  <StatusDropdown
                     value={clubData?.club?.status}
-                    className={styles.statusSelect}
-                    style={{ width: 140 }}
+                    options={
+                      ClubStatusOptions?.map((option) => ({
+                        statusName: option.label,
+                        id: option.value,
+                        color: option.color,
+                      })) || []
+                    }
                     onChange={handleStatusChange}
-                    suffixIcon={<IconChevronDown size={20} />}
                     loading={isStatusUpdatePending}
-                  >
-                    {ClubStatusOptions?.map(({ value, label = "" }) => (
-                      <Select.Option key={value} value={value}>
-                        <StatusTag label={label} />
-                      </Select.Option>
-                    ))}
-                  </Select>
+                  />
                 </div>
               </div>
               <div className={styles.actionButtons}>
@@ -221,6 +222,18 @@ const IndividualClub = () => {
         <ChatbotQuestionsModal
           open={isChatbotModalOpen}
           onClose={handleChatbotQuestionsModal}
+        />
+      </ConditionalRenderComponent>
+      <ConditionalRenderComponent
+        visible={isSettingsOpen.unlockModalOpen}
+        hideFallback
+      >
+        <UnlockClubModal
+          onClose={handleUnlockModal}
+          open={isSettingsOpen.unlockModalOpen}
+          isLoading={isUnlockPending}
+          onSave={unlockClubMutate}
+          clubName={clubData?.club?.name}
         />
       </ConditionalRenderComponent>
     </div>

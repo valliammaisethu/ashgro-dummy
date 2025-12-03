@@ -80,6 +80,7 @@
   }
 }
 .loginButton {
+  background-color: $ashgro-gold;
   &:global(.ant-btn) {
     margin-top: 5rem;
     @include flex-container(center, center, row, 1rem);
@@ -88,8 +89,15 @@
     font-size: 1.6rem;
     font-weight: 600;
     color: $ashgro-white;
+    border-radius: 3.2rem;
 
     &:hover {
+      color: $ashgro-white;
+      background-color: $ashgro-gold;
+    }
+    &:global(
+      .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+    ) {
       color: $ashgro-white;
       background-color: $ashgro-gold;
     }

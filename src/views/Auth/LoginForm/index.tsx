@@ -8,7 +8,7 @@ import CheckboxField from "src/shared/components/CheckboxField";
 import Button from "src/shared/components/Button";
 import PasswordField from "src/shared/components/PasswordField";
 import { INPUT_TYPE } from "src/enums/inputType";
-import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
+import { Buttons, HtmlButtonType } from "src/enums/buttons.enum";
 import { AuthService } from "src/services/AuthService/auth.service";
 import useRedirect from "src/shared/hooks/useRedirect";
 import logo from "src/assets/images/logo.webp";
@@ -76,7 +76,6 @@ const LoginForm = () => {
             htmlType={HtmlButtonType.SUBMIT}
             className={styles.loginButton}
             loading={isPending}
-            type={ButtonTypes.PRIMARY}
           >
             {Buttons.LOGIN}
           </Button>

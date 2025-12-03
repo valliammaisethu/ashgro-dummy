@@ -21,7 +21,7 @@ import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
-const { MEMBERS, MEMBER_DETAILS, MEMBERS_LIST } = ApiRoutes;
+const { MEMBER_DETAILS, MEMBERS_LIST } = ApiRoutes;
 const { ADD_MEMBER, UPDATE_MEMBER_STATUS, DELETE_RESOURCE } = MutationKeys;
 
 const { GET_MEMBER_DETAILS, GET_MEMBERS } = QueryKeys;
@@ -59,7 +59,7 @@ export const MembersService = () => {
       const { activityDetails, ...rest } = payload;
 
       const response = await axiosInstance.post(
-        MEMBERS,
+        MEMBERS_LIST,
         serialize(MemberFormData, {
           member: { ...rest, clubId: clubId, countryCode: CountryCode.USA },
           activityDetails,

@@ -29,9 +29,11 @@ export interface ClubFormState {
   clubId: string | null;
 }
 export interface ClubDetailsHeaderProps {
+  isClubLocked?: boolean;
   isFetching?: boolean;
   onChatbotQuestions?: () => void;
   onSettings?: () => void;
+  onUnlockClub?: () => void;
 }
 
 export interface IconTextProps {
@@ -71,4 +73,13 @@ export interface WarningModalProps {
 export interface ClubSettingsState {
   settingsOpen: boolean;
   modalOpen: boolean;
+  unlockModalOpen: boolean;
+}
+
+export interface UnlockClubModalProps {
+  open: boolean;
+  onClose: () => void;
+  onSave: () => void;
+  isLoading?: boolean;
+  clubName?: string;
 }

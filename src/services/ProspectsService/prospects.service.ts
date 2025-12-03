@@ -21,12 +21,18 @@ import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { cleanObject } from "src/shared/utils/helpers";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { renderNotification } from "src/shared/utils/renderNotification";
+import { TranscriptData } from "src/models/transcripts.model";
 
-const { GET_PROSPECTS, GET_SINGLE_PROSPECT } = QueryKeys;
+const {
+  GET_PROSPECTS,
+  GET_SINGLE_PROSPECT,
+  GET_TRANSCRIPTS: GET_TRANSCRIPTSQUERY,
+} = QueryKeys;
 const {
   PROSPECTS,
   GET_PROSPECT,
   CONVERT_TO_MEMBER: CONVERT_TO_MEMBER_ROUTE,
+  GET_TRANSCRIPTS,
 } = ApiRoutes;
 const { ADD_PROSPECT, EDIT_PROSPECT, DELETE_PROSPECT, CONVERT_TO_MEMBER } =
   MutationKeys;
@@ -146,6 +152,19 @@ export const ProspectsService = () => {
     },
   });
 
+  const getTranscripts = (
+    id: string,
+    clubId?: string,
+  ): UseQueryOptions<TranscriptData, ResponseModel, TranscriptData> => ({
+    queryKey: [GET_TRANSCRIPTSQUERY, id, clubId],
+    queryFn: async () => {
+      const response = await axiosInstance.get(
+        generatePath(GET_TRANSCRIPTS, { clubId, id }),
+      );
+      return deserialize(TranscriptData, response?.data?.data);
+    },
+  });
+
   return {
     getProspects,
     viewProspect,
@@ -153,5 +172,6 @@ export const ProspectsService = () => {
     editProspect,
     deleteProspect,
     convertToMember,
+    getTranscripts,
   };
 };

@@ -97,6 +97,7 @@ $neutral-bg: #fafafa;
 $cream-bg: #f8f4ec;
 $light-grey-bg: #ececec;
 $light-grey-text: #686868;
+$avatar-bg: #ecedf0;
 
 /* Component colors */
 $notification-success: #8bc34a;
@@ -189,7 +190,8 @@ $profile-bg: linear-gradient(
   rgba(197, 162, 93, 0.3) 50%,
   #c5a25d 100%
 );
-
+$dropdown-bg: #f7f6f0;
+$dropdown-border: #9a917b1a;
 $club-row-border-bg: linear-gradient(
   151.49deg,
   rgba(246, 239, 222, 0.5) 0%,
@@ -198,3 +200,7 @@ $club-row-border-bg: linear-gradient(
 
 $light-gold: #f6efde;
 $dark-gold: #766a4c;
+$gold-bolder: #957a4b;
+
+$placeholder-color: #0c234066;
+$text-area-box-shadow: 0px 1px 0.5px 0.05px rgba(29, 41, 61, 0.02);

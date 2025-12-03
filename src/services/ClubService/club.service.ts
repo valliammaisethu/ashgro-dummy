@@ -29,9 +29,15 @@ const {
   GET_CLUBS: GET_CLUBS_ROUTE,
   GET_CLUB_PROFILE: GET_CLUB_PROFILE_ROUTE,
   UPLOAD_CHATBOT_KNOWLEDGE_BASE: UPLOAD_CHATBOT_KNOWLEDGE_BASE_ROUTE,
+  UNLOCK_CLUB: UNLOCK_CLUB_ROUTE,
 } = ApiRoutes;
-const { ADD_CLUB, EDIT_CLUB, EDIT_CHATBOT, UPLOAD_CHATBOT_KNOWLEDGE_BASE } =
-  MutationKeys;
+const {
+  ADD_CLUB,
+  EDIT_CLUB,
+  EDIT_CHATBOT,
+  UPLOAD_CHATBOT_KNOWLEDGE_BASE,
+  UNLOCK_CLUB,
+} = MutationKeys;
 
 const handleSuccess =
   (queryClient: ReturnType<typeof useQueryClient>) =>
@@ -166,6 +172,22 @@ export const ClubService = () => {
     },
   });
 
+  const unlockClub = (
+    id: string,
+  ): UseMutationOptions<ResponseModel, ResponseModel> => ({
+    mutationKey: [UNLOCK_CLUB],
+    mutationFn: async () => {
+      const { data } = await axiosInstance.get(
+        generatePath(UNLOCK_CLUB_ROUTE, { id }),
+      );
+      return deserialize(ResponseModel, data);
+    },
+    onSuccess: (response) => {
+      const { description, title } = response;
+      renderNotification(title, description);
+    },
+  });
+
   return {
     getClubs,
     getClubProfile,
@@ -174,5 +196,6 @@ export const ClubService = () => {
     updateStatus,
     updateGeneralSettings,
     uploadKnowledgeBase,
+    unlockClub,
   };
 };

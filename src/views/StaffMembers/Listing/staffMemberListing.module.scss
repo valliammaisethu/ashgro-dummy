@@ -6,7 +6,7 @@
 
   .rowContainer {
     display: grid;
-    grid-template-columns: 44% 29% 32% 05%;
+    grid-template-columns: 44% 29% 22% 05%;
     align-items: center;
     padding: 2rem 3.2rem;
     background-color: $ashgro-white;
@@ -17,6 +17,7 @@
     :global(.actions-icons) {
       opacity: 0;
       transition: opacity 0.2s ease;
+      @include flex-flow(row, wrap, center, 1.8rem);
     }
 
     &:hover :global(.actions-icons) {
@@ -56,6 +57,12 @@
         }
       }
     }
+  }
+
+  .body {
+    background-color: $search-field-placeholder;
+    max-height: 50rem;
+    overflow-y: scroll;
   }
 
   .paginationContainer {

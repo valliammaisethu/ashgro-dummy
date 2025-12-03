@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import { Col, Row } from "antd";
 import { FieldValues } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -7,6 +7,7 @@ import { NewEmailModalProps } from "src/shared/types/email.type";
 import {
   fields,
   labels,
+  nameTemplate,
   newEmailModalConstants,
   placeholders,
 } from "./constants";
@@ -14,6 +15,7 @@ import Modal from "src/shared/components/Modal";
 import Form from "src/shared/components/Form";
 import SelectField from "src/shared/components/SelectField";
 import InputField from "src/shared/components/InputField";
+import Button from "src/shared/components/Button";
 import TextArea from "src/shared/components/TextArea";
 import FileUpload from "src/shared/components/FileUpload";
 import useForm from "src/shared/components/UseForm";
@@ -29,7 +31,6 @@ import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { ValidateEmail } from "src/shared/utils/helpers";
 
 import styles from "../email.module.scss";
-import Button from "src/shared/components/Button";
 
 const NewEmailModal = (props: NewEmailModalProps) => {
   const {
@@ -38,9 +39,12 @@ const NewEmailModal = (props: NewEmailModalProps) => {
     selectedEmails = [],
     selectedTemplate,
     isBulkEmail = false,
+    handleEmailComplete,
   } = props;
 
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
+  const bodyRef = useRef<HTMLTextAreaElement | null>(null);
 
   const { getEmailTemplate } = EmailTemplateService();
 
@@ -84,12 +88,31 @@ const NewEmailModal = (props: NewEmailModalProps) => {
     reset();
   };
 
-  const handleAddName = () => {
-    const currentBody = getValues("body");
+  const onAddNameMouseDown = (e: React.MouseEvent) => e.preventDefault();
 
-    setValue("body", currentBody + "{{name}}", {
+  const handleAddName = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const textarea = bodyRef.current;
+    if (!textarea) return;
+
+    const currentValue = textarea.value;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    const emailBody =
+      currentValue.substring(0, start) +
+      nameTemplate +
+      currentValue.substring(end);
+
+    setValue("body", emailBody, {
       shouldValidate: true,
       shouldDirty: true,
+    });
+
+    requestAnimationFrame(() => {
+      const pos = start + nameTemplate.length;
+      textarea.setSelectionRange(pos, pos);
+      textarea.focus();
     });
   };
 
@@ -114,6 +137,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
       {
         onSuccess: () => {
           handleClose();
+          handleEmailComplete?.();
         },
       },
     );
@@ -217,7 +241,11 @@ const NewEmailModal = (props: NewEmailModalProps) => {
           </Col>
           <Col className={styles.emailBodyContainer} span={24}>
             <Col className={styles.addNameContainer}>
-              <Button type={ButtonTypes.LINK} onClick={handleAddName}>
+              <Button
+                onMouseDown={onAddNameMouseDown}
+                type={ButtonTypes.LINK}
+                onClick={(e) => handleAddName(e)}
+              >
                 {Buttons.ADD_NAME}
               </Button>
             </Col>
@@ -228,6 +256,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
                 label={labels.emailBody}
                 placeholder={placeholders.emailBody}
                 className={styles.emailBodyInput}
+                ref={bodyRef}
               />
             </Col>
           </Col>

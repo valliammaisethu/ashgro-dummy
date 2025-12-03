@@ -233,6 +233,8 @@ export interface ModalProps extends AntdModalProps {
   okButtonType?: ButtonTypes;
   renderHeader?: boolean;
   closeIcon?: ReactNode;
+  maskClosable?: boolean;
+  keyboard?: boolean;
 }
 
 export interface ProfilePictureInputProps {
@@ -246,6 +248,7 @@ export interface AvatarWithFallbackProps {
   src?: string;
   name: string;
   size?: number;
+  fontSize?: number;
   className?: string;
   backgroundColor?: string;
   textColor?: string;
@@ -296,6 +299,19 @@ export interface FileUploadProps {
   deleteOnRemove?: boolean;
 }
 
+export interface StatusOption {
+  id?: string;
+  statusName?: string;
+  color?: string;
+}
+
+export interface StatusDropdownProps<T = StatusOption> {
+  value?: string;
+  options: T[];
+  onChange: (value: string) => void;
+  loading?: boolean;
+  onClick?: (e: React.MouseEvent) => void;
+}
 export type QueryKeyType = readonly unknown[];
 
 export interface UploadAreaProps {

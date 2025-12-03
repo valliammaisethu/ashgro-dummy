@@ -15,12 +15,13 @@ import { clubAdminRoutes, superAdminRoutes } from "./constants";
 
 import styles from "./topBar.module.scss";
 import MyProfile from "src/views/MyProfile";
+import Button from "../Button";
 
 const TopBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout } = AuthService();
-  const { mutateAsync } = useMutation(logout());
+  const { mutateAsync, isPending: logoutPending } = useMutation(logout());
   const { isSuperAdmin } = useUserRole();
 
   const handleLogOut = async () => mutateAsync();
@@ -63,7 +64,13 @@ const TopBar = () => {
       <div className={styles.topBarEnd}>
         {!isSuperAdmin && <div className={styles.clubName}>{clubName}</div>}
         {isSuperAdmin && <MyProfile />}
-        <IconLogOut className={styles.logoutIcon} onClick={handleLogOut} />
+        <Button
+          className={styles.logoutButton}
+          disabled={logoutPending}
+          icon={
+            <IconLogOut className={styles.logoutIcon} onClick={handleLogOut} />
+          }
+        ></Button>
       </div>
     </div>
   );

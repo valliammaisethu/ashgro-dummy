@@ -132,7 +132,7 @@ const Members = () => {
     useQuery(memberShipStatuses());
   const { mutateAsync: updateMemberStatusMutate } =
     useMutation(updateMemberStatus());
-  const { data, isPending, isSuccess } = useQuery(
+  const { data, isSuccess, isLoading } = useQuery(
     getStaffMembersList(queryParams),
   );
 
@@ -184,9 +184,20 @@ const Members = () => {
   const handleNavigateToDetails = (id?: string) => () =>
     navigateToMemberDetails(id);
 
-  const handlePageChange = useCallback((newPage: number) => {
+  const handleMemberStatusChange =
+    (memberId?: string) => (statusName: string) => {
+      const status = memberShipStatusesOptions?.find(
+        (opt) => opt?.id === statusName,
+      );
+      handleStatusChange(memberId, status?.value);
+    };
+
+  const handleMemberEdit = (member: Member) => () => handleEditClick(member);
+
+  const handleMemberDelete = (member: Member) => () => setDeleteItem(member);
+
+  const handlePageChange = (newPage: number) => () =>
     setQueryParams((prev) => ({ ...prev, page: newPage }));
-  }, []);
 
   const handleSelectAll = useCallback(
     (checked: boolean) => {
@@ -333,15 +344,11 @@ const Members = () => {
 
           <ConditionalRender
             records={data?.members}
-            isPending={isPending}
+            isPending={isLoading}
             isSuccess={isSuccess}
           >
             <div className={styles.listContainer}>
               {data?.members?.map((item) => {
-                const selectedValue = memberShipStatusesOptions.find(
-                  (opt) => opt.label === item.membershipStatus,
-                )?.value;
-
                 return (
                   <div
                     key={item.id}
@@ -378,14 +385,12 @@ const Members = () => {
 
                     <Actions
                       selectWidth={200}
-                      selectedValue={selectedValue}
+                      selectedValue={item.membershipStatus}
                       options={memberShipStatusesOptions}
-                      onSelectChange={(value) =>
-                        handleStatusChange(item.id, value)
-                      }
+                      onSelectChange={handleMemberStatusChange(item.id)}
                       selectLoading={updatingMemberId === item.id}
-                      onEditClick={() => handleEditClick(item)}
-                      onDeleteClick={() => setDeleteItem(item)}
+                      onEditClick={handleMemberEdit(item)}
+                      onDeleteClick={handleMemberDelete(item)}
                     />
                   </div>
                 );
@@ -427,6 +432,7 @@ const Members = () => {
         selectedEmails={emailRecipients}
         selectedTemplate={selectedTemplate}
         isBulkEmail
+        handleEmailComplete={handleClearSelections}
       />
       <BulkImportModal
         visible={bulkImportModalVisible}
