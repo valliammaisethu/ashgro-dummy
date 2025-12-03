@@ -1,36 +1,36 @@
-import { alias, serializable } from "serializr";
+import { serializable } from "serializr";
 
 export class ProfileDetails {
-  @serializable(alias("id"))
+  @serializable
   id?: string;
 
   @serializable
-  firstName?: string;
+  firstName = "";
 
   @serializable
-  lastName?: string;
+  lastName = "";
 
   @serializable
-  email?: string;
+  email = "";
 
   @serializable
   phoneNumber?: string;
 
   @serializable
-  countryCode?: string = "+1";
+  countryCode?: string;
 
   @serializable
-  profilePicture?: string;
+  profilePicture = "";
 
   @serializable
-  address?: string;
+  address = "";
 
   @serializable
-  contactNumber?: string;
+  contactNumber = "";
 
   @serializable
-  attachmentId?: string;
+  attachmentId = "";
 
   @serializable
-  emailId?: string;
+  emailId = "";
 }

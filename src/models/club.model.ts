@@ -97,6 +97,9 @@ export class ClubProfile extends ClubGeneralSettings {
 
   @serializable(object(ProfileDetails))
   adminDetails = new ProfileDetails();
+
+  @serializable
+  isClubLocked = false;
 }
 
 export class ClubData {

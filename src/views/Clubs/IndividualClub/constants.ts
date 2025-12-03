@@ -21,6 +21,12 @@ export const ClubStatusOptions = [
 
 export const headerConstants = {
   chatbotQuestions: "Chatbot Questions",
+  unlockClub: "Unlock Club",
 };
 
 export const clubStatusField = "clubStatus";
+
+export const unlockClubModalConstants = {
+  title: "Unlock Club?",
+  description: `Are you sure you want to unlock “%s” club?`,
+};

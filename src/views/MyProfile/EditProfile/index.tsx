@@ -16,10 +16,11 @@ import { Buttons } from "src/enums/buttons.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { useMutation } from "@tanstack/react-query";
 import { ClubService } from "src/services/ClubService/club.service";
-import { CountryCode } from "src/enums/countryCodes.enum";
 import { stripPhoneCode } from "src/shared/utils/parser";
+import { editProfileValidation } from "./validation";
 
 const { editProfile } = myProfileConstants;
+
 const { email, firstName, lastName, phoneNumber } = labels;
 const {
   email: emailPlaceholder,
@@ -53,6 +54,7 @@ const EditProfile = (props: EditProfileProps) => {
       [phoneNumberName]: user?.phoneNumber,
       [attachmentId]: user?.attachmentId,
     },
+    validationSchema: editProfileValidation,
   });
 
   const {
@@ -64,9 +66,16 @@ const EditProfile = (props: EditProfileProps) => {
     updateProfileMutate(
       {
         ...values,
+        attachmentId: values.attachmentId,
+        emailId: values.emailId,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        address: values.address,
         phoneNumber: stripPhoneCode(values.phoneNumber),
-        countryCode: CountryCode.USA,
         id: user?.id,
+        email: "",
+        profilePicture: "",
+        contactNumber: "",
       },
       {
         onSuccess: onClose,

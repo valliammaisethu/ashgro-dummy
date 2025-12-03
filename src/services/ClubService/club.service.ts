@@ -33,6 +33,7 @@ const {
   GET_CLUB_PROFILE: GET_CLUB_PROFILE_ROUTE,
   UPLOAD_CHATBOT_KNOWLEDGE_BASE: UPLOAD_CHATBOT_KNOWLEDGE_BASE_ROUTE,
   UPDATE_CLUB_PROFILE: UPDATE_CLUB_PROFILE_ROUTE,
+  UNLOCK_CLUB: UNLOCK_CLUB_ROUTE,
 } = ApiRoutes;
 const {
   ADD_CLUB,
@@ -40,6 +41,7 @@ const {
   EDIT_CHATBOT,
   UPLOAD_CHATBOT_KNOWLEDGE_BASE,
   UPDATE_CLUB_PROFILE,
+  UNLOCK_CLUB,
 } = MutationKeys;
 
 const handleSuccess =
@@ -185,10 +187,6 @@ export const ClubService = () => {
       const { data } = await axiosInstance.post(
         generatePath(UPDATE_CLUB_PROFILE_ROUTE, { id: body.id }),
         serialize(ProfileDetails, body),
-        {
-          baseURL:
-            "https://a89f515f-6ac1-462a-a278-7207247932f1.mock.pstmn.io/api/v1",
-        },
       );
       return deserialize(ResponseModel, data);
     },
@@ -196,12 +194,29 @@ export const ClubService = () => {
       handleSuccess(queryClient)({
         response,
       });
+      // TODO: check with BE for updated response in the API
       const oldUser = localStorageHelper.getItem(LocalStorageKeys.USER);
       const updatedUser = {
         ...oldUser,
         ...variables,
       };
       localStorageHelper.setItem(LocalStorageKeys.USER, updatedUser);
+    },
+  });
+
+  const unlockClub = (
+    id: string,
+  ): UseMutationOptions<ResponseModel, ResponseModel> => ({
+    mutationKey: [UNLOCK_CLUB],
+    mutationFn: async () => {
+      const { data } = await axiosInstance.get(
+        generatePath(UNLOCK_CLUB_ROUTE, { id }),
+      );
+      return deserialize(ResponseModel, data);
+    },
+    onSuccess: (response) => {
+      const { description, title } = response;
+      renderNotification(title, description);
     },
   });
 
@@ -214,5 +229,6 @@ export const ClubService = () => {
     updateGeneralSettings,
     uploadKnowledgeBase,
     updateClubProfile,
+    unlockClub,
   };
 };

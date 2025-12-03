@@ -32,6 +32,7 @@ export enum MutationKeys {
   ADD_CLUB = "addClub",
   EDIT_CLUB = "editClub",
   UPDATE_CLUB_PROFILE = "updateClubProfile",
+  UNLOCK_CLUB = "unlockClub",
 
   EDIT_CHATBOT = "editChatbot",
   UPLOAD_CHATBOT_KNOWLEDGE_BASE = "uploadChatbotKnowledgeBase",
@@ -42,6 +43,9 @@ export enum MutationKeys {
   CHECK_BULK_IMPORT_STATUS = "checkBulkImportStatus",
 
   LEAD_FORM = "leadForm",
+
+  BOOK_MEETING = "bookMeeting",
+  RESCHEDULE_MEETING_KEY = "rescheduleMeeting",
 }
 
 export enum QueryKeys {
