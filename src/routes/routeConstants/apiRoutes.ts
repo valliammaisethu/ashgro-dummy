@@ -87,4 +87,9 @@ export const ApiRoutes = {
   GET_TRANSCRIPTS: "/clubs/:clubId/users/:id/transcripts",
   MEETING: "/calendar/meetings",
   RESCHEDULE_MEETING: "/calendar/:id/reschedule",
+
+  // Dashboard
+  GET_DASHBOARD_CHARTS: "/dashboard/clubs/:clubId/charts",
+  GET_CHART_DETAIL: "/dashboard/clubs/:clubId/charts/:chartId",
+  ADMIN_DASHBOARD_CHART: "dashboard/:type",
 };
