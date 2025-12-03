@@ -2,6 +2,7 @@ import { ModalType } from "src/views/MyProfile/constants";
 
 export interface MyProfileContentProps {
   onOpenModal: (type: ModalType) => void;
+  closeMyProfile: () => void;
 }
 
 export interface EditProfileProps {

@@ -29,6 +29,7 @@ import { EmailService } from "src/services/EmailService/email.service";
 import { EmailTemplateService } from "src/services/SettingsService/emailTemplate.service";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { ValidateEmail } from "src/shared/utils/helpers";
+import { stopPropagation } from "src/shared/utils/eventUtils";
 
 import styles from "../email.module.scss";
 
@@ -68,7 +69,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
     values: {
       to: selectedEmails.map((e) => e.email),
       subject: selectedTemplate?.subject || "",
-      body: selectedTemplate?.body || "",
+      emailBody: selectedTemplate?.emailBody || "",
       title: selectedTemplate?.title || "",
       cc: [],
       bcc: [],
@@ -77,7 +78,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
     },
   });
 
-  const { reset, setValue, getValues } = methods;
+  const { reset, setValue } = methods;
 
   const { sendEmail } = EmailService();
 
@@ -91,7 +92,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
   const onAddNameMouseDown = (e: React.MouseEvent) => e.preventDefault();
 
   const handleAddName = (e: React.MouseEvent) => {
-    e.stopPropagation();
+    stopPropagation(e);
     const textarea = bodyRef.current;
     if (!textarea) return;
 
@@ -104,7 +105,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
       nameTemplate +
       currentValue.substring(end);
 
-    setValue("body", emailBody, {
+    setValue("emailBody", emailBody, {
       shouldValidate: true,
       shouldDirty: true,
     });
@@ -252,7 +253,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
             <Col span={24}>
               <TextArea
                 required
-                name={fields.body}
+                name={fields.emailBody}
                 label={labels.emailBody}
                 placeholder={placeholders.emailBody}
                 className={styles.emailBodyInput}
