@@ -9,7 +9,7 @@ import ConditionalRenderComponent from "../ConditionalRenderComponent";
 import { imageAlts } from "src/constants/imageAlts";
 
 const AvatarFallback: React.FC<AvatarWithFallbackProps> = ({
-  src,
+  src = "",
   name,
   size = 56,
   fontSize = 16,

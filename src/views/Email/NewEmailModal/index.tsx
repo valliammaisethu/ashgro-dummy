@@ -64,7 +64,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
     values: {
       to: selectedEmails.map((e) => e.email),
       subject: selectedTemplate?.subject || "",
-      body: selectedTemplate?.body || "",
+      emailBody: selectedTemplate?.emailBody || "",
       title: selectedTemplate?.title || "",
       cc: [],
       bcc: [],
@@ -210,7 +210,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
           <Col span={24}>
             <TextArea
               required
-              name={fields.body}
+              name={fields.emailBody}
               label={labels.emailBody}
               placeholder={placeholders.emailBody}
               className={styles.emailBodyInput}
