@@ -1,13 +1,18 @@
 export const ApiRoutes = {
   BASE_URL: import.meta.env.VITE_API_BASE_URL,
+
   USER_LOGIN: "/auth/login",
   USER_LOGOUT: "/auth/logout",
+
   REFRESH: "/auth/refresh",
+
   FORGOT_PASSWORD: "/auth/forgotPassword",
   RESET_PASSWORD: "/auth/resetPassword",
   CHANGE_PASSWORD: "/auth/changePassword",
+
   ATTACHMENTS: "/attachments",
   ATTACHMENTS_SPECIFIC: "/attachments/:id",
+
   PROSPECTS: "/prospects",
   GET_PROSPECT: "/prospects/:id",
   CONVERT_TO_MEMBER: "/prospects/:id/convertToMember",
@@ -23,8 +28,6 @@ export const ApiRoutes = {
 
   MEMBERSHIP_STATUS: "settings/:id/membershipStatuses",
   MEMBERSHIP_TYPE_STATUS: "settings/:id/membershipCategories",
-
-  MEMBERS: "members",
 
   STAFF_MEMBER_DETAILS: "/staffs/:id",
 
@@ -62,6 +65,7 @@ export const ApiRoutes = {
 
   GET_CLUBS: "/clubs",
   GET_CLUB_PROFILE: "/clubs/:id",
+  UNLOCK_CLUB: "/clubs/:id/unlock",
 
   UPLOAD_CHATBOT_KNOWLEDGE_BASE: "/clubs/:id/upload",
 
