@@ -31,3 +31,5 @@ export const placeholders = {
   attachmentIds: "Select attachments",
   title: "Enter title here",
 };
+
+export const nameTemplate = "{{name}}";

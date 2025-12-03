@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import { Col, Row } from "antd";
 import { FieldValues } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -7,6 +7,7 @@ import { NewEmailModalProps } from "src/shared/types/email.type";
 import {
   fields,
   labels,
+  nameTemplate,
   newEmailModalConstants,
   placeholders,
 } from "./constants";
@@ -14,12 +15,13 @@ import Modal from "src/shared/components/Modal";
 import Form from "src/shared/components/Form";
 import SelectField from "src/shared/components/SelectField";
 import InputField from "src/shared/components/InputField";
+import Button from "src/shared/components/Button";
 import TextArea from "src/shared/components/TextArea";
 import FileUpload from "src/shared/components/FileUpload";
 import useForm from "src/shared/components/UseForm";
 import { SelectModes } from "src/enums/selectModes.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { Buttons } from "src/enums/buttons.enum";
+import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
 import { maxFileSizeTextDescription } from "src/constants/sharedComponents";
 import { generateSelectOptions } from "../utils";
 import { addEmailValidation } from "./validation";
@@ -27,6 +29,7 @@ import { EmailService } from "src/services/EmailService/email.service";
 import { EmailTemplateService } from "src/services/SettingsService/emailTemplate.service";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { ValidateEmail } from "src/shared/utils/helpers";
+import { stopPropagation } from "src/shared/utils/eventUtils";
 
 import styles from "../email.module.scss";
 
@@ -41,6 +44,8 @@ const NewEmailModal = (props: NewEmailModalProps) => {
   } = props;
 
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
+  const bodyRef = useRef<HTMLTextAreaElement | null>(null);
 
   const { getEmailTemplate } = EmailTemplateService();
 
@@ -73,7 +78,7 @@ const NewEmailModal = (props: NewEmailModalProps) => {
     },
   });
 
-  const { reset } = methods;
+  const { reset, setValue } = methods;
 
   const { sendEmail } = EmailService();
 
@@ -82,6 +87,34 @@ const NewEmailModal = (props: NewEmailModalProps) => {
   const handleClose = () => {
     onClose();
     reset();
+  };
+
+  const onAddNameMouseDown = (e: React.MouseEvent) => e.preventDefault();
+
+  const handleAddName = (e: React.MouseEvent) => {
+    stopPropagation(e);
+    const textarea = bodyRef.current;
+    if (!textarea) return;
+
+    const currentValue = textarea.value;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    const emailBody =
+      currentValue.substring(0, start) +
+      nameTemplate +
+      currentValue.substring(end);
+
+    setValue("emailBody", emailBody, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+
+    requestAnimationFrame(() => {
+      const pos = start + nameTemplate.length;
+      textarea.setSelectionRange(pos, pos);
+      textarea.focus();
+    });
   };
 
   const handleSubmit = async (values: FieldValues) => {
@@ -207,14 +240,26 @@ const NewEmailModal = (props: NewEmailModalProps) => {
               label={labels.subject}
             />
           </Col>
-          <Col span={24}>
-            <TextArea
-              required
-              name={fields.emailBody}
-              label={labels.emailBody}
-              placeholder={placeholders.emailBody}
-              className={styles.emailBodyInput}
-            />
+          <Col className={styles.emailBodyContainer} span={24}>
+            <Col className={styles.addNameContainer}>
+              <Button
+                onMouseDown={onAddNameMouseDown}
+                type={ButtonTypes.LINK}
+                onClick={(e) => handleAddName(e)}
+              >
+                {Buttons.ADD_NAME}
+              </Button>
+            </Col>
+            <Col span={24}>
+              <TextArea
+                required
+                name={fields.emailBody}
+                label={labels.emailBody}
+                placeholder={placeholders.emailBody}
+                className={styles.emailBodyInput}
+                ref={bodyRef}
+              />
+            </Col>
           </Col>
           <Col className={styles.fileUploadContainer} span={24}>
             <FileUpload
