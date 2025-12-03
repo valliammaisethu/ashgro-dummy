@@ -39,6 +39,11 @@ export enum MutationKeys {
   CHATBOT_PROFILE = "chatbotProfileResponse",
   BULK_UPLOAD = "bulkUpload",
   CHECK_BULK_IMPORT_STATUS = "checkBulkImportStatus",
+
+  LEAD_FORM = "leadForm",
+
+  BOOK_MEETING = "bookMeeting",
+  RESCHEDULE_MEETING_KEY = "rescheduleMeeting",
 }
 
 export enum QueryKeys {
@@ -74,4 +79,7 @@ export enum QueryKeys {
   GET_CALENDER_SLOTS_AND_EVENTS = "getCanderSlotsAndEvents",
   GET_MEMBERS_META_LIST = "getMembersMetaList",
   GET_PROSPECTS_META_LIST = "getProspectsMetaList",
+
+  GET_LEAD_FORM_STATUS = "getLeadFormStatus",
+  GET_TRANSCRIPTS = "getTranscripts",
 }

@@ -819,3 +819,7 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   ):hover {
   background-color: $ashgro-navy;
 }
+
+.ant-input-outlined:focus-within {
+  background: $ashgro-cream;
+}

@@ -27,9 +27,10 @@ import Clubs from "src/views/Clubs";
 import IndividualClub from "src/views/Clubs/IndividualClub";
 import SettingsWrapper from "src/views/Settings";
 import DashboardWrapper from "src/views/Dashboard";
-import Calender from "src/views/Calender";
 import { AuthContext } from "src/context/AuthContext";
 import Chatbot from "src/views/Chatbot";
+import LeadForm from "src/views/LeadForm";
+import CalendarContainer from "src/views/Calender/Calender/CalendarContainer";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { authenticated } = AuthContext();
@@ -71,7 +72,7 @@ const RootRedirect = () => {
 const AppRouter = () => {
   const children: RouterProps[] = [
     { path: AppRoutes.PROSPECTS_LISTING, component: <ProspectsListing /> },
-    { path: AppRoutes.CALENDAR, component: <Calender /> },
+    { path: AppRoutes.CALENDAR, component: <CalendarContainer /> },
     { path: AppRoutes.MEMBERS, component: <Members /> },
     { path: AppRoutes.CLUB_STAFF, component: <StaffMembersListing /> },
     { path: AppRoutes.INDIVIDUAL_PROSPECT, component: <IndividualProspect /> },
@@ -114,6 +115,8 @@ const AppRouter = () => {
           />
 
           <Route path={AppRoutes.CHATBOT} element={<Chatbot />} />
+
+          <Route path={AppRoutes.LEAD_FORM} element={<LeadForm />} />
 
           <Route
             path={AppRoutes.APP_COMPONENTS}

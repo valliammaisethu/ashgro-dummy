@@ -233,6 +233,8 @@ export interface ModalProps extends AntdModalProps {
   okButtonType?: ButtonTypes;
   renderHeader?: boolean;
   closeIcon?: ReactNode;
+  maskClosable?: boolean;
+  keyboard?: boolean;
 }
 
 export interface ProfilePictureInputProps {

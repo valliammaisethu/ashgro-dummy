@@ -13,6 +13,7 @@ interface DeleteResourceParams {
   path: string;
   title?: string;
   description?: string;
+  useCustomToast?: boolean;
 }
 
 const DEFAULT_DELETE_MESSAGE = {
@@ -31,7 +32,8 @@ export const CommonService = () => {
       const response = await axiosInstance.delete(path);
       return deserialize(ResponseModel, response?.data);
     },
-    onSuccess: (_response, { title, description }) => {
+    onSuccess: (_response, { title, description, useCustomToast }) => {
+      if (useCustomToast) return;
       renderNotification(
         title || DEFAULT_DELETE_MESSAGE.title,
         description || DEFAULT_DELETE_MESSAGE.description,
