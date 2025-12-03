@@ -1,6 +1,8 @@
 import React, { useCallback } from "react";
 import { Col, Row } from "antd";
 import dayjs from "dayjs";
+import { FieldValues } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 
 import Modal from "src/shared/components/Modal";
 import Form from "src/shared/components/Form";
@@ -9,7 +11,7 @@ import InputField from "src/shared/components/InputField";
 import RadioField from "src/shared/components/RadioField";
 import DatePicker from "src/shared/components/DatePicker";
 import TimeRangePicker from "src/shared/components/TimeRangePicker";
-import { disablePastDates } from "src/shared/utils/dateUtils";
+import { convertTo24hrs, disablePastDates } from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { Justify } from "src/enums/align.enum";
 import { BOOK_MEETING_FIELDS, BOOK_MEETING_META } from "./constants";
@@ -22,11 +24,14 @@ import {
 } from "src/services/MetaService/meta.service";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
 import { BookMeeting as BookMeetingModel } from "src/models/calender.model";
+import { QueryParams } from "src/models/queryParams.model";
+import { CalenderService } from "src/services/Calender/calender.service";
+import { PaginatedOptions } from "src/models/common.model";
 
 import styles from "./bookMeeting.module.scss";
-import { QueryParams } from "src/models/queryParams.model";
 
-const { TITLE, TYPE, NAME, SLOT_DATE, MEETING_TIME } = BOOK_MEETING_FIELDS;
+const { TITLE, TYPE, NAME, SLOT_DATE, MEETING_TIME, USER } =
+  BOOK_MEETING_FIELDS;
 const { BOOK_MEETING, RESCHEDULE_MEETING, RESCHEDULE_NOW } = BOOK_MEETING_META;
 const { YYYY_MM_DD } = DateFormats;
 const { GET_MEMBERS_META_LIST, GET_PROSPECTS_META_LIST } = QueryKeys;
@@ -48,10 +53,16 @@ const BookMeeting = ({
     },
   });
 
+  const { bookMeeting } = CalenderService();
+
+  const { mutateAsync: addMeeting, isPending: isAddMeetingLoading } =
+    useMutation(bookMeeting());
+
   const {
     handleSubmit,
     formState: { isValid },
     watch,
+    setValue,
   } = methods;
 
   const handleClose = () => {
@@ -68,6 +79,23 @@ const BookMeeting = ({
     [isMembersSelected],
   );
 
+  const handleFormSubmit = async (data: FieldValues) => {
+    const paylaod = {
+      ...data,
+      startTime: convertTo24hrs(data.meetingTime.startTime),
+      endTime: convertTo24hrs(data.meetingTime.endTime),
+    };
+
+    await addMeeting(paylaod, { onSuccess: onClose });
+  };
+
+  const handleSelectUserType = (user: PaginatedOptions) => {
+    const { id = "", label = "" } = user;
+    if (!id || !label) return;
+    setValue(USER.USER_ID, id);
+    setValue(USER.USER_NAME, label);
+  };
+
   return (
     <Modal
       cancelButtonProps={{ className: "d-none" }}
@@ -76,8 +104,8 @@ const BookMeeting = ({
       okText={calendarEvent?.id ? RESCHEDULE_NOW : BOOK_MEETING}
       closeModal={handleClose}
       rootClassName={styles.bookMeeting}
-      handleOk={handleSubmit(() => {})}
-      okButtonProps={{ disabled: !isValid }}
+      handleOk={handleSubmit(handleFormSubmit)}
+      okButtonProps={{ disabled: !isValid, loading: isAddMeetingLoading }}
     >
       <Form methods={methods}>
         <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
@@ -117,6 +145,9 @@ const BookMeeting = ({
                       : GET_MEMBERS_META_LIST,
                   ]}
                   value={methods.watch(NAME.name as keyof BookMeetingModel)}
+                  onSelect={(_, user) =>
+                    handleSelectUserType(user as PaginatedOptions)
+                  }
                 />
               </Col>
             </Row>
@@ -138,7 +169,7 @@ const BookMeeting = ({
               label={MEETING_TIME.label}
               placeholder={[...MEETING_TIME.placeholder]}
               required
-              format={DateFormats.HH_MM}
+              changeOnScroll
             />
           </Col>
         </Row>
@@ -147,4 +178,4 @@ const BookMeeting = ({
   );
 };
 
-export default BookMeeting;
+export default React.memo(BookMeeting);

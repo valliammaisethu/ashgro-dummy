@@ -1,9 +1,9 @@
 export enum SLOT_STATUS {
-  BOOKED = "BOOKED",
-  AVAILABLE = "AVAILABLE",
+  BOOKED = "booked",
+  AVAILABLE = "available",
 }
 
 export enum SLOT_TYPE {
-  CHATBOT = "CHATBOT",
-  MEETING = "MEETING",
+  CHATBOT = "chatbot",
+  MEETING = "meeting",
 }

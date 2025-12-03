@@ -1,5 +1,7 @@
 import { generatePath, useNavigate } from "react-router-dom";
 import { NavigationRoutes } from "../../routes/routeConstants/appRoutes";
+import { updateLocationMonthQuery } from "src/views/Calender/utils/calendarUtils";
+import { NavigateToSelectedMonth } from "../types/route.type";
 
 const {
   HOME,
@@ -46,6 +48,23 @@ const useRedirect = () => {
   const navigateToInvidualClub = (id?: string) =>
     navigate(generatePath(INDIVIDUAL_CLUB, { id }));
 
+  const navigateToMonth = ({
+    navigate,
+    pathname,
+    query,
+    date,
+  }: NavigateToSelectedMonth) => {
+    const search = updateLocationMonthQuery(query, date);
+
+    navigate(
+      {
+        pathname,
+        search,
+      },
+      { replace: true },
+    );
+  };
+
   return {
     navigateToHome,
     navigateToDashboard,
@@ -59,6 +78,7 @@ const useRedirect = () => {
     navigateToStaffMemberList,
     navigateToMembers,
     navigateToInvidualClub,
+    navigateToMonth,
   };
 };
 

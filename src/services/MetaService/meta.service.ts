@@ -4,7 +4,7 @@ import { deserialize, serialize } from "serializr";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
-import { BaseSettingsModel } from "src/models/common.model";
+import { PaginatedOptions } from "src/models/common.model";
 import {
   ActivityTypesData,
   EmailTemplatesData,
@@ -43,9 +43,9 @@ const {
   GET_STAFF_DEPARTMENTS: GET_STAFF_DEPARTMENTS_KEY,
 } = QueryKeys;
 
+const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
+const clubId = user?.clubId;
 export const MetaService = () => {
-  const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
-  const clubId = user?.clubId;
   const getLeadSources = (
     params: LeadSourceParams = new LeadSourceParams(),
   ): UseQueryOptions<LeadSourcesData, ResponseModel, LeadSourcesData> => {
@@ -186,24 +186,36 @@ export const MetaService = () => {
 
 export const getMembersMetaList = async (params: Partial<QueryParams>) => {
   const { data } = await axiosInstance.get(ApiRoutes.MEMBERS_META_LIST, {
-    params: serialize(QueryParams, params),
+    params: {
+      ...serialize(QueryParams, params),
+      clubId,
+    },
   });
 
-  const members = deserialize(BaseSettingsModel, data.members as unknown[]);
+  const members = deserialize(
+    PaginatedOptions,
+    data?.data.members as unknown[],
+  );
 
-  const meta = deserialize(Pagination, data?.pagination);
+  const meta = deserialize(Pagination, data?.data?.pagination);
 
   return { data: members, meta };
 };
 
 export const getProspectssMetaList = async (params: Partial<QueryParams>) => {
   const { data } = await axiosInstance.get(ApiRoutes.PROSPECTS_META_LIST, {
-    params: serialize(QueryParams, params),
+    params: {
+      ...serialize(QueryParams, params),
+      clubId,
+    },
   });
 
-  const prospects = deserialize(BaseSettingsModel, data.prospects as unknown[]);
+  const prospects = deserialize(
+    PaginatedOptions,
+    data?.data?.prospects as unknown[],
+  );
 
-  const meta = deserialize(Pagination, data?.pagination);
+  const meta = deserialize(Pagination, data?.data?.pagination);
 
   return { data: prospects, meta };
 };
