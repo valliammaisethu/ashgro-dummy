@@ -88,3 +88,8 @@ export interface UnlockClubModalProps {
   isLoading?: boolean;
   clubName?: string;
 }
+
+export interface UploadFileState {
+  uploadedFileName: string;
+  uploadedFileId: string;
+}

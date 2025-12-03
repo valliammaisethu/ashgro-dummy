@@ -51,3 +51,6 @@ export const getInitials = (name?: string): string => {
 
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
+
+export const isObjectEmpty = (obj: { [key: string]: string } | null) =>
+  !obj || Object.values(obj).every((v) => v === "");

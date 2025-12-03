@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import { IconArrowRight, IconDownload } from "obra-icons-react";
 import { useMutation } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
@@ -14,31 +15,30 @@ import {
   chatbotKnowlegeBaseDescription,
   chatbotKnowlegeBaseInput,
 } from "./constants";
+import ImportFileUpload from "src/shared/components/ImportFileUpload";
 import excelIcon from "src/assets/images/excelIcon.webp";
 import wordIcon from "src/assets/images/wordIcon.webp";
 import pdfIcon from "src/assets/images/pdfIcon.webp";
 import ashgroLogo from "src/assets/images/homeLogo.webp";
 import { Buttons } from "src/enums/buttons.enum";
+import { docsPdfAccept, excelAccept } from "src/constants/sharedComponents";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { ImportModes } from "src/enums/importModes.enum";
 import { TemplateEntity } from "src/enums/templateEntity.enum";
 import { ImportModalProps } from "src/shared/types/importModes.type";
+import { UploadedFileData } from "src/shared/types/sharedComponents.type";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { BulkUploadService } from "src/services/BulkUploadService/bulkUpload.service";
 import { TemplateDownloadService } from "src/services/TemplateDownloadService/templateDownload.service";
 import { downloadTemplateFile } from "src/services/TemplateDownloadService/utils";
-
-import styles from "./importModal.module.scss";
+import { ClubService } from "src/services/ClubService/club.service";
 import { replaceString } from "src/shared/utils/commonHelpers";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
-import { UploadedFileData } from "src/shared/types/sharedComponents.type";
-import ImportFileUpload from "src/shared/components/ImportFileUpload";
-import { docsPdfAccept, excelAccept } from "src/constants/sharedComponents";
-import { ClubService } from "src/services/ClubService/club.service";
-import { useParams } from "react-router-dom";
+
+import styles from "./importModal.module.scss";
 
 const ImportModal = (props: ImportModalProps) => {
-  const { importMode, onClose, visible, onImport } = props;
+  const { importMode, onClose, visible, onImport, clubId: listClubId } = props;
   const [isUploading, setIsUploading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<string>("");
@@ -47,6 +47,7 @@ const ImportModal = (props: ImportModalProps) => {
     importMode === ImportModes.CHATBOT_KNOWLEDGE_BASE;
 
   const { id: adminClubId = "" } = useParams();
+  const updatingClubId = adminClubId || listClubId || "";
 
   const { bulkUpload } = BulkUploadService();
   const { uploadKnowledgeBase } = ClubService();
@@ -86,11 +87,11 @@ const ImportModal = (props: ImportModalProps) => {
 
   const handleImport = () => {
     if (isKnowledgeBaseImport) {
-      if (!uploadedFile || !adminClubId) return;
+      if (!uploadedFile || !updatingClubId) return;
       uploadChatbotKnowledgeBaseMutate(
         {
           attachmentId: uploadedFile,
-          clubId: adminClubId,
+          clubId: updatingClubId,
         },
         {
           onSuccess: () => {
