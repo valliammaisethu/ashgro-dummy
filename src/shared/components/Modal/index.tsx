@@ -36,6 +36,8 @@ const Modal: React.FC<ModalProps> = ({
   closable,
   destroyOnClose,
   bodyStyle,
+  maskClosable = false,
+  keyboard = false,
 }: ModalProps) => {
   const defaultFooter = (
     <ModalFooter
@@ -68,8 +70,8 @@ const Modal: React.FC<ModalProps> = ({
       onOk={handleOk ?? closeModal}
       onCancel={onCancel ?? closeModal}
       confirmLoading={confirmLoading}
-      maskClosable={false}
-      keyboard={false}
+      maskClosable={maskClosable}
+      keyboard={keyboard}
       destroyOnHidden
       footer={footer === undefined ? defaultFooter : footer}
       title={
