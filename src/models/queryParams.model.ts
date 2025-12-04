@@ -2,6 +2,9 @@ import { serializable } from "serializr";
 
 export class QueryParams {
   @serializable
+  id?: string;
+
+  @serializable
   search = "";
 
   @serializable

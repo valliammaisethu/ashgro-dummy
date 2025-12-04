@@ -22,6 +22,7 @@ import { cleanObject } from "src/shared/utils/helpers";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { renderNotification } from "src/shared/utils/renderNotification";
 import { TranscriptData } from "src/models/transcripts.model";
+import { QueryParams } from "src/models/queryParams.model";
 
 const {
   GET_PROSPECTS,
@@ -37,9 +38,10 @@ const {
 const { ADD_PROSPECT, EDIT_PROSPECT, DELETE_PROSPECT, CONVERT_TO_MEMBER } =
   MutationKeys;
 
+const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+
 export const ProspectsService = () => {
   const queryClient = useQueryClient();
-  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
   const getProspects = (
     params: ProspectsListingParams = new ProspectsListingParams(),
   ): UseQueryOptions<ProspectsListData, ResponseModel, ProspectsListData> => ({
@@ -152,18 +154,22 @@ export const ProspectsService = () => {
     },
   });
 
-  const getTranscripts = (
-    id: string,
-    clubId?: string,
-  ): UseQueryOptions<TranscriptData, ResponseModel, TranscriptData> => ({
-    queryKey: [GET_TRANSCRIPTSQUERY, id, clubId],
-    queryFn: async () => {
-      const response = await axiosInstance.get(
-        generatePath(GET_TRANSCRIPTS, { clubId, id }),
-      );
-      return deserialize(TranscriptData, response?.data?.data);
-    },
-  });
+  const getTranscripts = async (params: Partial<QueryParams>) => {
+    const { id, ...pageParams } = params;
+    const serializedParams = serialize(QueryParams, pageParams);
+    const response = await axiosInstance.get(
+      generatePath(GET_TRANSCRIPTS, { clubId, id }),
+      {
+        params: serializedParams,
+      },
+    );
+    const data = deserialize(TranscriptData, response?.data?.data);
+
+    return {
+      data: [data],
+      meta: data?.pagination,
+    };
+  };
 
   return {
     getProspects,

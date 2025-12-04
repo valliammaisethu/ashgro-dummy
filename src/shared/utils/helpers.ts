@@ -13,6 +13,9 @@ export const fillEmptyData = (val?: string) => val || "-";
 export const getFullName = (firstName = "", lastName = ""): string =>
   `${firstName} ${lastName}`.trim();
 
+export const getInitials = (firstName = "", lastName = ""): string =>
+  (firstName[0] ?? "").toUpperCase() + (lastName[0] ?? "").toUpperCase();
+
 export const formatCurrency = (
   amount: number | string,
   currencySymbol: string = "$",
