@@ -125,6 +125,7 @@ const EditProfile = (props: EditProfileProps) => {
               type={INPUT_TYPE.EMAIL}
               label={email}
               name={emailName}
+              disabled
             />
           </Col>
           <Col span={12}>

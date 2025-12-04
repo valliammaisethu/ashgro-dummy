@@ -4,11 +4,13 @@ import * as Yup from "yup";
 export const editProfileValidation = Yup.object({
   firstName: Yup.string()
     .required("First name is required")
-    .matches(REGEX.LETTERS_WITH_SPACES, "Only letters are allowed"),
+    .matches(REGEX.LETTERS_WITH_SPACES, "Only letters are allowed")
+    .max(50),
 
   lastName: Yup.string()
     .required("Last name is required")
-    .matches(REGEX.LETTERS_WITH_SPACES, "Only letters are allowed"),
+    .matches(REGEX.LETTERS_WITH_SPACES, "Only letters are allowed")
+    .max(50),
 
   email: Yup.string().nullable().email(),
   phoneNumber: Yup.string()

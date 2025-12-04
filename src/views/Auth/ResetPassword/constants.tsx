@@ -62,4 +62,4 @@ export const newPasswordValidation =
   "Password can’t be longer than 25 characters";
 
 export const confirmPasswordValidation = "Confirm password is required";
-export const matchingPasswordValidation = "Passwords must match";
+export const matchingPasswordValidation = "Passwords do not match";
