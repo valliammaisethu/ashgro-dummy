@@ -6,6 +6,9 @@ export const chartformValidation = Yup.object().shape({
     .required("Title is required")
     .max(50)
     .matches(REGEX.LETTERS_WITH_SPACES),
-  type: Yup.string().required("Type is required"),
-  label: Yup.string().required("Label is required"),
+  labels: Yup.array()
+    .of(Yup.string().required("X-axis value is required"))
+    .min(1, "At least one x-axis value is required")
+    .required("At least one x-axis value is required"),
+  xaxis: Yup.string().notRequired(),
 });

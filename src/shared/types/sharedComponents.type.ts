@@ -361,3 +361,10 @@ export interface DeleteModalProps {
   externalOnClose?: () => void;
   modalWidth?: number;
 }
+
+export interface TagInputProps {
+  name: string;
+  placeholder?: string;
+  label?: string;
+  required?: boolean;
+}
