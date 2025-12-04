@@ -51,9 +51,16 @@ const MyProfile = () => {
         placement={Placement.BOTTOM_LEFT}
         arrow={false}
         open={profileState.myProfileVisible}
+        destroyOnHidden
+        destroyTooltipOnHide
         onOpenChange={handleMyProfile}
         trigger={Trigger.CLICK}
-        content={<MyProfileContent onOpenModal={handleOpenModal} />}
+        content={
+          <MyProfileContent
+            closeMyProfile={handleMyProfile}
+            onOpenModal={handleOpenModal}
+          />
+        }
       >
         <IconUser className={styles.myProfileIcon} />
       </Popover>
@@ -66,15 +73,10 @@ const MyProfile = () => {
           visible={profileState.changePasswordVisible}
         />
       </ConditionalRenderComponent>
-      <ConditionalRenderComponent
+      <EditProfile
+        onClose={handleEditProfile}
         visible={profileState.editProfileVisible}
-        hideFallback
-      >
-        <EditProfile
-          onClose={handleEditProfile}
-          visible={profileState.editProfileVisible}
-        />
-      </ConditionalRenderComponent>
+      />
     </Fragment>
   );
 };

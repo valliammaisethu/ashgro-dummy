@@ -1,6 +1,8 @@
 import { list, object, serializable } from "serializr";
 
 import { ProfileDetails } from "./profile.model";
+import { Pagination } from "./pagination.model";
+import { BasicProfile } from "./common.model";
 
 export class TranscriptConversation {
   @serializable
@@ -24,15 +26,12 @@ export class TranscriptSession {
   conversations?: TranscriptConversation[];
 }
 
-export class TranscriptClub {
+export class TranscriptClub extends BasicProfile {
   @serializable
   id?: string;
 
   @serializable
-  clubLogo?: string;
-
-  @serializable
-  clubName?: string;
+  clubLogoUrl?: string;
 }
 
 export class TranscriptData {
@@ -44,4 +43,7 @@ export class TranscriptData {
 
   @serializable(object(ProfileDetails))
   user?: ProfileDetails;
+
+  @serializable(object(Pagination))
+  pagination = new Pagination();
 }

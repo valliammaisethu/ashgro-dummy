@@ -18,7 +18,7 @@ html {
 input::placeholder,
 select::placeholder {
   font-family: $font-secondary;
-  color: $placeholder-text;
+  color: $placeholder-color;
   font-size: 1.2rem;
   font-weight: 400;
 }

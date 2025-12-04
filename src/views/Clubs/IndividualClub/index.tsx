@@ -15,6 +15,7 @@ import Switch from "src/shared/components/Switch";
 import { stopPropagation } from "src/shared/utils/eventUtils";
 import ClubForm from "../ClubForm";
 import ChatbotQuestionsModal from "../ChatbotQuestionsModal";
+import UnlockClubModal from "./components/UnlockClubModal";
 import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
 import StatusDropdown from "src/shared/components/StatusDropdown";
 import { ClubService } from "src/services/ClubService/club.service";
@@ -37,9 +38,11 @@ const IndividualClub = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState<ClubSettingsState>({
     modalOpen: false,
     settingsOpen: false,
+    unlockModalOpen: false,
   });
   const queryClient = useQueryClient();
-  const { getClubProfile, updateStatus, updateGeneralSettings } = ClubService();
+  const { getClubProfile, updateStatus, updateGeneralSettings, unlockClub } =
+    ClubService();
 
   const {
     data: clubData,
@@ -62,6 +65,9 @@ const IndividualClub = () => {
     isPending: isSettingsUpdatePending,
   } = useMutation(updateGeneralSettings());
 
+  const { mutateAsync: unlockClubMutate, isPending: isUnlockPending } =
+    useMutation(unlockClub(id));
+
   const handleChatbotStatusChange = async (value: boolean) =>
     await updateChatbotStatusMutate({ chatbotEnabled: value, id });
 
@@ -70,14 +76,21 @@ const IndividualClub = () => {
   const handleSettings = () => {
     setIsSettingsOpen((prev) => ({
       ...prev,
-      modalOpen: !prev,
+      modalOpen: !prev.settingsOpen,
     }));
   };
 
   const handleModalClose = () => {
     setIsSettingsOpen((prev) => ({
       ...prev,
-      modalOpen: false,
+      modalOpen: !prev.modalOpen,
+    }));
+  };
+
+  const handleUnlockModal = () => {
+    setIsSettingsOpen((prev) => ({
+      ...prev,
+      unlockModalOpen: !prev.unlockModalOpen,
     }));
   };
 
@@ -105,9 +118,11 @@ const IndividualClub = () => {
   return (
     <div className={styles.individualClub}>
       <Header
+        isClubLocked={clubData?.club?.isClubLocked}
         isFetching={isPending}
         onSettings={handleSettings}
         onChatbotQuestions={handleChatbotQuestionsModal}
+        onUnlockClub={handleUnlockModal}
       />
       <ConditionalRender
         isPending={isPending}
@@ -207,6 +222,18 @@ const IndividualClub = () => {
         <ChatbotQuestionsModal
           open={isChatbotModalOpen}
           onClose={handleChatbotQuestionsModal}
+        />
+      </ConditionalRenderComponent>
+      <ConditionalRenderComponent
+        visible={isSettingsOpen.unlockModalOpen}
+        hideFallback
+      >
+        <UnlockClubModal
+          onClose={handleUnlockModal}
+          open={isSettingsOpen.unlockModalOpen}
+          isLoading={isUnlockPending}
+          onSave={unlockClubMutate}
+          clubName={clubData?.club?.name}
         />
       </ConditionalRenderComponent>
     </div>

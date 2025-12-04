@@ -484,7 +484,7 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   font-size: 1.2rem;
 }
 .ant-select .ant-select-selection-placeholder {
-  color: $placeholder-text;
+  color: $placeholder-color;
   font-size: 1.2rem;
   font-weight: 400;
 }
@@ -602,7 +602,7 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   font-family: $font-secondary;
   &::placeholder {
     font-size: 1.2rem;
-    color: $placeholder-text;
+    color: $placeholder-color;
     font-weight: 400;
   }
 }

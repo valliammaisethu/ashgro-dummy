@@ -33,6 +33,8 @@ export enum Buttons {
   YES_PROCEED = "Yes, Proceed",
   ADD_FILE = "Add File",
   ADD_CHART = "Add Chart",
+  ADD_NAME = "Add Name",
+  YES_UNLOCK = "Yes, Unlock",
 }
 
 export enum HtmlButtonType {
