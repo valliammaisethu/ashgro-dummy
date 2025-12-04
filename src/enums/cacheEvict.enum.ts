@@ -84,4 +84,7 @@ export enum QueryKeys {
 
   GET_LEAD_FORM_STATUS = "getLeadFormStatus",
   GET_TRANSCRIPTS = "getTranscripts",
+
+  GET_DASHBOARD_CHARTS_KEY = "getDashboardCharts",
+  GET_CHART_DETAIL_KEY = "getChartDetails",
 }
