@@ -823,3 +823,8 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 .ant-input-outlined:focus-within {
   background: $ashgro-cream;
 }
+
+.ant-drawer,
+.ant-modal {
+  font-family: $font-secondary;
+}
