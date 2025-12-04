@@ -26,6 +26,7 @@ export enum Buttons {
   EDIT_PROFILE = "Edit Profile",
   CHANGE_PASSWORD = "Change Password",
   ADD_SLOTS = "Add Slot(s)",
+  UPDATE_SLOTS = "Update Slot(s)",
   DOWNLOAD_TEMPLATE = "Download Template",
   CANCEL_UPLOAD = "Cancel Upload",
   CHANGE = "Change",

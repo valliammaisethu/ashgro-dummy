@@ -18,6 +18,7 @@ import { CalenderService } from "src/services/Calender/calender.service";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import useRedirect from "src/shared/hooks/useRedirect";
 import { CalendarEvent } from "src/shared/types/calender";
+import { useAppContainerPadding } from "src/shared/hooks/useAppContainerPadding";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import styles from "./calender.module.scss";
@@ -80,6 +81,8 @@ const Calender = ({
     ),
     [eventsForSelectedMonth],
   );
+
+  useAppContainerPadding();
 
   return (
     <div className={styles.calendarWrapper}>
