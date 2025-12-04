@@ -1,10 +1,6 @@
 import { ClubSettingsTypes } from "src/enums/clubSettingsTypes.enum";
 import { Dispatch, SetStateAction } from "react";
-import {
-  ClubData,
-  ClubGeneralSettings,
-  ClubProfile,
-} from "src/models/club.model";
+import { ClubGeneralSettings, ClubProfile } from "src/models/club.model";
 import { QueryParams } from "src/models/queryParams.model";
 
 export interface ClubFormProps {
@@ -58,7 +54,7 @@ export interface GeneralSettingsDrawerProps {
   open: boolean;
   onClose: () => void;
   clubId: string;
-  clubData?: ClubData;
+  clubData?: ClubGeneralSettings;
   onSave: (data: ClubGeneralSettings, clubId: string) => void;
   isLoading?: boolean;
 }

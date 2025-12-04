@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import Drawer from "src/shared/components/Drawer";
@@ -7,95 +7,134 @@ import NumberIncrementer from "src/shared/components/NumberIncrementer";
 import { HtmlButtonType } from "src/enums/buttons.enum";
 import { GeneralSettingsDrawerProps } from "src/shared/types/clubs.type";
 import { SETTINGS_LABELS, SETTINGS_FIELD_NAMES } from "./constants";
+import { ClubSettingsTypes } from "src/enums/clubSettingsTypes.enum";
 
 import styles from "./generalSettingsDrawer.module.scss";
-import { ClubData, ClubGeneralSettings } from "src/models/club.model";
+import { ClubGeneralSettings } from "src/models/club.model";
 import SwitchField from "src/shared/components/SwitchField";
+import WarningModal from "../WarningModal";
 
 const GeneralSettingsDrawer: React.FC<GeneralSettingsDrawerProps> = ({
   open,
   onClose,
   clubId,
-  clubData = new ClubData(),
+  clubData = new ClubGeneralSettings(),
   onSave,
   isLoading,
 }) => {
   const methods = useForm<ClubGeneralSettings>({
-    defaultValues: clubData?.club,
+    defaultValues: clubData,
   });
 
-  const {
-    formState: { isDirty, isValid },
-    reset,
-    handleSubmit,
-  } = methods;
+  const { getValues, formState, reset, handleSubmit } = methods;
+
+  const [showWarning, setShowWarning] = useState(false);
 
   useEffect(() => {
-    if (open) reset({ ...new ClubGeneralSettings() });
-  }, [open, clubData?.club?.id, methods]);
+    if (open) reset(clubData);
+  }, [open, clubData]);
 
-  const handleFormSubmit = (data: ClubGeneralSettings) => onSave(data, clubId);
+  const checkIfReducingValues = () => {
+    const values = getValues();
+    if (!clubData) return false;
+
+    const isReducingTemplates =
+      (values.noOfEmailTemplatesAllowed ?? 0) <
+      (clubData.noOfEmailTemplatesAllowed ?? 0);
+
+    const isReducingCharts =
+      (values.noOfCustomChartsAllowed ?? 0) <
+      (clubData?.noOfCustomChartsAllowed ?? 0);
+
+    return isReducingTemplates || isReducingCharts;
+  };
+
+  const handleFormSubmit = () => {
+    if (checkIfReducingValues()) {
+      setShowWarning(true);
+      return;
+    }
+
+    onSave(getValues(), clubId);
+  };
+
+  const handleOverrideSave = () => {
+    setShowWarning(false);
+    onSave(getValues(), clubId);
+  };
 
   return (
-    <Drawer
-      open={open}
-      onClose={onClose}
-      title={SETTINGS_LABELS.title}
-      width={384}
-      rootClassName={styles.generalSettingsDrawer}
-      okText={SETTINGS_LABELS.saveChanges}
-      cancelButtonProps={{
-        className: "d-none",
-      }}
-      okButtonHtmlType={HtmlButtonType.SUBMIT}
-      okButtonProps={{ loading: isLoading, disabled: !isDirty || !isValid }}
-      handleOk={handleSubmit(handleFormSubmit)}
-    >
-      <Form methods={methods} onSubmit={handleFormSubmit}>
-        <div className={styles.generalSettingsContent}>
-          <div className={styles.settingRow}>
-            <span className={styles.settingLabel}>
-              {SETTINGS_LABELS.leadForms}
-            </span>
-            <SwitchField
-              name={SETTINGS_FIELD_NAMES.isLeadForms}
-              className={styles.settingSwitch}
-            />
+    <>
+      <Drawer
+        open={open}
+        onClose={onClose}
+        title={SETTINGS_LABELS.title}
+        width={384}
+        rootClassName={styles.generalSettingsDrawer}
+        okText={SETTINGS_LABELS.saveChanges}
+        cancelButtonProps={{ className: "d-none" }}
+        okButtonHtmlType={HtmlButtonType.SUBMIT}
+        okButtonProps={{
+          loading: isLoading,
+          disabled: !formState.isDirty || !formState.isValid,
+        }}
+        handleOk={handleSubmit(handleFormSubmit)}
+      >
+        <Form methods={methods} onSubmit={handleFormSubmit}>
+          <div className={styles.generalSettingsContent}>
+            <div className={styles.settingRow}>
+              <span className={styles.settingLabel}>
+                {SETTINGS_LABELS.leadForms}
+              </span>
+              <SwitchField
+                name={SETTINGS_FIELD_NAMES.isLeadForms}
+                className={styles.settingSwitch}
+              />
+            </div>
+
+            <div className={styles.settingRow}>
+              <span className={styles.settingLabel}>
+                {SETTINGS_LABELS.bulkEmail}
+              </span>
+              <SwitchField
+                name={SETTINGS_FIELD_NAMES.isBulkEmail}
+                className={styles.settingSwitch}
+              />
+            </div>
           </div>
 
-          <div className={styles.settingRow}>
-            <span className={styles.settingLabel}>
-              {SETTINGS_LABELS.bulkEmail}
-            </span>
-            <SwitchField
-              name={SETTINGS_FIELD_NAMES.isBulkEmail}
-              className={styles.settingSwitch}
-            />
-          </div>
-        </div>
-        <div className={styles.additionalSettings}>
-          <div className={styles.settingSection}>
-            <span className={styles.sectionLabel}>
-              {SETTINGS_LABELS.emailTemplatesLabel}
-            </span>
-            <NumberIncrementer
-              name={SETTINGS_FIELD_NAMES.noOfEmailTemplatesAllowed}
-              min={0}
-            />
-          </div>
+          <div className={styles.additionalSettings}>
+            <div className={styles.settingSection}>
+              <span className={styles.sectionLabel}>
+                {SETTINGS_LABELS.emailTemplatesLabel}
+              </span>
+              <NumberIncrementer
+                name={SETTINGS_FIELD_NAMES.noOfEmailTemplatesAllowed}
+                min={0}
+              />
+            </div>
 
-          <div className={styles.settingSection}>
-            <span className={styles.sectionLabel}>
-              {SETTINGS_LABELS.customChartsLabel}
-            </span>
-            <NumberIncrementer
-              name={SETTINGS_FIELD_NAMES.noOfCustomChartsAllowed}
-              min={0}
-            />
+            <div className={styles.settingSection}>
+              <span className={styles.sectionLabel}>
+                {SETTINGS_LABELS.customChartsLabel}
+              </span>
+              <NumberIncrementer
+                name={SETTINGS_FIELD_NAMES.noOfCustomChartsAllowed}
+                min={0}
+              />
+            </div>
           </div>
-        </div>
-      </Form>
-    </Drawer>
+        </Form>
+      </Drawer>
+
+      <WarningModal
+        open={showWarning}
+        type={ClubSettingsTypes.TEMPLATES}
+        isLoading={isLoading}
+        onClose={() => setShowWarning(false)}
+        onSave={handleOverrideSave}
+      />
+    </>
   );
 };
 
