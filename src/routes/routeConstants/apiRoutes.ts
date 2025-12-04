@@ -67,6 +67,7 @@ export const ApiRoutes = {
   GET_CLUB_PROFILE: "/clubs/:id",
   UPDATE_CLUB_PROFILE: "/clubs/:id/update",
   UNLOCK_CLUB: "/clubs/:id/unlock",
+  UPDATE_CLUB_GENERAL_SETTINGS: "/clubs/:id/settings",
 
   UPLOAD_CHATBOT_KNOWLEDGE_BASE: "/clubs/:id/upload",
 

@@ -5,16 +5,16 @@ import { ResponseModel } from "./response.model";
 
 export class ClubGeneralSettings {
   @serializable
-  webFormsEnabled?: boolean;
+  isLeadForms?: boolean;
 
   @serializable
-  bulkEmailEnabled?: boolean;
+  isBulkEmail?: boolean;
 
   @serializable
-  emailTemplatesAllowed?: number;
+  noOfEmailTemplatesAllowed?: number;
 
   @serializable
-  customChartsAllowed?: number;
+  noOfCustomChartsAllowed?: number;
 
   @serializable
   clubId?: string;
