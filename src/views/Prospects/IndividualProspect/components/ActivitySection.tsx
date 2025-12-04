@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { IconAdd, IconMessage } from "obra-icons-react";
+import { useParams } from "react-router-dom";
 
 import Card from "src/shared/components/Card";
 import Button from "src/shared/components/Button";
@@ -8,6 +9,9 @@ import { ActivityDetails } from "src/models/viewProspect.model";
 import { formatDateTime } from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import AddActivity from "./Activity/AddActivity";
+import useDrawer from "src/shared/hooks/useDrawer";
+import Transcripts from "../../Transcripts";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 import styles from "../individualProspect.module.scss";
 
@@ -22,7 +26,10 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
   activityCount = 0,
   handleRefetch,
 }) => {
+  const { id = "" } = useParams();
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
+  const { visible: transcriptsVisible, toggleVisibility: toggleTranscripts } =
+    useDrawer();
 
   const handleToggleVisibility = () => setIsActivityModalOpen((prev) => !prev);
   return (
@@ -37,6 +44,7 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
               title: headerConstants.viewTranscripts,
             }}
             className={styles.messageButton}
+            onClick={toggleTranscripts}
           >
             <IconMessage />
           </Button>
@@ -64,6 +72,13 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
         isOpen={isActivityModalOpen}
         handleRefetch={handleRefetch}
       />
+      <ConditionalRenderComponent visible={transcriptsVisible} hideFallback>
+        <Transcripts
+          visible={transcriptsVisible}
+          onClose={toggleTranscripts}
+          userId={id}
+        />
+      </ConditionalRenderComponent>
     </div>
   );
 };

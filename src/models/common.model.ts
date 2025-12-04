@@ -24,3 +24,17 @@ export class PaginatedOptions extends BaseSettingsModel {
   @serializable(alias("name"))
   label?: string;
 }
+
+export class BasicProfile {
+  @serializable
+  firstName = "";
+
+  @serializable
+  lastName = "";
+
+  @serializable
+  email?: string;
+
+  @serializable
+  profilePictureUrl?: string;
+}
