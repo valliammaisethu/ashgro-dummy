@@ -48,3 +48,17 @@ export const MEETING_PREVIEW_POPOVER_PROPS = {
     borderRadius: 0,
   },
 };
+
+export const DELETE_MEETING_MODAL_PROPS = {
+  customTitle: "Cancel Meeting?",
+  customDescription:
+    "Are you sure you want to cancel the meeting, this action is not reversible",
+  deleteButtonText: "Cancel Meeting",
+  customWidth: 650,
+};
+
+export const DELETE_CHATBOT_SLOTS_MODAL_PROPS = {
+  title: "Chatbot Slots",
+  description: "slots",
+  customWidth: 650,
+};

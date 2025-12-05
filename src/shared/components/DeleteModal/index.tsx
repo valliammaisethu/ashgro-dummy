@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { IconDelete } from "obra-icons-react";
+import clsx from "clsx";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
 import { Buttons } from "src/enums/buttons.enum";
 import { replaceString } from "src/shared/utils/commonHelpers";
 import { deleteDescription, deleteTitle, modalWidth } from "./constants";
+import ConditionalRenderComponent from "../ConditionalRenderComponent";
 
 import styles from "./deleteModal.module.scss";
 
@@ -14,10 +16,27 @@ interface DeleteModalProps {
   description?: string;
   onDelete?: () => void | Promise<void>;
   loading?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  customTitle?: string;
+  customDescription?: string;
+  deleteButtonText?: string;
+  customWidth?: number;
 }
 
 const DeleteModal = (props: DeleteModalProps) => {
-  const { title, description, onDelete, loading } = props;
+  const {
+    title,
+    description,
+    onDelete,
+    loading,
+    className,
+    children,
+    customTitle,
+    customDescription,
+    deleteButtonText,
+    customWidth,
+  } = props;
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -28,16 +47,26 @@ const DeleteModal = (props: DeleteModalProps) => {
     handleVisiblity();
   };
   return (
-    <div>
-      <Button
-        onClick={handleVisiblity}
-        icon={<IconDelete strokeWidth={1.5} />}
-        className={styles.deleteIcon}
-      />
+    <>
+      <ConditionalRenderComponent
+        visible={!children}
+        fallback={
+          <div onClick={handleVisiblity} className={className}>
+            {children}
+          </div>
+        }
+      >
+        <Button
+          onClick={handleVisiblity}
+          icon={<IconDelete strokeWidth={1.5} />}
+          className={clsx(styles.deleteIcon, className)}
+        />
+      </ConditionalRenderComponent>
+
       <Modal
-        title={replaceString(deleteTitle, title)}
+        title={customTitle || replaceString(deleteTitle, title)}
         visible={isVisible}
-        width={modalWidth}
+        width={customWidth || modalWidth}
         centered
         handleOk={handleVisiblity}
         rootClassName={styles.deleteModal}
@@ -50,16 +79,16 @@ const DeleteModal = (props: DeleteModalProps) => {
               className={styles.deleteButton}
               loading={loading}
             >
-              {Buttons.DELETE_PERMANENTLY}
+              {deleteButtonText || Buttons.DELETE_PERMANENTLY}
             </Button>
           </div>,
         ]}
       >
         <p className={styles.description}>
-          {replaceString(deleteDescription, description)}
+          {customDescription || replaceString(deleteDescription, description)}
         </p>
       </Modal>
-    </div>
+    </>
   );
 };
 

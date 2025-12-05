@@ -4,6 +4,7 @@
 .calendarWrapper {
   height: 90vh;
   overflow-y: auto;
+  @extend %hideScrollbar;
 
   :global {
     .rbc-header {
@@ -18,7 +19,7 @@
     }
 
     .rbc-month-row {
-      min-height: 19rem;
+      min-height: 21rem;
       overflow: scroll;
     }
     .rbc-show-more {
