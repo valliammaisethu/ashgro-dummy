@@ -368,3 +368,16 @@ export interface TagInputProps {
   label?: string;
   required?: boolean;
 }
+
+export interface DeleteModalProps {
+  title?: string;
+  description?: string;
+  onDelete?: () => void | Promise<void>;
+  loading?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  customTitle?: string;
+  customDescription?: string;
+  deleteButtonText?: string;
+  customWidth?: number;
+}

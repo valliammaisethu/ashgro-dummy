@@ -140,4 +140,8 @@
   .ant-picker-outlined.ant-picker-status-error:not(.ant-picker-disabled) {
     background: $input-background !important;
   }
+
+  .ant-picker-range .ant-picker-clear {
+    inset-inline-end: 0.7rem !important;
+  }
 }

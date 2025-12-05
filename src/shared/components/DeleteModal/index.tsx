@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { IconDelete } from "obra-icons-react";
+import clsx from "clsx";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
 import { Buttons } from "src/enums/buttons.enum";
 import { replaceString } from "src/shared/utils/commonHelpers";
-import { DeleteModalProps } from "src/shared/types/sharedComponents.type";
 import { deleteDescription, deleteTitle, modalWidth } from "./constants";
+import ConditionalRenderComponent from "../ConditionalRenderComponent";
+import { DeleteModalProps } from "src/shared/types/sharedComponents.type";
 
 import styles from "./deleteModal.module.scss";
 
@@ -16,46 +18,47 @@ const DeleteModal = (props: DeleteModalProps) => {
     description,
     onDelete,
     loading,
-    externalVisible,
-    externalOnClose,
-    modalWidth: externalModalWidth = modalWidth,
+    className,
+    children,
+    customTitle,
+    customDescription,
+    deleteButtonText,
+    customWidth,
   } = props;
 
-  const isControlled = externalVisible !== undefined;
+  const [isVisible, setIsVisible] = useState(false);
 
-  const [internalVisible, setInternalVisible] = useState(false);
-  const visible = isControlled ? externalVisible : internalVisible;
-
-  const handleInternalState = () => setInternalVisible((prev) => !prev);
-
-  const handleVisibility = () => {
-    if (isControlled) externalOnClose?.();
-    else handleInternalState();
-  };
+  const handleVisiblity = () => setIsVisible((prev) => !prev);
 
   const handleDelete = async () => {
     await onDelete?.();
-    handleVisibility();
+    handleVisiblity();
   };
-
   return (
-    <div>
-      {!isControlled && (
+    <>
+      <ConditionalRenderComponent
+        visible={!children}
+        fallback={
+          <div onClick={handleVisiblity} className={className}>
+            {children}
+          </div>
+        }
+      >
         <Button
-          onClick={handleInternalState}
+          onClick={handleVisiblity}
           icon={<IconDelete strokeWidth={1.5} />}
-          className={styles.deleteIcon}
+          className={clsx(styles.deleteIcon, className)}
         />
-      )}
+      </ConditionalRenderComponent>
 
       <Modal
-        title={replaceString(deleteTitle, title)}
-        visible={visible}
-        width={externalModalWidth}
+        title={customTitle || replaceString(deleteTitle, title)}
+        visible={isVisible}
+        width={customWidth || modalWidth}
         centered
-        handleOk={handleVisibility}
+        handleOk={handleVisiblity}
         rootClassName={styles.deleteModal}
-        onCancel={handleVisibility}
+        onCancel={handleVisiblity}
         maskClosable={false}
         footer={[
           <div className={styles.footer} key={Buttons.DELETE_PERMANENTLY}>
@@ -64,16 +67,16 @@ const DeleteModal = (props: DeleteModalProps) => {
               className={styles.deleteButton}
               loading={loading}
             >
-              {Buttons.DELETE_PERMANENTLY}
+              {deleteButtonText || Buttons.DELETE_PERMANENTLY}
             </Button>
           </div>,
         ]}
       >
         <p className={styles.description}>
-          {replaceString(deleteDescription, description)}
+          {customDescription || replaceString(deleteDescription, description)}
         </p>
       </Modal>
-    </div>
+    </>
   );
 };
 
