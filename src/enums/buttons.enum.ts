@@ -26,12 +26,15 @@ export enum Buttons {
   EDIT_PROFILE = "Edit Profile",
   CHANGE_PASSWORD = "Change Password",
   ADD_SLOTS = "Add Slot(s)",
+  UPDATE_SLOTS = "Update Slot(s)",
   DOWNLOAD_TEMPLATE = "Download Template",
   CANCEL_UPLOAD = "Cancel Upload",
   CHANGE = "Change",
   IMPORT = "Import",
   YES_PROCEED = "Yes, Proceed",
   ADD_FILE = "Add File",
+  ADD_NAME = "Add Name",
+  YES_UNLOCK = "Yes, Unlock",
 }
 
 export enum HtmlButtonType {

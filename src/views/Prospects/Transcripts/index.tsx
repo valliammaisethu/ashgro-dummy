@@ -1,5 +1,4 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Avatar } from "antd";
 import clsx from "clsx";
 
@@ -7,10 +6,21 @@ import Drawer from "src/shared/components/Drawer";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import { formatDate } from "src/shared/utils/dateUtils";
+import { getInitials } from "src/shared/utils/helpers";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import defaultProfile from "src/assets/images/default-profile.webp";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { TRANSCRIPTS_CONSTANTS } from "./transcripts.constants";
+import Loader from "src/shared/components/Loader";
+import { usePaginatedQuery } from "src/shared/hooks/usePaginatedQuery";
+import { useInfiniteScroll } from "src/shared/hooks/useInfiniteScroll";
+import {
+  TranscriptData,
+  TranscriptSession,
+} from "src/models/transcripts.model";
+import { QueryParams } from "src/models/queryParams.model";
+import { LoaderSizes } from "src/enums/LoaderSizes";
+import { QueryKeys } from "src/enums/cacheEvict.enum";
 
 import styles from "./transcripts.module.scss";
 
@@ -28,13 +38,33 @@ const {
   PROFILE_ALT_TEXT,
 } = TRANSCRIPTS_CONSTANTS;
 
+const { GET_TRANSCRIPTS } = QueryKeys;
+
 const Transcripts = ({ visible, onClose, userId }: TranscriptsProps) => {
   const { getTranscripts } = ProspectsService();
 
-  const { data, isLoading, isSuccess } = useQuery({
-    ...getTranscripts(userId),
-    enabled: visible && !!userId,
+  const {
+    items = [],
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isLoading,
+    isSuccess,
+  } = usePaginatedQuery<TranscriptData, Partial<QueryParams>>({
+    queryKey: [GET_TRANSCRIPTS],
+    fetchPage: (pageParams) => getTranscripts(pageParams),
+    params: { id: userId },
   });
+
+  const { handleScroll } = useInfiniteScroll({
+    hasNextPage,
+    isFetching,
+    fetchNextPage,
+  });
+
+  const allSessions = items?.flatMap((item) => item?.sessions || []);
+
+  const { firstName, lastName, clubLogoUrl = "" } = items?.[0]?.club || {};
 
   return (
     <Drawer
@@ -43,15 +73,16 @@ const Transcripts = ({ visible, onClose, userId }: TranscriptsProps) => {
       title={DRAWER_TITLE}
       width={DRAWER_WIDTH}
       footer={null}
+      maskClosable={false}
     >
       <ConditionalRender
         isPending={isLoading}
         isSuccess={isSuccess}
-        records={data?.sessions}
+        records={allSessions}
         emptyDescription={EMPTY_DESCRIPTION}
       >
-        <div className={styles.transcriptContainer}>
-          {data?.sessions?.map((session) => (
+        <div className={styles.transcriptContainer} onScroll={handleScroll}>
+          {allSessions?.map((session: TranscriptSession) => (
             <div key={session.id} className={styles.sessionContainer}>
               {session?.conversations?.map(
                 ({ id, isUser, message, createdAt }) => (
@@ -63,9 +94,12 @@ const Transcripts = ({ visible, onClose, userId }: TranscriptsProps) => {
                     })}
                   >
                     <ConditionalRenderComponent visible={!isUser} hideFallback>
-                      <Avatar size={AVATAR_SIZE} className={styles.botMsg}>
-                        {/* TODO: To check with BE to send first name and last name */}
-                        {data?.club?.clubName}
+                      <Avatar
+                        size={AVATAR_SIZE}
+                        className={styles.botMsg}
+                        src={clubLogoUrl}
+                      >
+                        {getInitials(firstName, lastName)}
                       </Avatar>
                     </ConditionalRenderComponent>
 
@@ -95,6 +129,7 @@ const Transcripts = ({ visible, onClose, userId }: TranscriptsProps) => {
               )}
             </div>
           ))}
+          <Loader loading={isFetching && !isLoading} size={LoaderSizes.SMALL} />
         </div>
       </ConditionalRender>
     </Drawer>

@@ -131,3 +131,11 @@
   @include flex-flow(column, wrap, normal);
   gap: 2.4rem;
 }
+
+.emailBodyContainer {
+  @include flex-container(normal, normal, column, 2rem);
+
+  .addNameContainer {
+    text-align: right;
+  }
+}

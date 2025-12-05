@@ -1,5 +1,5 @@
 import React from "react";
-import { IconSettings } from "obra-icons-react";
+import { IconSettings, IconUnlock } from "obra-icons-react";
 
 import BackButton from "src/shared/components/Back";
 import Button from "src/shared/components/Button";
@@ -12,9 +12,11 @@ import styles from "../individualClub.module.scss";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 const Header: React.FC<ClubDetailsHeaderProps> = ({
+  isClubLocked = false,
   isFetching,
   onChatbotQuestions,
   onSettings,
+  onUnlockClub,
 }) => {
   return (
     <ConditionalRenderComponent hideFallback visible={!isFetching}>
@@ -35,6 +37,15 @@ const Header: React.FC<ClubDetailsHeaderProps> = ({
           >
             {headerConstants.chatbotQuestions}
           </Button>
+          <ConditionalRenderComponent visible={isClubLocked} hideFallback>
+            <Button
+              className={styles.unlockButton}
+              icon={<IconUnlock strokeWidth={1.5} size={24} />}
+              onClick={onUnlockClub}
+            >
+              {headerConstants.unlockClub}
+            </Button>
+          </ConditionalRenderComponent>
         </div>
       </div>
     </ConditionalRenderComponent>

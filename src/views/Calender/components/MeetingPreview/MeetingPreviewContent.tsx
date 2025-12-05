@@ -5,7 +5,10 @@ import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 
 import { Colors } from "src/enums/colors.enum";
-import { BOOK_MEETING_CONSTANTS } from "../../constants";
+import {
+  BOOK_MEETING_CONSTANTS,
+  DELETE_MEETING_MODAL_PROPS,
+} from "../../constants";
 import { ButtonTypes } from "src/enums/buttons.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { MeetingPopoverContentProps } from "src/shared/types/calender";
@@ -16,11 +19,12 @@ import { useMutation } from "@tanstack/react-query";
 import { generatePath } from "react-router-dom";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { responseHandlers } from "src/shared/utils/responseHandlers";
+import DeleteModal from "src/shared/components/DeleteModal";
 
 import styles from "./meetingPreview.module.scss";
 
 const { CANCEL_BTN, RESCHEDULE } = BOOK_MEETING_CONSTANTS;
-const { HH_MM_A, DDD_MMM_DO } = DateFormats;
+const { HH_MM_A, DDD_MMM_DO_YYYY } = DateFormats;
 
 const MeetingPopoverContent: React.FC<MeetingPopoverContentProps> = ({
   event,
@@ -78,7 +82,7 @@ const MeetingPopoverContent: React.FC<MeetingPopoverContentProps> = ({
               color={Colors.ASHGRO_GOLD}
             />
             <p className={styles.meetingDetailsLabel}>
-              {dayjs(event.date).format(DDD_MMM_DO)}
+              {dayjs(event.date).format(DDD_MMM_DO_YYYY)}
             </p>
           </div>
           <div className={styles.timeDetails}>
@@ -96,14 +100,19 @@ const MeetingPopoverContent: React.FC<MeetingPopoverContentProps> = ({
       </div>
 
       <div className={styles.actions}>
-        <Button
-          type={ButtonTypes.LINK}
-          className={styles.actionBtn}
-          onClick={handleCancelEvent}
+        <DeleteModal
+          {...DELETE_MEETING_MODAL_PROPS}
+          onDelete={handleCancelEvent}
           loading={isPending}
         >
-          {CANCEL_BTN}
-        </Button>
+          <Button
+            type={ButtonTypes.LINK}
+            className={styles.actionBtn}
+            loading={isPending}
+          >
+            {CANCEL_BTN}
+          </Button>
+        </DeleteModal>
         <Button
           type={ButtonTypes.SECONDARY}
           className={styles.actionBtn}

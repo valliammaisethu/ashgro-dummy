@@ -1,5 +1,8 @@
 import dayjs, { Dayjs } from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import { deserialize } from "serializr";
+
+dayjs.extend(customParseFormat);
 
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { ChatbotSlotPayload, TimeRangeItem } from "src/models/calender.model";
@@ -12,7 +15,7 @@ import {
 } from "../types/calender";
 import { defaultTimeRange } from "src/views/Calender/ChatbotSlot/constants";
 
-const { HH_MM_A } = DateFormats;
+const { HH_MM_A, YYYY_MM_DD, HH_MM } = DateFormats;
 
 export const hasOverlap = ({
   startMinutes,
@@ -87,18 +90,30 @@ export const getOccupiedRangesForIndex = ({
     })
     .filter(Boolean) as OccupiedRange[];
 };
-
 export const initialChatbotSlots = (
   selectedDate?: string,
-  timeRanges?: TimeRangeItem[] | CalendarEvent[],
+  timeRanges?: (TimeRangeItem | CalendarEvent)[],
 ) => {
-  const updatedData = {
-    fromDate: selectedDate,
-    toDate: selectedDate,
-    timeRanges: timeRanges?.length ? timeRanges : [defaultTimeRange],
-  };
+  const formattedDate = selectedDate
+    ? dayjs(selectedDate).format(YYYY_MM_DD)
+    : undefined;
 
-  return deserialize(ChatbotSlotPayload, updatedData);
+  const formattedTimeRanges = timeRanges?.length
+    ? timeRanges?.map((range) =>
+        "start" in range
+          ? {
+              startTime: dayjs(range.start).format(HH_MM),
+              endTime: dayjs(range.end).format(HH_MM),
+            }
+          : range,
+      )
+    : [defaultTimeRange];
+
+  return deserialize(ChatbotSlotPayload, {
+    fromDate: formattedDate,
+    toDate: formattedDate,
+    timeRanges: formattedTimeRanges,
+  });
 };
 
 const parseTime = (time?: string): Dayjs | null => {

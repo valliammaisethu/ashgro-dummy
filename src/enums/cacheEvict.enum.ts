@@ -31,6 +31,8 @@ export enum MutationKeys {
 
   ADD_CLUB = "addClub",
   EDIT_CLUB = "editClub",
+  UPDATE_CLUB_PROFILE = "updateClubProfile",
+  UNLOCK_CLUB = "unlockClub",
 
   EDIT_CHATBOT = "editChatbot",
   UPLOAD_CHATBOT_KNOWLEDGE_BASE = "uploadChatbotKnowledgeBase",
@@ -82,4 +84,7 @@ export enum QueryKeys {
 
   GET_LEAD_FORM_STATUS = "getLeadFormStatus",
   GET_TRANSCRIPTS = "getTranscripts",
+
+  GET_DASHBOARD_CHARTS_KEY = "getDashboardCharts",
+  GET_CHART_DETAIL_KEY = "getChartDetails",
 }
