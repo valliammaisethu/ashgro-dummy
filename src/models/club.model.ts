@@ -5,22 +5,22 @@ import { ResponseModel } from "./response.model";
 
 export class ClubGeneralSettings {
   @serializable
-  webFormsEnabled?: boolean;
+  isLeadForms = false;
 
   @serializable
-  bulkEmailEnabled?: boolean;
+  isBulkEmail = false;
 
   @serializable
-  emailTemplatesAllowed?: number;
+  noOfEmailTemplatesAllowed?: number;
 
   @serializable
-  customChartsAllowed?: number;
+  noOfCustomChartsAllowed?: number;
 
   @serializable
   clubId?: string;
 }
 
-export class ClubFormData extends ClubGeneralSettings {
+export class ClubFormData {
   @serializable
   attachmentId?: string;
 

@@ -34,6 +34,7 @@ const {
   UPLOAD_CHATBOT_KNOWLEDGE_BASE: UPLOAD_CHATBOT_KNOWLEDGE_BASE_ROUTE,
   UPDATE_CLUB_PROFILE: UPDATE_CLUB_PROFILE_ROUTE,
   UNLOCK_CLUB: UNLOCK_CLUB_ROUTE,
+  UPDATE_CLUB_GENERAL_SETTINGS: UPDATE_CLUB_GENERAL_SETTINGS_ROUTE,
 } = ApiRoutes;
 const {
   ADD_CLUB,
@@ -42,6 +43,7 @@ const {
   UPLOAD_CHATBOT_KNOWLEDGE_BASE,
   UPDATE_CLUB_PROFILE,
   UNLOCK_CLUB,
+  UPDATE_CLUB_GENERAL_SETTINGS,
 } = MutationKeys;
 
 const handleSuccess =
@@ -148,11 +150,12 @@ export const ClubService = () => {
     ClubGeneralSettingsResponse,
     ClubGeneralSettings
   > => ({
-    mutationKey: [EDIT_CHATBOT],
+    mutationKey: [UPDATE_CLUB_GENERAL_SETTINGS],
     mutationFn: async (body: ClubGeneralSettings) => {
+      const { clubId, ...rest } = body;
       const { data } = await axiosInstance.patch(
-        generatePath(GET_CLUB_PROFILE_ROUTE, { id: body.clubId }),
-        body,
+        generatePath(UPDATE_CLUB_GENERAL_SETTINGS_ROUTE, { id: clubId }),
+        rest,
       );
       return deserialize(ClubGeneralSettingsResponse, data);
     },

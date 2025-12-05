@@ -1,6 +1,6 @@
 import { ClubSettingsTypes } from "src/enums/clubSettingsTypes.enum";
 import { Dispatch, SetStateAction } from "react";
-import { ClubProfile } from "src/models/club.model";
+import { ClubGeneralSettings, ClubProfile } from "src/models/club.model";
 import { QueryParams } from "src/models/queryParams.model";
 
 export interface ClubFormProps {
@@ -43,10 +43,10 @@ export interface IconTextProps {
 }
 
 export interface GeneralSettingsData {
-  webFormsEnabled: boolean;
-  bulkEmailEnabled: boolean;
-  emailTemplatesAllowed: number;
-  customChartsAllowed: number;
+  isLeadForms: boolean;
+  isBulkEmail: boolean;
+  noOfEmailTemplatesAllowed: number;
+  noOfCustomChartsAllowed: number;
   clubId: string;
 }
 
@@ -54,11 +54,8 @@ export interface GeneralSettingsDrawerProps {
   open: boolean;
   onClose: () => void;
   clubId: string;
-  webFormsEnabled?: boolean;
-  bulkEmailEnabled?: boolean;
-  emailTemplatesAllowed?: number;
-  customChartsAllowed?: number;
-  onSave: (data: GeneralSettingsData, clubId: string) => void;
+  clubData?: ClubGeneralSettings;
+  onSave: (data: ClubGeneralSettings, clubId: string) => void;
   isLoading?: boolean;
 }
 

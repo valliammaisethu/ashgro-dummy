@@ -1,6 +1,6 @@
 export const SETTINGS_LABELS = {
   title: "General Settings",
-  webForms: "Web Forms",
+  leadForms: "Lead Forms",
   bulkEmail: "Bulk Email",
   emailTemplatesLabel: "No of Email templates allowed",
   customChartsLabel: "No of Custom charts allowed",
@@ -8,8 +8,8 @@ export const SETTINGS_LABELS = {
 };
 
 export const SETTINGS_FIELD_NAMES = {
-  webFormsEnabled: "webFormsEnabled",
-  bulkEmailEnabled: "bulkEmailEnabled",
-  emailTemplatesAllowed: "emailTemplatesAllowed",
-  customChartsAllowed: "customChartsAllowed",
+  isLeadForms: "isLeadForms",
+  isBulkEmail: "isBulkEmail",
+  noOfEmailTemplatesAllowed: "noOfEmailTemplatesAllowed",
+  noOfCustomChartsAllowed: "noOfCustomChartsAllowed",
 };
