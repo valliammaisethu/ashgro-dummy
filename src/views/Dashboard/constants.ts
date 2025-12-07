@@ -1,3 +1,7 @@
+export const deleteModalTitle = "Custom Chart";
+
+export const deleteModalDescription = "the custom chart %s";
+
 export const CHART_CONSTANTS = {
   CUSTOM_CHART: "Custom chart",
   DEFAULT_ITEM_WIDTH: 70,

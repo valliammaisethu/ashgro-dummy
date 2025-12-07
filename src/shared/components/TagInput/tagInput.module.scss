@@ -1,0 +1,29 @@
+@import "src/styles/_variables";
+@import "src/styles/_helpers";
+
+.tagsContainer {
+  margin-top: 0.6rem;
+  @include flex-container(normal, center, row, 0.8rem);
+  flex-wrap: wrap;
+}
+
+.tagLabel {
+  padding-bottom: 0.4rem;
+  padding-left: 0.2rem;
+}
+
+.tag {
+  &:global(.ant-tag) {
+    font-size: 1.2rem;
+    border-radius: 1.6rem;
+    color: $ashgro-navy;
+    padding: 0.4rem 0.8rem;
+    background-color: $ashgro-input-border;
+
+    :global(.ant-tag-close-icon) {
+      margin-inline-start: 0.8rem;
+      font-size: 1.2rem;
+      color: $ashgro-navy;
+    }
+  }
+}

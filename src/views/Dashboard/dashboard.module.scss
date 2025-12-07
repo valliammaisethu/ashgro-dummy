@@ -1,12 +1,37 @@
-@import "src/styles/variables";
-@import "src/styles/helpers";
+@import "src/styles/_variables";
+@import "src/styles/_helpers";
+
+.addChartButton {
+  position: relative;
+  background-color: $ashgro-navy;
+  color: $ashgro-white;
+  border-radius: 3.6rem;
+  width: 14.4rem;
+  height: 4.4rem;
+
+  &:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+  ) {
+    color: $ashgro-white;
+    background-color: $ashgro-navy;
+  }
+}
+.addIcon {
+  position: absolute;
+  top: 0.8rem;
+  left: 3.8rem;
+}
+
+.header {
+  @include flex-container(flex-end, center, row);
+}
 
 .dashboardContainer {
   height: calc(100vh - 11rem);
   overflow-y: auto;
 
   .header {
-    @include flex-container(space-between, center);
+    @include flex-container(flex-end, center);
     margin-bottom: 2.4rem;
 
     .headerLeft {

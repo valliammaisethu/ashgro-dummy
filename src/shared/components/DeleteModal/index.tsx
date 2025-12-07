@@ -8,21 +8,9 @@ import { Buttons } from "src/enums/buttons.enum";
 import { replaceString } from "src/shared/utils/commonHelpers";
 import { deleteDescription, deleteTitle, modalWidth } from "./constants";
 import ConditionalRenderComponent from "../ConditionalRenderComponent";
+import { DeleteModalProps } from "src/shared/types/sharedComponents.type";
 
 import styles from "./deleteModal.module.scss";
-
-interface DeleteModalProps {
-  title?: string;
-  description?: string;
-  onDelete?: () => void | Promise<void>;
-  loading?: boolean;
-  className?: string;
-  children?: React.ReactNode;
-  customTitle?: string;
-  customDescription?: string;
-  deleteButtonText?: string;
-  customWidth?: number;
-}
 
 const DeleteModal = (props: DeleteModalProps) => {
   const {

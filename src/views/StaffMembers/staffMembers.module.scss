@@ -73,11 +73,11 @@
     margin-inline-end: 0;
   }
   :global(.ant-select-selection-placeholder) {
-    padding-top: 0.6rem;
+    padding-top: 0.5rem;
     padding-left: 0.1rem;
-    font-size: 1.4rem;
-    @include secondaryBold;
+    // using important here to override antoverrides
+    font-size: 1.4rem !important;
+    font-weight: 600 !important;
     color: $filter-icon !important;
-    opacity: 1 !important;
   }
 }
