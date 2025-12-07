@@ -73,6 +73,12 @@ export class ResetPassword {
 
 export class ChangePassword {
   @serializable
+  id?: string;
+
+  @serializable
+  oldPassword?: string;
+
+  @serializable
   currentPassword?: string;
 
   @serializable

@@ -8,7 +8,7 @@ export const ApiRoutes = {
 
   FORGOT_PASSWORD: "/auth/forgotPassword",
   RESET_PASSWORD: "/auth/resetPassword",
-  CHANGE_PASSWORD: "/auth/changePassword",
+  CHANGE_PASSWORD: "/clubs/:id/password",
 
   ATTACHMENTS: "/attachments",
   ATTACHMENTS_SPECIFIC: "/attachments/:id",
