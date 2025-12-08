@@ -3,27 +3,28 @@ import { useQuery } from "@tanstack/react-query";
 
 import { DashboardService } from "src/services/DashboardService/dashboard.service";
 import ConditionalRender from "src/shared/components/ConditionalRender";
+import BarChartCard from "./components/BarChartCard";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { DashboardStats } from "src/models/dashboardStats.model";
 import DeleteModal from "src/shared/components/DeleteModal";
 import { useUserRole } from "src/shared/hooks/useUserRole";
-import BarChartCard from "./components/BarChartCard";
 import { SUPER_ADMIN_CHARTS as superAdminCharts } from "./utils/chartUtils";
 import { XAxisTypes } from "src/enums/charts.enum";
 import { useAppContainerPadding } from "src/shared/hooks/useAppContainerPadding";
+import { ChartState } from "src/shared/types/dashboard.type";
+import { replaceString } from "src/shared/utils/commonHelpers";
 import DashboardHeader from "./Header";
 import ChartForm from "./ChartForm";
-import StatsCard from "./StatsCard";
+import StatsCard from "./atoms/StatsCard";
 import ChartFilters from "./Filters";
 import {
   chartFiltersTitle,
   deleteModalDescription,
   deleteModalTitle,
   getDashboardStats,
+  sampleFilter,
 } from "./constants";
 import { xAxisLabel } from "./ChartForm/constants";
-import { replaceString } from "src/shared/utils/commonHelpers";
-import { ChartState } from "src/shared/types/dashboard.type";
 
 import styles from "./dashboard.module.scss";
 
@@ -46,6 +47,7 @@ const Dashboard = () => {
     chartDeleteOpen: false,
     chartFormOpen: false,
     chartFiltersOpen: false,
+    activeFilter: sampleFilter,
   });
 
   const handleChartForm = () =>
@@ -73,8 +75,8 @@ const Dashboard = () => {
       <DashboardHeader onAddChart={handleChartForm} />
       <ConditionalRenderComponent visible={isSuperAdmin} hideFallback>
         <div className={styles.superAdminDashboard}>
-          {getDashboardStats(new DashboardStats())?.map((stat) => (
-            <StatsCard key={stat.label} title={stat.label} value={stat.value} />
+          {getDashboardStats(new DashboardStats())?.map(({ label, value }) => (
+            <StatsCard key={label} title={label} value={value} />
           ))}
         </div>
       </ConditionalRenderComponent>
@@ -103,7 +105,7 @@ const Dashboard = () => {
         isSuccess={isClubAdmin ? isSuccess : true}
       >
         <div className={styles.chartsGrid}>
-          {dashboardCharts.map(({ id, name, isDefault, path }) => (
+          {dashboardCharts?.map(({ id, name, isDefault, path }) => (
             <ConditionalRenderComponent key={id} visible={!!id} hideFallback>
               <BarChartCard
                 title={name}
@@ -114,7 +116,6 @@ const Dashboard = () => {
           ))}
         </div>
       </ConditionalRender>
-
       <ConditionalRenderComponent
         visible={chartState.chartFiltersOpen}
         hideFallback
@@ -122,8 +123,9 @@ const Dashboard = () => {
         <ChartFilters
           open={chartState.chartFiltersOpen}
           onClose={handleChartFilters}
-          title={replaceString(chartFiltersTitle, XAxisTypes.LEAD_SOURCE)}
+          title={replaceString(chartFiltersTitle, chartState.activeFilter)}
           selectedType={XAxisTypes.LEAD_SOURCE}
+          // TODO: to remove this once the API is ready
         />
       </ConditionalRenderComponent>
     </div>

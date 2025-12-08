@@ -1,5 +1,5 @@
 import { Col, Row } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 
@@ -9,12 +9,12 @@ import Form from "src/shared/components/Form";
 import Checkbox from "src/shared/components/Checkbox";
 import Label from "src/shared/components/Label";
 import useForm from "src/shared/components/UseForm";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { ChartFilterProps } from "src/shared/types/dashboard.type";
-import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
 import { Buttons } from "src/enums/buttons.enum";
 import { XAxisTypes } from "src/enums/charts.enum";
 import { MetaService } from "src/services/MetaService/meta.service";
-import { getChartFilterLabel } from "./utils";
+import { getChartFilterLabel, getDynamicLabelOptions } from "./utils";
 import { dateRangeFilterField, dateRangeFilterLabel } from "./constants";
 
 import styles from "./chartFilters.module.scss";
@@ -57,47 +57,27 @@ const ChartFilters = (props: ChartFilterProps) => {
     enabled: selectedType === XAxisTypes.STAFF_DEPARTMENT,
   });
 
-  const dynamicLabelOptions = useMemo(() => {
-    switch (selectedType) {
-      case XAxisTypes.LEAD_SOURCE:
-        return mapToSelectOptionsDynamic(leadSourcesData?.leadSources);
-
-      case XAxisTypes.LEAD_STATUS:
-        return mapToSelectOptionsDynamic(leadStatusesData?.leadStatuses);
-
-      case XAxisTypes.MEMBERSHIP_CATEGORY:
-        return mapToSelectOptionsDynamic(
-          membershipCategoriesData?.membershipCategories,
-        );
-
-      case XAxisTypes.MEMBERSHIP_STATUS:
-        return mapToSelectOptionsDynamic(
-          membershipStatusesData?.membershipStatuses,
-        );
-
-      case XAxisTypes.STAFF_DEPARTMENT:
-        return mapToSelectOptionsDynamic(
-          staffDepartmentsData?.staffDepartments,
-        );
-
-      default:
-        return [];
-    }
-  }, [
-    selectedType,
+  const optionsBundle = {
     leadSourcesData,
     leadStatusesData,
     membershipCategoriesData,
     membershipStatusesData,
     staffDepartmentsData,
-  ]);
+  };
 
-  const allValues = dynamicLabelOptions?.map((o) => o.value);
-  const isAllSelected = selectedValues.length === allValues.length;
+  const dynamicLabelOptions = useMemo(
+    () => getDynamicLabelOptions(selectedType, optionsBundle),
+    [selectedType, optionsBundle],
+  );
+
+  const filterCheckboxesValues = dynamicLabelOptions?.map(
+    (option) => option.value,
+  );
+  const isAllSelected = selectedValues.length === filterCheckboxesValues.length;
 
   const handleSelectAll = () => {
     if (isAllSelected) setSelectedValues([]);
-    else setSelectedValues(allValues);
+    else setSelectedValues(filterCheckboxesValues);
   };
 
   const handleCheckboxChange = (value: string) => () =>
@@ -111,16 +91,17 @@ const ChartFilters = (props: ChartFilterProps) => {
 
   const methods = useForm({});
 
-  useEffect(() => {
+  const handleCloseDrawer = () => {
     setSelectedValues([]);
-  }, [selectedType]);
+    onClose();
+  };
 
   return (
     <Drawer
       rootClassName={styles.chartFiltersDrawer}
       open={open}
       width={504}
-      onClose={onClose}
+      onClose={handleCloseDrawer}
       title={title}
       handleOk={methods.handleSubmit(handleSubmit)}
       okText={Buttons.APPLY_FILTERS}
@@ -150,16 +131,18 @@ const ChartFilters = (props: ChartFilterProps) => {
             </Col>
           </div>
           <div className={styles.filtersContainer}>
-            {dynamicLabelOptions.map((option) => (
-              <div className={styles.checkboxContainer} key={option.value}>
-                <Checkbox
-                  onChange={handleCheckboxChange(option.value)}
-                  checked={selectedValues.includes(option.value)}
-                  key={option.value}
-                />
-                <Label className={styles.checkboxLabel}>{option.label}</Label>
-              </div>
-            ))}
+            <ConditionalRenderComponent visible={!!dynamicLabelOptions.length}>
+              {dynamicLabelOptions?.map((option) => (
+                <div className={styles.checkboxContainer} key={option.value}>
+                  <Checkbox
+                    onChange={handleCheckboxChange(option.value)}
+                    checked={selectedValues.includes(option.value)}
+                    key={option.value}
+                  />
+                  <Label className={styles.checkboxLabel}>{option.label}</Label>
+                </div>
+              ))}
+            </ConditionalRenderComponent>
           </div>
         </Row>
       </Form>
