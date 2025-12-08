@@ -4,7 +4,7 @@ export const deleteModalTitle = "Custom Chart";
 
 export const deleteModalDescription = "the custom chart %s";
 
-export const getDashboardStats = (stats: DashboardStats) => {
+export const getDashboardStatsValues = (stats = new DashboardStats()) => {
   return [
     {
       label: "Chatbot Leads",

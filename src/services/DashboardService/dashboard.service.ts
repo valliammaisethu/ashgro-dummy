@@ -10,9 +10,12 @@ import { ResponseModel } from "src/models/response.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { generateChartPaths } from "src/views/Dashboard/utils/chartUtils";
+import { DashboardStats } from "src/models/dashboardStats.model";
 
-const { GET_DASHBOARD_CHARTS_KEY, GET_CHART_DETAIL_KEY } = QueryKeys;
-const { GET_DASHBOARD_CHARTS } = ApiRoutes;
+const { GET_DASHBOARD_CHARTS_KEY, GET_CHART_DETAIL_KEY, GET_DASHBOARD_STATS } =
+  QueryKeys;
+const { GET_DASHBOARD_CHARTS, GET_DASHBOARD_STATS: GET_DASHBOARD_STATS_PATH } =
+  ApiRoutes;
 
 export const DashboardService = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
@@ -49,8 +52,21 @@ export const DashboardService = () => {
     enabled: !!clubId,
   });
 
+  const getDashboardStats = (): UseQueryOptions<
+    DashboardStats,
+    ResponseModel,
+    DashboardStats
+  > => ({
+    queryKey: [GET_DASHBOARD_STATS, clubId],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(GET_DASHBOARD_STATS_PATH);
+      return deserialize(DashboardStats, data?.data);
+    },
+  });
+
   return {
     getDashboardChartsList,
     getChartDetails,
+    getDashboardStats,
   };
 };

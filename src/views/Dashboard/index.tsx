@@ -5,7 +5,6 @@ import { DashboardService } from "src/services/DashboardService/dashboard.servic
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import BarChartCard from "./components/BarChartCard";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
-import { DashboardStats } from "src/models/dashboardStats.model";
 import DeleteModal from "src/shared/components/DeleteModal";
 import { useUserRole } from "src/shared/hooks/useUserRole";
 import { SUPER_ADMIN_CHARTS as superAdminCharts } from "./utils/chartUtils";
@@ -15,13 +14,13 @@ import { ChartState } from "src/shared/types/dashboard.type";
 import { replaceString } from "src/shared/utils/commonHelpers";
 import DashboardHeader from "./Header";
 import ChartForm from "./ChartForm";
-import StatsCard from "./StatsCard";
+import StatsCard from "./atoms/StatsCard";
 import ChartFilters from "./Filters";
 import {
   chartFiltersTitle,
   deleteModalDescription,
   deleteModalTitle,
-  getDashboardStats,
+  getDashboardStatsValues,
   sampleFilter,
 } from "./constants";
 import { xAxisLabel } from "./ChartForm/constants";
@@ -32,7 +31,7 @@ const Dashboard = () => {
   const { isClubAdmin, isSuperAdmin } = useUserRole();
   useAppContainerPadding();
 
-  const { getDashboardChartsList } = DashboardService();
+  const { getDashboardChartsList, getDashboardStats } = DashboardService();
 
   const {
     data: clubAdminCharts = [],
@@ -41,6 +40,11 @@ const Dashboard = () => {
   } = useQuery({
     ...getDashboardChartsList(),
     enabled: isClubAdmin,
+  });
+
+  const { data: dashboardStats } = useQuery({
+    ...getDashboardStats(),
+    enabled: isSuperAdmin,
   });
 
   const [chartState, setChartState] = useState<ChartState>({
@@ -75,8 +79,8 @@ const Dashboard = () => {
       <DashboardHeader onAddChart={handleChartForm} />
       <ConditionalRenderComponent visible={isSuperAdmin} hideFallback>
         <div className={styles.superAdminDashboard}>
-          {getDashboardStats(new DashboardStats())?.map((stat) => (
-            <StatsCard key={stat.label} title={stat.label} value={stat.value} />
+          {getDashboardStatsValues(dashboardStats)?.map(({ label, value }) => (
+            <StatsCard key={value} title={label} value={value} />
           ))}
         </div>
       </ConditionalRenderComponent>
