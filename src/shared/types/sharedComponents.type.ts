@@ -233,6 +233,8 @@ export interface ModalProps extends AntdModalProps {
   okButtonType?: ButtonTypes;
   renderHeader?: boolean;
   closeIcon?: ReactNode;
+  maskClosable?: boolean;
+  keyboard?: boolean;
 }
 
 export interface ProfilePictureInputProps {
@@ -363,4 +365,23 @@ export interface DeleteModalProps {
 export interface DashboardStatsCardProps {
   title: string;
   value: string | number;
+}
+export interface TagInputProps {
+  name: string;
+  placeholder?: string;
+  label?: string;
+  required?: boolean;
+}
+
+export interface DeleteModalProps {
+  title?: string;
+  description?: string;
+  onDelete?: () => void | Promise<void>;
+  loading?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  customTitle?: string;
+  customDescription?: string;
+  deleteButtonText?: string;
+  customWidth?: number;
 }

@@ -4,20 +4,20 @@ export const chartFormConstants = {
 
 export const labels = {
   chartTitle: "Chart Title",
-  type: "Type",
-  label: "Label",
+  xAxis: "Value(s)",
+  labelAlongYAxis: "Label along Y-axis",
 };
 
 export const fields = {
   chartTitle: "chartTitle",
-  type: "type",
-  label: "label",
+  xaxis: "xaxis",
+  labels: "labels",
 };
 
 export const placeholders = {
-  chartTitle: "Enter chart title",
-  type: "Select x-axis type",
-  label: "Select x-axis label",
+  chartTitle: "Enter Chart Title",
+  xAxis: "Add one or more value(s)",
+  yAxis: "Enter Y-axis label",
 };
 
 export const xAxisLabel = "X-axis";

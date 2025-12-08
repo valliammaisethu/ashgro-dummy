@@ -1,56 +1,64 @@
-import React, { FC } from "react";
-import { Input } from "antd";
-import { TextAreaProps } from "antd/es/input";
-import { useFormContext, useController, FieldValues } from "react-hook-form";
+import React, { forwardRef } from "react";
+import { useFormContext, useController } from "react-hook-form";
+import clsx from "clsx";
 
-import { InputStatus } from "src/enums/inputStatus.enum";
 import Label from "../Label";
 import Error from "../Error";
 
 import styles from "./textArea.module.scss";
-import clsx from "clsx";
 
-const { TextArea: AntTextArea } = Input;
-
-interface TextAreaFieldProps extends TextAreaProps {
+interface TextAreaFieldProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string;
   label?: string;
   required?: boolean;
   className?: string;
+  rootClassName?: string;
 }
 
-const TextArea: FC<TextAreaFieldProps> = ({
-  name,
-  label,
-  required = false,
-  className,
-  rootClassName,
-  ...rest
-}) => {
-  const { control } = useFormContext<FieldValues>();
-  const {
-    field: { value, onChange, onBlur },
-    fieldState,
-  } = useController({ name, control });
+const TextArea = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
+  (
+    { name, label, required = false, className, rootClassName, ...rest },
+    ref,
+  ) => {
+    const { control } = useFormContext();
+    const {
+      field: { value, onChange, onBlur },
+      fieldState,
+    } = useController({ name, control });
 
-  return (
-    <div className={clsx(styles.textAreaWrapper, className)}>
-      <Label htmlFor={name} required={required}>
-        {label}
-      </Label>
-      <AntTextArea
-        id={name}
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-        className={rootClassName}
-        {...rest}
-        status={fieldState.error ? InputStatus.ERROR : undefined}
-      />
+    const hasError = !!fieldState.error;
 
-      <Error message={fieldState?.error?.message} />
-    </div>
-  );
-};
+    return (
+      <div
+        className={clsx(
+          styles.textAreaWrapper,
+          className,
+          hasError && styles.errorWrapper,
+        )}
+      >
+        <Label htmlFor={name} required={required}>
+          {label}
+        </Label>
+
+        <textarea
+          id={name}
+          ref={ref}
+          value={value ?? ""}
+          onChange={onChange}
+          onBlur={onBlur}
+          className={clsx(rootClassName, styles.textArea, {
+            [styles.error]: hasError,
+          })}
+          {...rest}
+        />
+
+        <Error message={fieldState?.error?.message} />
+      </div>
+    );
+  },
+);
+
+TextArea.displayName = "TextArea";
 
 export default TextArea;

@@ -41,8 +41,8 @@ const SettingsWrapper = () => {
           />
         </div>
         <ConditionalRenderComponent
-          hideFallback
           visible={changePasswordVisible}
+          hideFallback
         >
           <ChangePassword
             onClose={handleChangePassword}

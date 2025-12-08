@@ -22,16 +22,14 @@ export const validationSchema = yup.object().shape({
   [SLOT_DATE.name]: yup.string().required(DATE_REQUIRED),
 
   [MEETING_TIME.name]: yup
-    .array()
-    .of(yup.string().nullable())
-    .test("valid-range", TIME_INVALID_RANGE, (value) => {
-      if (!value || value.length !== 2) return true;
-
-      const [start, end] = value;
-
-      if (!start || !end) return !start && !end;
-
-      return end > start;
+    .object({
+      startTime: yup.string().required(TIME_REQUIRED),
+      endTime: yup.string().required(TIME_REQUIRED),
     })
-    .required(TIME_REQUIRED),
+    .test("valid-range", TIME_INVALID_RANGE, (value) => {
+      if (!value) return false;
+      const { startTime, endTime } = value;
+      return endTime > startTime;
+    })
+    .required(),
 });

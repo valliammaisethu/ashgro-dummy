@@ -15,6 +15,7 @@ import { AuthContext } from "src/context/AuthContext";
 import useRedirect from "src/shared/hooks/useRedirect";
 import { logoutMessages } from "src/constants/sharedComponents";
 import { renderNotification } from "src/shared/utils/renderNotification";
+import { generatePath } from "react-router-dom";
 
 const {
   USER_LOGIN,
@@ -110,9 +111,12 @@ export const AuthService = () => {
     mutationKey: [CHANGE_PASSWORD_KEY],
     mutationFn: async (payload: ChangePassword) => {
       const serializedData = serialize(ChangePassword, payload);
-      const response = await axiosInstance.patch(CHANGE_PASSWORD, {
-        user: serializedData,
-      });
+      const response = await axiosInstance.put(
+        generatePath(CHANGE_PASSWORD, { id: payload?.id }),
+        {
+          oldPassword: serializedData.oldPassword,
+        },
+      );
 
       return deserialize(ResponseModel, response.data);
     },

@@ -79,4 +79,7 @@ export class ChatbotSlotPayload {
 
   @serializable(list(object(TimeRangeSchema)))
   timeRanges?: TimeRangeSchema[];
+
+  @serializable
+  slotDate?: string;
 }

@@ -29,3 +29,31 @@
 .header {
   @include flex-container(flex-end, center, row);
 }
+
+.dashboardContainer {
+  height: calc(100vh - 11rem);
+  overflow-y: auto;
+
+  .header {
+    @include flex-container(flex-end, center);
+    margin-bottom: 2.4rem;
+
+    .headerLeft {
+      @include flex-container(flex-start, center, row, 1.6rem);
+
+      .datePickerWrapper {
+        @include flex-container(flex-start, center);
+      }
+    }
+
+    .headerRight {
+      @include flex-container(flex-start);
+    }
+  }
+
+  .chartsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.8rem;
+  }
+}
