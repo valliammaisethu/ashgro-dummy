@@ -362,6 +362,10 @@ export interface DeleteModalProps {
   modalWidth?: number;
 }
 
+export interface DashboardStatsCardProps {
+  title: string;
+  value: string | number;
+}
 export interface TagInputProps {
   name: string;
   placeholder?: string;

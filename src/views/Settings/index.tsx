@@ -11,10 +11,6 @@ import ChangePassword from "src/views/MyProfile/ChangePassword";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 const SettingsWrapper = () => {
-  const SuperAdminSettings = () => {
-    return <div>SuperAdminSettings</div>;
-  };
-
   const ClubAdminSettings = () => {
     const [activeTab, setActiveTab] = useState("lead");
     const [changePasswordVisible, setChangePasswordVisible] = useState(false);
@@ -57,9 +53,8 @@ const SettingsWrapper = () => {
     );
   };
 
-  const { isSuperAdmin, isClubAdmin } = useUserRole();
+  const { isClubAdmin } = useUserRole();
 
-  if (isSuperAdmin) return <SuperAdminSettings />;
   if (isClubAdmin) return <ClubAdminSettings />;
   return null;
 };
