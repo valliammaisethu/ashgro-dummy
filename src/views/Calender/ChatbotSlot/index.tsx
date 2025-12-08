@@ -1,4 +1,4 @@
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, useEffect } from "react";
 import clsx from "clsx";
 import { Col, Row } from "antd";
 import { useFieldArray } from "react-hook-form";
@@ -22,6 +22,7 @@ import { ChatbotSlotProps } from "src/shared/types/calender";
 import { CalenderService } from "src/services/Calender/calender.service";
 import { ChatbotSlotPayload } from "src/models/calender.model";
 import { chatbotSlotSchema } from "./validationSchema";
+import { getCalendarMonthFromQuery } from "src/shared/utils/helpers";
 import {
   CHAT_BOT_CONSTANTS,
   FIELD_NAME,
@@ -40,6 +41,7 @@ const { TITLE, DATE_RANGE, TIME_RANGE, START_AND_END_TIME, ADD_BTN } =
 const { DATE_FROM, DATE_TO, TIMERANGE_START, TIMERANGE_END } = PLACEHOLDERS;
 const { NOT_ALLOWED, POINTER } = POINTER_CONSTANTS;
 const { FROM_DATE_LABEL, TO_DATE_LABEL } = LABELS;
+const { ADD_SLOTS, UPDATE_SLOTS } = Buttons;
 
 const ChatbotSlot = ({
   isOpen,
@@ -52,10 +54,16 @@ const ChatbotSlot = ({
     defaultValues: initialChatbotSlots(selectedDate, availableSlots),
   });
 
+  useEffect(() => {
+    if (isOpen) {
+      methods.reset(initialChatbotSlots(selectedDate, availableSlots));
+    }
+  }, [isOpen, selectedDate, availableSlots, methods]);
+
   const {
     control,
     watch,
-    formState: { isValid },
+    formState: { isValid, errors },
     handleSubmit,
   } = methods;
 
@@ -72,10 +80,13 @@ const ChatbotSlot = ({
 
   const { addChatbotSlots } = CalenderService();
 
+  const calenderMonth = getCalendarMonthFromQuery(location.search);
+
   const { mutateAsync, isPending } = useMutation(addChatbotSlots());
 
   const handleSubmitForm = async (data: Partial<ChatbotSlotPayload>) => {
-    await mutateAsync(data);
+    await mutateAsync({ ...data, slotDate: calenderMonth });
+    handleOnClose();
   };
 
   const handleDelete = (index: number) => (e: MouseEvent) => {
@@ -84,7 +95,10 @@ const ChatbotSlot = ({
     remove(index);
   };
 
-  const handleAddTimeRange = () => prepend(defaultTimeRange);
+  const handleAddTimeRange = () => {
+    if (fields.length >= 10) return;
+    prepend(defaultTimeRange);
+  };
 
   const handleOnClose = () => {
     methods.reset({});
@@ -110,7 +124,7 @@ const ChatbotSlot = ({
             loading={isPending}
             onClick={handleSubmit(handleSubmitForm)}
           >
-            {Buttons.ADD_SLOTS}
+            {availableSlots?.length ? UPDATE_SLOTS : ADD_SLOTS}
           </Button>
         </div>
       }
@@ -138,7 +152,12 @@ const ChatbotSlot = ({
 
         <div className={clsx(styles.sectionTitle, styles.timeRangeSection)}>
           <p>{TIME_RANGE}</p>
-          <span className={styles.addField} onClick={handleAddTimeRange}>
+          <span
+            className={clsx(styles.addField, {
+              [styles.isAddDisabled]: fields?.length >= 10,
+            })}
+            onClick={handleAddTimeRange}
+          >
             <IconAdd color={Colors.ASHGRO_BLACK} size={15} />
             {ADD_BTN}
           </span>

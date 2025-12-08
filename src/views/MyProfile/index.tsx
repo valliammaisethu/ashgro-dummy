@@ -2,7 +2,6 @@ import { Popover } from "antd";
 import { IconUser } from "obra-icons-react";
 import React, { Fragment, useState } from "react";
 
-import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { Trigger } from "src/enums/trigger.enum";
 import { Placement } from "src/enums/placement.enum";
 import { ProfileState } from "src/shared/types/myProfile.type";
@@ -51,30 +50,27 @@ const MyProfile = () => {
         placement={Placement.BOTTOM_LEFT}
         arrow={false}
         open={profileState.myProfileVisible}
+        destroyOnHidden
+        destroyTooltipOnHide
         onOpenChange={handleMyProfile}
         trigger={Trigger.CLICK}
-        content={<MyProfileContent onOpenModal={handleOpenModal} />}
+        content={
+          <MyProfileContent
+            closeMyProfile={handleMyProfile}
+            onOpenModal={handleOpenModal}
+          />
+        }
       >
         <IconUser className={styles.myProfileIcon} />
       </Popover>
-      <ConditionalRenderComponent
-        hideFallback
+      <ChangePassword
+        onClose={handleChangePassword}
         visible={profileState.changePasswordVisible}
-      >
-        <ChangePassword
-          onClose={handleChangePassword}
-          visible={profileState.changePasswordVisible}
-        />
-      </ConditionalRenderComponent>
-      <ConditionalRenderComponent
+      />
+      <EditProfile
+        onClose={handleEditProfile}
         visible={profileState.editProfileVisible}
-        hideFallback
-      >
-        <EditProfile
-          onClose={handleEditProfile}
-          visible={profileState.editProfileVisible}
-        />
-      </ConditionalRenderComponent>
+      />
     </Fragment>
   );
 };
