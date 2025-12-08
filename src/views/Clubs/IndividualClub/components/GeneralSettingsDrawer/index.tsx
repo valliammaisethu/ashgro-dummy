@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import Drawer from "src/shared/components/Drawer";
 import Form from "src/shared/components/Form";
 import NumberIncrementer from "src/shared/components/NumberIncrementer";
-import { HtmlButtonType } from "src/enums/buttons.enum";
 import { GeneralSettingsDrawerProps } from "src/shared/types/clubs.type";
 import { SETTINGS_LABELS, SETTINGS_FIELD_NAMES } from "./constants";
 import { ClubSettingsTypes } from "src/enums/clubSettingsTypes.enum";
@@ -31,8 +30,10 @@ const GeneralSettingsDrawer: React.FC<GeneralSettingsDrawerProps> = ({
   const [showWarning, setShowWarning] = useState(false);
 
   useEffect(() => {
-    if (open) reset(clubData);
-  }, [open, clubData]);
+    if (open) {
+      reset(clubData);
+    }
+  }, [open]);
 
   const checkIfReducingValues = () => {
     const values = getValues();
@@ -73,14 +74,13 @@ const GeneralSettingsDrawer: React.FC<GeneralSettingsDrawerProps> = ({
         rootClassName={styles.generalSettingsDrawer}
         okText={SETTINGS_LABELS.saveChanges}
         cancelButtonProps={{ className: "d-none" }}
-        okButtonHtmlType={HtmlButtonType.SUBMIT}
         okButtonProps={{
           loading: isLoading,
           disabled: !formState.isDirty || !formState.isValid,
         }}
         handleOk={handleSubmit(handleFormSubmit)}
       >
-        <Form methods={methods} onSubmit={handleFormSubmit}>
+        <Form methods={methods}>
           <div className={styles.generalSettingsContent}>
             <div className={styles.settingRow}>
               <span className={styles.settingLabel}>

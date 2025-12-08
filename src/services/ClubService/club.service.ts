@@ -153,7 +153,7 @@ export const ClubService = () => {
     mutationKey: [UPDATE_CLUB_GENERAL_SETTINGS],
     mutationFn: async (body: ClubGeneralSettings) => {
       const { clubId, ...rest } = body;
-      const { data } = await axiosInstance.patch(
+      const { data } = await axiosInstance.put(
         generatePath(UPDATE_CLUB_GENERAL_SETTINGS_ROUTE, { id: clubId }),
         rest,
       );
