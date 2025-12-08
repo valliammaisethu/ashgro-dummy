@@ -3,23 +3,31 @@ import { useQuery } from "@tanstack/react-query";
 
 import { DashboardService } from "src/services/DashboardService/dashboard.service";
 import ConditionalRender from "src/shared/components/ConditionalRender";
+import BarChartCard from "./components/BarChartCard";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import DeleteModal from "src/shared/components/DeleteModal";
 import { useUserRole } from "src/shared/hooks/useUserRole";
-import BarChartCard from "./components/BarChartCard";
-import { SUPER_ADMIN_CHARTS as superAdminCharts } from "./utils/chartUtils";
 import { useAppContainerPadding } from "src/shared/hooks/useAppContainerPadding";
+import { ChartState } from "src/shared/types/dashboard.type";
+import { replaceString } from "src/shared/utils/commonHelpers";
+import { XAxisTypes } from "src/enums/charts.enum";
+import { SUPER_ADMIN_CHARTS as superAdminCharts } from "./utils/chartUtils";
 import DashboardHeader from "./Header";
 import ChartForm from "./ChartForm";
-import { deleteModalDescription, deleteModalTitle } from "./constants";
+import ChartFilters from "./Filters";
+import {
+  chartFiltersTitle,
+  deleteModalDescription,
+  deleteModalTitle,
+  sampleFilter,
+} from "./constants";
 import { xAxisLabel } from "./ChartForm/constants";
-import { replaceString } from "src/shared/utils/commonHelpers";
-import { ChartState } from "src/shared/types/dashboard.type";
 
 import styles from "./dashboard.module.scss";
 
 const Dashboard = () => {
   const { isClubAdmin } = useUserRole();
+
   useAppContainerPadding();
 
   const { getDashboardChartsList } = DashboardService();
@@ -36,6 +44,8 @@ const Dashboard = () => {
   const [chartState, setChartState] = useState<ChartState>({
     chartDeleteOpen: false,
     chartFormOpen: false,
+    chartFiltersOpen: false,
+    activeFilter: sampleFilter,
   });
 
   const handleChartForm = () =>
@@ -48,6 +58,12 @@ const Dashboard = () => {
     setChartState((prev) => ({
       ...prev,
       chartDeleteOpen: !prev.chartDeleteOpen,
+    }));
+
+  const handleChartFilters = () =>
+    setChartState((prev) => ({
+      ...prev,
+      chartFiltersOpen: !prev.chartFiltersOpen,
     }));
 
   const dashboardCharts = isClubAdmin ? clubAdminCharts : superAdminCharts;
@@ -81,7 +97,7 @@ const Dashboard = () => {
         isSuccess={isClubAdmin ? isSuccess : true}
       >
         <div className={styles.chartsGrid}>
-          {dashboardCharts.map(({ id, name, isDefault, path }) => (
+          {dashboardCharts?.map(({ id, name, isDefault, path }) => (
             <ConditionalRenderComponent key={id} visible={!!id} hideFallback>
               <BarChartCard
                 title={name}
@@ -92,6 +108,18 @@ const Dashboard = () => {
           ))}
         </div>
       </ConditionalRender>
+      <ConditionalRenderComponent
+        visible={chartState.chartFiltersOpen}
+        hideFallback
+      >
+        <ChartFilters
+          open={chartState.chartFiltersOpen}
+          onClose={handleChartFilters}
+          title={replaceString(chartFiltersTitle, chartState.activeFilter)}
+          selectedType={XAxisTypes.LEAD_SOURCE}
+          // TODO: to remove this once the API is ready
+        />
+      </ConditionalRenderComponent>
     </div>
   );
 };

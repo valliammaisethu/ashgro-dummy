@@ -12,3 +12,7 @@ export const superAdminChartItems = [
   { id: "spend-time", name: "Chatbot Spend Time" },
   { id: "crm-usage", name: "CRM Usage" },
 ];
+
+export const chartFiltersTitle = "Filters - %s";
+
+export const sampleFilter = "Lead Generation";
