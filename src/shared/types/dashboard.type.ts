@@ -13,6 +13,7 @@ export interface ChartState {
   chartFormOpen: boolean;
   chartDeleteOpen: boolean;
   chartFiltersOpen: boolean;
+  activeFilter: string;
 }
 
 export interface ChartFilterProps {

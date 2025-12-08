@@ -32,3 +32,5 @@ export const superAdminChartItems = [
 ];
 
 export const chartFiltersTitle = "Filters - %s";
+
+export const sampleFilter = "Lead Generation";
