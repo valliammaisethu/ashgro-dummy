@@ -1,5 +1,6 @@
 import React from "react";
 import { Col, Divider, Row } from "antd";
+import { useMutation } from "@tanstack/react-query";
 
 import {
   chartFormConstants,
@@ -10,49 +11,63 @@ import {
 } from "./constants";
 import { chartformValidation } from "./validation";
 import { Buttons } from "src/enums/buttons.enum";
-import { ChartFormProps } from "src/shared/types/dashboard.type";
+import { CustomChartProps } from "src/shared/types/dashboard.type";
+import { xAxisTypesOptions } from "src/constants/chartOptions";
 import InputField from "src/shared/components/InputField";
 import Form from "src/shared/components/Form";
 import useForm from "src/shared/components/UseForm";
 import Modal from "src/shared/components/Modal";
 import TagInput from "src/shared/components/TagInput";
+import SelectField from "src/shared/components/SelectField";
+import { CustomChart } from "src/models/chart.model";
+import { DashboardService } from "src/services/DashboardService/dashboard.service";
 
-import styles from "./chartForm.module.scss";
+import styles from "./customChartForm.module.scss";
 
 const { title } = chartFormConstants;
-const { chartTitle, xAxis, labelAlongYAxis } = labels;
+const { chartTitle, xAxis, labelAlongYAxis, type } = labels;
 const {
   chartTitle: chartTitleField,
   labels: xAxisLabelsField,
   xaxis: xAxisField,
+  type: xAxisTypeField,
 } = fields;
 const {
   chartTitle: chartTitlePlaceholder,
   xAxis: xAxisLabelsPlaceholder,
   yAxis: yAxisPlaceholder,
+  type: typePlaceholder,
 } = placeholders;
 
-const ChartForm = (props: ChartFormProps) => {
-  const { onClose, open } = props;
+const CustomChartForm = (props: CustomChartProps) => {
+  const { onClose, open, formValues } = props;
 
-  // TODO: Edit Integration
+  const { addCustomChart, editCustomChart } = DashboardService();
 
-  // const editData = useMemo(() => {
-  //   return {
-  //     [chartTitleField]: title,
-  //     [typeField]: XAxisTypes.TOUR_BOOKING_TO_CONVERSION_RATE,
-  //     [labelField]: xAxisLabel,
-  //   };
-  // }, []);
+  const { mutateAsync: addCustomChartMutate, isPending: isAddingCustomChart } =
+    useMutation(addCustomChart());
+
+  const {
+    mutateAsync: editCustomChartMutate,
+    isPending: isEditingCustomChart,
+  } = useMutation(editCustomChart());
+
+  const handleFormSubmit = (values: CustomChart) => {
+    const mutateFn = formValues?.id
+      ? editCustomChartMutate
+      : addCustomChartMutate;
+
+    mutateFn(values, { onSuccess: onClose });
+  };
 
   const methods = useForm({
     validationSchema: chartformValidation,
-    // TODO: Edit Integration
-    // defaultValues: editData,
+    defaultValues: formValues,
   });
 
   const {
     formState: { isDirty, isValid },
+    handleSubmit,
   } = methods;
 
   return (
@@ -60,11 +75,11 @@ const ChartForm = (props: ChartFormProps) => {
       cancelButtonProps={{
         className: "d-none",
       }}
-      // TODO: Edit Integration
-      // okText={editData ? Buttons.SAVE_CHANGES : Buttons.ADD_CHART}
-      okText={Buttons.ADD_CHART}
+      handleOk={handleSubmit(handleFormSubmit)}
+      okText={formValues ? Buttons.SAVE_CHANGES : Buttons.ADD_CHART}
       okButtonProps={{
         disabled: !isDirty || !isValid,
+        loading: formValues?.id ? isEditingCustomChart : isAddingCustomChart,
       }}
       title={title}
       onCancel={onClose}
@@ -95,6 +110,15 @@ const ChartForm = (props: ChartFormProps) => {
 
         <Row className={styles.formRow} gutter={[24, 0]}>
           <Col span={12}>
+            <SelectField
+              required
+              label={type}
+              name={xAxisTypeField}
+              options={xAxisTypesOptions}
+              placeholder={typePlaceholder}
+            />
+          </Col>
+          <Col span={12}>
             <TagInput
               required
               label={xAxis}
@@ -110,4 +134,4 @@ const ChartForm = (props: ChartFormProps) => {
   );
 };
 
-export default ChartForm;
+export default CustomChartForm;

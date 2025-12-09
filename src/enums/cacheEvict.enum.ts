@@ -48,6 +48,9 @@ export enum MutationKeys {
 
   BOOK_MEETING = "bookMeeting",
   RESCHEDULE_MEETING_KEY = "rescheduleMeeting",
+
+  CAN_CREATE_CUSTOM_CHART = "canCreateCustomChart",
+  ADD_CUSTOM_CHART = "addCustomChart",
 }
 
 export enum QueryKeys {
