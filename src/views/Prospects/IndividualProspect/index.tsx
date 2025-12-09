@@ -12,7 +12,11 @@ import ProspectInfo from "./components/ProspectInfo";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import DetailSection from "./components/DetailSection";
 import ActivitySection from "./components/ActivitySection";
-import { PROSPECT_LABELS, DetailSectionType } from "./constants";
+import {
+  PROSPECT_LABELS,
+  DetailSectionType,
+  getProspectMeetingEvent,
+} from "./constants";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import useDrawer from "src/shared/hooks/useDrawer";
 import { MetaService } from "src/services/MetaService/meta.service";
@@ -24,11 +28,12 @@ import NewEmailModal from "src/views/Email/NewEmailModal";
 import { SelectedEmailModel } from "src/models/email.model";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
-
-import styles from "./individualProspect.module.scss";
 import TemplateModal from "src/views/Email/TemplateModal";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import { EmailTemplate } from "src/models/meta.model";
+import BookMeeting from "src/views/Calender/BookMeeting";
+
+import styles from "./individualProspect.module.scss";
 
 const IndividualProspect = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
@@ -70,6 +75,9 @@ const IndividualProspect = () => {
     visible: templateModalVisible,
     toggleVisibility: toggleTemplateModal,
   } = useDrawer();
+
+  const { visible: bookMeetingVisible, toggleVisibility: toggleBookMeeting } =
+    useDrawer();
 
   const handleEdit = () => {
     setIsEdit(true);
@@ -116,6 +124,7 @@ const IndividualProspect = () => {
         isFetchingProfile={isPending}
         onEmail={toggleTemplateModal}
         onConvert={handleConvertToMember}
+        onBookMeeting={toggleBookMeeting}
       />
       <ConditionalRender
         isPending={isPending}
@@ -208,6 +217,15 @@ const IndividualProspect = () => {
         isOpen={emailModalVisible}
         onClose={toggleEmailModal}
         selectedTemplate={selectedTemplate}
+      />
+      <BookMeeting
+        isOpen={bookMeetingVisible}
+        onClose={toggleBookMeeting}
+        calendarEvent={getProspectMeetingEvent({
+          id,
+          firstName: data?.prospect?.firstName,
+          lastName: data?.prospect?.lastName,
+        })}
       />
     </div>
   );

@@ -26,6 +26,7 @@ export interface ProspectFormProps {
 export interface IndividualProspectHeaderProps {
   onConvert: () => void;
   onEmail: () => void;
+  onBookMeeting: () => void;
   isFetchingProfile: boolean;
 }
 
