@@ -12,7 +12,12 @@ import Label from "../Label";
 
 import styles from "src/shared/components/InputField/inputField.module.scss";
 
-const PasswordField: FC<PasswordFieldProps> = ({ name, label, ...rest }) => {
+const PasswordField: FC<PasswordFieldProps> = ({
+  name,
+  label,
+  className,
+  ...rest
+}) => {
   const { control } = useFormContext<FieldValues>();
   const {
     field: { onChange, onBlur, value },
@@ -24,7 +29,7 @@ const PasswordField: FC<PasswordFieldProps> = ({ name, label, ...rest }) => {
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   return (
-    <div className={clsx(styles.inputWrapper, styles.passwordInput)}>
+    <div className={clsx(styles.inputWrapper, styles.passwordInput, className)}>
       {label && <Label htmlFor={name}>{label}</Label>}
       <Input
         id={name}

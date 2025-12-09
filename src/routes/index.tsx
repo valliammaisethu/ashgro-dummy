@@ -53,7 +53,7 @@ const AuthRoute = ({ children }: { children: JSX.Element }) => {
   const { authenticated } = AuthContext();
 
   if (authenticated) {
-    return <Navigate to={NavigationRoutes.DASHBOARD} replace />;
+    return <Navigate to={NavigationRoutes.CALENDER} replace />;
   }
 
   return children;
@@ -66,7 +66,7 @@ const RootRedirect = () => {
     return <Navigate to={NavigationRoutes.LOGIN} replace />;
   }
 
-  return <Navigate to={AppRoutes.DASHBOARD} replace />;
+  return <Navigate to={AppRoutes.CALENDAR} replace />;
 };
 
 const AppRouter = () => {

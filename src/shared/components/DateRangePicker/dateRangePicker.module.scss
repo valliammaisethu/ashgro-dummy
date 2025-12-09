@@ -39,6 +39,13 @@
 }
 
 .rangePickerComponent {
+  &:global(.ant-picker-range .ant-picker-range-separator) {
+    margin-left: 2rem;
+  }
+  &:global(.ant-picker.ant-picker-range.ant-picker-outlined .ant-picker-input) {
+    border: 1px solid $incrementer-border;
+    padding: 1.2rem !important;
+  }
   :global(.ant-picker-panel-container) {
     border-radius: 1.6rem;
   }

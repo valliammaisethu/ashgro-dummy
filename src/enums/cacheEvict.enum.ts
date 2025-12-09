@@ -4,6 +4,7 @@ export enum MutationKeys {
   RESET_PASSWORD = "resetPassword",
   CHANGE_PASSWORD = "changePassword",
   LOGOUT = "logout",
+
   ATTACHMENT_UPLOAD = "attachmentUpload",
   ATTACHMENT_DELETE = "attachmentDelete",
   ADD_PROSPECT = "addProspect",
@@ -33,12 +34,13 @@ export enum MutationKeys {
   EDIT_CLUB = "editClub",
   UPDATE_CLUB_PROFILE = "updateClubProfile",
   UNLOCK_CLUB = "unlockClub",
+  UPDATE_CLUB_GENERAL_SETTINGS = "updateClubGeneralSettings",
 
   EDIT_CHATBOT = "editChatbot",
   UPLOAD_CHATBOT_KNOWLEDGE_BASE = "uploadChatbotKnowledgeBase",
-
   CHATBOT = "chatbotResponse",
   CHATBOT_PROFILE = "chatbotProfileResponse",
+
   BULK_UPLOAD = "bulkUpload",
   CHECK_BULK_IMPORT_STATUS = "checkBulkImportStatus",
 
