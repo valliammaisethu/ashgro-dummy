@@ -1,12 +1,15 @@
 import { XAxisTypes } from "src/enums/charts.enum";
+import { CustomChart } from "src/models/chart.model";
 
 export interface DashboardHeaderProps {
   onAddChart: () => void;
+  loading: boolean;
 }
 
-export interface ChartFormProps {
+export interface CustomChartProps {
   open: boolean;
   onClose: () => void;
+  formValues?: CustomChart;
 }
 
 export interface ChartState {

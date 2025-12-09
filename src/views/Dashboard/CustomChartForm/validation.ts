@@ -10,5 +10,6 @@ export const chartformValidation = Yup.object().shape({
     .of(Yup.string().required("X-axis value is required"))
     .min(1, "At least one x-axis value is required")
     .required("At least one x-axis value is required"),
-  xaxis: Yup.string().notRequired(),
+  xaxis: Yup.string().notRequired().nonNullable(),
+  type: Yup.string().required("Type is required"),
 });

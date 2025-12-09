@@ -1,8 +1,8 @@
 import { generatePath } from "react-router-dom";
-import { UseQueryOptions } from "@tanstack/react-query";
-import { deserialize } from "serializr";
+import { UseMutationOptions, UseQueryOptions } from "@tanstack/react-query";
+import { deserialize, serialize } from "serializr";
 
-import { QueryKeys } from "src/enums/cacheEvict.enum";
+import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
 import { ChartDetail, ChartItem } from "src/models/dashboard.model";
@@ -10,9 +10,15 @@ import { ResponseModel } from "src/models/response.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { generateChartPaths } from "src/views/Dashboard/utils/chartUtils";
+import { CustomChart } from "src/models/chart.model";
+import { renderNotification } from "src/shared/utils/renderNotification";
 
 const { GET_DASHBOARD_CHARTS_KEY, GET_CHART_DETAIL_KEY } = QueryKeys;
-const { GET_DASHBOARD_CHARTS } = ApiRoutes;
+const {
+  GET_DASHBOARD_CHARTS,
+  CAN_CREATE_CUSTOM_CHART: CAN_CREATE_CUSTOM_CHART_ROUTE,
+} = ApiRoutes;
+const { ADD_CUSTOM_CHART, CAN_CREATE_CUSTOM_CHART } = MutationKeys;
 
 export const DashboardService = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
@@ -49,8 +55,62 @@ export const DashboardService = () => {
     enabled: !!clubId,
   });
 
+  const canCreateCustomChart = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel
+  > => ({
+    mutationKey: [CAN_CREATE_CUSTOM_CHART],
+    mutationFn: async () => {
+      const response = await axiosInstance.get(
+        generatePath(CAN_CREATE_CUSTOM_CHART_ROUTE, { id: clubId }),
+      );
+      return deserialize(ResponseModel, response?.data);
+    },
+  });
+
+  const addCustomChart = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    CustomChart
+  > => ({
+    mutationKey: [ADD_CUSTOM_CHART],
+    mutationFn: async (payload: CustomChart) => {
+      const response = await axiosInstance.post(
+        generatePath(GET_DASHBOARD_CHARTS, { clubId }),
+        serialize(CustomChart, payload),
+      );
+      return deserialize(ResponseModel, response?.data);
+    },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description);
+    },
+  });
+
+  const editCustomChart = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    CustomChart
+  > => ({
+    mutationKey: [ADD_CUSTOM_CHART],
+    mutationFn: async (payload: CustomChart) => {
+      const response = await axiosInstance.put(
+        generatePath(GET_DASHBOARD_CHARTS, { clubId }),
+        payload,
+      );
+      return deserialize(ResponseModel, response?.data);
+    },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description);
+    },
+  });
+
   return {
     getDashboardChartsList,
     getChartDetails,
+    canCreateCustomChart,
+    addCustomChart,
+    editCustomChart,
   };
 };

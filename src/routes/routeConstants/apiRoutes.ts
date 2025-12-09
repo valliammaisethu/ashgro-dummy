@@ -94,4 +94,5 @@ export const ApiRoutes = {
   GET_DASHBOARD_CHARTS: "/dashboard/clubs/:clubId/charts",
   GET_CHART_DETAIL: "/dashboard/clubs/:clubId/charts/:chartId",
   ADMIN_DASHBOARD_CHART: "dashboard/:type",
+  CAN_CREATE_CUSTOM_CHART: "/dashboard/clubs/:id/charts/available",
 };

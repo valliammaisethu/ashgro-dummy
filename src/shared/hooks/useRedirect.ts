@@ -15,6 +15,8 @@ const {
   MEMBERS,
   DASHBOARD,
   INDIVIDUAL_CLUB,
+  CALENDER,
+  CLUBS,
 } = NavigationRoutes;
 
 const useRedirect = () => {
@@ -31,6 +33,10 @@ const useRedirect = () => {
   const navigateToForgotPassword = () => navigate(FORGOT_PASSWORD);
 
   const navigateToProspects = () => navigate(PROSPECTS_LISTING);
+
+  const navigateToCalendar = () => navigate(CALENDER);
+
+  const navigateToClubs = () => navigate(CLUBS);
 
   const navigateToIndividualProspect = (id: string) =>
     navigate(generatePath(INDIVIDUAL_PROSPECT, { id }));
@@ -79,6 +85,8 @@ const useRedirect = () => {
     navigateToMembers,
     navigateToInvidualClub,
     navigateToMonth,
+    navigateToCalendar,
+    navigateToClubs,
   };
 };
 
