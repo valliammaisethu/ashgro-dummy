@@ -23,3 +23,9 @@ export interface ActivityData {
   content: string;
   date: string;
 }
+
+export interface ProspectMeetingEventParams {
+  id: string;
+  firstName?: string;
+  lastName?: string;
+}

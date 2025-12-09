@@ -129,15 +129,16 @@ export const getMeetingDefaultValues = (
     bookedUserName = "",
   } = resource;
 
+  // For new bookings, default to today's date if no date is provided
+  const defaultDate = selectedDate ?? new Date();
+
   return {
     title: calendarEvent?.id ? String(title) : "",
     [TYPE.name]: bookedUserType,
     [NAME.name]: bookedUserId,
     [SLOT_DATE.name]: id
       ? dayjs(date).format(YYYY_MM_DD)
-      : selectedDate
-        ? dayjs(selectedDate).format(YYYY_MM_DD)
-        : "",
+      : dayjs(defaultDate).format(YYYY_MM_DD),
     [MEETING_TIME.name]: {
       startTime: id ? dayjs(start).format(HH_MM_A) : "",
       endTime: id ? dayjs(end).format(HH_MM_A) : "",

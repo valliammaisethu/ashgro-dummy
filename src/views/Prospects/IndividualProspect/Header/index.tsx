@@ -14,7 +14,7 @@ import BackButton from "src/shared/components/Back";
 import styles from "../individualProspect.module.scss";
 
 const Header = (props: IndividualProspectHeaderProps) => {
-  const { onConvert, onEmail, isFetchingProfile } = props;
+  const { onConvert, onEmail, onBookMeeting, isFetchingProfile } = props;
 
   return (
     <div className={styles.header}>
@@ -25,6 +25,8 @@ const Header = (props: IndividualProspectHeaderProps) => {
             title: headerConstants.bookAMeeting,
           }}
           className={styles.meetingButton}
+          onClick={onBookMeeting}
+          disabled={isFetchingProfile}
         >
           <IconCalendarSelectedDate />
         </Button>
