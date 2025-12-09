@@ -6,15 +6,23 @@ import { SwitchFieldProps } from "src/shared/types/sharedComponents.type";
 import Error from "../Error";
 
 const SwitchField = ({ name, ...props }: SwitchFieldProps) => {
-  const { control } = useFormContext<FieldValues>();
+  const { control, setValue } = useFormContext<FieldValues>();
   const {
-    field: { value, onChange },
+    field: { value },
     fieldState: { error },
   } = useController({ name, control });
 
+  const handleOnChange = (checked: boolean) => {
+    setValue(name, checked, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+  };
+
   return (
     <Fragment>
-      <Switch {...props} checked={value} onChange={onChange} />
+      <Switch {...props} checked={value} onChange={handleOnChange} />
       {error && <Error message={error.message} />}
     </Fragment>
   );
