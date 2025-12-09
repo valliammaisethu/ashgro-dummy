@@ -16,6 +16,7 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import { logoutMessages } from "src/constants/sharedComponents";
 import { renderNotification } from "src/shared/utils/renderNotification";
 import { generatePath } from "react-router-dom";
+import { RoleNames } from "src/enums/roleNames.enum";
 
 const {
   USER_LOGIN,
@@ -36,7 +37,8 @@ const { title, description } = logoutMessages;
 
 export const AuthService = () => {
   const { setAuthenticated, resetAuthState } = AuthContext();
-  const { navigateToLogin, navigateToDashboard } = useRedirect();
+  const { navigateToLogin, navigateToCalendar, navigateToClubs } =
+    useRedirect();
   const queryClient = useQueryClient();
 
   const loginUser = (): UseMutationOptions<
@@ -56,7 +58,13 @@ export const AuthService = () => {
     onSuccess: (response) => {
       const { data, title, description } = response;
       setAuthenticated(data?.user, response?.data?.token);
-      navigateToDashboard();
+      const role = data?.user?.role;
+      if (role === RoleNames.SUPER_ADMIN) {
+        navigateToClubs();
+        return;
+      }
+
+      navigateToCalendar();
       renderNotification(title, description);
     },
   });
