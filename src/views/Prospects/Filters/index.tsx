@@ -81,6 +81,7 @@ const Filters = (props: ProspectFilterProps) => {
       title={title}
       open={visible}
       closable
+      footer={[]}
       onClose={handleClose}
     >
       <div className={styles.body}>
