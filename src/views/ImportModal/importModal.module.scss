@@ -80,6 +80,10 @@
   cursor: pointer;
   @include flex-flow(row, wrap, center);
   gap: 0.8rem;
+
+  &.isDownloading {
+    cursor: not-allowed;
+  }
 }
 
 .modalFooter {

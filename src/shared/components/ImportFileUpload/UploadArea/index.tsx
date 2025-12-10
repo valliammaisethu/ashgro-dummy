@@ -2,12 +2,13 @@ import React, { MouseEvent } from "react";
 import { IconDocumentUpload } from "obra-icons-react";
 
 import Button from "src/shared/components/Button";
-import ConditionalRenderComponent from "../ConditionalRenderComponent";
 import { Buttons } from "src/enums/buttons.enum";
 import { Colors } from "src/enums/colors.enum";
 
-import styles from "../../../views/ImportModal/importModal.module.scss";
+import ConditionalRenderComponent from "../../ConditionalRenderComponent";
 import { renderUploadingIcon } from "src/shared/utils/importUtils";
+
+import styles from "./uploadArea.module.scss";
 
 export interface UploadAreaProps {
   onClick: () => void;

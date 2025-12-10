@@ -152,6 +152,7 @@ export const excelValidTypes = [
   "application/vnd.ms-excel",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 ];
+export const defaultTagInputPlaceholder = "Add one or more value(s)";
 export const profileMaxSize = 5 * 1024 * 1024;
 
 export const fiveMb = 5 * 1024 * 1024;

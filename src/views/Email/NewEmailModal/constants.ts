@@ -17,7 +17,7 @@ export const fields = {
   cc: "cc",
   bcc: "bcc",
   subject: "subject",
-  body: "body",
+  emailBody: "emailBody",
   attachmentIds: "attachmentIds",
   title: "title",
 };
@@ -31,3 +31,5 @@ export const placeholders = {
   attachmentIds: "Select attachments",
   title: "Enter title here",
 };
+
+export const nameTemplate = "{{name}}";

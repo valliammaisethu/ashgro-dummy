@@ -1,18 +1,22 @@
 import React from "react";
+import clsx from "clsx";
 import { DatePicker } from "antd";
+import { IconCalendarDates } from "obra-icons-react";
 import { useFormContext, useController, FieldValues } from "react-hook-form";
+
 import dayjs from "dayjs";
 import Label from "../Label";
 import Error from "../Error";
-import styles from "./dateRangePicker.module.scss";
+
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { InputStatus } from "src/enums/inputStatus.enum";
-import { IconCalendarDates } from "obra-icons-react";
 import { Colors } from "src/enums/colors.enum";
 import {
   datePickerFromPlaceholder,
   datePickerToPlaceholder,
 } from "src/constants/sharedComponents";
+
+import styles from "./dateRangePicker.module.scss";
 
 const { RangePicker } = DatePicker;
 
@@ -24,6 +28,7 @@ interface DateRangePickerFieldProps {
   placeholder?: [string, string];
   fromLabel?: string;
   toLabel?: string;
+  className?: string;
 }
 
 const DateRangePickerField: React.FC<DateRangePickerFieldProps> = ({
@@ -32,6 +37,7 @@ const DateRangePickerField: React.FC<DateRangePickerFieldProps> = ({
   toLabel = "To",
   format = DateFormats.DD_MMM_YYYY,
   placeholder = [datePickerFromPlaceholder, datePickerToPlaceholder],
+  className,
 }) => {
   const { control } = useFormContext<FieldValues>();
 
@@ -68,7 +74,7 @@ const DateRangePickerField: React.FC<DateRangePickerFieldProps> = ({
       <Label className={styles.toLabel}>{toLabel}</Label>
       <RangePicker
         id={name}
-        rootClassName={styles.rangePickerComponent}
+        rootClassName={clsx(styles.rangePickerComponent, className)}
         value={rangeValue}
         onChange={handleChange}
         onBlur={onBlur}

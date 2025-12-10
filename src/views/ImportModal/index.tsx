@@ -13,6 +13,7 @@ import {
   chatbotKnowlegeBaseTitle,
   chatbotKnowlegeBaseDescription,
   chatbotKnowlegeBaseInput,
+  isDownloadingText,
 } from "./constants";
 import excelIcon from "src/assets/images/excelIcon.webp";
 import wordIcon from "src/assets/images/wordIcon.webp";
@@ -36,6 +37,7 @@ import ImportFileUpload from "src/shared/components/ImportFileUpload";
 import { docsPdfAccept, excelAccept } from "src/constants/sharedComponents";
 import { ClubService } from "src/services/ClubService/club.service";
 import { useParams } from "react-router-dom";
+import { imageAlts } from "src/constants/imageAlts";
 
 const ImportModal = (props: ImportModalProps) => {
   const { importMode, onClose, visible, onImport } = props;
@@ -183,21 +185,37 @@ const ImportModal = (props: ImportModalProps) => {
               fallback={
                 <div className={styles.chatKnowledgeBaseIcons}>
                   <Button className={styles.iconButton}>
-                    <img src={wordIcon} className={styles.excelIcon} />
+                    <img
+                      alt={imageAlts.wordIcon}
+                      src={wordIcon}
+                      className={styles.excelIcon}
+                    />
                   </Button>
                   <Button className={styles.iconButton}>
-                    <img src={pdfIcon} className={styles.excelIcon} />
+                    <img
+                      alt={imageAlts.pdfIcon}
+                      src={pdfIcon}
+                      className={styles.excelIcon}
+                    />
                   </Button>
                 </div>
               }
             >
               <Button className={styles.iconButton}>
-                <img src={excelIcon} className={styles.excelIcon} />
+                <img
+                  alt={imageAlts.excelIcon}
+                  src={excelIcon}
+                  className={styles.excelIcon}
+                />
               </Button>
             </ConditionalRenderComponent>
             <IconArrowRight />
             <Button className={styles.iconButton}>
-              <img className={styles.excelIcon} src={ashgroLogo} />
+              <img
+                alt={imageAlts.ashgroLogo}
+                className={styles.excelIcon}
+                src={ashgroLogo}
+              />
             </Button>
           </div>
           <div className={styles.description}>
@@ -218,14 +236,18 @@ const ImportModal = (props: ImportModalProps) => {
             hideFallback
           >
             <div
-              className={styles.templateDownload}
+              className={clsx(styles.templateDownload, {
+                [styles.isDownloading]: isDownloading,
+              })}
               onClick={handleDownloadTemplate}
-              style={{ cursor: isDownloading ? "not-allowed" : "pointer" }}
             >
               <IconDownload />
-              <span>
-                {isDownloading ? "Downloading..." : Buttons.DOWNLOAD_TEMPLATE}
-              </span>
+              <ConditionalRenderComponent
+                visible={isDownloading}
+                fallback={Buttons.DOWNLOAD_TEMPLATE}
+              >
+                {isDownloadingText}
+              </ConditionalRenderComponent>
             </div>
           </ConditionalRenderComponent>
         </div>

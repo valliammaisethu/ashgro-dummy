@@ -9,7 +9,9 @@ import {
 
 export const validationSchema = Yup.object().shape({
   currentPassword: Yup.string().required(currentPasswordValidation),
-  newPassword: Yup.string().max(25, newPasswordValidation),
+  newPassword: Yup.string()
+    .max(25, newPasswordValidation)
+    .notOneOf([Yup.ref("currentPassword")], "Incorrect current password"),
   confirmPassword: Yup.string()
     .required(confirmPasswordValidation)
     .oneOf([Yup.ref("newPassword")], matchingPasswordValidation),

@@ -1,0 +1,24 @@
+@import "src/styles/_variables";
+@import "src/styles/_helpers";
+
+.emptyStateContainer {
+  @include flex-container(center, center, column);
+  height: 100%;
+  min-height: 40rem;
+  width: 100%;
+  text-align: center;
+  padding: 2rem;
+
+  .title {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .description {
+    color: $gold-bolder;
+    font-size: 1.4rem;
+    font-weight: 400;
+  }
+}

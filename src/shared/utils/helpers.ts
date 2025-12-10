@@ -1,7 +1,11 @@
+import queryString from "query-string";
+import dayjs from "dayjs";
+
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { localStorageHelper } from "./localStorageHelper";
 import { RcFile } from "antd/es/upload";
 import { CONTENT_TYPES } from "src/enums/contentTypes.enum";
+import { DateFormats } from "src/enums/dateFormats.enum";
 
 export const clearAuthData = () => {
   localStorageHelper.removeItem(LocalStorageKeys.USER);
@@ -12,6 +16,9 @@ export const fillEmptyData = (val?: string) => val || "-";
 
 export const getFullName = (firstName = "", lastName = ""): string =>
   `${firstName} ${lastName}`.trim();
+
+export const getInitials = (firstName = "", lastName = ""): string =>
+  (firstName[0] ?? "").toUpperCase() + (lastName[0] ?? "").toUpperCase();
 
 export const formatCurrency = (
   amount: number | string,
@@ -95,4 +102,9 @@ export const getStatusTagBackgroundColor = (color?: string) => {
   const b = parseInt(hex.substring(4, 6), 16);
 
   return `rgba(${r}, ${g}, ${b}, 0.3)`;
+};
+
+export const getCalendarMonthFromQuery = (search: string) => {
+  const query = queryString.parse(search);
+  return (query?.month as string) || dayjs().format(DateFormats.YYYY_MM);
 };

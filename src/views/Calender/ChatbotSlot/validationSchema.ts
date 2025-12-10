@@ -19,6 +19,9 @@ export const VALIDATION_MESSAGE = {
   END_AFTER_START: "End time must be later than start time",
 
   MIN_TIME_RANGE: "At least one time range is required",
+
+  START_AND_END_REQUIRED: "Start and end time are required",
+  MAX_SLOTS_ALLOWED: "Maximum 10 slots allowed",
 };
 
 export const VALIDATION_CONDITIONS = {
@@ -48,7 +51,11 @@ export const timeRangeSchema = Yup.object({
         return toMinutes(endTime) > toMinutes(startTime);
       },
     ),
-});
+}).test(
+  "is-complete",
+  VALIDATION_MESSAGE.START_AND_END_REQUIRED,
+  (value) => !!(value?.startTime && value?.endTime),
+);
 
 export const chatbotSlotSchema = Yup.object({
   fromDate: Yup.string()
@@ -93,5 +100,6 @@ export const chatbotSlotSchema = Yup.object({
 
   timeRanges: Yup.array()
     .of(timeRangeSchema)
-    .min(1, VALIDATION_MESSAGE.MIN_TIME_RANGE),
+    .min(1, VALIDATION_MESSAGE.MIN_TIME_RANGE)
+    .max(10, VALIDATION_MESSAGE.MAX_SLOTS_ALLOWED),
 });

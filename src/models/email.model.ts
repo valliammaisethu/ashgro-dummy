@@ -30,8 +30,8 @@ export class SendEmail {
   @serializable
   subject?: string;
 
-  @serializable
-  body?: string;
+  @serializable(alias("body"))
+  emailBody?: string;
 
   @serializable
   clubId?: string;

@@ -12,24 +12,32 @@ const NumberIncrementer = (props: NumberIncrementerProps) => {
   // TODO: change max steps after confirming with BA
   const { name, min = 0, max = Infinity, step = 1, disabled = false } = props;
 
-  const { control } = useFormContext<FieldValues>();
+  const { control, setValue } = useFormContext<FieldValues>();
   const {
-    field: { value = 0, onChange },
+    field: { value = 0 },
     fieldState: { error },
   } = useController({
     name,
     control,
   });
 
+  const handleChange = (newValue: number) => {
+    setValue(name, newValue, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+  };
+
   const handleDecrement = () => {
     if (!disabled && value > min) {
-      onChange(Number(value) - step);
+      handleChange(Number(value) - step);
     }
   };
 
   const handleIncrement = () => {
     if (!disabled && value < max) {
-      onChange(Number(value) + step);
+      handleChange(Number(value) + step);
     }
   };
 

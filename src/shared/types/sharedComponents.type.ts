@@ -373,3 +373,38 @@ export interface ImportFileUploadProps {
   uploadingClassName?: string;
   uploadedClassName?: string;
 }
+
+export interface DeleteModalProps {
+  title?: string;
+  description?: string;
+  onDelete?: () => void | Promise<void>;
+  loading?: boolean;
+
+  externalVisible?: boolean;
+  externalOnClose?: () => void;
+  modalWidth?: number;
+}
+
+export interface DashboardStatsCardProps {
+  title: string;
+  value: string | number;
+}
+export interface TagInputProps {
+  name: string;
+  placeholder?: string;
+  label?: string;
+  required?: boolean;
+}
+
+export interface DeleteModalProps {
+  title?: string;
+  description?: string;
+  onDelete?: () => void | Promise<void>;
+  loading?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  customTitle?: string;
+  customDescription?: string;
+  deleteButtonText?: string;
+  customWidth?: number;
+}

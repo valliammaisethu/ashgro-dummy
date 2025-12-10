@@ -62,8 +62,8 @@ export class EmailTemplate {
   @serializable
   subject?: string;
 
-  @serializable
-  body?: string;
+  @serializable(alias("body"))
+  emailBody?: string;
 
   @serializable(list(primitive()))
   attachmentIds?: string[];

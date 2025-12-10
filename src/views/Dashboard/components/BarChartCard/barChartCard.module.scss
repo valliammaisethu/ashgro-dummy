@@ -1,0 +1,80 @@
+@import "src/styles/variables";
+@import "src/styles/helpers";
+
+.chartCard {
+  border-radius: 20px;
+  box-shadow: $card-box-shadow;
+  background: $ashgro-white;
+  border: 0.5px solid $chart-border-color;
+  overflow: hidden;
+
+  &.chartCardOver {
+    border: 1px dotted $active-highlight-blue;
+    box-shadow: $card-box-shadow;
+    transform: scale(0.98);
+  }
+
+  .chartHeader {
+    @include flex-container(space-between, center);
+    padding: 1.7rem 1.6rem 1.6rem 2.6rem;
+
+    .headerLeft {
+      @include flex-container(flex-start, center, row, 1.2rem);
+
+      .dragIcon {
+        cursor: grab;
+
+        &:active,
+        &.dragging {
+          cursor: grabbing;
+        }
+      }
+
+      .chartTitle {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: $ashgro-navy;
+        margin: 0;
+      }
+    }
+
+    .chartActions {
+      @include flex-container(flex-start, center, row, 1.2rem);
+
+      svg {
+        cursor: pointer;
+        &:hover {
+          color: $icon-hover-color;
+        }
+      }
+    }
+  }
+  .customChartText {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: $ashgro-navy;
+  }
+  .chartContainerWrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 1.6rem 1.6rem;
+    &::-webkit-scrollbar {
+      height: 0.3rem;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $scrollbar-thumb-bg;
+      border-radius: 0.3rem;
+    }
+  }
+}
+
+.loader {
+  @include flex-container(center, center);
+  min-height: 35rem;
+}
+
+.chartCardDragging {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  transform: scale(1.02);
+}

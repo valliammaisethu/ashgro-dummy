@@ -3,8 +3,9 @@
 
 .cellContent {
   padding: 0.5rem;
-  height: 18rem;
+  height: 20rem;
   width: 19.5rem;
+  @include flex-container(flex-start, stretch, column);
   .cellHeader {
     @include flex-container;
     margin-bottom: 0.6rem;
@@ -22,6 +23,11 @@
       font-family: $font-secondary;
     }
   }
+  &:hover {
+    .actionBtns {
+      visibility: visible;
+    }
+  }
 }
 .eventList {
   @include flex-container;
@@ -31,7 +37,7 @@
 
   .eventCard {
     padding: 0.8rem 1rem;
-    width: max-content;
+    width: 100%;
     background-color: $search-bg;
     border-radius: 8px;
     color: $ashgro-white;
@@ -158,6 +164,7 @@
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
+  width: 100%;
 }
 
 .allowedDates {
@@ -167,6 +174,8 @@
 .actionBtns {
   @include flex-container;
   justify-content: end;
+  visibility: hidden;
+  margin-top: auto;
   .icon {
     margin-right: 0.5rem;
   }
