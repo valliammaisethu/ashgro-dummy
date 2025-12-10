@@ -16,7 +16,7 @@ revolte:
             variables:
               BASE_URL: /api/v1
               VITE_CHATBOT_SCRIPT_URL: "#{VITE_CHATBOT_SCRIPT_URL}"
-              VITE_API_BASE_URL: "{VITE_API_BASE_URL}"
+              VITE_API_BASE_URL: "#{VITE_API_BASE_URL}"
     qa:
       branch: qa
       services:
@@ -30,7 +30,7 @@ revolte:
             variables:
               API_URL: /api/v1
               VITE_CHATBOT_SCRIPT_URL: "#{VITE_CHATBOT_SCRIPT_URL}"
-              VITE_API_BASE_URL: "{VITE_API_BASE_URL}"
+              VITE_API_BASE_URL: "#{VITE_API_BASE_URL}"
               VITE_SENTRY_DSN: >-
                 https://1bb6737846196ee5ea836f69fd5f3838@o4510104495587328.ingest.us.sentry.io/4510104497160192
     production:
