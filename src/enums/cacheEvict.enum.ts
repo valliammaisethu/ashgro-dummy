@@ -51,6 +51,7 @@ export enum MutationKeys {
 
   CAN_CREATE_CUSTOM_CHART = "canCreateCustomChart",
   ADD_CUSTOM_CHART = "addCustomChart",
+  REORDER_CHARTS = "reorderCharts",
 }
 
 export enum QueryKeys {

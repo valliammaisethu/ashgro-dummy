@@ -14,11 +14,12 @@ import { CustomChart } from "src/models/chart.model";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
 const { GET_DASHBOARD_CHARTS_KEY, GET_CHART_DETAIL_KEY } = QueryKeys;
-const {
-  GET_DASHBOARD_CHARTS,
-  CAN_CREATE_CUSTOM_CHART: CAN_CREATE_CUSTOM_CHART_ROUTE,
-} = ApiRoutes;
+const { CAN_CREATE_CUSTOM_CHART: CAN_CREATE_CUSTOM_CHART_ROUTE } = ApiRoutes;
 const { ADD_CUSTOM_CHART, CAN_CREATE_CUSTOM_CHART } = MutationKeys;
+import { ReorderChartsPayload } from "src/shared/types/dashboard.types";
+
+const { REORDER_CHARTS } = MutationKeys;
+const { GET_DASHBOARD_CHARTS, UPDATE_CHART_ORDER } = ApiRoutes;
 
 export const DashboardService = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
@@ -49,10 +50,9 @@ export const DashboardService = () => {
     queryKey: [GET_CHART_DETAIL_KEY, clubId, path],
     queryFn: async () => {
       const response = await axiosInstance.get(path);
-
       return deserialize(ChartDetail, response?.data?.data?.chart);
     },
-    enabled: !!clubId,
+    enabled: !!clubId && !!path,
   });
 
   const canCreateCustomChart = (): UseMutationOptions<
@@ -106,11 +106,27 @@ export const DashboardService = () => {
     },
   });
 
+  const updateChartOrder = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    ReorderChartsPayload
+  > => ({
+    mutationKey: [REORDER_CHARTS, clubId],
+    mutationFn: async (payload) => {
+      const response = await axiosInstance.put(
+        generatePath(UPDATE_CHART_ORDER, { clubId }),
+        payload,
+      );
+      return deserialize(ResponseModel, response?.data);
+    },
+  });
+
   return {
     getDashboardChartsList,
     getChartDetails,
     canCreateCustomChart,
     addCustomChart,
     editCustomChart,
+    updateChartOrder,
   };
 };

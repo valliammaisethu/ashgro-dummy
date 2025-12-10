@@ -21,19 +21,19 @@ export const calculateChartWidth = (length: number = 0) => {
 
 const {
   CHART_TEXT,
-  CHART_HOVER,
+  DARK_GOLD,
   TOOLTIP_BG,
   ASHGRO_WHITE,
   GRID_LINE,
   ASHGRO_NAVY,
   ASHGRO_WHITE_80,
+  DEFAULT_BAR_COLOR,
 } = Colors;
 
 export const createBarChart = (
   ctx: ChartItem,
   title: string,
   labels: ChartLabel[],
-  barColor: string,
 ) => {
   const dataLabelPlugin = {
     id: `${title}_dataLabels`,
@@ -69,13 +69,13 @@ export const createBarChart = (
         {
           label: title,
           data: labels?.map((item) => item?.count || 0) || [],
-          backgroundColor: barColor,
+          backgroundColor: DEFAULT_BAR_COLOR,
           borderRadius: 6,
           barThickness: 30,
           maxBarThickness: 30,
           categoryPercentage: 1.0,
           barPercentage: 0.43,
-          hoverBackgroundColor: CHART_HOVER,
+          hoverBackgroundColor: DARK_GOLD,
         },
       ],
     },
@@ -183,9 +183,31 @@ export const generateChartPaths = (charts: ChartItemModel[]) => {
   });
 };
 
-export const SUPER_ADMIN_CHARTS = superAdminChartItems?.map((item) => ({
+export const SUPER_ADMIN_CHARTS = superAdminChartItems?.map((item, index) => ({
   ...item,
   label: item.id,
   isDefault: false,
+  order: index,
   path: generatePath(ApiRoutes.GET_CHART_DETAIL, { clubId, chartId: item.id }),
 }));
+
+export const getSwappedCharts = (
+  charts: ChartItemModel[],
+  activeId?: string,
+  overId?: string,
+) => {
+  if (!overId || activeId === overId) return null;
+
+  const oldIndex = charts?.findIndex(({ id }) => id === activeId);
+  const newIndex = charts?.findIndex(({ id }) => id === overId);
+
+  if (oldIndex === -1 || newIndex === -1) return null;
+
+  const newCharts = [...charts];
+  [newCharts[oldIndex], newCharts[newIndex]] = [
+    newCharts[newIndex],
+    newCharts[oldIndex],
+  ];
+
+  return { newCharts, oldIndex, newIndex };
+};
