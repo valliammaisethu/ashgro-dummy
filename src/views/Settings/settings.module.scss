@@ -127,3 +127,13 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
+.chatbotLinkContainer {
+  @include flex-container(center, center, row, 0.8rem);
+  color: $ashgro-gold;
+  font-weight: 600;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding-right: 2rem;
+}
