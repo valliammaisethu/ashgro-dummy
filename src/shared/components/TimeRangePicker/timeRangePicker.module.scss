@@ -1,0 +1,147 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.timeRangeLabel {
+  width: 100%;
+}
+
+// TODO to check antd config and move to antd overrides
+:global {
+  .ant-picker {
+    width: 100% !important;
+  }
+
+  .ant-picker-time-panel,
+  .ant-picker-time-panel * {
+    user-select: none !important;
+  }
+
+  :where(.ant-picker-dropdown-range) {
+    padding: 0 !important;
+  }
+  .ant-picker-dropdown {
+    margin-top: -0.45rem !important;
+  }
+
+  .ant-picker-time-panel {
+    position: relative !important;
+    height: 14rem !important;
+  }
+  .ant-picker-time-panel-column {
+    height: 15rem !important;
+    padding-top: 4.5rem !important;
+    padding-bottom: 4.5rem !important;
+    box-sizing: content-box !important;
+    scrollbar-width: none;
+  }
+  .ant-picker-time-panel-column::-webkit-scrollbar {
+    display: none;
+  }
+  .ant-picker-time-panel-cell,
+  .ant-picker-time-panel-cell-inner {
+    height: 4rem !important;
+    line-height: 4rem !important;
+  }
+  .ant-picker-time-panel-cell-inner {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0 !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+  .ant-picker-time-panel {
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      left: 1.2rem;
+      right: 1.2rem;
+      top: 50%;
+      height: 0.15rem;
+      background: $modal-footer-bg;
+      z-index: 2;
+      border-radius: 0.2rem;
+      pointer-events: none;
+    }
+
+    &::after {
+      transform: translateY(-2rem);
+    }
+
+    &::before {
+      transform: translateY(2rem);
+    }
+  }
+
+  :where(.ant-picker-dropdown)
+    .ant-picker-time-panel-column
+    > li.ant-picker-time-panel-cell-selected
+    .ant-picker-time-panel-cell-inner {
+    background: $ashgro-white !important;
+    border-radius: 0.8rem !important;
+    color: $ashgro-black !important;
+  }
+  .ant-picker-dropdown .ant-picker-time-panel-column {
+    scrollbar-width: none;
+  }
+  :where(.ant-picker-dropdown) .ant-picker-time-panel-column:not(:first-child) {
+    border-inline-start: none !important;
+  }
+  :where(.ant-picker-dropdown)
+    .ant-picker-time-panel-cell:hover
+    .ant-picker-time-panel-cell-inner {
+    background: transparent !important;
+  }
+  :where(.ant-picker-dropdown) .ant-picker-time-panel-cell-inner {
+    font-family: "Open Sans", sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 1.4rem !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  :where(.ant-picker-dropdown) .ant-picker-panel-container {
+    box-shadow: 0 0.4rem 2.4rem 0 #00000014 !important;
+    border-radius: 1.2rem !important;
+    background: $ashgro-white !important;
+  }
+  .ant-picker-dropdown .ant-picker-range-arrow,
+  .ant-picker-dropdown .ant-picker-arrow {
+    display: none !important;
+  }
+  :where(.ant-picker-dropdown)
+    .ant-picker-panel-container.ant-picker-time-panel-container {
+    width: 100% !important;
+  }
+  :where(.ant-picker-dropdown) .ant-picker-panel-container .ant-picker-panel {
+    width: 100% !important;
+  }
+  :where(.ant-picker-dropdown)
+    .ant-picker-panel-container
+    .ant-picker-panel-layout {
+    display: block !important;
+  }
+
+  .ant-picker-focused::before,
+  .ant-picker-has-value::before {
+    opacity: 0 !important;
+  }
+
+  .ant-picker-range-separator {
+    padding: 0 !important;
+  }
+
+  .ant-picker-input {
+    padding: 0.5rem !important;
+  }
+
+  .ant-picker-outlined.ant-picker-status-error:not(.ant-picker-disabled) {
+    background: $input-background !important;
+  }
+
+  .ant-picker-range .ant-picker-clear {
+    inset-inline-end: 0.7rem !important;
+  }
+}

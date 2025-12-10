@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+echo "🔍 Running type check (tsc --noEmit)..."
+npx tsc --noEmit || { echo "❌ Type check failed."; exit 1; }
+echo "✅ Type check passed."
+
+echo "🎯 Running lint-staged (eslint + prettier)..."
+npx lint-staged || { echo "❌ Linting failed."; exit 1; }
+echo "✅ Linting passed."
+
+# Get all staged files with relevant extensions
+STAGED_FILES=$(git diff --name-only --cached | grep -E '\.(ts|tsx)$' || true)

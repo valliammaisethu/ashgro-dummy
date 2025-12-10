@@ -1,26 +1,36 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import viteTsconfigPaths from 'vite-tsconfig-paths'
+/// <reference types="vite-plugin-svgr/client" />
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import viteTsconfigPaths from "vite-tsconfig-paths";
 import svgr from "vite-plugin-svgr";
-import path from 'path';
+import path from "path";
 
 export default defineConfig({
-    test: {
-        globals: true,
-        environment: "jsdom",
-        setupFiles: ["src/setupTests.ts"],
+  test: {
+    coverage: {
+      include: [
+        "src/shared/components/**",
+        "src/views/**",
+        "src/shared/utils/**",
+      ],
+      reportOnFailure: true,
     },
-    plugins: [react(), viteTsconfigPaths(), svgr()],
-    build: {
-        outDir: 'build',
+    globals: true,
+    environment: "jsdom",
+    setupFiles: ["src/setupTests.ts"],
+    css: false,
+  },
+  plugins: [react(), viteTsconfigPaths(), svgr({ include: "**/*.svg?react" })],
+  build: {
+    outDir: "build",
+  },
+  server: {
+    port: 3000,
+  },
+  resolve: {
+    alias: {
+      src: path.resolve(__dirname, "./src"),
     },
-    server: {
-        port: 3000
-    },
-    resolve: {
-        alias: {
-            'src': path.resolve(__dirname, './src'),
-        }
-    }
-})
+  },
+});

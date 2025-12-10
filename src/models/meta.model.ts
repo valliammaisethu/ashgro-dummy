@@ -1,0 +1,172 @@
+import { alias, list, object, primitive, serializable } from "serializr";
+
+export class ActivityType {
+  @serializable
+  id?: string;
+
+  @serializable
+  type?: string;
+
+  @serializable(alias("sourceName"))
+  label?: string;
+
+  @serializable(alias("id"))
+  value?: string;
+}
+
+export class MembershipCategory {
+  @serializable
+  id?: string;
+
+  @serializable
+  category?: string;
+}
+
+export class LeadSource {
+  @serializable
+  id?: string;
+
+  @serializable
+  sourceName?: string;
+}
+
+export class LeadStatus {
+  @serializable
+  id?: string;
+
+  @serializable
+  statusName?: string;
+
+  @serializable
+  color?: string;
+}
+
+export class MembershipStatus {
+  @serializable
+  id?: string;
+
+  @serializable
+  statusName?: string;
+
+  @serializable
+  color?: string;
+}
+
+export class EmailTemplate {
+  @serializable
+  id?: string;
+
+  @serializable
+  title?: string;
+
+  @serializable
+  subject?: string;
+
+  @serializable(alias("body"))
+  emailBody?: string;
+
+  @serializable(list(primitive()))
+  attachmentIds?: string[];
+}
+
+export class Attachment {
+  @serializable
+  id?: string;
+
+  @serializable
+  fileName?: string;
+
+  @serializable
+  s3Key?: string;
+
+  @serializable
+  contentType?: string;
+
+  @serializable
+  fileSize?: number;
+}
+
+export class EmailTemplateDetail {
+  @serializable
+  id?: string;
+
+  @serializable
+  title?: string;
+
+  @serializable
+  subject?: string;
+
+  @serializable
+  body?: string;
+
+  @serializable(list(object(Attachment)))
+  attachments?: Attachment[];
+}
+
+export class StaffDepartment {
+  @serializable
+  id?: string;
+
+  @serializable
+  name?: string;
+}
+export class LeadSourceParams {
+  @serializable
+  filter?: string;
+
+  @serializable(list(primitive()))
+  leadStatusIds?: string[];
+}
+
+export class LeadStatusParams {
+  @serializable
+  filter?: string;
+
+  @serializable(list(primitive()))
+  leadSourceIds?: string[];
+}
+
+export class MembershipStatusParams {
+  @serializable(list(primitive()))
+  leadSourceIds?: string[];
+
+  @serializable
+  filter?: string;
+
+  @serializable(list(primitive()))
+  membershipCategoryIds?: string[];
+}
+
+export class MembershipCategoriesData {
+  @serializable(list(object(MembershipCategory)))
+  membershipCategories?: MembershipCategory[];
+}
+
+export class LeadSourcesData {
+  @serializable(list(object(LeadSource)))
+  leadSources?: LeadSource[];
+}
+export class ActivityTypesData {
+  @serializable(list(object(ActivityType)))
+  activityTypes?: ActivityType[];
+}
+
+export class LeadStatusesData {
+  @serializable(list(object(LeadStatus)))
+  leadStatuses?: LeadStatus[];
+}
+
+export class MembershipStatusData {
+  @serializable(list(object(MembershipStatus)))
+  membershipStatuses?: MembershipStatus[];
+}
+
+export class EmailTemplatesData {
+  @serializable(list(object(EmailTemplate)))
+  emailTemplates?: EmailTemplate[];
+}
+
+export class StaffDepartmentsData {
+  @serializable(list(object(StaffDepartment)))
+  staffDepartments?: StaffDepartment[];
+}

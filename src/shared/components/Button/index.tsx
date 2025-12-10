@@ -1,49 +1,64 @@
-import { Button as AntButton } from 'antd';
-import { ButtonType } from 'antd/lib/button';
-import React, { FC, MouseEvent, ReactNode } from 'react'
-import { styledClassnames } from '../../utils/styledClassnames';
-import styles from "./button.module.scss"
+import React, { FC } from "react";
+import { Button as AntButton, Tooltip } from "antd";
+import clsx from "clsx";
 
-interface ButtonProps {
-    clickHandler?: (event: MouseEvent) => void;
-    children: ReactNode
-    htmlType?: "reset" | "submit" | "button";
-    type?: ButtonType
-    className?: string;
-    moduleClassName?: string;
-    icon?: any;
-    disabled?: boolean;
-    size?: "small"|"medium";
-    loading?:boolean,
-    name?:string,
-    target?:string,
-    href?:string,
-}
+import {
+  ButtonSizes,
+  ButtonTypes,
+  HtmlButtonType,
+} from "src/enums/buttons.enum";
+import { mapToAntdType } from "src/shared/utils/mapButtonType";
+import { ButtonProps } from "src/shared/types/sharedComponents.type";
 
-const Button: FC<ButtonProps> = (props) => {
-    const { clickHandler, children, htmlType = "button", className, moduleClassName, icon, disabled, size, loading,name,target,href, type} = props;
+import styles from "./button.module.scss";
+import { tooltipPosition } from "src/enums/tooltipPosition";
+import { Colors } from "src/enums/colors.enum";
 
-    const globalClassnames = className && [className].join(" ")
-    const moduleClassnames = moduleClassName && styledClassnames(moduleClassName, styles)
+const Button: FC<ButtonProps> = ({
+  children,
+  className,
+  type = ButtonTypes.DEFAULT,
+  size = ButtonSizes.MEDIUM,
+  htmlType = HtmlButtonType.BUTTON,
+  tooltip,
+  ...restProps
+}) => {
+  const antType = mapToAntdType(type);
 
-    return (
-        <div className={`button ${moduleClassnames} ${globalClassnames}`}>
-            <AntButton
-                loading={!!loading}
-                disabled={disabled}
-                icon={icon}
-                className={`${type} ${size}`}
-                htmlType={htmlType}
-                onClick={clickHandler}
-                name={name}
-                target={target}
-                href={href}
-                type = {type}
-                >
-                {children}
-            </AntButton>
-        </div>
-    )
-}
+  const buttonClassName = clsx(
+    styles.button,
+    styles[type],
+    styles[size],
+    className,
+  );
+
+  const buttonElement = (
+    <AntButton
+      {...restProps}
+      htmlType={htmlType}
+      type={antType}
+      className={buttonClassName}
+    >
+      {children}
+    </AntButton>
+  );
+
+  if (!tooltip) {
+    return buttonElement;
+  }
+
+  const tooltipProps =
+    typeof tooltip === "string" ? { title: tooltip } : tooltip;
+
+  return (
+    <Tooltip
+      {...tooltipProps}
+      color={Colors.ASHGRO_BLACK}
+      placement={tooltipPosition.BOTTOM}
+    >
+      {buttonElement}
+    </Tooltip>
+  );
+};
 
 export default Button;

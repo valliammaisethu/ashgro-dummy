@@ -1,51 +1,126 @@
-import React, { useContext, createContext, useMemo, useState, Dispatch, SetStateAction } from "react";
-import { User } from "../../models/user.model";
+import React, {
+  useContext,
+  createContext,
+  useMemo,
+  useState,
+  Dispatch,
+  SetStateAction,
+  PropsWithChildren,
+  useEffect,
+} from "react";
+import { UserData, TokenData } from "src/models/user.model";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 
 export interface AuthState {
   authenticated?: boolean;
-  user?: User;
+  user?: UserData;
+  token?: TokenData;
 }
 
 type SetAuthState = Dispatch<SetStateAction<AuthState>>;
 
-type AuthContentProps = [AuthState, SetAuthState];
+const getInitialValues = (): AuthState => {
+  const storedUser = localStorageHelper.getItem(LocalStorageKeys.USER);
+  const rawToken = localStorage.getItem(LocalStorageKeys.TOKEN);
 
-// Define the default context state
-const initialValues: AuthState = {
-  authenticated: false,
-  user: new User(),
+  let parsedToken = null;
+  if (rawToken) {
+    try {
+      parsedToken = JSON.parse(rawToken);
+    } catch {
+      parsedToken = rawToken;
+    }
+  }
+
+  const hasToken = Boolean(
+    parsedToken && String(parsedToken).trim().length > 0,
+  );
+
+  return {
+    authenticated: hasToken,
+    user: storedUser || new UserData(),
+    token: parsedToken || new TokenData(),
+  };
 };
 
-// Create the context
-const AuthContent: any = createContext({});
+const AuthContent = createContext<[AuthState, SetAuthState] | undefined>(
+  undefined,
+);
 
-// Create method to use context
 const AuthContext = () => {
-  const context = useContext<AuthContentProps>(AuthContent);
+  const context = useContext(AuthContent);
   if (!context) {
-    throw new Error(`useMeContext must be used within a MeContextProvider`);
+    throw new Error(`AuthContext must be used within an AuthProvider`);
   }
+
   const [auth, setAuth] = context;
-  
-  const setAuthenticated = (user?: User) => {
-    setAuth((auth) => ({
-      ...auth,
+
+  const rawToken = localStorage.getItem(LocalStorageKeys.TOKEN);
+
+  let parsedToken = null;
+  if (rawToken) {
+    try {
+      parsedToken = JSON.parse(rawToken);
+    } catch {
+      parsedToken = rawToken;
+    }
+  }
+
+  const actualAuthenticated = Boolean(
+    parsedToken && String(parsedToken).trim().length > 0,
+  );
+
+  useEffect(() => {
+    if (auth.authenticated !== actualAuthenticated) {
+      setAuth(getInitialValues());
+    }
+  }, [auth.authenticated, actualAuthenticated, setAuth]);
+
+  const setAuthenticated = (user?: UserData, token?: TokenData) => {
+    const newAuth = {
       authenticated: true,
       user,
-    }));
+      token,
+    };
+    setAuth(newAuth);
+    localStorageHelper.setItem(LocalStorageKeys.USER, user);
+    localStorageHelper.setItem(LocalStorageKeys.TOKEN, token?.accessToken);
+    localStorageHelper.setItem(
+      LocalStorageKeys.REFRESH_TOKEN,
+      token?.refreshToken,
+    );
+  };
+
+  const resetAuthState = () => {
+    setAuth({
+      authenticated: false,
+      user: new UserData(),
+      token: new TokenData(),
+    });
+    localStorageHelper.clearData();
   };
 
   return {
     ...auth,
-    setAuthenticated
+    authenticated: actualAuthenticated,
+    setAuthenticated,
+    resetAuthState,
   };
 };
 
-// Create the context provider
-const AuthProvider = (ownProps: any) => {
-  const [auth, setAuth] = useState<AuthState>(initialValues);
-  const value = useMemo(() => [auth, setAuth], [auth]);
-  return <AuthContent.Provider value={value} {...ownProps} />;
-}
+export const AuthProvider = ({
+  values,
+  children,
+}: PropsWithChildren<{ values?: AuthState }>) => {
+  const [auth, setAuth] = useState<AuthState>(values || getInitialValues());
 
-export { AuthProvider, AuthContext };
+  const value = useMemo(
+    () => [auth, setAuth] as [AuthState, SetAuthState],
+    [auth],
+  );
+
+  return <AuthContent.Provider value={value}>{children}</AuthContent.Provider>;
+};
+
+export { AuthContext };

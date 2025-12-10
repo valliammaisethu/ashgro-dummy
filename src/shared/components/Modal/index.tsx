@@ -1,52 +1,102 @@
-import React from 'react';
-import { Modal as CustomModal } from 'antd';
-import styles from './Modal.module.scss';
+import React, { Fragment } from "react";
+import { Divider, Modal as AntModal } from "antd";
+import clsx from "clsx";
+import { IconCircleClose } from "obra-icons-react";
 
-export interface ModalProps {
-  children?: React.ReactNode;
-  closeModal: () => void;
-  handleOk?: () => void;
-  visible: boolean;
-  width?: number;
-  title?: string;
-  footer?: JSX.Element[];
-  confirmLoading?: boolean;
-}
+import { ModalFooter } from "./atoms";
+import { Colors } from "src/enums/colors.enum";
+import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
+import { ModalProps } from "src/shared/types/sharedComponents.type";
+import { defaultModalWidth } from "src/constants/sharedComponents";
 
-/* Pass in the following props: 
-child component, 
-closeModal function,
-open/close state for the modal
-modal Title (optional)
-width (optional)
-footer (optional) - pass array of JSX.Element like buttons for the footer
-handleOk (optional) - pass an async function: to be used for executing async operationsw
-confirmLoading(optional) - Boolean value to set loading indicator for confirm button in a modal
-*/
+import styles from "./Modal.module.scss";
+
 const Modal: React.FC<ModalProps> = ({
   children,
   closeModal,
   visible,
   title,
-  width,
+  width = defaultModalWidth,
   handleOk,
   footer,
+  cancelText = Buttons.CANCEL,
+  onCancel,
   confirmLoading,
+  okText = Buttons.OK,
+  cancelButtonProps,
+  okButtonProps,
+  okButtonHtmlType = HtmlButtonType.BUTTON,
+  okButtonType = ButtonTypes.DEFAULT,
+  rootClassName,
+  centered,
+  styles: modalStyles,
+  loading,
+  renderHeader = true,
+  closeIcon,
+  closable,
+  bodyStyle,
+  maskClosable = false,
+  keyboard = false,
 }: ModalProps) => {
+  const defaultFooter = (
+    <ModalFooter
+      cancelText={cancelText}
+      okText={okText}
+      cancelButtonProps={cancelButtonProps}
+      okButtonProps={okButtonProps}
+      okButtonType={okButtonType}
+      okButtonHtmlType={okButtonHtmlType}
+      confirmLoading={confirmLoading}
+      onCancel={onCancel}
+      handleOk={handleOk}
+      closeModal={closeModal}
+    />
+  );
+
   return (
-    <div className={styles['modal-container']}>
-      <CustomModal
-        width={width ?? width}
-        footer={footer ?? footer}
-        title={title ? title : ''}
-        visible={visible}
-        onOk={handleOk ? handleOk : closeModal}
-        onCancel={closeModal}
-        confirmLoading={confirmLoading}
-      >
-        {children}
-      </CustomModal>
-    </div>
+    <AntModal
+      width={width}
+      rootClassName={clsx(styles.modalContainer, rootClassName, {
+        [styles.noHeaderModal]: !renderHeader,
+      })}
+      destroyOnHidden
+      destroyOnClose
+      centered={centered}
+      bodyStyle={bodyStyle}
+      styles={modalStyles}
+      open={visible}
+      closable={closable}
+      loading={loading}
+      onOk={handleOk ?? closeModal}
+      onCancel={onCancel ?? closeModal}
+      confirmLoading={confirmLoading}
+      maskClosable={maskClosable}
+      keyboard={keyboard}
+      footer={footer === undefined ? defaultFooter : footer}
+      title={
+        renderHeader ? (
+          <Fragment>
+            {title}
+            <Divider className={styles.titleDivider} />
+          </Fragment>
+        ) : (
+          <></>
+        )
+      }
+      closeIcon={
+        closeIcon ? (
+          closeIcon
+        ) : (
+          <IconCircleClose
+            strokeWidth={1.25}
+            color={Colors.MODAL_CLOSE_ICON}
+            size={24}
+          />
+        )
+      }
+    >
+      {children}
+    </AntModal>
   );
 };
 

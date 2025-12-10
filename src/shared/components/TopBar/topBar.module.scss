@@ -1,0 +1,102 @@
+@import "src/styles/variables";
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  .homeLogo {
+    width: 3.6rem;
+    height: 3.8rem;
+  }
+
+  .textLogo {
+    height: 3.1rem;
+    width: 8rem;
+  }
+}
+
+.logoutButton {
+  background-color: transparent;
+  border: 0;
+
+  &:global(.ant-btn-color-default) {
+    box-shadow: none;
+  }
+
+  &:hover {
+    background-color: transparent;
+    border: 0;
+  }
+  &:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+  ) {
+    color: unset;
+    background-color: unset;
+  }
+}
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 3.9rem;
+}
+
+.topBarRight {
+  display: flex;
+  align-items: center;
+  gap: 4.8rem;
+}
+
+.topBarItem {
+  color: $nav-text;
+  font-size: 1.5rem;
+  font-family: $font-secondary;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-bottom: 0.9rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition:
+    color 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
+
+  &.active {
+    font-weight: 600;
+    border-bottom: 0.25rem solid;
+    border-image: $nav-active-bg;
+    border-image-slice: 1;
+    color: $nav-active-text;
+    opacity: 1;
+  }
+
+  &:hover {
+    color: $nav-active-text;
+    opacity: 1;
+  }
+}
+
+.topBarEnd {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  .clubName {
+    border-radius: 10rem;
+    padding: 0.8rem 1.4rem;
+    background-color: $club-name;
+    color: $club-name-text;
+    font-size: 1.3rem;
+    font-weight: 500;
+    font-family: $font-secondary;
+  }
+  .logoutIcon {
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    &:hover {
+      transform: translateX(0.4rem);
+      color: darken($ashgro-navy, 10%);
+    }
+  }
+}

@@ -1,0 +1,44 @@
+@import "src/styles/_variables";
+@import "src/styles/_helpers";
+
+.sectionTitle {
+  color: $add-icon-bg;
+  font-size: 1.6rem;
+  font-family: $font-secondary;
+  padding-bottom: 1.6rem;
+}
+
+.okButton {
+  @include modalOkButton;
+}
+
+.membersForm {
+  :global(.ant-modal-body) {
+    height: 58rem;
+    overflow-y: auto;
+  }
+  :global(.ant-modal) {
+    top: 2rem;
+  }
+
+  :global(.ant-modal-footer) {
+    border-radius: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-content: flex-end;
+  }
+}
+
+// whenever delete is happening we are not able to getch api
+
+.addressBox {
+  textArea {
+    min-height: 8rem;
+  }
+}
+.activityDescription {
+  textArea {
+    min-height: 24rem;
+  }
+}

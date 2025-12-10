@@ -1,0 +1,37 @@
+@import "src/styles/_variables";
+@import "src/styles/_helpers";
+
+.profileContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.okButton {
+  @include modalOkButton;
+}
+
+.staffMembersModal {
+  :global(.ant-modal-body) {
+    height: 58rem;
+    overflow-y: auto;
+  }
+  :global(.ant-modal) {
+    top: 2rem;
+  }
+
+  :global(.ant-modal-footer) {
+    background-color: $modal-footer-bg;
+    border-radius: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-content: flex-end;
+  }
+}
+.addressBox {
+  textArea {
+    min-height: 8rem;
+  }
+}

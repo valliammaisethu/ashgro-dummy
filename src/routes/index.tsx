@@ -1,51 +1,155 @@
-import React, { FC, useContext, useEffect } from "react";
+import React from "react";
 import {
   Routes,
   Route,
   BrowserRouter,
   Navigate,
+  useLocation,
 } from "react-router-dom";
-import AuthWrapper from "../views/Auth/AuthWrapper";
-import isAuthenticated from "../shared/components/HOC/requireAuth";
+
+import AppLayout from "../shared/components/AppLayout";
 import Home from "../views/Home";
+import { TopBarProvider } from "../shared/contexts/TopBarContext";
+import NotFound from "../shared/components/FallbackPage";
+import { AppRoutes, NavigationRoutes } from "./routeConstants/appRoutes";
 import { RouterProps } from "../shared/types/route.type";
+import AuthWrapper from "../views/Auth/AuthWrapper";
 import AppComponents from "../views/AppComponents";
-import { AppRoutes } from "./routeConstants/appRoutes";
+import ProspectsListing from "../views/Prospects/Listing";
+import IndividualProspect from "src/views/Prospects/IndividualProspect";
+import Members from "src/views/Members/Listing";
+import StaffMemberDetails from "src/views/StaffMembers/Details";
+import StaffMembersListing from "src/views/StaffMembers/Listing";
+import MemberDetails from "src/views/Members/Details";
+import RoleGuard from "src/shared/components/RoleGuard";
+import { RoleNames } from "src/enums/roleNames.enum";
+import Clubs from "src/views/Clubs";
+import IndividualClub from "src/views/Clubs/IndividualClub";
+import SettingsWrapper from "src/views/Settings";
+import DashboardWrapper from "src/views/Dashboard";
+import { AuthContext } from "src/context/AuthContext";
+import Chatbot from "src/views/Chatbot";
+import LeadForm from "src/views/LeadForm";
+import CalendarContainer from "src/views/Calender/Calender/CalendarContainer";
 
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const { authenticated } = AuthContext();
+  const location = useLocation();
 
-const AppRouter = () => {
-  let routes: RouterProps[] = [
-    { path: AppRoutes.AUTH, component: <AuthWrapper /> },
-    { path: AppRoutes.HOME, component: isAuthenticated(<Home />) },
-  ];
-  if (Boolean(import.meta.env.VITE_UNDER_DEVELOPMENT)) {
-    routes.push({
-      path: AppRoutes.APP_COMPONENTS,
-      component: <AppComponents />,
-    });
+  if (!authenticated) {
+    return (
+      <Navigate
+        to={NavigationRoutes.LOGIN}
+        state={{ from: location.pathname + location.search }}
+        replace
+      />
+    );
   }
 
+  return children;
+};
+
+const AuthRoute = ({ children }: { children: JSX.Element }) => {
+  const { authenticated } = AuthContext();
+
+  if (authenticated) {
+    return <Navigate to={NavigationRoutes.CALENDER} replace />;
+  }
+
+  return children;
+};
+
+const RootRedirect = () => {
+  const { authenticated } = AuthContext();
+
+  if (!authenticated) {
+    return <Navigate to={NavigationRoutes.LOGIN} replace />;
+  }
+
+  return <Navigate to={AppRoutes.CALENDAR} replace />;
+};
+
+const AppRouter = () => {
+  const children: RouterProps[] = [
+    { path: AppRoutes.PROSPECTS_LISTING, component: <ProspectsListing /> },
+    { path: AppRoutes.CALENDAR, component: <CalendarContainer /> },
+    { path: AppRoutes.MEMBERS, component: <Members /> },
+    { path: AppRoutes.CLUB_STAFF, component: <StaffMembersListing /> },
+    { path: AppRoutes.INDIVIDUAL_PROSPECT, component: <IndividualProspect /> },
+    { path: AppRoutes.STAFF_MEMBER_DETAILS, component: <StaffMemberDetails /> },
+    { path: AppRoutes.MEMBER_DETAILS, component: <MemberDetails /> },
+    { path: AppRoutes.SETTINGS, component: <SettingsWrapper /> },
+    { path: AppRoutes.DASHBOARD, component: <DashboardWrapper /> },
+
+    {
+      path: AppRoutes.CLUBS,
+      component: (
+        <RoleGuard allowedRoles={[RoleNames.SUPER_ADMIN]}>
+          <Clubs />
+        </RoleGuard>
+      ),
+    },
+    {
+      path: AppRoutes.INDIVIDUAL_CLUB,
+      component: (
+        <RoleGuard allowedRoles={[RoleNames.SUPER_ADMIN]}>
+          <IndividualClub />
+        </RoleGuard>
+      ),
+    },
+  ];
+
   return (
-    <div>
-      <BrowserRouter>
+    <BrowserRouter>
+      <TopBarProvider>
         <Routes>
-          {routes?.map((route, index) => {
-            return (
-              <Route key={index} path={route?.path} element={route?.component}>
-                {route.children &&
-                  route.children.map(childRoute => (
-                    <Route
-                      key={childRoute.path}
-                      path={childRoute.path}
-                      element={childRoute.component}
-                    />
-                  ))}
-              </Route>
-            );
-          })}
+          <Route path="/" element={<RootRedirect />} />
+
+          <Route
+            path={AppRoutes.AUTH}
+            element={
+              <AuthRoute>
+                <AuthWrapper />
+              </AuthRoute>
+            }
+          />
+
+          <Route path={AppRoutes.CHATBOT} element={<Chatbot />} />
+
+          <Route path={AppRoutes.LEAD_FORM} element={<LeadForm />} />
+
+          <Route
+            path={AppRoutes.APP_COMPONENTS}
+            element={
+              <ProtectedRoute>
+                <AppComponents />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path={AppRoutes.HOME}
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route element={<Home />}>
+              {children.map((child) => (
+                <Route
+                  key={child.path}
+                  path={child.path}
+                  element={child.component}
+                />
+              ))}
+            </Route>
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
-    </div>
+      </TopBarProvider>
+    </BrowserRouter>
   );
 };
 

@@ -1,0 +1,36 @@
+@use "src/styles/variables" as *;
+
+.textAreaWrapper {
+  display: flex;
+  gap: 0.6rem;
+  flex-flow: column nowrap;
+
+  textArea {
+    padding-top: 1rem;
+  }
+}
+
+.textArea {
+  font-family: $font-secondary;
+  background-color: $ashgro-cream;
+  border: 1px solid $incrementer-border;
+  border-radius: 1.2rem;
+  padding: 1rem 1.2rem;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: $ashgro-navy;
+  resize: none;
+
+  &:hover {
+    box-shadow: $text-area-box-shadow;
+  }
+
+  &::placeholder {
+    font-size: 1.2rem;
+    color: $placeholder-color;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}

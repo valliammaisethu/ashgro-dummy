@@ -1,0 +1,660 @@
+@import "src/styles/_variables";
+@import "src/styles/_helpers.scss";
+
+.iconButton {
+  background-color: $search-bg;
+  border-radius: 1.4rem;
+  height: 4.4rem;
+
+  &:global(.ant-btn.ant-btn-icon-only) {
+    width: 4.4rem;
+
+    &:hover {
+      background-color: $search-bg !important;
+    }
+  }
+}
+
+.bulkFileUpload {
+  width: 100%;
+}
+.documentUploadBtn {
+  border-radius: 1.4rem;
+  width: 4.4rem;
+  height: 4.4rem;
+  background-color: $search-bg;
+
+  &:global(.ant-btn.ant-btn-icon-only) {
+    width: 4.4rem;
+  }
+
+  &:global(
+      .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
+    ):hover {
+    background-color: $search-bg;
+  }
+}
+
+@import "src/styles/_variables";
+@import "src/styles/_helpers.scss";
+
+.iconButton {
+  background-color: $search-bg;
+  border-radius: 1.4rem;
+  height: 4.4rem;
+  width: 4.4rem;
+
+  &:global(.ant-btn.ant-btn-icon-only) {
+    width: 4.4rem;
+  }
+  &:hover {
+    background-color: $search-bg !important;
+  }
+}
+
+.modalBody {
+  @include flex-flow(column, wrap, center);
+  gap: 2.4rem;
+}
+
+.iconsContainer {
+  @include flex-flow(row, wrap, center);
+  gap: 1.6rem;
+}
+
+.description {
+  @include flex-flow(column, wrap, center);
+
+  .importDescription {
+    color: $ashgro-navy;
+    font-weight: 500;
+    font-size: 1.8rem;
+  }
+  .uploadDescription {
+    color: $ashgro-gold;
+    font-size: 1.4rem;
+    font-weight: 300;
+  }
+}
+.templateDownload {
+  cursor: pointer;
+  @include flex-flow(row, wrap, center);
+  gap: 0.8rem;
+}
+
+.modalFooter {
+  background-color: $modal-footer-bg;
+  min-height: 16.7rem;
+  border-radius: 1.6rem;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  padding: 2.4rem;
+}
+
+.innerFooter {
+  position: relative;
+  background-color: $ashgro-white;
+  border-radius: 1.6rem;
+  border: 0.1rem solid transparent;
+  background-image:
+    linear-gradient($ashgro-white, $ashgro-white),
+    repeating-linear-gradient(
+      90deg,
+      $search-bg 0 0.6rem,
+      transparent 0.6rem 1.2rem
+    );
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0px 4px 16px 0px rgba(98, 62, 3, 0.1);
+  min-height: auto;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 1.6rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.15;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  &.isUploadingFooter {
+    background-image: linear-gradient($ashgro-white, $ashgro-white);
+    min-height: 5.6rem;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  &.uploadedFooter {
+    background-image: linear-gradient($ashgro-white, $ashgro-white);
+
+    &::before {
+      display: none;
+    }
+  }
+}
+.footerContent {
+  @include flex-flow(column, wrap, center);
+  gap: 0.8rem;
+  width: 100%;
+  padding: 1.6rem 2rem;
+  justify-content: center;
+  cursor: pointer;
+
+  &.isUploadingContent {
+    padding: 1.6rem 2rem;
+    cursor: default;
+  }
+
+  .uploadText {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+  }
+
+  &.uploadedFooter {
+    align-items: flex-start;
+  }
+}
+
+.uploadingContainer {
+  @include flex-flow(column, wrap, flex-start);
+  gap: 0.8rem;
+  width: 100%;
+  border-radius: 0.6rem;
+  opacity: 60%;
+
+  &.isUploadingContainer {
+    padding: 0;
+  }
+
+  .uploadingFileInfo {
+    @include flex-flow(row, nowrap, flex-start);
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+
+    .uploadingFileName {
+      color: $ashgro-navy;
+      font-size: 1.4rem;
+      font-weight: 400;
+    }
+  }
+
+  .progressBarContainer {
+    width: 110%;
+    height: 0.5rem;
+    border-radius: 1rem;
+    overflow: visible;
+    position: relative;
+
+    .progressBar {
+      height: 100%;
+      background: linear-gradient(180deg, #28b128 30%, #c9e4c9 100%);
+      border-radius: 1rem;
+      position: absolute;
+      top: 0.5rem;
+      left: -0.8rem;
+      border-top-left-radius: 2.6rem;
+      border-top-right-radius: 2.6rem;
+      transform: rotate(180deg);
+      transition: width 0.3s ease;
+    }
+  }
+}
+
+.uploadedFileInfo {
+  @include flex-flow(row, wrap, center);
+  gap: 1.2rem;
+  padding: 1.2rem 2.4rem;
+  background-color: rgba($ashgro-gold, 0.1);
+  border-radius: 0.8rem;
+  border: 0.1rem solid $ashgro-gold;
+
+  .fileName {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+}
+
+.uploadedFooterContent {
+  @include flex-flow(row, nowrap, space-between);
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+
+  .fileName {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    font-weight: 400;
+    text-align: left;
+    flex: 1;
+  }
+}
+
+.changeButton {
+  background-color: $search-bg;
+  border: 0.15rem solid transparent;
+  color: $filter-icon;
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 1rem 2.5rem;
+  border-radius: 3.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 3.6rem;
+
+  &:hover {
+    background-color: $search-bg !important;
+    color: $filter-icon !important;
+  }
+}
+
+.cancelButtonContainer {
+  width: 100%;
+  margin-top: 1.6rem;
+  position: absolute;
+  top: 6rem;
+
+  .cancelButton {
+    margin-left: 2rem;
+    background-color: transparent;
+    border: 1px solid $gold-bold;
+    color: $ashgro-gold;
+    font-size: 1.4rem;
+    font-weight: 600;
+    padding: 0.8rem 2.4rem;
+    border-radius: 2.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 4.4rem;
+    width: 14.4rem;
+
+    &:hover {
+      background-color: rgba($ashgro-gold, 0.08);
+    }
+  }
+}
+
+.isUploadingFooter {
+  height: 4rem;
+}
+.uploadedFooterContent {
+  display: flex;
+  gap: 0.8rem;
+}
+.importButton {
+  background-color: $ashgro-navy;
+  color: $ashgro-white;
+  border-radius: 3.6rem;
+  padding: 1.2rem 1.6rem;
+  width: 14.4rem;
+  height: 4.4rem;
+  margin-top: 2.7rem;
+
+  &:hover {
+    background-color: $ashgro-navy !important;
+    color: $ashgro-white !important;
+  }
+}
+.excelIcon {
+  height: 2.2rem;
+  width: 2rem;
+}
+
+.modalBody {
+  @include flex-flow(column, wrap, center);
+  gap: 2.4rem;
+}
+
+.iconsContainer {
+  @include flex-flow(row, wrap, center);
+  gap: 1.6rem;
+}
+
+.description {
+  @include flex-flow(column, wrap, center);
+
+  .importDescription {
+    color: $ashgro-navy;
+    font-weight: 500;
+    font-size: 1.8rem;
+  }
+  .uploadDescription {
+    color: $ashgro-gold;
+    font-size: 1.4rem;
+    font-weight: 300;
+  }
+}
+.templateDownload {
+  cursor: pointer;
+  @include flex-flow(row, wrap, center);
+  gap: 0.8rem;
+}
+
+.modalFooter {
+  background-color: $modal-footer-bg;
+  min-height: 16.7rem;
+  border-radius: 1.6rem;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  padding: 2.4rem;
+}
+
+.innerFooter {
+  position: relative;
+  background-color: $ashgro-white;
+  border-radius: 1.6rem;
+  border: 0.1rem solid transparent;
+  background-image:
+    linear-gradient($ashgro-white, $ashgro-white),
+    repeating-linear-gradient(
+      90deg,
+      $search-bg 0 0.6rem,
+      transparent 0.6rem 1.2rem
+    );
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0px 4px 16px 0px rgba(98, 62, 3, 0.1);
+  min-height: auto;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 1.6rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.15;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  &.isUploadingFooter {
+    background-image: linear-gradient($ashgro-white, $ashgro-white);
+    min-height: 5.6rem;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  &.uploadedFooter {
+    background-image: linear-gradient($ashgro-white, $ashgro-white);
+
+    &::before {
+      display: none;
+    }
+  }
+}
+.footerContent {
+  @include flex-flow(column, wrap, center);
+  gap: 0.8rem;
+  width: 100%;
+  padding: 1.6rem 2rem;
+  justify-content: center;
+  cursor: pointer;
+
+  &.isUploadingContent {
+    padding: 1.6rem 2rem;
+    cursor: default;
+  }
+
+  .uploadText {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+  }
+
+  &.uploadedFooter {
+    align-items: flex-start;
+  }
+}
+
+.uploadingContainer {
+  @include flex-flow(column, wrap, flex-start);
+  gap: 0.8rem;
+  width: 100%;
+  border-radius: 0.6rem;
+  opacity: 60%;
+
+  &.isUploadingContainer {
+    padding: 0;
+  }
+
+  .uploadingFileInfo {
+    @include flex-flow(row, nowrap, flex-start);
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+
+    .uploadingFileName {
+      color: $ashgro-navy;
+      font-size: 1.4rem;
+      font-weight: 400;
+    }
+  }
+
+  .progressBarContainer {
+    width: 110%;
+    height: 0.5rem;
+    border-radius: 1rem;
+    overflow: visible;
+    position: relative;
+
+    .progressBar {
+      height: 100%;
+      background: linear-gradient(180deg, #28b128 30%, #c9e4c9 100%);
+      border-radius: 1rem;
+      position: absolute;
+      top: 0.5rem;
+      left: -0.8rem;
+      border-top-left-radius: 2.6rem;
+      border-top-right-radius: 2.6rem;
+      transform: rotate(180deg);
+      transition: width 0.3s ease;
+    }
+  }
+}
+
+.uploadedFileInfo {
+  @include flex-flow(row, wrap, center);
+  gap: 1.2rem;
+  padding: 1.2rem 2.4rem;
+  background-color: rgba($ashgro-gold, 0.1);
+  border-radius: 0.8rem;
+  border: 0.1rem solid $ashgro-gold;
+
+  .fileName {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+}
+
+.uploadedFooterContent {
+  @include flex-flow(row, nowrap, space-between);
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+
+  .fileName {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    font-weight: 400;
+    text-align: left;
+    flex: 1;
+  }
+}
+
+.changeButton {
+  background-color: $search-bg;
+  border: 0.15rem solid transparent;
+  color: $filter-icon;
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 1rem 2.5rem;
+  border-radius: 3.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 3.6rem;
+
+  &:hover {
+    background-color: $search-bg !important;
+    color: $filter-icon !important;
+  }
+}
+
+.cancelButtonContainer {
+  width: 100%;
+  margin-top: 1.6rem;
+  position: absolute;
+  top: 6rem;
+
+  .cancelButton {
+    margin-left: 2rem;
+    background-color: transparent;
+    border: 1px solid $gold-bold;
+    color: $ashgro-gold;
+    font-size: 1.4rem;
+    font-weight: 600;
+    padding: 0.8rem 2.4rem;
+    border-radius: 2.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 4.4rem;
+    width: 14.4rem;
+
+    &:global(
+      .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+    ) {
+      background-color: transparent;
+      color: $ashgro-gold;
+      border: 1px solid $gold-bold;
+    }
+
+    &:hover {
+      background-color: rgba($ashgro-gold, 0.08);
+    }
+  }
+}
+
+.isUploadingFooter {
+  height: 4rem;
+}
+.uploadedFooterContent {
+  display: flex;
+  gap: 0.8rem;
+}
+.importButton {
+  background-color: $ashgro-navy;
+  color: $ashgro-white;
+  border-radius: 3.6rem;
+  padding: 1.2rem 1.6rem;
+  width: 14.4rem;
+  height: 4.4rem;
+  margin-top: 2.7rem;
+
+  &:hover {
+    background-color: $ashgro-navy !important;
+    color: $ashgro-white !important;
+  }
+}
+.excelIcon {
+  height: 2.2rem;
+  width: 2rem;
+}
+
+.body {
+  padding: 2.5rem 15.2rem 0 15.2rem;
+  @include flex-container(center, center, column);
+}
+.iconsContainer {
+  @include flex-flow(row, wrap, center);
+  gap: 1.6rem;
+}
+.iconButton {
+  background-color: $search-bg;
+  border-radius: 1.4rem;
+  height: 4.4rem;
+  width: 4.4rem;
+
+  &:global(.ant-btn.ant-btn-icon-only) {
+    width: 4.4rem;
+  }
+  &:hover {
+    background-color: $search-bg;
+  }
+}
+.excelIcon {
+  height: 2.2rem;
+  width: 2rem;
+}
+
+.uploadingArrow {
+  width: 3.2rem;
+  height: 1rem;
+}
+
+@keyframes dotBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.5rem);
+  }
+}
+
+.inProgressText {
+  color: $ashgro-navy;
+  font-size: 1.8rem;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 2.4rem;
+
+  .dot1,
+  .dot2,
+  .dot3 {
+    padding-left: 0.2rem;
+    display: inline-block;
+    animation: dotBounce 1.4s infinite ease-in-out;
+  }
+
+  .dot1 {
+    animation-delay: 0s;
+  }
+
+  .dot2 {
+    animation-delay: 0.2s;
+  }
+
+  .dot3 {
+    animation-delay: 0.4s;
+  }
+}
+
+.description {
+  color: $filter-icon;
+  font-size: 1.2rem;
+  text-align: center;
+  font-weight: 300;
+  margin-top: 0.4rem;
+}
+.inProgressModal {
+  :global(.ant-modal) {
+    top: 30%;
+  }
+  :global(.ant-modal-body) {
+    height: 21.9rem;
+    overflow-y: hidden;
+  }
+}
+
+.uploadingFileIcon {
+  height: 2.4rem;
+  width: 2.3rem;
+}

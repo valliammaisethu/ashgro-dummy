@@ -1,122 +1,83 @@
-import { useState } from "react";
-import { deserialize, serialize } from "serializr";
-import axiosInstance from "../../interceptor/axiosInstance";
-import { ApiRoutes } from "./../../routes/routeConstants/apiRoutes";
-import Axios from "axios";
-import {
-  Attachment,
-  AttachmentPresignedUrl
-} from "../../models/attachment.model";
+import { useMutation, UseQueryOptions } from "@tanstack/react-query";
+import axios from "axios";
+import { generatePath } from "react-router-dom";
+import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
+import axiosInstance from "src/interceptor/axiosInstance";
+import { AttachmentPayload, S3UploadError } from "src/models/attachment.model";
+import { ResponseModel } from "src/models/response.model";
+import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
+import { uploadHeaders } from "src/shared/utils/helpers";
 
-const AttachmentService = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+const { ATTACHMENTS, ATTACHMENTS_SPECIFIC } = ApiRoutes;
+const { ATTACHMENT_UPLOAD, ATTACHMENT_DELETE } = MutationKeys;
+const { GET_ATTACHMENT_PREVIEW } = QueryKeys;
 
-  const [attachment, setAttachment] = useState<Attachment>();
-
-  const [attachments, setAttachments] = useState<Attachment[]>([]);
-
-  const [attachmentPreSignedUrl, setAttachmentPreSignedUrl] =
-    useState<AttachmentPresignedUrl>();
-
-  const [isUploading, setIsUploading] = useState(false);
-
-  const [isAttachmentAdding, setIsAttachmentAdding] = useState(false);
-
-  const generatePresignedUrl = async (file: File) => {
-    try {
-      setLoading(true);
+export const AttachmentService = () => {
+  const uploadFile = useMutation({
+    mutationKey: [ATTACHMENT_UPLOAD],
+    mutationFn: async (attachmentPayload: AttachmentPayload) => {
+      const { file, attachmentType } = attachmentPayload;
 
       const payload = {
-        attachment: serialize(Attachment, {
-          format: file.type,
-          name: file.name
-        })
+        attachment: {
+          fileName: file?.name,
+          contentType: file?.type,
+          fileSize: file?.size?.toString(),
+          ...(attachmentType && { attachmentType }),
+        },
       };
 
-      const { data } = await axiosInstance.post(
-        ApiRoutes.ATTACHMENT_PRESIGNED_URL,
-        payload
+      const { data } = await axiosInstance.post(ATTACHMENTS, payload);
+
+      const presignedUrl = data?.data?.presignedUrl;
+      const savedAttachment = data?.data?.savedAttachment;
+      const attachmentId = savedAttachment?.id;
+      const fileName = savedAttachment?.fileName;
+      const s3Key = savedAttachment?.s3Key;
+
+      if (presignedUrl && file) {
+        try {
+          await axios.put(presignedUrl, file, {
+            headers: uploadHeaders(file),
+          });
+        } catch {
+          throw new S3UploadError(
+            "Failed to upload file to S3. Please check CORS configuration.",
+            attachmentId,
+          );
+        }
+      }
+
+      return { id: attachmentId, fileName, s3Key };
+    },
+  });
+
+  const deleteFile = useMutation({
+    mutationKey: [ATTACHMENT_DELETE],
+    mutationFn: async (attachmentId: string) => {
+      const { data } = await axiosInstance.delete(
+        generatePath(ATTACHMENTS_SPECIFIC, { id: attachmentId }),
       );
+      return data;
+    },
+  });
 
-      const attachmentPreSignedUrl = deserialize(
-        AttachmentPresignedUrl,
-        data["attachment"]
+  const getAttachmentPreview = (
+    attachmentId = "",
+  ): UseQueryOptions<string, ResponseModel, string> => ({
+    queryKey: [GET_ATTACHMENT_PREVIEW, attachmentId],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(
+        generatePath(ATTACHMENTS_SPECIFIC, { id: attachmentId }),
       );
-
-      setAttachmentPreSignedUrl(attachmentPreSignedUrl);
-
-      return attachmentPreSignedUrl;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const uploadToS3 = async (attachment: Attachment, file: File) => {
-    try {
-      if (!attachment.url) return;
-
-      setIsUploading(true);
-
-      const { data } = await Axios.put(attachment.url, file);
-
-      return data;
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const addAttachment = async (attachment: Attachment) => {
-    try {
-      setLoading(true);
-
-      const response = await axiosInstance.post(ApiRoutes.ATTACHMENTS, {
-        attachment: serialize(Attachment, attachment)
-      });
-
-      const data = deserialize(Attachment, response.data["attachment"]);
-
-      setAttachment(data);
-
-      setAttachments((attachments) => [...attachments, data]);
-
-      return data;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const uploadAttachment = async (file: File) => {
-    try {
-      setIsAttachmentAdding(true);
-      const attachment = await generatePresignedUrl(file);
-
-      await uploadToS3(attachment, file);
-
-      const newAttachment = await addAttachment({
-        s3Key: attachment?.key,
-        size: file.size,
-        name: file.name,
-        format: attachment.format
-      });
-
-      return newAttachment;
-    } catch (ex) {
-      setIsAttachmentAdding(false);
-    }
-  };
+      return data?.data?.presignedUrl;
+    },
+    enabled: !!attachmentId,
+  });
 
   return {
-    loading,
-    attachment,
-    attachmentPreSignedUrl,
-    addAttachment,
-    generatePresignedUrl,
-    attachments,
-    setAttachment,
-    isUploading,
-    uploadAttachment,
-    isAttachmentAdding
+    uploadFile,
+    deleteFile,
+    getAttachmentPreview,
   };
 };
-
-export default AttachmentService;

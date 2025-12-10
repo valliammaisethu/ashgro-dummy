@@ -1,0 +1,83 @@
+@import "src/styles/variables";
+@import "src/styles/_helpers";
+
+.header {
+  @include flex-container(space-between, center, row);
+}
+
+.left {
+  flex: 1;
+}
+.right {
+  @include flex-container(normal, center, row, 1.6rem);
+}
+
+.addStaffButton {
+  &:global(.ant-btn) {
+    border-radius: 3.6rem;
+    font-size: 1.4rem;
+    height: 4.4rem;
+    color: $ashgro-white;
+    @include secondaryBold;
+    min-width: 14.4rem;
+  }
+}
+
+.staffFilter {
+  :global(
+    .ant-select-multiple
+      .ant-select-selection-overflow
+      .ant-select-selection-item
+  ) {
+    background-color: transparent;
+    color: $filter-icon;
+    @include secondaryBold;
+
+    &:global(.placeholderText) {
+      color: $filter-icon;
+    }
+  }
+  :global(.ant-select) {
+    min-width: 18.8rem;
+    height: 4.4rem;
+    color: $filter-icon;
+    @include secondaryBold;
+    font-size: 1.4rem;
+
+    &:after {
+      background: $search-bg;
+      border-radius: 0 4.6rem 4.6rem 0;
+    }
+  }
+
+  :global(
+    .ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector
+  ) {
+    background-color: $search-bg;
+  }
+
+  :global(
+    .ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector
+  ) {
+    border-radius: 4.6rem;
+  }
+
+  :global(.ant-select-multiple .ant-select-selection-item) {
+    height: 3.1rem;
+  }
+  :global(
+    .ant-select-multiple
+      .ant-select-selection-overflow
+      .ant-select-selection-item-content
+  ) {
+    margin-inline-end: 0;
+  }
+  :global(.ant-select-selection-placeholder) {
+    padding-top: 0.5rem;
+    padding-left: 0.1rem;
+    // using important here to override antoverrides
+    font-size: 1.4rem !important;
+    font-weight: 600 !important;
+    color: $filter-icon !important;
+  }
+}

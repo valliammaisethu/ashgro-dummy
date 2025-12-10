@@ -1,40 +1,83 @@
-import React from "react";
-import { ExclamationCircleFilled } from "@ant-design/icons";
-import { Modal } from "antd";
-import {
-  SharedComponentsConstants,
-  getDeleteModalTitle
-} from "../../../constants/sharedComponents";
+import React, { useState } from "react";
+import { IconDelete } from "obra-icons-react";
+import clsx from "clsx";
 
-export interface DeleteModalProps {
-  children: React.ReactNode;
-  resource: string;
-  onOk?: () => void;
-  onCancel?: () => void;
-  description?: string;
-}
-const DeleteModal: React.FC<DeleteModalProps> = ({
-  children,
-  onOk,
-  onCancel,
-  resource,
-  description
-}: DeleteModalProps) => {
-  const { confirm } = Modal;
-  const showDeleteConfirm = () => {
-    confirm({
-      title: getDeleteModalTitle(resource),
-      icon: <ExclamationCircleFilled />,
-      content: description,
-      okText: SharedComponentsConstants.DELETE_MODAL.okText,
-      okType: SharedComponentsConstants.DELETE_MODAL.okType,
-      cancelText: SharedComponentsConstants.DELETE_MODAL.cancelText,
-      onOk,
-      onCancel
-    });
+import Modal from "src/shared/components/Modal";
+import Button from "src/shared/components/Button";
+import { Buttons } from "src/enums/buttons.enum";
+import { replaceString } from "src/shared/utils/commonHelpers";
+import { deleteDescription, deleteTitle, modalWidth } from "./constants";
+import ConditionalRenderComponent from "../ConditionalRenderComponent";
+import { DeleteModalProps } from "src/shared/types/sharedComponents.type";
+
+import styles from "./deleteModal.module.scss";
+
+const DeleteModal = (props: DeleteModalProps) => {
+  const {
+    title,
+    description,
+    onDelete,
+    loading,
+    className,
+    children,
+    customTitle,
+    customDescription,
+    deleteButtonText,
+    customWidth,
+  } = props;
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  const handleVisiblity = () => setIsVisible((prev) => !prev);
+
+  const handleDelete = async () => {
+    await onDelete?.();
+    handleVisiblity();
   };
+  return (
+    <>
+      <ConditionalRenderComponent
+        visible={!children}
+        fallback={
+          <div onClick={handleVisiblity} className={className}>
+            {children}
+          </div>
+        }
+      >
+        <Button
+          onClick={handleVisiblity}
+          icon={<IconDelete strokeWidth={1.5} />}
+          className={clsx(styles.deleteIcon, className)}
+        />
+      </ConditionalRenderComponent>
 
-  return <div onClick={showDeleteConfirm}>{children}</div>;
+      <Modal
+        title={customTitle || replaceString(deleteTitle, title)}
+        visible={isVisible}
+        width={customWidth || modalWidth}
+        centered
+        handleOk={handleVisiblity}
+        rootClassName={styles.deleteModal}
+        onCancel={handleVisiblity}
+        maskClosable={false}
+        footer={[
+          <div className={styles.footer} key={Buttons.DELETE_PERMANENTLY}>
+            <Button
+              onClick={handleDelete}
+              className={styles.deleteButton}
+              loading={loading}
+            >
+              {deleteButtonText || Buttons.DELETE_PERMANENTLY}
+            </Button>
+          </div>,
+        ]}
+      >
+        <p className={styles.description}>
+          {customDescription || replaceString(deleteDescription, description)}
+        </p>
+      </Modal>
+    </>
+  );
 };
 
 export default DeleteModal;

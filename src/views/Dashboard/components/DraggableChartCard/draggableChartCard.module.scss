@@ -1,0 +1,12 @@
+.draggableCard {
+  transition:
+    transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1),
+    opacity 0.2s ease,
+    outline 0.2s ease;
+}
+
+.dragging {
+  cursor: grabbing;
+  opacity: 0.3;
+  z-index: 1000;
+}

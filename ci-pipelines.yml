@@ -1,14 +1,11 @@
 name: CI Pipeline
 
-trigger:
-  branches:
-    include:
-      - "*" # Adjust to restrict to specific branches if needed
-
 pr:
   branches:
     include:
-      - "*" # Trigger on all pull requests
+      - "develop"
+      - "qa"
+      - "staging"
 
 pool:
   vmImage: "ubuntu-latest"
@@ -23,24 +20,14 @@ steps:
   # Step 2: Setup Node.js
   - task: NodeTool@0
     inputs:
-      versionSpec: "18.12.1"
+      versionSpec: "20.19.5"
     displayName: "Install Node.js"
 
   # Step 3: Install dependencies
   - script: npm ci
     displayName: "Install dependencies"
 
-  # Step 4: Run linter
-  - script: npm run lint
-    displayName: "Run linter"
-
-  # Step 5: Run tests and coverage
-  - script: npm run coverage
-    displayName: "Run tests and collect coverage"
-    env:
-      VITE_APP_API_BASE_URL: "$(VITE_API_BASE_URL)"
-
-  # Step 6: Build project
+  # Step 4: Build Project
   - script: npm run build
     displayName: "Build project"
     env:

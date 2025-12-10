@@ -1,0 +1,21 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.wrapper {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.cardGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+}
+
+.addButton {
+  border: none;
+  font-weight: 500;
+  padding: 0 1.8rem;
+  height: 4rem;
+  background-color: $ashgro-navy;
+}

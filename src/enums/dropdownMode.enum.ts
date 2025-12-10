@@ -1,5 +1,4 @@
-
 export enum DropdownModeEnum {
-    MULTIPLE = 'multiple',
-    TAGS = 'tags'
+  MULTIPLE = "multiple",
+  TAGS = "tags",
 }

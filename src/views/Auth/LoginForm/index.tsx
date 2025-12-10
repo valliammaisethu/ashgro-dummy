@@ -1,39 +1,86 @@
 import React from "react";
-import { Formik, Form } from "formik";
-import InputField from "../../../shared/components/InputField";
-import { validationSchema } from "./LoginValidation";
-import { Button } from "antd";
-import UserService from "../../../services/AuthService/auth.service";
-import { AuthConstants } from "../../../constants/auth";
+import { useMutation } from "@tanstack/react-query";
+import { FieldValues } from "react-hook-form";
 
-interface User {
-  email: string;
-  password: string;
-}
+import Form from "src/shared/components/Form";
+import InputField from "src/shared/components/InputField";
+import CheckboxField from "src/shared/components/CheckboxField";
+import Button from "src/shared/components/Button";
+import PasswordField from "src/shared/components/PasswordField";
+import { INPUT_TYPE } from "src/enums/inputType";
+import { Buttons, HtmlButtonType } from "src/enums/buttons.enum";
+import { AuthService } from "src/services/AuthService/auth.service";
+import useRedirect from "src/shared/hooks/useRedirect";
+import logo from "src/assets/images/logo.webp";
+import { imageAlts } from "src/constants/imageAlts";
+import { fields, labels, loginFormConstants, placeholders } from "./constants";
+import { validationSchema } from "./LoginValidation";
+
+import styles from "./loginForm.module.scss";
+
+const { email: emailPlaceholder, password: passwordPlaceholder } = placeholders;
+const {
+  email: emailLabel,
+  password: passwordLabel,
+  rememberMe: rememberMeLabel,
+} = labels;
+const { email, password, rememberMe } = fields;
 
 const LoginForm = () => {
-  const { loading, loginUser } = UserService();
+  const { navigateToForgotPassword } = useRedirect();
 
-  const { INITIAL_VALUES, INPUT_FIELDS, BUTTON } = AuthConstants.LOGIN_FORM;
+  const { loginUser } = AuthService();
 
-  const onSubmit = (user: User) => loginUser(user);
+  const { mutateAsync, isPending } = useMutation(loginUser());
+
+  const handleSubmit = (values: FieldValues) =>
+    mutateAsync({
+      ...values,
+      rememberMe: values.rememberMe ? true : false,
+    });
 
   return (
-    <div>
-      <Formik
-        initialValues={INITIAL_VALUES}
-        onSubmit={onSubmit}
-        validationSchema={validationSchema}
-      >
-        <Form>
-          {INPUT_FIELDS.map(({ TYPE, NAME, PLACEHOLDER }) => (
-            <InputField type={TYPE} name={NAME} placeholder={PLACEHOLDER} />
-          ))}
-          <Button htmlType={BUTTON.TYPE} loading={loading}>
-            {BUTTON.TEXT}
+    <div className={styles.loginFormContainer}>
+      <img className={styles.loginLogo} alt={imageAlts.loginLogo} src={logo} />
+      <div className={styles.container}>
+        <h1 className={styles.title}>{loginFormConstants.title}</h1>
+        <Form
+          validationSchema={validationSchema}
+          className={styles.form}
+          onSubmit={handleSubmit}
+        >
+          <div className={styles.formFields}>
+            <InputField
+              placeholder={emailPlaceholder}
+              name={email}
+              label={emailLabel}
+              type={INPUT_TYPE.EMAIL}
+            />
+            <PasswordField
+              name={password}
+              label={passwordLabel}
+              placeholder={passwordPlaceholder}
+              className={styles.passwordInput}
+            />
+          </div>
+          <div className={styles.footer}>
+            <CheckboxField name={rememberMe} label={rememberMeLabel} />
+            <span
+              onClick={navigateToForgotPassword}
+              className={styles.forgotPassword}
+            >
+              {loginFormConstants.forgotPassword}
+            </span>
+          </div>
+          <Button
+            htmlType={HtmlButtonType.SUBMIT}
+            className={styles.loginButton}
+            loading={isPending}
+          >
+            {Buttons.LOGIN}
           </Button>
         </Form>
-      </Formik>
+      </div>
     </div>
   );
 };

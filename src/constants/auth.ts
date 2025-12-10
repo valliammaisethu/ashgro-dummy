@@ -6,19 +6,19 @@ export const AuthConstants = {
     TITLE: "Welcome",
     INITIAL_VALUES: {
       email: "abc@123.com",
-      password: "test@1234"
+      password: "test@1234",
     },
     INPUT_FIELDS: [
       { TYPE: INPUT_TYPE.EMAIL, NAME: "email", PLACEHOLDER: "Enter email" },
       {
         TYPE: INPUT_TYPE.PASSWORD,
         NAME: "password",
-        PLACEHOLDER: "Enter password"
-      }
+        PLACEHOLDER: "Enter password",
+      },
     ],
     BUTTON: {
       TYPE: "submit" as ButtonHTMLType,
-      TEXT: "Login"
-    }
-  }
+      TEXT: "Login",
+    },
+  },
 };

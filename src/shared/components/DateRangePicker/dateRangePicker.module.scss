@@ -1,0 +1,97 @@
+@import "src/styles/_helpers";
+@import "src/styles/variables";
+
+.datePickerWrapper {
+  position: relative;
+}
+
+.toLabel {
+  position: absolute;
+  left: 52%;
+}
+
+.fromSuffix {
+  position: absolute;
+  left: 40%;
+  bottom: 12%;
+}
+
+.toSuffix {
+  position: absolute;
+  bottom: 12%;
+  right: 1.5rem;
+}
+
+.datePickerWrapper {
+  :global(.ant-picker-range) {
+    padding-left: 0;
+    padding-top: 1.4rem;
+  }
+
+  :global(.ant-picker-range.ant-picker-outlined) {
+    border: 0;
+    background-color: transparent;
+
+    &:hover {
+      box-shadow: none;
+    }
+  }
+  :global(.ant-picker-range .ant-picker-clear) {
+    inset-inline-end: -2.1rem !important;
+  }
+  :global(.ant-picker-range) {
+    :global(.ant-picker-input) {
+      border: 1px solid $incrementer-border;
+      padding: 1rem;
+      border-radius: 1.2rem;
+      height: 4rem;
+      min-width: 21rem;
+    }
+  }
+}
+
+.rangePickerComponent {
+  &:global(.ant-picker-range .ant-picker-range-separator) {
+    margin-left: 2rem;
+  }
+  &:global(.ant-picker.ant-picker-range.ant-picker-outlined .ant-picker-input) {
+    border: 1px solid $incrementer-border;
+    padding: 1.2rem !important;
+  }
+  :global(.ant-picker-panel-container) {
+    border-radius: 1.6rem;
+  }
+  :global(.ant-picker-header-view) {
+    padding: 1rem;
+    padding-bottom: 0;
+    @include secondaryRegular;
+    font-size: 1.6rem;
+    color: $ashgro-navy;
+  }
+  :global(.ant-picker-header) {
+    border-bottom: 0;
+  }
+  :global(.ant-picker-content) {
+    tr {
+      th {
+        color: $range-picker-tr;
+        @include secondaryRegular;
+        font-size: 1.2rem;
+      }
+    }
+  }
+  :global(.ant-picker-cell-inner) {
+    color: $ashgro-navy;
+    @include secondaryRegular;
+    font-size: 1.4rem;
+  }
+  :global(
+    .ant-picker-dropdown
+      .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
+        .ant-picker-cell-disabled
+      )
+      .ant-picker-cell-inner
+  ) {
+    color: $ashgro-gold;
+  }
+}

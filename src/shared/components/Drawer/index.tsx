@@ -1,26 +1,61 @@
-import { Drawer as AntdDrawer, DrawerProps } from 'antd'
-import React, { ReactNode,FC } from 'react'
+import React from "react";
+import { Drawer as AntdDrawer } from "antd";
+import { IconCircleClose } from "obra-icons-react";
 
-export type drawerProps = {
-  title: ReactNode,
-  width?: number,
-  closable: boolean,
-  onClose: () => void,
-  open: boolean,
-  closeIcon?: ReactNode,
-  footer?: ReactNode,
-  size?: DrawerProps["size"],
-  zIndex?: number,
-  children: JSX.Element,
-  placement?: 'top' | 'bottom' | 'left' | 'right'
-}
-const Drawer:FC<drawerProps>=(props)=> {
-  const { title, width, closable = true, onClose, open = false, closeIcon, footer, size = 'default', zIndex, placement = 'right', children } = props
+import { DrawerProps } from "src/shared/types/sharedComponents.type";
+import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
+import { Colors } from "src/enums/colors.enum";
+import { DrawerFooter } from "./drawerFooter";
+
+const Drawer = (props: DrawerProps) => {
+  const {
+    footer,
+    onClose,
+    cancelText,
+    okText,
+    cancelButtonProps,
+    okButtonProps,
+    okButtonType,
+    okButtonHtmlType,
+    confirmLoading,
+    handleOk,
+    ...rest
+  } = props;
+
+  const renderFooter = () => {
+    if (footer === null) return null;
+    if (footer !== undefined) return footer;
+
+    return (
+      <DrawerFooter
+        cancelText={cancelText}
+        okText={okText}
+        cancelButtonProps={cancelButtonProps}
+        okButtonProps={okButtonProps}
+        okButtonType={okButtonType}
+        okButtonHtmlType={okButtonHtmlType}
+        confirmLoading={confirmLoading}
+        onClose={onClose}
+        handleOk={handleOk}
+      />
+    );
+  };
+
   return (
-    <AntdDrawer title={title} width={width} closable={closable} onClose={onClose} zIndex={zIndex} placement={placement} visible={open} size={size} closeIcon={closeIcon} footer={footer}>
-      {children}
-    </AntdDrawer>
-  )
-}
+    <AntdDrawer
+      {...rest}
+      onClose={onClose}
+      closeIcon={
+        <IconCircleClose
+          color={Colors.MODAL_CLOSE_ICON}
+          strokeWidth={1.25}
+          size={24}
+        />
+      }
+      footer={renderFooter()}
+      placement={DrawerPlacement.RIGHT}
+    />
+  );
+};
 
 export default Drawer;

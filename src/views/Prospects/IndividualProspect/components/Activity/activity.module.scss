@@ -1,0 +1,65 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.title {
+  color: $add-icon-bg;
+  font-size: 1.6rem;
+}
+
+.header {
+  @include flex-container(flex-end, center, row, 1rem);
+  margin-top: 2rem;
+}
+
+.description {
+  margin-top: 2rem;
+}
+
+.modalFooter {
+  background-color: $modal-footer-bg;
+  min-height: 7.6rem;
+  border-radius: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  justify-content: flex-end;
+  padding: 1.6rem 3.2rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+  .okButton {
+    background-color: $ashgro-navy;
+    color: $ashgro-white;
+    border-radius: 3.6rem;
+    padding: 1.2rem 1.6rem;
+    width: 14.4rem;
+    height: 4.4rem;
+
+    &:hover {
+      background-color: $ashgro-navy !important;
+      color: $ashgro-white !important;
+    }
+  }
+}
+
+.currentDateAndTime {
+  @include flex-container(space-between, center, row, 1rem);
+  margin-top: 0.5rem;
+  height: 4rem;
+  padding: 1rem;
+  background-color: $input-background;
+  border-radius: $input-border-radius;
+  border: 0.1rem solid $ashgro-input-border;
+}
+
+.container {
+  margin-top: 1rem;
+}
+
+.activityDescription {
+  textArea {
+    min-height: 24rem;
+  }
+}

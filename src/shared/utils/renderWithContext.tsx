@@ -22,7 +22,7 @@ const renderWithContext = (
       {
         wrapper: BrowserRouter,
         ...options,
-      }
+      },
     ) as ReturnType<typeof render>),
   };
 };

@@ -3,110 +3,76 @@
 @import "@antOverrides";
 
 /* General component styles */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%; // 1 rem = 10px
+  font-family: $font-secondary;
+}
+
+input::placeholder,
+select::placeholder {
+  font-family: $font-secondary;
+  color: $placeholder-color;
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+label {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: $ashgro-label;
+  font-family: $font-secondary !important;
+}
+
 body {
-  background-color: #FFFFFF;
+  background-color: $search-field-placeholder;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
   color: $primary-black;
 }
 
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-button,
-input {
-  font-family: 'Roboto', sans-serif !important;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid inherit;
+  /* Reset text color */
+  -webkit-text-fill-color: inherit;
+  /* Reset background */
+  -webkit-box-shadow: 0 0 0 1000px $input-background inset !important;
 }
 
-
-.avatar-bg-color--1 {
-  background-color: #ef6c0033 !important;
-  color: #EF6C00 !important
+/* Firefox */
+input:-moz-autofill,
+textarea:-moz-autofill,
+select:-moz-autofill,
+input:autofill,
+textarea:autofill,
+select:autofill {
+  box-shadow: none;
+  background-color: transparent;
+  color: inherit;
 }
 
-.avatar-bg-color--2 {
-  background-color: #c2175a33 !important;
-  color: #C2175A !important
+span.ant-input-affix-wrapper.customInput > .ant-input:not(.ant-input-disabled) {
+  // Using important as antd used important to override browser default
+  -webkit-box-shadow: 0 0 0 1000px $input-background inset !important;
 }
 
-.avatar-bg-color--3 {
-  background-color: #be360933 !important;
-  color: #BE3609 !important
-}
-
-.avatar-bg-color--4 {
-  background-color: #7c58c033 !important;
-  color: #7C58C0 !important
-}
-
-.avatar-bg-color--5 {
-  background-color: #ab47bb33 !important;
-  color: #AB47BB !important
-}
-
-.avatar-bg-color--6 {
-  background-color: #01897b33 !important;
-  color: #01897B !important
-}
-
-.avatar-bg-color--7 {
-  background-color: #00579b33 !important;
-  color: #00579B !important
-}
-
-.avatar-bg-color--8 {
-  background-color: #bf350d33 !important;
-  color: #BF350D !important
-}
-
-.avatar-bg-color--9 {
-  background-color: #5b6bc033 !important;
-  color: #5B6BC0 !important
-}
-
-.avatar-bg-color--10 {
-  background-color: #00579a33 !important;
-  color: #00579A !important
-}
-
-.avatar-bg-color--11 {
-  background-color: #33691c33 !important;
-  color: #33691C !important
-}
-
-.avatar-bg-color--12 {
-  background-color: #7e57c233 !important;
-  color: #7E57C2 !important;
-
-}
-
-.avatar-bg-color--13 {
-  background-color: #77909c33 !important;
-  color: #77909C !important
-}
-
-.avatar-bg-color--14 {
-  background-color: #455a6433 !important;
-  color: #455A64 !important
-}
-
-.avatar-bg-color--15 {
-  background-color: #669f3733 !important;
-  color: #669F37 !important
-}
-
-.avatar-bg-color--16 {
-  background-color: #eb407a33 !important;
-  color: #EB407A !important
-}
-
-.avatar-bg-color--17 {
-  background-color: #bf360d33 !important;
-  color: #BF360D !important
-}
-
-.avatar-bg-color--18 {
-  background-color: #0097a733 !important;
-  color: #0097A7 !important
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

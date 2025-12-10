@@ -1,0 +1,24 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.headerRow {
+  display: grid;
+  align-items: center;
+  padding: $table-padding;
+  padding: 1.9rem 0 1.8rem 3.2rem;
+  background-color: $ashgro-white;
+  border-radius: 2rem 2rem 0 0;
+  border-bottom: 1px solid $gradient-border;
+  .headerLabel {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: $ashgro-gold;
+    font-family: $font-secondary;
+
+    &:nth-child(2),
+    &:nth-child(3),
+    &:nth-child(4) {
+      text-align: center;
+    }
+  }
+}

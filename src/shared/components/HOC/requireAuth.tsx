@@ -1,34 +1,35 @@
-import React, { FC, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../../context/AuthContext';
-import { NavigationRoutes } from '../../../routes/routeConstants/appRoutes';
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { NavigationRoutes } from "src/routes/routeConstants/appRoutes";
 import RestrictAccess from "../RestrictedAccess";
+import { AuthContext } from "src/context/AuthContext";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
-    const Authentication = (props: any) => {
-        const {allowedRoles} = props
-        const { authenticated } = AuthContext();
-        const location = useLocation();
-        const navigate = useNavigate();
-        useEffect(() => {
-            if (!authenticated && location.pathname !== NavigationRoutes.LOGIN) {
-                return navigate(NavigationRoutes.LOGIN);
-            }
-        }, [props]);
+  const Authentication = (props: any) => {
+    const { allowedRoles } = props;
+    const { authenticated } = AuthContext();
+    const location = useLocation();
+    const navigate = useNavigate();
 
-        if(allowedRoles?.length) {
-            const { user } = props;
-            return allowedRoles.includes(user.role) ? children : <RestrictAccess />;
-        }
-        return children;
-    } 
+    useEffect(() => {
+      if (!authenticated && location.pathname !== NavigationRoutes.LOGIN) {
+        return navigate(NavigationRoutes.LOGIN);
+      }
+    }, [authenticated, location.pathname, navigate]);
 
-    return <Authentication/>;
+    if (allowedRoles?.length) {
+      const { user } = props;
+      return allowedRoles.includes(user.role) ? children : <RestrictAccess />;
+    }
+    return children;
+  };
+
+  return <Authentication />;
 };
 
 export const isAuthenticated = (component: JSX.Element) => {
-    return RequireAuth({children: component});
+  return RequireAuth({ children: component });
 };
-
 
 export default isAuthenticated;

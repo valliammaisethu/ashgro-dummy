@@ -1,39 +1,29 @@
-import { serializable, alias, primitive } from "serializr";
-import { AttachmentFormat } from "../enums/attachmentFormat";
+import { RcFile } from "antd/es/upload";
+import { serializable } from "serializr";
+import { AttachmentTypes } from "src/enums/attachmentTypes.enum";
 
-export class AttachmentPresignedUrl {
+export class AttachmentPayload {
   @serializable
-  url?: string;
-
-  @serializable
-  format?: AttachmentFormat;
+  fileName?: string;
 
   @serializable
-  key?: string;
+  contentType?: string;
+
+  @serializable
+  fileSize?: string;
+
+  @serializable
+  attachmentType?: AttachmentTypes;
+
+  file?: RcFile;
 }
 
-export class Attachment {
-  @serializable
-  id?: string;
+export class S3UploadError extends Error {
+  attachmentId: string;
 
-  @serializable
-  name?: string;
-
-  @serializable
-  format?: string;
-
-  @serializable(alias("s3_key", primitive()))
-  s3Key?: string;
-
-  @serializable
-  size?: number;
-
-  @serializable
-  url?: string;
-
-  @serializable(alias("thumbnail_s3_key", primitive()))
-  thumbnailS3Key?: string;
-
-  @serializable(alias("thumbnail_url", primitive()))
-  thumbnailUrl?: string;
+  constructor(message: string, attachmentId: string) {
+    super(message);
+    this.name = "S3UploadError";
+    this.attachmentId = attachmentId;
+  }
 }

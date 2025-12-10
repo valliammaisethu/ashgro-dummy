@@ -1,0 +1,93 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.transcriptContainer {
+  @include flex-container(normal, normal, column, 2rem);
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+  @extend %hideScrollbar;
+}
+
+.sessionContainer {
+  @include flex-container(normal, normal, column, 1.6rem);
+  padding: 1.6rem;
+  border-radius: 1.6rem;
+  border: 1px solid $activity-border;
+}
+
+.messageRow {
+  @include flex-container(normal, flex-start, row, 0.8rem);
+  width: 100%;
+}
+
+.userRow {
+  justify-content: flex-start;
+}
+
+.botRow {
+  justify-content: flex-end;
+
+  .messageContent {
+    text-align: right;
+  }
+}
+
+.messageAvatar {
+  width: 3.8rem;
+  height: 3.8rem;
+  border-radius: 50%;
+}
+
+.botMsg {
+  width: 4.2rem;
+  height: 4.2rem;
+  border-radius: 50%;
+  background-color: $avatar-bg;
+  color: $select-tag-color;
+  @include flex-container(center, center, row);
+  font-family: $font-secondary;
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 2.2rem;
+  letter-spacing: -0.007em;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.messageContent {
+  @include flex-container(normal, normal, column, 0.4rem);
+  max-width: 60%;
+}
+
+.messageBubble {
+  padding: 1.2rem;
+  border-radius: 1.6rem;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.userBubble {
+  background-color: $skeleton-bg;
+  color: $ashgro-black;
+  border-radius: 1.6rem;
+}
+
+.botBubble {
+  background-color: $select-tag-color;
+  color: $ashgro-white;
+}
+
+.timestamp {
+  font-size: 1.1rem;
+  color: $range-picker-tr;
+  padding: 0 0.4rem;
+}
+
+:global {
+  .ant-drawer .ant-drawer-body {
+    margin-bottom: 2.4rem;
+  }
+}

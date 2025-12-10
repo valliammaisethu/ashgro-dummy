@@ -1,14 +1,20 @@
-import React, { FC } from "react";
+import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import RegisterForm from "../../views/Auth/RegisterForm";
-import LoginForm from "../../views/Auth/LoginForm";
+
 import { RouterProps } from "../../shared/types/route.type";
-import { AppRoutes, NavigationRoutes } from "../../routes/routeConstants/appRoutes";
+import {
+  AppRoutes,
+  NavigationRoutes,
+} from "../../routes/routeConstants/appRoutes";
+import LoginForm from "../../views/Auth/LoginForm";
+import ForgotPassword from "./ForgotPassword";
+import ResetPassword from "./ResetPassword";
 
 const authRouter = () => {
   const routes: RouterProps[] = [
-    { path: AppRoutes.REGISTER, component: <RegisterForm /> },
     { path: AppRoutes.LOGIN, component: <LoginForm /> },
+    { path: AppRoutes.FORGOT_PASSWORD, component: <ForgotPassword /> },
+    { path: AppRoutes.RESET_PASSWORD, component: <ResetPassword /> },
   ];
 
   return (
@@ -17,7 +23,7 @@ const authRouter = () => {
         return (
           <Route key={index} path={route?.path} element={route?.component}>
             {route.children &&
-              route.children.map(childRoute => (
+              route.children.map((childRoute) => (
                 <Route
                   key={childRoute.path}
                   path={childRoute.path}
