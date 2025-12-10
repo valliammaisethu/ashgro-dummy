@@ -8,6 +8,12 @@
   border: 0.5px solid $chart-border-color;
   overflow: hidden;
 
+  &.chartCardOver {
+    border: 1px dotted $active-highlight-blue;
+    box-shadow: $card-box-shadow;
+    transform: scale(0.98);
+  }
+
   .chartHeader {
     @include flex-container(space-between, center);
     padding: 1.7rem 1.6rem 1.6rem 2.6rem;
@@ -17,7 +23,9 @@
 
       .dragIcon {
         cursor: grab;
-        &:active {
+
+        &:active,
+        &.dragging {
           cursor: grabbing;
         }
       }
@@ -64,4 +72,9 @@
 .loader {
   @include flex-container(center, center);
   min-height: 35rem;
+}
+
+.chartCardDragging {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  transform: scale(1.02);
 }
