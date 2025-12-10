@@ -2,7 +2,7 @@ import { list, object, serializable } from "serializr";
 
 export class BaseChartModel {
   @serializable
-  id?: string;
+  id = "";
 
   @serializable
   name = "";

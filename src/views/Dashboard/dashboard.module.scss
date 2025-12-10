@@ -57,3 +57,11 @@
     gap: 2.8rem;
   }
 }
+
+.dragOverlayCard {
+  opacity: 0.95;
+  cursor: grabbing;
+  transform: scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}

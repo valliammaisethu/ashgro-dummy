@@ -160,3 +160,13 @@ export const EMAIL_TEMPLATE_CONSTANTS = {
   },
   FIELD_NAME: "name",
 };
+
+export const CHATBOT_CONSTANTS = {
+  SCRIPT_URL: import.meta.env.VITE_CHATBOT_SCRIPT_URL,
+  LABEL: "Chatbot Link",
+  MESSAGES: {
+    SUCCESS: "Chatbot link copied to clipboard!",
+    ERROR: "Failed to copy link",
+    WARNING: "Club ID not found",
+  },
+};
