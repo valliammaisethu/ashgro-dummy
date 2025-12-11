@@ -30,7 +30,7 @@ const SettingsWrapper = () => {
 
     const handleCopyLink = async () => {
       const user = localStorageHelper.getItem(LocalStorageKeys.USER);
-      const clubId = user?.id;
+      const clubId = user?.clubId;
       if (!clubId) return message.warning(WARNING);
 
       const chatbotScript = `<script src="${SCRIPT_URL}" data-club-id="${clubId}" async></script>`;
