@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input, Tag } from "antd";
+import { Input, Tag, Select } from "antd";
 import { useFormContext, useController } from "react-hook-form";
 
 import { TagInputProps } from "src/shared/types/sharedComponents.type";
@@ -8,12 +8,16 @@ import { defaultTagInputPlaceholder } from "src/constants/sharedComponents";
 import styles from "./tagInput.module.scss";
 import Label from "../Label";
 import ErrorMessage from "../Error";
+import ConditionalRenderComponent from "../ConditionalRenderComponent";
 
 const TagInput: React.FC<TagInputProps> = ({
   name,
   label,
   placeholder = defaultTagInputPlaceholder,
   required,
+  options,
+  loading,
+  disabled,
 }) => {
   const { control } = useFormContext();
 
@@ -27,10 +31,9 @@ const TagInput: React.FC<TagInputProps> = ({
 
   const [inputValue, setInputValue] = useState("");
 
-  const addTag = () => {
-    const trimmed = inputValue.trim();
-    if (!trimmed) return;
-    onChange([...value, trimmed]);
+  const addTag = (tagValue?: string) => {
+    if (value.includes(tagValue)) return;
+    onChange([...value, tagValue]);
     setInputValue("");
   };
 
@@ -55,29 +58,57 @@ const TagInput: React.FC<TagInputProps> = ({
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) =>
     setInputValue(e.target.value);
 
+  const handleSelectChange = (selectedValue: string) => addTag(selectedValue);
+
+  const availableOptions =
+    options?.filter((opt) => !value.includes(opt.id)) || [];
+
   return (
     <div>
       <Label className={styles.tagLabel} htmlFor={name} required={required}>
         {label}
       </Label>
-      <Input
-        placeholder={placeholder}
-        value={inputValue}
-        onChange={handleInput}
-        onKeyDown={onKeyDown}
-      />
+
+      <ConditionalRenderComponent
+        visible={!!options}
+        fallback={
+          <Input
+            placeholder={placeholder}
+            value={inputValue}
+            onChange={handleInput}
+            disabled={disabled}
+            onKeyDown={onKeyDown}
+          />
+        }
+      >
+        <Select
+          key={value?.length}
+          placeholder={placeholder}
+          onChange={handleSelectChange}
+          value={undefined}
+          options={availableOptions}
+          loading={loading}
+          disabled={!availableOptions.length}
+          showSearch={false}
+        />
+      </ConditionalRenderComponent>
 
       <div className={styles.tagsContainer}>
-        {value?.map((tag: string, index: number) => (
-          <Tag
-            key={`${tag}-${index}`}
-            closeIcon
-            className={styles.tag}
-            onClose={handleRemoveTag(index)}
-          >
-            {tag}
-          </Tag>
-        ))}
+        {value?.map((tag: string, index: number) => {
+          const displayName =
+            options?.find((opt) => opt.id === tag)?.name || tag;
+
+          return (
+            <Tag
+              key={`${tag}-${index}`}
+              closeIcon
+              className={styles.tag}
+              onClose={handleRemoveTag(index)}
+            >
+              {displayName}
+            </Tag>
+          );
+        })}
       </div>
       <ErrorMessage message={error?.message} />
     </div>

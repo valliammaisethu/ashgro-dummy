@@ -2,6 +2,7 @@ import {
   DraggableAttributes,
   DraggableSyntheticListeners,
 } from "@dnd-kit/core";
+import { CustomChart } from "src/models/chart.model";
 import { ChartLabel } from "src/models/dashboard.model";
 
 export interface ChartCanvasProps {
@@ -28,4 +29,5 @@ export interface BarChartCardProps {
   isDragging?: boolean;
   isOver?: boolean;
   dragHandleProps?: DraggableAttributes & DraggableSyntheticListeners;
+  onEdit?: (chartData?: CustomChart) => void;
 }
