@@ -113,9 +113,10 @@ export const DashboardService = () => {
   > => ({
     mutationKey: [ADD_CUSTOM_CHART],
     mutationFn: async (payload: CustomChart) => {
+      const { id, ...rest } = payload;
       const response = await axiosInstance.put(
-        generatePath(GET_DASHBOARD_CHARTS, { clubId }),
-        payload,
+        generatePath(GET_CHART_DETAIL, { clubId, chartId: id }),
+        rest,
       );
       return deserialize(ResponseModel, response?.data);
     },
