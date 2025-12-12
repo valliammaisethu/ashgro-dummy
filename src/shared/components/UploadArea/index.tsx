@@ -40,14 +40,16 @@ const UploadArea: React.FC<UploadAreaProps> = ({
   maxSizeMB = 5,
   mainText = defaultUploadPlaceholder,
   subText,
+  existingFileS3Key,
+  existingFileName,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fileState, setFileState] = useState<UploadAreaState>({
     isUploading: false,
-    uploadingFileName: "",
-    isUploaded: false,
+    uploadingFileName: existingFileName || "",
+    isUploaded: !!existingFileS3Key,
     isError: false,
-    fileId: "",
+    fileId: existingFileS3Key || "",
   });
 
   const { uploadFile, deleteFile } = AttachmentService();

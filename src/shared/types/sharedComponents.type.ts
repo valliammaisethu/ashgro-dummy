@@ -320,6 +320,8 @@ export interface UploadAreaProps {
   maxSizeMB?: number;
   mainText?: string;
   subText?: string;
+  existingFileS3Key?: string;
+  existingFileName?: string;
 }
 
 export interface UploadAreaState {
@@ -349,6 +351,27 @@ export interface ClearSelectionButtonProps {
 export interface AddUserButtonProps {
   onClick?: () => void;
   label: string;
+}
+export interface UploadedFileData {
+  fileId: string;
+  fileName: string;
+  s3Key: string;
+}
+
+export interface ImportFileUploadProps {
+  onFileUploaded?: (fileData: UploadedFileData) => void;
+  onUploadStateChange?: (isUploading: boolean) => void;
+  onChangeFile?: () => void;
+  maxFileSize?: number;
+  accept?: string;
+  validTypes?: string[];
+  attachmentType?: AttachmentTypes;
+  inputPlaceholder?: string;
+  className?: string;
+  isUploadingClassName?: string;
+  isUploadedClassName?: string;
+  uploadingClassName?: string;
+  uploadedClassName?: string;
 }
 
 export interface DeleteModalProps {
