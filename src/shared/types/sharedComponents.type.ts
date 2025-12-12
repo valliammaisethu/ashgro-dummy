@@ -29,6 +29,7 @@ import { Trigger } from "src/enums/trigger.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
 import { AttachmentTypes } from "src/enums/attachmentTypes.enum";
+import { MetaOptions } from "src/models/common.model";
 
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
@@ -320,6 +321,8 @@ export interface UploadAreaProps {
   maxSizeMB?: number;
   mainText?: string;
   subText?: string;
+  existingFileS3Key?: string;
+  existingFileName?: string;
 }
 
 export interface UploadAreaState {
@@ -350,6 +353,27 @@ export interface AddUserButtonProps {
   onClick?: () => void;
   label: string;
 }
+export interface UploadedFileData {
+  fileId: string;
+  fileName: string;
+  s3Key: string;
+}
+
+export interface ImportFileUploadProps {
+  onFileUploaded?: (fileData: UploadedFileData) => void;
+  onUploadStateChange?: (isUploading: boolean) => void;
+  onChangeFile?: () => void;
+  maxFileSize?: number;
+  accept?: string;
+  validTypes?: string[];
+  attachmentType?: AttachmentTypes;
+  inputPlaceholder?: string;
+  className?: string;
+  isUploadingClassName?: string;
+  isUploadedClassName?: string;
+  uploadingClassName?: string;
+  uploadedClassName?: string;
+}
 
 export interface DeleteModalProps {
   title?: string;
@@ -371,6 +395,9 @@ export interface TagInputProps {
   placeholder?: string;
   label?: string;
   required?: boolean;
+  options?: MetaOptions[];
+  loading?: boolean;
+  disabled?: boolean;
 }
 
 export interface DeleteModalProps {

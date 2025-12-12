@@ -38,3 +38,12 @@ export class BasicProfile {
   @serializable
   profilePictureUrl?: string;
 }
+
+export class MetaOptions extends BaseSettingsModel {
+  @serializable
+  name?: string;
+
+  get label() {
+    return this?.name;
+  }
+}

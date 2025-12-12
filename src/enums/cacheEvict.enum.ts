@@ -52,6 +52,7 @@ export enum MutationKeys {
   CAN_CREATE_CUSTOM_CHART = "canCreateCustomChart",
   ADD_CUSTOM_CHART = "addCustomChart",
   REORDER_CHARTS = "reorderCharts",
+  DELETE_CHART = "deleteChart",
 }
 
 export enum QueryKeys {
@@ -93,4 +94,5 @@ export enum QueryKeys {
 
   GET_DASHBOARD_CHARTS_KEY = "getDashboardCharts",
   GET_CHART_DETAIL_KEY = "getChartDetails",
+  GET_CHART_VALUES_KEY = "getChartValues",
 }

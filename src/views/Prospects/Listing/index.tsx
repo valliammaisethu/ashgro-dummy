@@ -12,7 +12,7 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import useDrawer from "src/shared/hooks/useDrawer";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { BulkModes } from "src/enums/bulkModes";
+import { ImportModes } from "src/enums/importModes.enum";
 import {
   ProspectsList,
   ProspectsListingParams,
@@ -26,8 +26,8 @@ import { BulkUploadService } from "src/services/BulkUploadService/bulkUpload.ser
 import { TemplateEntity } from "src/enums/templateEntity.enum";
 import TemplateModal from "src/views/Email/TemplateModal";
 import NewEmailModal from "src/views/Email/NewEmailModal";
-import BulkImportModal from "src/views/BulkImport";
-import BulkInProgressModal from "src/views/BulkImport/InProgressModal";
+import ImportModal from "src/views/ImportModal";
+import BulkInProgressModal from "src/views/ImportModal/InProgressModal";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import Filters from "../Filters";
 import DeleteModal from "../DeleteModal";
@@ -43,6 +43,7 @@ import {
 import Header from "./Header";
 
 import styles from "./listing.module.scss";
+
 const ProspectsListing = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER).clubId;
 
@@ -397,10 +398,10 @@ const ProspectsListing = () => {
         isBulkEmail
         handleEmailComplete={handleClearSelections}
       />
-      <BulkImportModal
+      <ImportModal
         visible={bulkUploadVisible}
         onClose={hideBulkUpload}
-        importMode={BulkModes.PROSPECTS}
+        importMode={ImportModes.PROSPECTS}
         onImport={handleBulkImportSuccess}
       />
       <BulkInProgressModal visible={bulkInProgressVisible} />
