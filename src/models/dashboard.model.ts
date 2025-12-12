@@ -10,6 +10,9 @@ export class BaseChartModel {
 
 export class ChartItem extends BaseChartModel {
   @serializable
+  type?: string;
+
+  @serializable
   isDefault = false;
 
   @serializable
@@ -26,5 +29,5 @@ export class ChartLabel extends BaseChartModel {
 
 export class ChartDetail extends ChartItem {
   @serializable(list(object(ChartLabel)))
-  labels?: ChartLabel[];
+  values?: ChartLabel[];
 }

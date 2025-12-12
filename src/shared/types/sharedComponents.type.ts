@@ -29,6 +29,7 @@ import { Trigger } from "src/enums/trigger.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
 import { AttachmentTypes } from "src/enums/attachmentTypes.enum";
+import { MetaOptions } from "src/models/common.model";
 
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
@@ -394,6 +395,9 @@ export interface TagInputProps {
   placeholder?: string;
   label?: string;
   required?: boolean;
+  options?: MetaOptions[];
+  loading?: boolean;
+  disabled?: boolean;
 }
 
 export interface DeleteModalProps {

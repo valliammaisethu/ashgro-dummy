@@ -41,6 +41,7 @@ import {
 import { xAxisLabel } from "./CustomChartForm/constants";
 import { ChartItem } from "src/models/dashboard.model";
 import DraggableChartCard from "./components/DraggableChartCard";
+import { CustomChart } from "src/models/chart.model";
 
 import styles from "./dashboard.module.scss";
 
@@ -51,6 +52,9 @@ const Dashboard = () => {
     id: string;
     width?: number;
   } | null>(null);
+  const [chartFormValues, setChartFormValues] = useState<
+    CustomChart | undefined
+  >(new CustomChart());
 
   useAppContainerPadding();
 
@@ -90,11 +94,21 @@ const Dashboard = () => {
     });
   };
 
-  const closeChartForm = () =>
+  const closeChartForm = () => {
     setChartState((prev) => ({
       ...prev,
       chartFormOpen: false,
     }));
+    setChartFormValues(new CustomChart());
+  };
+
+  const handleChartEdit = (chartData?: CustomChart) => {
+    setChartFormValues(chartData);
+    setChartState((prev) => ({
+      ...prev,
+      chartFormOpen: true,
+    }));
+  };
 
   const handleDeleteChart = () =>
     setChartState((prev) => ({
@@ -198,6 +212,7 @@ const Dashboard = () => {
         <CustomChartForm
           onClose={closeChartForm}
           open={chartState.chartFormOpen}
+          formValues={chartFormValues}
         />
       </ConditionalRenderComponent>
 
@@ -227,7 +242,11 @@ const Dashboard = () => {
         >
           <div className={styles.chartsGrid}>
             {orderedCharts?.map((chart) => (
-              <DraggableChartCard key={chart.id} chart={chart} />
+              <DraggableChartCard
+                key={chart.id}
+                chart={chart}
+                onEdit={handleChartEdit}
+              />
             ))}
           </div>
 

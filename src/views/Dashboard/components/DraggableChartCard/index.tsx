@@ -6,17 +6,21 @@ import {
   useDroppable,
 } from "@dnd-kit/core";
 import clsx from "clsx";
-
 import BarChartCard from "../BarChartCard";
 import { ChartItem } from "src/models/dashboard.model";
+import { CustomChart } from "src/models/chart.model";
 
 import styles from "./draggableChartCard.module.scss";
 
 interface DraggableChartCardProps {
   chart: ChartItem;
+  onEdit?: (chartData?: CustomChart) => void;
 }
 
-const DraggableChartCard: React.FC<DraggableChartCardProps> = ({ chart }) => {
+const DraggableChartCard: React.FC<DraggableChartCardProps> = ({
+  chart,
+  onEdit,
+}) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: chart.id,
   });
@@ -44,6 +48,7 @@ const DraggableChartCard: React.FC<DraggableChartCardProps> = ({ chart }) => {
         apiPath={chart?.path}
         isDragging={isDragging}
         isOver={isOver}
+        onEdit={onEdit}
         dragHandleProps={
           { ...attributes, ...listeners } as DraggableAttributes &
             DraggableSyntheticListeners

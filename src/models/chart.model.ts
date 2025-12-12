@@ -5,10 +5,10 @@ export class CustomChart {
   id?: string;
 
   @serializable
-  chartTitle?: string;
+  name?: string;
 
   @serializable(list(primitive()))
-  labels?: string[];
+  values?: string[];
 
   @serializable(alias("xaxis"))
   xAxis?: string;
