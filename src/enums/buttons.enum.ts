@@ -38,6 +38,7 @@ export enum Buttons {
   ADD_CHART = "Add Chart",
   ADD_NAME = "Add Name",
   YES_UNLOCK = "Yes, Unlock",
+  RELOAD = "Reload",
 }
 
 export enum HtmlButtonType {

@@ -24,6 +24,11 @@ export interface ClubInfoProps {
   data?: ClubProfile;
 }
 
+export interface ChatbotSectionProps {
+  data?: ClubProfile;
+  onEditKnowledgeBase?: () => void;
+}
+
 export interface ClubFormState {
   visible: boolean;
   clubId: string | null;

@@ -178,6 +178,10 @@ export const ClubService = () => {
       );
       return deserialize(ResponseModel, data);
     },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description);
+    },
   });
 
   const updateClubProfile = (): UseMutationOptions<

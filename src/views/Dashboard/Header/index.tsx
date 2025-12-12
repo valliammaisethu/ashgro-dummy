@@ -10,13 +10,14 @@ import { Buttons } from "src/enums/buttons.enum";
 import styles from "../dashboard.module.scss";
 
 const DashboardHeader = (props: DashboardHeaderProps) => {
-  const { onAddChart } = props;
+  const { onAddChart, loading } = props;
   const ClubAdminDashboardHeader = () => {
     return (
       <div className={styles.header}>
         <Button
           className={styles.addChartButton}
           onClick={onAddChart}
+          loading={loading}
           icon={
             <IconBarChartThin
               strokeWidth={2}

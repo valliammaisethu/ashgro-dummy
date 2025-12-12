@@ -39,6 +39,7 @@ export const CalenderService = () => {
         return mapCalendarDaysToEvents(response?.data?.data?.days);
       },
       enabled: !!clubId && !!month,
+      refetchOnMount: true,
     };
   };
 

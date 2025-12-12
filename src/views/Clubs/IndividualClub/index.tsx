@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import Header from "./Header";
 import ClubInfo from "./components/ClubInfo";
 import ContactDetails from "./components/ContactDetails";
+import ChatbotSection from "./components/ChatbotSection";
 import NotesSection from "./components/NotesSection";
 import GeneralSettingsDrawer from "./components/GeneralSettingsDrawer";
 import Button from "src/shared/components/Button";
@@ -20,6 +21,8 @@ import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
 import StatusDropdown from "src/shared/components/StatusDropdown";
 import { ClubService } from "src/services/ClubService/club.service";
 import { Colors } from "src/enums/colors.enum";
+import ImportModal from "src/views/ImportModal";
+import { ImportModes } from "src/enums/importModes.enum";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 import styles from "./individualClub.module.scss";
@@ -153,6 +156,12 @@ const IndividualClub = () => {
             <div className={styles.content}>
               <ClubInfo data={clubData?.club} />
               <ContactDetails data={clubData?.club} />
+              {clubData?.club?.logoUrl && (
+                <ChatbotSection
+                  data={clubData?.club}
+                  onEditKnowledgeBase={handleChatbotQuestionsModal}
+                />
+              )}
             </div>
           </div>
 
@@ -204,6 +213,11 @@ const IndividualClub = () => {
           clubName={clubData?.club?.name}
         />
       </ConditionalRenderComponent>
+      <ImportModal
+        visible={isChatbotModalOpen}
+        onClose={handleChatbotQuestionsModal}
+        importMode={ImportModes.CHATBOT_KNOWLEDGE_BASE}
+      />
     </div>
   );
 };

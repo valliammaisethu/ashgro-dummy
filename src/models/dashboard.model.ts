@@ -2,13 +2,16 @@ import { list, object, serializable } from "serializr";
 
 export class BaseChartModel {
   @serializable
-  id?: string;
+  id = "";
 
   @serializable
   name = "";
 }
 
 export class ChartItem extends BaseChartModel {
+  @serializable
+  type?: string;
+
   @serializable
   isDefault = false;
 
@@ -26,5 +29,5 @@ export class ChartLabel extends BaseChartModel {
 
 export class ChartDetail extends ChartItem {
   @serializable(list(object(ChartLabel)))
-  labels?: ChartLabel[];
+  values?: ChartLabel[];
 }

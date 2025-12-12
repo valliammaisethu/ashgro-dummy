@@ -3,6 +3,7 @@ import React, { ReactNode } from "react";
 
 import Loader from "../Loader";
 import { noDataFound } from "src/constants/sharedComponents";
+import ConditionalRenderComponent from "../ConditionalRenderComponent";
 
 import styles from "./conditionalRender.module.scss";
 
@@ -21,6 +22,9 @@ interface ConditionalRenderProps<T> {
   skeletonRows?: number;
   skeletonCols?: number;
   skipEmptyState?: boolean;
+  noData?: ReactNode;
+  isError?: boolean;
+  errorComponent?: ReactNode;
 }
 
 const ConditionalRender = <T,>(props: ConditionalRenderProps<T>) => {
@@ -39,8 +43,12 @@ const ConditionalRender = <T,>(props: ConditionalRenderProps<T>) => {
     skeletonRows = 6,
     skeletonCols = 2,
     skipEmptyState = false,
+    noData,
+    isError,
+    errorComponent,
   } = props;
 
+  // TODO: Optimize the component
   const isDataEmpty = isSuccess && records.length <= 0 && !skipEmptyState;
   const wrapperClass = className ?? styles.centerWrapper;
 
@@ -71,10 +79,19 @@ const ConditionalRender = <T,>(props: ConditionalRenderProps<T>) => {
     );
   }
 
+  if (isError && !!errorComponent) {
+    return <div className={wrapperClass}>{errorComponent}</div>;
+  }
+
   if (isDataEmpty) {
     return (
       <div className={wrapperClass}>
-        <Empty description={emptyDescription} />
+        <ConditionalRenderComponent
+          visible={!!noData}
+          fallback={<Empty description={emptyDescription} />}
+        >
+          {noData}
+        </ConditionalRenderComponent>
       </div>
     );
   }

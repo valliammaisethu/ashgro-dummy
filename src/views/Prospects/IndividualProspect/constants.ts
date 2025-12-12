@@ -1,3 +1,6 @@
+import { getFullName } from "src/shared/utils/helpers";
+import { ProspectMeetingEventParams } from "./types";
+
 export const PROSPECT_LABELS = {
   followUpDate: "Follow-up Date",
   leadDetails: "Lead Details",
@@ -32,3 +35,17 @@ export const headerConstants = {
   bookAMeeting: "Book a meeting",
   viewTranscripts: "View Transcripts",
 };
+
+export const defaultType = "prospect";
+
+export const getProspectMeetingEvent = ({
+  id,
+  firstName = "",
+  lastName = "",
+}: ProspectMeetingEventParams) => ({
+  resource: {
+    bookedUserType: defaultType,
+    bookedUserId: id,
+    bookedUserName: getFullName(firstName, lastName),
+  },
+});

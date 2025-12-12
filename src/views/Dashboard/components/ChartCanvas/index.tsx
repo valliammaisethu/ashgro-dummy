@@ -12,7 +12,6 @@ import {
 
 import { calculateChartWidth, createBarChart } from "../../utils/chartUtils";
 import { ChartCanvasProps } from "src/shared/types/dashboard.types";
-import { Colors } from "src/enums/colors.enum";
 
 import styles from "../BarChartCard/barChartCard.module.scss";
 
@@ -29,7 +28,6 @@ Chart.register(
 const ChartCanvas: React.FC<ChartCanvasProps> = ({
   title,
   labels,
-  barColor = Colors.DEFAULT_BAR_COLOR,
   height = 350,
 }) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
@@ -47,14 +45,14 @@ const ChartCanvas: React.FC<ChartCanvasProps> = ({
     const ctx = chartRef.current.getContext("2d");
     if (!ctx) return;
 
-    chartInstance.current = createBarChart(ctx, title, labels, barColor);
+    chartInstance.current = createBarChart(ctx, title, labels);
 
     return () => {
       if (chartInstance.current) {
         chartInstance.current.destroy();
       }
     };
-  }, [labels, title, barColor]);
+  }, [labels, title]);
 
   return (
     <div

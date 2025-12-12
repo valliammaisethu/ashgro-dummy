@@ -34,3 +34,18 @@ export const superAdminChartItems = [
 export const chartFiltersTitle = "Filters - %s";
 
 export const sampleFilter = "Lead Generation";
+
+export const dropAnimationConfig = {
+  duration: 300,
+  easing: "cubic-bezier(0.25, 0.1, 0.25, 1)",
+};
+
+export const EMPTY_STATE_STRINGS = {
+  TITLE: "Hmmm...",
+  DESCRIPTION: "Looks like no results fit your selected filters",
+};
+
+export const ERROR_STATE_STRINGS = {
+  TITLE: "Hold on...",
+  DESCRIPTION: "Just a moment while we load this section",
+};

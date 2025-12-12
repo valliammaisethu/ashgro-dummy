@@ -72,7 +72,10 @@ const BookMeeting = ({
   const selectedType = watch(TYPE.name as keyof BookMeetingModel);
   const isMembersSelected = selectedType === TYPE.options[0].value;
 
-  const isNameDisabled = !selectedType || !!calendarEvent?.id;
+  const isNameDisabled =
+    !selectedType ||
+    !!calendarEvent?.id ||
+    !!calendarEvent?.resource?.bookedUserId;
 
   const fetchMembersOrProspects = useCallback(
     (params: Partial<QueryParams>) =>
@@ -88,10 +91,13 @@ const BookMeeting = ({
     };
 
     const id = calendarEvent?.id;
+    const { bookedUserId, bookedUserName } = calendarEvent?.resource || {};
+
+    const userData = bookedUserId ? { bookedUserId, bookedUserName } : {};
 
     await (id
       ? editMeeting({ ...payload, id })
-      : addMeeting({ ...data, ...payload }));
+      : addMeeting({ ...data, ...payload, ...userData }));
 
     onClose?.();
   };
@@ -152,7 +158,7 @@ const BookMeeting = ({
             <Row>
               <Col span={12}>
                 <ConditionalRenderComponent
-                  visible={!calendarEvent?.id}
+                  visible={!calendarEvent?.resource?.bookedUserId}
                   fallback={
                     <InputField
                       name={NAME.name}
@@ -160,7 +166,7 @@ const BookMeeting = ({
                       placeholder={NAME.placeholder}
                       value={calendarEvent?.resource?.bookedUserName}
                       required
-                      disabled={!!calendarEvent?.title}
+                      disabled={!!calendarEvent?.resource?.bookedUserId}
                     />
                   }
                 >
@@ -196,7 +202,9 @@ const BookMeeting = ({
               required
               disabledDate={disablePastAndFuture180}
               format={YYYY_MM_DD}
-              disabled={!!selectedDate}
+              disabled={
+                !!selectedDate || !!calendarEvent?.resource?.bookedUserId
+              }
             />
           </Col>
           <Col span={12}>
