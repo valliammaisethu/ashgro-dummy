@@ -14,13 +14,6 @@
   )}&host=${encodeURIComponent(host)}`;
 
   async function checkIsValidHost(url, attempt = 1, maxRetries = 3) {
-    const CACHE_KEY = `chatbot-access-${clubId}`;
-
-    try {
-      const cached = sessionStorage.getItem(CACHE_KEY);
-      if (cached) return JSON.parse(cached);
-    } catch {}
-
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
 
@@ -32,7 +25,6 @@
 
       const data = await res.json();
 
-      sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
       return data;
     } catch {
       clearTimeout(timeout);

@@ -8,7 +8,7 @@ export const ApiRoutes = {
 
   FORGOT_PASSWORD: "/auth/forgotPassword",
   RESET_PASSWORD: "/auth/resetPassword",
-  CHANGE_PASSWORD: "/auth/changePassword",
+  CHANGE_PASSWORD: "/clubs/:id/password",
 
   ATTACHMENTS: "/attachments",
   ATTACHMENTS_SPECIFIC: "/attachments/:id",
@@ -65,7 +65,9 @@ export const ApiRoutes = {
 
   GET_CLUBS: "/clubs",
   GET_CLUB_PROFILE: "/clubs/:id",
+  UPDATE_CLUB_PROFILE: "/clubs/:id/update",
   UNLOCK_CLUB: "/clubs/:id/unlock",
+  UPDATE_CLUB_GENERAL_SETTINGS: "/clubs/:id/settings",
 
   UPLOAD_CHATBOT_KNOWLEDGE_BASE: "/clubs/:id/upload",
 
@@ -87,4 +89,12 @@ export const ApiRoutes = {
   GET_TRANSCRIPTS: "/clubs/:clubId/users/:id/transcripts",
   MEETING: "/calendar/meetings",
   RESCHEDULE_MEETING: "/calendar/:id/reschedule",
+
+  // Dashboard
+  GET_DASHBOARD_CHARTS: "/dashboard/clubs/:clubId/charts",
+  GET_CHART_DETAIL: "/dashboard/clubs/:clubId/charts/:chartId",
+  ADMIN_DASHBOARD_CHART: "dashboard/:type",
+  CAN_CREATE_CUSTOM_CHART: "/dashboard/clubs/:id/charts/available",
+  UPDATE_CHART_ORDER: "/dashboard/clubs/:clubId/charts",
+  GET_CHART_VALUES: "/dashboard/clubs/:clubId/values",
 };

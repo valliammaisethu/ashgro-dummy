@@ -1,0 +1,71 @@
+@import "src/styles/_variables";
+@import "src/styles/_helpers";
+
+.superAdminDashboard {
+  @include flex-flow(row, wrap, normal, 4.1rem);
+}
+
+.addChartButton {
+  position: relative;
+  background-color: $ashgro-navy;
+  color: $ashgro-white;
+  border-radius: 3.6rem;
+  width: 14.4rem;
+  height: 4.4rem;
+
+  &:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+  ) {
+    color: $ashgro-white;
+    background-color: $ashgro-navy;
+  }
+}
+.addIcon {
+  position: absolute;
+  top: 0.8rem;
+  left: 3.8rem;
+}
+
+.header {
+  @include flex-container(flex-end, center, row);
+}
+
+.dashboardContainer {
+  height: calc(100vh - 11rem);
+  overflow-y: auto;
+
+  .header {
+    @include flex-container(flex-end, center);
+    margin-bottom: 2.4rem;
+
+    .headerLeft {
+      @include flex-container(flex-start, center, row, 1.6rem);
+
+      .datePickerWrapper {
+        @include flex-container(flex-start, center);
+      }
+    }
+
+    .headerRight {
+      @include flex-container(flex-start);
+    }
+  }
+}
+
+.dragOverlayCard {
+  opacity: 0.95;
+  cursor: grabbing;
+  transform: scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.6rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  white-space: nowrap;
+}

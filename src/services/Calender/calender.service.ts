@@ -1,8 +1,4 @@
-import {
-  UseMutationOptions,
-  useQueryClient,
-  UseQueryOptions,
-} from "@tanstack/react-query";
+import { UseMutationOptions, UseQueryOptions } from "@tanstack/react-query";
 import { generatePath } from "react-router-dom";
 import { deserialize, serialize } from "serializr";
 
@@ -14,7 +10,6 @@ import { ResponseModel } from "src/models/response.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { CalendarEvent } from "src/shared/types/calender";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
-import { renderNotification } from "src/shared/utils/renderNotification";
 import { responseHandlers } from "src/shared/utils/responseHandlers";
 import { mapCalendarDaysToEvents } from "src/views/Calender/utils/calendarUtils";
 
@@ -29,7 +24,6 @@ const { BOOK_MEETING, RESCHEDULE_MEETING_KEY } = MutationKeys;
 
 export const CalenderService = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
-  const queryClient = useQueryClient();
   const { refetchCalender } = responseHandlers();
 
   const calenderEventsAndSlotsList = (
@@ -45,6 +39,7 @@ export const CalenderService = () => {
         return mapCalendarDaysToEvents(response?.data?.data?.days);
       },
       enabled: !!clubId && !!month,
+      refetchOnMount: true,
     };
   };
 
@@ -63,12 +58,8 @@ export const CalenderService = () => {
       });
       return deserialize(ResponseModel, response?.data);
     },
-    onSuccess: (response) => {
-      const { title, description } = response;
-      renderNotification(title, description);
-      queryClient.invalidateQueries({
-        queryKey: [GET_CALENDER_SLOTS_AND_EVENTS, clubId],
-      });
+    onSuccess: (response, { slotDate }) => {
+      refetchCalender({ response, slotDate });
     },
   });
 

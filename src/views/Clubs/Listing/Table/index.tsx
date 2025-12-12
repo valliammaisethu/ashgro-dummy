@@ -65,22 +65,6 @@ const ClubListingTable = ({
     isPending: isStatusUpdatePending,
   } = useMutation(updateStatus());
 
-  // const handleChatbotStatusChange = async (clubId = "", value: boolean) => {
-  //   setUpdatingClubId(clubId);
-
-  //   await updateChatbotStatusMutate(
-  //     { chatbotEnabled: value, id: clubId },
-  //     {
-  //       onSuccess: () => {
-  //         setUpdatingClubId("");
-  //       },
-  //       onError: () => {
-  //         setUpdatingClubId("");
-  //       },
-  //     },
-  //   );
-  // };
-
   const handleStatusChange = async (clubId = "", value: string) => {
     setUpdatingClubId(clubId);
     await updateClubStatusMutate(

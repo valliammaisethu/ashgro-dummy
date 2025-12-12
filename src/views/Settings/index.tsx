@@ -1,20 +1,26 @@
 import React, { Fragment, useState } from "react";
+import { message } from "antd";
+import { IconKey, IconCopy } from "obra-icons-react";
+
 import { useUserRole } from "src/shared/hooks/useUserRole";
 import styles from "./settings.module.scss";
 import Tabs from "src/shared/components/Tabs";
-import { settingsTabs } from "./constants";
+import { settingsTabs, CHATBOT_CONSTANTS } from "./constants";
 import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
 import Button from "src/shared/components/Button";
 import { Buttons, ButtonTypes } from "src/enums/buttons.enum";
-import { IconKey } from "obra-icons-react";
 import ChangePassword from "src/views/MyProfile/ChangePassword";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+
+const {
+  SCRIPT_URL,
+  MESSAGES: { ERROR, SUCCESS, WARNING },
+  LABEL,
+} = CHATBOT_CONSTANTS;
 
 const SettingsWrapper = () => {
-  const SuperAdminSettings = () => {
-    return <div>SuperAdminSettings</div>;
-  };
-
   const ClubAdminSettings = () => {
     const [activeTab, setActiveTab] = useState("lead");
     const [changePasswordVisible, setChangePasswordVisible] = useState(false);
@@ -22,9 +28,27 @@ const SettingsWrapper = () => {
     const handleChangePassword = () =>
       setChangePasswordVisible((prev) => !prev);
 
+    const handleCopyLink = async () => {
+      const user = localStorageHelper.getItem(LocalStorageKeys.USER);
+      const clubId = user?.clubId;
+      if (!clubId) return message.warning(WARNING);
+
+      const chatbotScript = `<script src="${SCRIPT_URL}" data-club-id="${clubId}" async></script>`;
+      try {
+        await navigator.clipboard.writeText(chatbotScript);
+        message.success(SUCCESS);
+      } catch {
+        message.error(ERROR);
+      }
+    };
+
     return (
       <Fragment>
         <div className={styles.buttonsContainer}>
+          <div className={styles.chatbotLinkContainer} onClick={handleCopyLink}>
+            <IconCopy />
+            <span>{LABEL}</span>
+          </div>
           <Button
             type={ButtonTypes.LINK}
             className={styles.changePasswordButton}
@@ -45,8 +69,8 @@ const SettingsWrapper = () => {
           />
         </div>
         <ConditionalRenderComponent
-          hideFallback
           visible={changePasswordVisible}
+          hideFallback
         >
           <ChangePassword
             onClose={handleChangePassword}
@@ -57,9 +81,8 @@ const SettingsWrapper = () => {
     );
   };
 
-  const { isSuperAdmin, isClubAdmin } = useUserRole();
+  const { isClubAdmin } = useUserRole();
 
-  if (isSuperAdmin) return <SuperAdminSettings />;
   if (isClubAdmin) return <ClubAdminSettings />;
   return null;
 };

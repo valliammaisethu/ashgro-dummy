@@ -20,7 +20,7 @@ export const extractNameParts = (fullName = "") => {
 };
 
 export const stripPhoneCode = (val?: string) => {
-  if (!val) return undefined;
+  if (!val) return;
   const digits = val.replace(/\D/g, "");
   const withoutCode =
     digits.length > 10 ? digits.slice(digits.length - 10) : digits;

@@ -3,13 +3,13 @@ import { IconDocumentUpload } from "obra-icons-react";
 import clsx from "clsx";
 
 import Button from "src/shared/components/Button";
-import ConditionalRenderComponent from "../ConditionalRenderComponent";
 import { Buttons } from "src/enums/buttons.enum";
 import { Colors } from "src/enums/colors.enum";
 import { isObjectEmpty } from "src/shared/utils/parser";
+import ConditionalRenderComponent from "../../ConditionalRenderComponent";
 import { renderUploadingIcon } from "src/shared/utils/importUtils";
 
-import styles from "../../../views/ImportModal/importModal.module.scss";
+import styles from "./uploadArea.module.scss";
 
 export interface UploadAreaProps {
   onClick: () => void;
@@ -79,7 +79,11 @@ const UploadArea: React.FC<UploadAreaProps> = ({
         hideFallback
       >
         <div className={uploadingClassName}>
-          <div className={styles.uploadingFileInfo}>
+          <div
+            className={clsx(styles.uploadingFileInfo, {
+              [styles.isUploadingFileInfo]: isUploading,
+            })}
+          >
             {uploadingIcon && (
               <img
                 src={uploadingIcon.src}
@@ -87,7 +91,7 @@ const UploadArea: React.FC<UploadAreaProps> = ({
                 className={styles.uploadingFileIcon}
               />
             )}
-            <span className={styles.uploadingFileName}>{currentFileName}</span>
+            <div className={styles.uploadingFileName}>{currentFileName}</div>
           </div>
           <div className={styles.progressBarContainer}>
             <div

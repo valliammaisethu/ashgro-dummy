@@ -50,6 +50,16 @@
         border-radius: 0 1.2rem 1.2rem 0;
       }
     }
+    .ant-select-disabled {
+      &::after {
+        background: rgba($ashgro-white, 0.04);
+        pointer-events: none;
+        z-index: 1;
+        border: 1px solid $input-border;
+        border-left: 0;
+        border-radius: 0 1.2rem 1.2rem 0;
+      }
+    }
 
     .ant-select-selector {
       overflow-x: auto;
@@ -59,12 +69,6 @@
 
     .ant-select-selection-overflow {
       flex-wrap: nowrap;
-    }
-
-    .ant-select-selection-placeholder {
-      color: $ashgro-grey;
-      opacity: 0.6;
-      font-size: 1.2rem;
     }
 
     .ant-select-clear,

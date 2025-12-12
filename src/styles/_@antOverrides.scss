@@ -481,13 +481,15 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   box-shadow: none;
 }
 .ant-select-single .ant-select-selector .ant-select-selection-item {
-  line-height: 1.3rem;
   font-size: 1.2rem;
 }
-.ant-select-selection-placeholder {
-  color: $ashgro-grey !important;
-  opacity: 0.6;
+.ant-select .ant-select-selection-placeholder {
+  color: $placeholder-color;
   font-size: 1.2rem;
+  font-weight: 400;
+}
+.ant-select-single .ant-select-selector {
+  font-family: $font-secondary;
 }
 .ant-btn:not(:disabled):focus-visible {
   outline: none;
@@ -597,6 +599,12 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 }
 .ant-input {
   font-size: 1.2rem;
+  font-family: $font-secondary;
+  &::placeholder {
+    font-size: 1.2rem;
+    color: $placeholder-color;
+    font-weight: 400;
+  }
 }
 .ant-picker .ant-picker-input > input {
   font-size: 1.2rem;
@@ -675,10 +683,6 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 
 .ant-picker-range {
   .ant-picker-input {
-    border: 1px solid $ashgro-input-border;
-    padding: 1rem;
-    border-radius: 1.2rem;
-    width: 20.4rem;
   }
 }
 .ant-picker-range .ant-picker-range-separator {
@@ -822,4 +826,13 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
 
 .ant-input-outlined:focus-within {
   background: $ashgro-cream;
+}
+.ant-drawer,
+.ant-picker,
+.ant-modal {
+  font-family: $font-secondary;
+}
+.ant-picker .ant-picker-input > input {
+  font-size: 1.2rem;
+  font-weight: 400;
 }

@@ -24,7 +24,7 @@ export const NavigationRoutes = {
   CLUBS: "/home/clubs",
   INDIVIDUAL_CLUB: "/home/clubs/:id",
 
-  CALENDER: "/home/calender",
+  CALENDER: "/home/calendar",
 
   CHATBOT: "/chatbot",
 };

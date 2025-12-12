@@ -16,3 +16,5 @@ export const inProgress = "Import In Progress";
 
 export const inProgressDescription =
   " This should only take a few minutes, and we’ll notify you once it’s done.";
+
+export const isDownloadingText = "Downloading...";
