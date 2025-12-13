@@ -14,14 +14,18 @@ import { ResponseModel } from "src/models/response.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { generateChartPaths } from "src/views/Dashboard/utils/chartUtils";
+import { DashboardStats } from "src/models/dashboardStats.model";
 import { CustomChart } from "src/models/chart.model";
 import { renderNotification } from "src/shared/utils/renderNotification";
 import { ReorderChartsPayload } from "src/shared/types/dashboard.types";
 import { MetaOptions } from "src/models/common.model";
 
-const { GET_DASHBOARD_CHARTS_KEY, GET_CHART_DETAIL_KEY, GET_CHART_VALUES_KEY } =
-  QueryKeys;
-const { CAN_CREATE_CUSTOM_CHART: CAN_CREATE_CUSTOM_CHART_ROUTE } = ApiRoutes;
+const {
+  GET_DASHBOARD_CHARTS_KEY,
+  GET_CHART_DETAIL_KEY,
+  GET_CHART_VALUES_KEY,
+  GET_DASHBOARD_STATS,
+} = QueryKeys;
 const {
   ADD_CUSTOM_CHART,
   CAN_CREATE_CUSTOM_CHART,
@@ -33,6 +37,8 @@ const {
   UPDATE_CHART_ORDER,
   GET_CHART_VALUES,
   GET_CHART_DETAIL,
+  GET_DASHBOARD_STATS: GET_DASHBOARD_STATS_PATH,
+  CAN_CREATE_CUSTOM_CHART: CAN_CREATE_CUSTOM_CHART_ROUTE,
 } = ApiRoutes;
 
 export const DashboardService = () => {
@@ -183,9 +189,22 @@ export const DashboardService = () => {
     },
   });
 
+  const getDashboardStats = (): UseQueryOptions<
+    DashboardStats,
+    ResponseModel,
+    DashboardStats
+  > => ({
+    queryKey: [GET_DASHBOARD_STATS, clubId],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(GET_DASHBOARD_STATS_PATH);
+      return deserialize(DashboardStats, data?.data);
+    },
+  });
+
   return {
     getDashboardChartsList,
     getChartDetails,
+    getDashboardStats,
     canCreateCustomChart,
     addCustomChart,
     editCustomChart,

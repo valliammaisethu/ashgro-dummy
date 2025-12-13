@@ -15,7 +15,6 @@ import { DashboardService } from "src/services/DashboardService/dashboard.servic
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import BarChartCard from "./components/BarChartCard";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
-import { DashboardStats } from "src/models/dashboardStats.model";
 import DeleteModal from "src/shared/components/DeleteModal";
 import { useUserRole } from "src/shared/hooks/useUserRole";
 import {
@@ -34,7 +33,7 @@ import {
   chartFiltersTitle,
   deleteModalDescription,
   deleteModalTitle,
-  getDashboardStats,
+  getDashboardStatsValues,
   sampleFilter,
   dropAnimationConfig,
 } from "./constants";
@@ -58,8 +57,12 @@ const Dashboard = () => {
 
   useAppContainerPadding();
 
-  const { getDashboardChartsList, canCreateCustomChart, updateChartOrder } =
-    DashboardService();
+  const {
+    getDashboardChartsList,
+    canCreateCustomChart,
+    updateChartOrder,
+    getDashboardStats,
+  } = DashboardService();
 
   const {
     data: clubAdminCharts = [],
@@ -70,6 +73,10 @@ const Dashboard = () => {
     enabled: isClubAdmin,
   });
 
+  const { data: dashboardStats } = useQuery({
+    ...getDashboardStats(),
+    enabled: isSuperAdmin,
+  });
   const {
     mutateAsync: canCreateCustomChartMutate,
     isPending: canCreateChartLoading,
@@ -200,8 +207,8 @@ const Dashboard = () => {
       />
       <ConditionalRenderComponent visible={isSuperAdmin} hideFallback>
         <div className={styles.superAdminDashboard}>
-          {getDashboardStats(new DashboardStats())?.map(({ label, value }) => (
-            <StatsCard key={label} title={label} value={value} />
+          {getDashboardStatsValues(dashboardStats)?.map(({ label, value }) => (
+            <StatsCard key={value} title={label} value={value} />
           ))}
         </div>
       </ConditionalRenderComponent>
