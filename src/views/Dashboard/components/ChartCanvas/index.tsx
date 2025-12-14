@@ -11,7 +11,7 @@ import {
 } from "chart.js";
 
 import { calculateChartWidth, createBarChart } from "../../utils/chartUtils";
-import { ChartCanvasProps } from "src/shared/types/dashboard.types";
+import { ChartCanvasProps } from "src/shared/types/dashboard.type";
 
 import styles from "../BarChartCard/barChartCard.module.scss";
 

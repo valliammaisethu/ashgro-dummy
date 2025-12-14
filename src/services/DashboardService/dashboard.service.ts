@@ -17,7 +17,10 @@ import { generateChartPaths } from "src/views/Dashboard/utils/chartUtils";
 import { DashboardStats } from "src/models/dashboardStats.model";
 import { CustomChart } from "src/models/chart.model";
 import { renderNotification } from "src/shared/utils/renderNotification";
-import { ReorderChartsPayload } from "src/shared/types/dashboard.types";
+import {
+  ReorderChartsPayload,
+  ChartParams,
+} from "src/shared/types/dashboard.type";
 import { MetaOptions } from "src/models/common.model";
 
 const {
@@ -67,10 +70,11 @@ export const DashboardService = () => {
 
   const getChartDetails = (
     path: string,
+    params?: ChartParams,
   ): UseQueryOptions<ChartDetail, ResponseModel, ChartDetail> => ({
-    queryKey: [GET_CHART_DETAIL_KEY, clubId, path],
+    queryKey: [GET_CHART_DETAIL_KEY, clubId, path, params],
     queryFn: async () => {
-      const response = await axiosInstance.get(path);
+      const response = await axiosInstance.get(path, { params });
 
       return deserialize(ChartDetail, response?.data?.data?.chart);
     },
