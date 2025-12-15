@@ -1,10 +1,11 @@
 import React, { MouseEvent } from "react";
 import { IconDocumentUpload } from "obra-icons-react";
+import clsx from "clsx";
 
 import Button from "src/shared/components/Button";
 import { Buttons } from "src/enums/buttons.enum";
 import { Colors } from "src/enums/colors.enum";
-
+import { isObjectEmpty } from "src/shared/utils/parser";
 import ConditionalRenderComponent from "../../ConditionalRenderComponent";
 import { renderUploadingIcon } from "src/shared/utils/importUtils";
 
@@ -22,6 +23,7 @@ export interface UploadAreaProps {
   className?: string;
   uploadingClassName?: string;
   uploadedClassName?: string;
+  customCancelClassName?: string;
 }
 
 const UploadArea: React.FC<UploadAreaProps> = ({
@@ -36,6 +38,7 @@ const UploadArea: React.FC<UploadAreaProps> = ({
   className,
   uploadingClassName,
   uploadedClassName,
+  customCancelClassName,
 }) => {
   const handleCancelUpload = (e: MouseEvent) => {
     e.stopPropagation();
@@ -76,7 +79,11 @@ const UploadArea: React.FC<UploadAreaProps> = ({
         hideFallback
       >
         <div className={uploadingClassName}>
-          <div className={styles.uploadingFileInfo}>
+          <div
+            className={clsx(styles.uploadingFileInfo, {
+              [styles.isUploadingFileInfo]: isUploading,
+            })}
+          >
             {uploadingIcon && (
               <img
                 src={uploadingIcon.src}
@@ -84,7 +91,7 @@ const UploadArea: React.FC<UploadAreaProps> = ({
                 className={styles.uploadingFileIcon}
               />
             )}
-            <span className={styles.uploadingFileName}>{currentFileName}</span>
+            <div className={styles.uploadingFileName}>{currentFileName}</div>
           </div>
           <div className={styles.progressBarContainer}>
             <div
@@ -93,7 +100,9 @@ const UploadArea: React.FC<UploadAreaProps> = ({
             />
           </div>
         </div>
-        <div className={styles.cancelButtonContainer}>
+        <div
+          className={clsx(styles.cancelButtonContainer, customCancelClassName)}
+        >
           <Button className={styles.cancelButton} onClick={handleCancelUpload}>
             {Buttons.CANCEL_UPLOAD}
           </Button>
@@ -101,7 +110,7 @@ const UploadArea: React.FC<UploadAreaProps> = ({
       </ConditionalRenderComponent>
 
       <ConditionalRenderComponent
-        visible={Boolean(uploadedFile) && !isUploading}
+        visible={!isObjectEmpty(uploadedFile) && !isUploading}
         hideFallback
       >
         <div className={uploadedClassName}>

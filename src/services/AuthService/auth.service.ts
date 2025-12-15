@@ -17,6 +17,7 @@ import { logoutMessages } from "src/constants/sharedComponents";
 import { renderNotification } from "src/shared/utils/renderNotification";
 import { generatePath } from "react-router-dom";
 import { RoleNames } from "src/enums/roleNames.enum";
+import { clearFilters } from "src/utils/dashboardFilters";
 
 const {
   USER_LOGIN,
@@ -139,6 +140,7 @@ export const AuthService = () => {
     onSuccess: () => {
       renderNotification(title, description);
       resetAuthState();
+      clearFilters();
       queryClient.clear();
       navigateToLogin();
     },

@@ -4,7 +4,7 @@ export const deleteModalTitle = "Custom Chart";
 
 export const deleteModalDescription = "the custom chart %s";
 
-export const getDashboardStats = (stats: DashboardStats) => {
+export const getDashboardStatsValues = (stats = new DashboardStats()) => {
   return [
     {
       label: "Chatbot Leads",
@@ -23,6 +23,10 @@ export const getDashboardStats = (stats: DashboardStats) => {
 export const CHART_CONSTANTS = {
   CUSTOM_CHART: "Custom chart",
   DEFAULT_ITEM_WIDTH: 70,
+  customTitle: "Delete Custom Chart",
+  customDescription:
+    "Are you sure you want to delete this %s ?This action is not reversible.",
+  customWidth: 650,
 };
 
 export const superAdminChartItems = [

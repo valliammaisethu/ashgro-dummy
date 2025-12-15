@@ -26,6 +26,22 @@
   left: 3.8rem;
 }
 
+.resetButton {
+  margin-right: 2rem;
+  color: $ashgro-gold;
+  border: none;
+  background: transparent;
+  font-weight: 400;
+  box-shadow: none;
+  font-size: 1.6rem;
+  // TODO: TO handle inside button types and remove !important
+  &:hover {
+    color: $ashgro-gold !important;
+    background: transparent !important;
+    opacity: 0.8;
+  }
+}
+
 .header {
   @include flex-container(flex-end, center, row);
 }

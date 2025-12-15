@@ -15,8 +15,6 @@ import { DashboardService } from "src/services/DashboardService/dashboard.servic
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import BarChartCard from "./components/BarChartCard";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
-import { DashboardStats } from "src/models/dashboardStats.model";
-import DeleteModal from "src/shared/components/DeleteModal";
 import { useUserRole } from "src/shared/hooks/useUserRole";
 import {
   SUPER_ADMIN_CHARTS as superAdminCharts,
@@ -25,20 +23,12 @@ import {
 import { XAxisTypes } from "src/enums/charts.enum";
 import { useAppContainerPadding } from "src/shared/hooks/useAppContainerPadding";
 import { ChartState } from "src/shared/types/dashboard.type";
-import { replaceString } from "src/shared/utils/commonHelpers";
 import DashboardHeader from "./Header";
 import StatsCard from "./atoms/StatsCard";
 import ChartFilters from "./Filters";
 import CustomChartForm from "./CustomChartForm";
-import {
-  chartFiltersTitle,
-  deleteModalDescription,
-  deleteModalTitle,
-  getDashboardStats,
-  sampleFilter,
-  dropAnimationConfig,
-} from "./constants";
-import { xAxisLabel } from "./CustomChartForm/constants";
+import { useDashboardFilters } from "src/context/DashboardFiltersContext";
+import { getDashboardStatsValues, dropAnimationConfig } from "./constants";
 import { ChartItem } from "src/models/dashboard.model";
 import DraggableChartCard from "./components/DraggableChartCard";
 import { CustomChart } from "src/models/chart.model";
@@ -56,10 +46,16 @@ const Dashboard = () => {
     CustomChart | undefined
   >(new CustomChart());
 
+  const { activeFilterChart, closeFilterDrawer } = useDashboardFilters();
+
   useAppContainerPadding();
 
-  const { getDashboardChartsList, canCreateCustomChart, updateChartOrder } =
-    DashboardService();
+  const {
+    getDashboardChartsList,
+    canCreateCustomChart,
+    updateChartOrder,
+    getDashboardStats,
+  } = DashboardService();
 
   const {
     data: clubAdminCharts = [],
@@ -70,6 +66,10 @@ const Dashboard = () => {
     enabled: isClubAdmin,
   });
 
+  const { data: dashboardStats } = useQuery({
+    ...getDashboardStats(),
+    enabled: isSuperAdmin,
+  });
   const {
     mutateAsync: canCreateCustomChartMutate,
     isPending: canCreateChartLoading,
@@ -77,10 +77,7 @@ const Dashboard = () => {
   const { mutateAsync: reorderCharts } = useMutation(updateChartOrder());
 
   const [chartState, setChartState] = useState<ChartState>({
-    chartDeleteOpen: false,
     chartFormOpen: false,
-    chartFiltersOpen: false,
-    activeFilter: sampleFilter,
   });
 
   const handleChartForm = () => {
@@ -109,18 +106,6 @@ const Dashboard = () => {
       chartFormOpen: true,
     }));
   };
-
-  const handleDeleteChart = () =>
-    setChartState((prev) => ({
-      ...prev,
-      chartDeleteOpen: !prev.chartDeleteOpen,
-    }));
-
-  const handleChartFilters = () =>
-    setChartState((prev) => ({
-      ...prev,
-      chartFiltersOpen: !prev.chartFiltersOpen,
-    }));
 
   const dashboardCharts = isClubAdmin ? clubAdminCharts : superAdminCharts;
 
@@ -200,8 +185,8 @@ const Dashboard = () => {
       />
       <ConditionalRenderComponent visible={isSuperAdmin} hideFallback>
         <div className={styles.superAdminDashboard}>
-          {getDashboardStats(new DashboardStats())?.map(({ label, value }) => (
-            <StatsCard key={label} title={label} value={value} />
+          {getDashboardStatsValues(dashboardStats)?.map(({ label, value }) => (
+            <StatsCard key={value} title={label} value={value} />
           ))}
         </div>
       </ConditionalRenderComponent>
@@ -213,18 +198,6 @@ const Dashboard = () => {
           onClose={closeChartForm}
           open={chartState.chartFormOpen}
           formValues={chartFormValues}
-        />
-      </ConditionalRenderComponent>
-
-      <ConditionalRenderComponent
-        visible={chartState.chartDeleteOpen}
-        hideFallback
-      >
-        <DeleteModal
-          title={deleteModalTitle}
-          externalOnClose={handleDeleteChart}
-          externalVisible={chartState.chartDeleteOpen}
-          description={replaceString(deleteModalDescription, xAxisLabel)}
         />
       </ConditionalRenderComponent>
 
@@ -264,27 +237,22 @@ const Dashboard = () => {
                 }}
               >
                 <BarChartCard
-                  id={activeChart?.id}
-                  title={activeChart?.name}
-                  isDefaultChart={activeChart?.isDefault}
-                  apiPath={activeChart?.path}
-                  isDragging={true}
+                  key={activeChart?.id}
+                  chart={activeChart}
+                  dragChartProps={{ isDragging: true }}
                 />
               </div>
             </ConditionalRenderComponent>
           </DragOverlay>
         </DndContext>
       </ConditionalRender>
-      <ConditionalRenderComponent
-        visible={chartState.chartFiltersOpen}
-        hideFallback
-      >
+      <ConditionalRenderComponent visible={!!activeFilterChart} hideFallback>
         <ChartFilters
-          open={chartState.chartFiltersOpen}
-          onClose={handleChartFilters}
-          title={replaceString(chartFiltersTitle, chartState.activeFilter)}
-          selectedType={XAxisTypes.LEAD_SOURCE}
-          // TODO: to remove this once the API is ready
+          open={!!activeFilterChart}
+          onClose={closeFilterDrawer}
+          title={`Filters - ${activeFilterChart?.chartName || ""}`}
+          selectedType={activeFilterChart?.type || XAxisTypes.LEAD_SOURCE}
+          chartId={activeFilterChart?.chartId}
         />
       </ConditionalRenderComponent>
     </div>

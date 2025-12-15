@@ -1,28 +1,6 @@
 @import "src/styles/_variables.scss";
 @import "src/styles/_helpers.scss";
 
-.chatbot {
-  @include flex-container(space-between, center, row);
-}
-
-.clubAddressInput {
-  min-height: 8rem;
-}
-
-.notesInput {
-  min-height: 24rem;
-}
-.addClubModal {
-  :global(.ant-modal) {
-    top: 2rem;
-  }
-}
-
-.sectionTitle {
-  color: $add-icon-bg;
-  @include secondaryRegular;
-  font-size: 1.6rem;
-}
 .noMarginDivider {
   margin: 0;
 }
@@ -43,6 +21,7 @@
   border-radius: 1.4rem;
   height: 4.4rem;
   width: 4.4rem;
+  border-color: transparent;
 
   &:global(.ant-btn.ant-btn-icon-only) {
     width: 4.4rem;
@@ -91,9 +70,4 @@
 
 .customCancelButton {
   display: none;
-}
-
-.errorText {
-  padding-top: 2rem;
-  color: $danger-color;
 }

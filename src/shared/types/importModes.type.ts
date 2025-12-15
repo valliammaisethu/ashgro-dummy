@@ -5,6 +5,7 @@ export interface ImportModalProps {
   onClose: () => void;
   importMode: ImportModes;
   onImport?: () => void;
+  clubId?: string;
 }
 
 export interface BulkInProgressModalProps {

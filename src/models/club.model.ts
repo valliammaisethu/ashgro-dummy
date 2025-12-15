@@ -53,6 +53,12 @@ export class ClubFormData {
 
   @serializable
   status?: string;
+
+  @serializable
+  knowledgeBaseId?: string;
+
+  @serializable
+  knowledgeBaseName?: string;
 }
 
 export class ClubProfile extends ClubGeneralSettings {
@@ -100,6 +106,12 @@ export class ClubProfile extends ClubGeneralSettings {
 
   @serializable
   isClubLocked = false;
+
+  @serializable
+  knowledgeBaseId?: string;
+
+  @serializable
+  knowledgeBaseName?: string;
 }
 
 export class ClubData {
