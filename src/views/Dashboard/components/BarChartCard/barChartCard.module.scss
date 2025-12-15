@@ -99,3 +99,31 @@
   text-transform: capitalize;
   box-shadow: 0px 0px 16px 2px #ffffff80 inset;
 }
+
+.filterIconWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterBadge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background-color: #ff4d4f;
+  border-radius: 50%;
+  border: 1.5px solid $ashgro-white;
+}
+
+.dateRangePicker {
+  max-width: 240px;
+
+  :global {
+    .ant-picker-input > input {
+      font-size: 1.3rem;
+    }
+  }
+}

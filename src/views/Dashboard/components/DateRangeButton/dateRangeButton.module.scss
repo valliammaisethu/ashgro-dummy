@@ -1,0 +1,58 @@
+@import "src/styles/variables";
+@import "src/styles/helpers";
+
+.dateRangeButton {
+  position: relative;
+
+  .hiddenPicker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    pointer-events: none;
+    z-index: -1;
+
+    :global {
+      .ant-picker-input {
+        display: none;
+      }
+    }
+  }
+
+  .calendarLabelContainer {
+    @include flex-container(row, center, center);
+    gap: 0.5rem;
+
+    background: $ashgro-white;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: rgba(0, 0, 0, 0.88);
+
+    &:hover {
+      border-color: $primary-color;
+    }
+
+    .calendarIcon {
+      font-size: 1.6rem;
+      color: rgba(0, 0, 0, 0.45);
+    }
+
+    .calendarLabel {
+      @include flex-container(row, center, center);
+      gap: 0.5rem;
+
+      .dateText {
+        font-weight: 400;
+        white-space: nowrap;
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  .pickerWrapper {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+}

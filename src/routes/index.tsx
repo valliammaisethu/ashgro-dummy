@@ -26,7 +26,7 @@ import { RoleNames } from "src/enums/roleNames.enum";
 import Clubs from "src/views/Clubs";
 import IndividualClub from "src/views/Clubs/IndividualClub";
 import SettingsWrapper from "src/views/Settings";
-import DashboardWrapper from "src/views/Dashboard";
+import DashboardWrapper from "src/views/Dashboard/DashboardWrapper";
 import { AuthContext } from "src/context/AuthContext";
 import Chatbot from "src/views/Chatbot";
 import LeadForm from "src/views/LeadForm";
