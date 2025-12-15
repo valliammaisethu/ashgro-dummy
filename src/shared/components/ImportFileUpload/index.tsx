@@ -28,6 +28,8 @@ const ImportFileUpload = ({
   isUploadedClassName,
   uploadingClassName,
   uploadedClassName,
+  customCancelClassName,
+  uplodedFile: preUploadedFile,
 }: ImportFileUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -139,6 +141,14 @@ const ImportFileUpload = ({
     [isUploadedClassName || ""]: uploadedFile !== null,
   });
 
+  useEffect(() => {
+    if (preUploadedFile) {
+      setUploadedFile(preUploadedFile);
+      setCurrentFileName(preUploadedFile.name);
+      setIsUploading(false);
+    }
+  }, []);
+
   return (
     <div className={styles.bulkFileUpload}>
       <UploadArea
@@ -153,6 +163,7 @@ const ImportFileUpload = ({
         className={computedClassName}
         uploadingClassName={uploadingClassName}
         uploadedClassName={uploadedClassName}
+        customCancelClassName={customCancelClassName}
       />
       <input
         ref={fileInputRef}

@@ -13,14 +13,22 @@ import Button from "src/shared/components/Button";
 import Card from "src/shared/components/Card";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import Switch from "src/shared/components/Switch";
+import Notification from "src/shared/components/Notification";
 import { stopPropagation } from "src/shared/utils/eventUtils";
 import ClubForm from "../ClubForm";
 import ChatbotQuestionsModal from "../ChatbotQuestionsModal";
 import UnlockClubModal from "./components/UnlockClubModal";
-import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
+import {
+  chatbotKnowledgeBaseConstants,
+  CLUB_LABELS,
+  clubStatusField,
+  ClubStatusOptions,
+} from "./constants";
 import StatusDropdown from "src/shared/components/StatusDropdown";
 import { ClubService } from "src/services/ClubService/club.service";
 import { Colors } from "src/enums/colors.enum";
+import { NotificationTypes } from "src/enums/notificationTypes";
+import { ClubSettingsState } from "src/shared/types/clubs.type";
 import ImportModal from "src/views/ImportModal";
 import { ImportModes } from "src/enums/importModes.enum";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
@@ -33,8 +41,12 @@ const IndividualClub = () => {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isChatbotModalOpen, setIsChatbotModalOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isUnlockModalOpen, setIsUnlockModalOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<ClubSettingsState>({
+    modalOpen: false,
+    settingsOpen: false,
+    unlockModalOpen: false,
+  });
+  const [pendingChatbotEnable, setPendingChatbotEnable] = useState(false);
 
   const { getClubProfile, updateStatus, updateGeneralSettings, unlockClub } =
     ClubService();
@@ -63,32 +75,80 @@ const IndividualClub = () => {
   const { mutateAsync: unlockClubMutate, isPending: isUnlockPending } =
     useMutation(unlockClub(id));
 
-  const handleSaveSettings = (data: ClubGeneralSettings) => {
-    updateGeneralSettingsMutate(
+  const handleChatbotStatusChange = async (value: boolean) => {
+    const currentlyEnabled = clubData?.club?.chatbotEnabled;
+
+    if (!currentlyEnabled && value) {
+      Notification({
+        title: chatbotKnowledgeBaseConstants.requiredError,
+        description: chatbotKnowledgeBaseConstants.requiredDescription,
+        type: NotificationTypes.WARNING,
+      });
+      setPendingChatbotEnable(true);
+      setIsChatbotModalOpen(true);
+      return;
+    }
+
+    if (currentlyEnabled && !value) {
+      Notification({
+        title: chatbotKnowledgeBaseConstants.disabledError,
+        description: chatbotKnowledgeBaseConstants.disabledDescription,
+        type: NotificationTypes.WARNING,
+      });
+    }
+
+    await updateChatbotStatusMutate({ chatbotEnabled: value, id });
+  };
+
+  const handleImportSuccess = async () => {
+    if (pendingChatbotEnable) {
+      await updateChatbotStatusMutate({ chatbotEnabled: true, id });
+      setPendingChatbotEnable(false);
+    }
+
+    setIsChatbotModalOpen(false);
+  };
+
+  const handleSettings = () => {
+    setIsSettingsOpen((prev) => ({
+      ...prev,
+      settingsOpen: !prev.settingsOpen,
+    }));
+  };
+
+  const handleModalClose = () => {
+    setIsSettingsOpen((prev) => ({
+      ...prev,
+      modalOpen: !prev.modalOpen,
+    }));
+  };
+
+  const handleUnlockModal = () => {
+    setIsSettingsOpen((prev) => ({
+      ...prev,
+      unlockModalOpen: !prev.unlockModalOpen,
+    }));
+  };
+
+  const handleSaveSettings = async (data: ClubGeneralSettings) => {
+    await updateGeneralSettingsMutate(
       {
-        isBulkEmail: data.isBulkEmail,
-        isLeadForms: data.isLeadForms,
-        noOfCustomChartsAllowed: data.noOfCustomChartsAllowed,
-        noOfEmailTemplatesAllowed: data.noOfEmailTemplatesAllowed,
+        ...data,
         clubId: id,
       },
       {
-        onSuccess: handleSettings,
+        onSuccess: () => {
+          handleModalClose();
+          handleSettings();
+        },
       },
     );
   };
 
   const handleEditModal = () => setIsEditModalOpen((prev) => !prev);
 
-  const handleSettings = () => setIsSettingsOpen((prev) => !prev);
-
-  const handleUnlockModal = () => setIsUnlockModalOpen((prev) => !prev);
-
   const handleChatbotQuestionsModal = () =>
     setIsChatbotModalOpen((prev) => !prev);
-
-  const handleChatbotStatusChange = async (value: boolean) =>
-    await updateChatbotStatusMutate({ chatbotEnabled: value, id });
 
   const handleStatusChange = async (value: string) =>
     await updateClubStatusMutate({ status: value, id });
@@ -179,9 +239,12 @@ const IndividualClub = () => {
         />
       </ConditionalRenderComponent>
 
-      <ConditionalRenderComponent visible={isSettingsOpen} hideFallback>
+      <ConditionalRenderComponent
+        visible={isSettingsOpen.settingsOpen}
+        hideFallback
+      >
         <GeneralSettingsDrawer
-          open={isSettingsOpen}
+          open={isSettingsOpen.settingsOpen}
           onClose={handleSettings}
           clubId={id}
           onSave={handleSaveSettings}
@@ -204,10 +267,13 @@ const IndividualClub = () => {
         />
       </ConditionalRenderComponent>
 
-      <ConditionalRenderComponent visible={isUnlockModalOpen} hideFallback>
+      <ConditionalRenderComponent
+        visible={isSettingsOpen.unlockModalOpen}
+        hideFallback
+      >
         <UnlockClubModal
           onClose={handleUnlockModal}
-          open={isUnlockModalOpen}
+          open={isSettingsOpen.unlockModalOpen}
           isLoading={isUnlockPending}
           onSave={unlockClubMutate}
           clubName={clubData?.club?.name}
@@ -217,6 +283,7 @@ const IndividualClub = () => {
         visible={isChatbotModalOpen}
         onClose={handleChatbotQuestionsModal}
         importMode={ImportModes.CHATBOT_KNOWLEDGE_BASE}
+        onImport={handleImportSuccess}
       />
     </div>
   );

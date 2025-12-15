@@ -4,10 +4,12 @@ export const titles = {
   sections: {
     primaryContact: "Primary Contact Details",
     notes: "Notes",
+    chatKnowledgeBase: "Chat Knowledge Base",
   },
   misc: {
     chatbotStatus: "Chatbot Status",
   },
+  uploadError: "Please upload Knowledge base to continue",
 };
 
 export const labels = {

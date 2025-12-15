@@ -137,104 +137,6 @@
     }
   }
 }
-.footerContent {
-  @include flex-flow(column, wrap, center);
-  gap: 0.8rem;
-  width: 100%;
-  padding: 1.6rem 2rem;
-  justify-content: center;
-  cursor: pointer;
-
-  &.isUploadingContent {
-    padding: 1.6rem 2rem;
-    cursor: default;
-  }
-
-  .uploadText {
-    color: $ashgro-navy;
-    font-size: 1.4rem;
-  }
-
-  &.uploadedFooter {
-    align-items: flex-start;
-  }
-}
-
-.uploadingContainer {
-  @include flex-flow(column, wrap, flex-start);
-  gap: 0.8rem;
-  width: 100%;
-  border-radius: 0.6rem;
-  opacity: 60%;
-
-  &.isUploadingContainer {
-    padding: 0;
-  }
-
-  .uploadingFileInfo {
-    @include flex-flow(row, nowrap, flex-start);
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-
-    .uploadingFileName {
-      color: $ashgro-navy;
-      font-size: 1.4rem;
-      font-weight: 400;
-    }
-  }
-
-  .progressBarContainer {
-    width: 110%;
-    height: 0.5rem;
-    border-radius: 1rem;
-    overflow: visible;
-    position: relative;
-
-    .progressBar {
-      height: 100%;
-      background: linear-gradient(180deg, #28b128 30%, #c9e4c9 100%);
-      border-radius: 1rem;
-      position: absolute;
-      top: 0.5rem;
-      left: -0.8rem;
-      border-top-left-radius: 2.6rem;
-      border-top-right-radius: 2.6rem;
-      transform: rotate(180deg);
-      transition: width 0.3s ease;
-    }
-  }
-}
-
-.uploadedFileInfo {
-  @include flex-flow(row, wrap, center);
-  gap: 1.2rem;
-  padding: 1.2rem 2.4rem;
-  background-color: rgba($ashgro-gold, 0.1);
-  border-radius: 0.8rem;
-  border: 0.1rem solid $ashgro-gold;
-
-  .fileName {
-    color: $ashgro-navy;
-    font-size: 1.4rem;
-    font-weight: 500;
-  }
-}
-
-.uploadedFooterContent {
-  @include flex-flow(row, nowrap, space-between);
-  align-items: center;
-  gap: 1.2rem;
-  width: 100%;
-
-  .fileName {
-    color: $ashgro-navy;
-    font-size: 1.4rem;
-    font-weight: 400;
-    text-align: left;
-    flex: 1;
-  }
-}
 
 .changeButton {
   background-color: $search-bg;
@@ -283,10 +185,7 @@
 .isUploadingFooter {
   height: 4rem;
 }
-.uploadedFooterContent {
-  display: flex;
-  gap: 0.8rem;
-}
+
 .importButton {
   background-color: $ashgro-navy;
   color: $ashgro-white;
@@ -392,8 +291,7 @@
   }
 }
 .footerContent {
-  @include flex-flow(column, wrap, center);
-  gap: 0.8rem;
+  @include flex-flow(column, wrap, center, 0.8rem);
   width: 100%;
   padding: 1.6rem 2rem;
   justify-content: center;
@@ -419,23 +317,9 @@
   gap: 0.8rem;
   width: 100%;
   border-radius: 0.6rem;
-  opacity: 60%;
 
   &.isUploadingContainer {
     padding: 0;
-  }
-
-  .uploadingFileInfo {
-    @include flex-flow(row, nowrap, flex-start);
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-
-    .uploadingFileName {
-      color: $ashgro-navy;
-      font-size: 1.4rem;
-      font-weight: 400;
-    }
   }
 
   .progressBarContainer {
@@ -460,34 +344,9 @@
   }
 }
 
-.uploadedFileInfo {
-  @include flex-flow(row, wrap, center);
-  gap: 1.2rem;
-  padding: 1.2rem 2.4rem;
-  background-color: rgba($ashgro-gold, 0.1);
-  border-radius: 0.8rem;
-  border: 0.1rem solid $ashgro-gold;
-
-  .fileName {
-    color: $ashgro-navy;
-    font-size: 1.4rem;
-    font-weight: 500;
-  }
-}
-
 .uploadedFooterContent {
-  @include flex-flow(row, nowrap, space-between);
-  align-items: center;
-  gap: 1.2rem;
+  @include flex-flow(row, nowrap, center, 1.2rem);
   width: 100%;
-
-  .fileName {
-    color: $ashgro-navy;
-    font-size: 1.4rem;
-    font-weight: 400;
-    text-align: left;
-    flex: 1;
-  }
 }
 
 .changeButton {
@@ -545,10 +404,7 @@
 .isUploadingFooter {
   height: 4rem;
 }
-.uploadedFooterContent {
-  display: flex;
-  gap: 0.8rem;
-}
+
 .importButton {
   background-color: $ashgro-navy;
   color: $ashgro-white;
@@ -660,4 +516,50 @@
 }
 .chatKnowledgeBaseIcons {
   @include flex-container(normal, center, row, 0.2rem);
+}
+
+.uploadingFileInfo {
+  @include flex-flow(row, nowrap, flex-start);
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+
+  .uploadingFileName {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    font-weight: 400;
+  }
+}
+
+.progressBarContainer {
+  width: 102.5%;
+  height: 0.45rem;
+  border-radius: 1rem;
+  overflow: visible;
+  position: relative;
+
+  .progressBar {
+    height: 100%;
+    background: $upload-progress-gradient;
+    border-radius: 1rem;
+    position: absolute;
+    top: 0.5rem;
+    left: -0.8rem;
+    border-top-left-radius: 2.6rem;
+    border-top-right-radius: 2.6rem;
+    transform: rotate(180deg);
+    transition: width 0.3s ease;
+  }
+}
+
+.fileName {
+  color: $ashgro-navy;
+  font-size: 1.4rem;
+  font-weight: 400;
+  text-align: left;
+  flex: 1;
+}
+
+.isUploadingFileInfo {
+  opacity: 60%;
 }

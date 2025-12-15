@@ -373,6 +373,8 @@ export interface ImportFileUploadProps {
   isUploadedClassName?: string;
   uploadingClassName?: string;
   uploadedClassName?: string;
+  customCancelClassName?: string;
+  uplodedFile?: { id: string; name: string };
 }
 
 export interface DeleteModalProps {
