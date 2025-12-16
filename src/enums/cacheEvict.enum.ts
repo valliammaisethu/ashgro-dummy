@@ -96,4 +96,5 @@ export enum QueryKeys {
   GET_CHART_DETAIL_KEY = "getChartDetails",
   GET_DASHBOARD_STATS = "getDashboardStats",
   GET_CHART_VALUES_KEY = "getChartValues",
+  GET_SUPER_ADMIN_CHARTS_KEY = "getSuperAdminCharts",
 }

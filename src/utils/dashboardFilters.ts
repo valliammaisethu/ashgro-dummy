@@ -1,22 +1,21 @@
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 
 export interface ChartFilterData {
   dateRange?: [string, string];
   selectedValues?: string[];
 }
 
-export const getStorageKey = (clubId: string) =>
-  `${LocalStorageKeys.DASHBOARD_FILTERS}_${clubId}`;
+export const getStorageKey = (userId: string) =>
+  `${LocalStorageKeys.DASHBOARD_FILTERS}_${userId}`;
 
 const isValidFilterData = (data: ChartFilterData) =>
   !!data && typeof data === "object" && !Array.isArray(data);
 
-export const getFilters = (clubId: string): Record<string, ChartFilterData> => {
-  if (!clubId) return {};
+export const getFilters = (userId: string): Record<string, ChartFilterData> => {
+  if (!userId) return {};
   // TODO : To fix the issue in localstoragehelper and use here
   try {
-    const stored = localStorage.getItem(getStorageKey(clubId));
+    const stored = localStorage.getItem(getStorageKey(userId));
     if (!stored) return {};
 
     const parsed = JSON.parse(stored);
@@ -27,10 +26,10 @@ export const getFilters = (clubId: string): Record<string, ChartFilterData> => {
 };
 
 export const saveFilters = (
-  clubId: string,
+  userId: string,
   filters: Record<string, ChartFilterData>,
 ): boolean => {
-  if (!clubId) return false;
+  if (!userId) return false;
 
   const filtered = Object.fromEntries(
     Object.entries(filters).filter(([, { dateRange, selectedValues }]) => {
@@ -41,19 +40,18 @@ export const saveFilters = (
   );
   // TODO : To fix the issue in localstoragehelper and use here
   try {
-    localStorage.setItem(getStorageKey(clubId), JSON.stringify(filtered));
+    localStorage.setItem(getStorageKey(userId), JSON.stringify(filtered));
     return true;
   } catch {
     return false;
   }
 };
 
-export const clearFilters = () => {
-  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER);
-  if (!clubId) return false;
+export const clearFilters = (userId: string) => {
+  if (!userId) return false;
   // TODO : To fix the issue in localstoragehelper and use here
   try {
-    localStorage.removeItem(getStorageKey(clubId));
+    localStorage.removeItem(getStorageKey(userId));
     return true;
   } catch {
     return false;

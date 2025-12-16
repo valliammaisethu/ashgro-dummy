@@ -8,8 +8,7 @@ import React, {
   useCallback,
 } from "react";
 
-import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { getCurrentUserId } from "src/shared/utils/helpers";
 import {
   saveFilters,
   clearFilters,
@@ -31,11 +30,11 @@ export const DashboardFiltersProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+  const userId = getCurrentUserId();
 
   const [chartFilters, setChartFilters] = useState<
     Record<string, ChartFilterData>
-  >(initialFilters(clubId));
+  >(initialFilters(userId));
   const [activeFilterChart, setActiveFilterChart] =
     useState<ChartConfig | null>(null);
 
@@ -92,7 +91,7 @@ export const DashboardFiltersProvider = ({
 
   const clearAllFilters = () => {
     setChartFilters({});
-    clearFilters();
+    clearFilters(userId);
   };
 
   const hasActiveFilters = (chartId: string): boolean => {
@@ -155,8 +154,8 @@ export const DashboardFiltersProvider = ({
   );
 
   useEffect(() => {
-    if (clubId) saveFilters(clubId, chartFilters);
-  }, [chartFilters, clubId]);
+    if (userId) saveFilters(userId, chartFilters);
+  }, [chartFilters, userId]);
 
   return (
     <DashboardFiltersContext.Provider value={contextValue}>

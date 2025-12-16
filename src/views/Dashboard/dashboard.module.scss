@@ -3,6 +3,12 @@
 
 .superAdminDashboard {
   @include flex-flow(row, wrap, normal, 4.1rem);
+  justify-content: center;
+  padding: 2.4rem 1rem;
+  background-color: $ashgro-white;
+  border: 1px solid $ashgro-light-border;
+  border-radius: 16px;
+  margin-bottom: 2.4rem;
 }
 
 .addChartButton {

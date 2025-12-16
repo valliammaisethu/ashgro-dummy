@@ -113,7 +113,7 @@
   right: -2px;
   width: 8px;
   height: 8px;
-  background-color: #ff4d4f;
+  background-color: $filter-badge-bg;
   border-radius: 50%;
   border: 1.5px solid $ashgro-white;
 }
@@ -126,4 +126,16 @@
       font-size: 1.3rem;
     }
   }
+}
+
+.labelPrefix {
+  height: 1.4rem;
+  width: 1.4rem;
+  background-color: $ashgro-light-border;
+  border-radius: 4px;
+}
+
+.superAdminChatLabel {
+  font-size: 1.4rem;
+  font-weight: 600;
 }
