@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import clsx from "clsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IconLogOut } from "obra-icons-react";
@@ -11,20 +11,33 @@ import { AuthService } from "src/services/AuthService/auth.service";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { useUserRole } from "src/shared/hooks/useUserRole";
-import { clubAdminRoutes, superAdminRoutes } from "./constants";
-
-import styles from "./topBar.module.scss";
+import {
+  clubAdminRoutes,
+  logoutConstants,
+  superAdminRoutes,
+} from "./constants";
 import MyProfile from "src/views/MyProfile";
 import Button from "../Button";
+import { Buttons } from "src/enums/buttons.enum";
+import Modal from "../Modal";
 
+import styles from "./topBar.module.scss";
+
+const { LOGOUT, YES_LOGOUT, CANCEL } = Buttons;
 const TopBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout } = AuthService();
   const { mutateAsync, isPending: logoutPending } = useMutation(logout());
   const { isSuperAdmin } = useUserRole();
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
-  const handleLogOut = async () => mutateAsync();
+  const toggleLogoutModal = () => setIsLogoutOpen((prev) => !prev);
+
+  const handelLogout = async () => {
+    await mutateAsync();
+    toggleLogoutModal();
+  };
 
   const handleItemClick = (path: string) => navigate(path);
 
@@ -68,9 +81,30 @@ const TopBar = () => {
           className={styles.logoutButton}
           disabled={logoutPending}
           icon={
-            <IconLogOut className={styles.logoutIcon} onClick={handleLogOut} />
+            <IconLogOut
+              className={styles.logoutIcon}
+              onClick={toggleLogoutModal}
+            />
           }
         ></Button>
+        <Modal
+          title={LOGOUT}
+          visible={isLogoutOpen}
+          okText={YES_LOGOUT}
+          closeModal={toggleLogoutModal}
+          rootClassName={styles.logoutModal}
+          handleOk={handelLogout}
+          cancelText={CANCEL}
+          centered
+          okButtonProps={{
+            loading: logoutPending,
+          }}
+          cancelButtonProps={{
+            className: styles.cancelButton,
+          }}
+        >
+          <p className={styles.logoutModalText}>{logoutConstants.LOGOUT}</p>
+        </Modal>
       </div>
     </div>
   );
