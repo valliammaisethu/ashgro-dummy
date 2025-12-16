@@ -65,13 +65,11 @@
   border-radius: 1.6rem;
   font-size: 1.4rem;
   line-height: 1.5;
-  word-wrap: break-word;
-  white-space: pre-wrap;
 }
 
 .userBubble {
   background-color: $skeleton-bg;
-  color: $ashgro-black;
+  color: $ashgro-navy;
   border-radius: 1.6rem;
 }
 
@@ -90,4 +88,8 @@
   .ant-drawer .ant-drawer-body {
     margin-bottom: 2.4rem;
   }
+}
+
+.messageList {
+  padding-left: 2rem;
 }
