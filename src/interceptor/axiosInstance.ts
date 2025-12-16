@@ -148,7 +148,7 @@ axiosInstance.interceptors.response.use(
         if (!shouldSupressNotifications) {
           Notification({
             title: errorTitle || forbidden.title,
-            description: forbidden.description,
+            description: errorMessage || forbidden.description,
             type: NotificationTypes.ERROR,
           });
         }
@@ -158,7 +158,7 @@ axiosInstance.interceptors.response.use(
         if (!shouldSupressNotifications) {
           Notification({
             title: errorTitle || notFound.title,
-            description: notFound.description,
+            description: errorMessage || notFound.description,
             type: NotificationTypes.ERROR,
           });
         }

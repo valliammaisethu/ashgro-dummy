@@ -28,6 +28,7 @@
     "react-big-calendar": "^1.19.4",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.56.4",
+    "react-markdown": "^8.0.7",
     "react-otp-input": "^3.1.0",
     "react-router-dom": "^6.20.1",
     "reflect-metadata": "^0.2.2",

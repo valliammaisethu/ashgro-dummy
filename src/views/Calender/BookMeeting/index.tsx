@@ -189,6 +189,7 @@ const BookMeeting = ({
                       handleSelectUserType(user as PaginatedOptions)
                     }
                     disabled={isNameDisabled}
+                    required
                   />
                 </ConditionalRenderComponent>
               </Col>

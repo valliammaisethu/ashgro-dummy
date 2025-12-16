@@ -10,3 +10,7 @@ export const clubAdminRoutes = [
   TopBarItems.MEMBERS,
   TopBarItems.CLUB_STAFF,
 ];
+
+export const logoutConstants = {
+  LOGOUT: "You can login again using your credentials",
+};
