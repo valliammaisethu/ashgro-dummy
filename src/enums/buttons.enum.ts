@@ -40,6 +40,8 @@ export enum Buttons {
   YES_UNLOCK = "Yes, Unlock",
   RELOAD = "Reload",
   RESET_FILTERS = "Reset Filters",
+  YES_LOGOUT = "Yes, Logout",
+  LOGOUT = "Logout?",
 }
 
 export enum HtmlButtonType {
