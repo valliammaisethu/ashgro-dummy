@@ -105,6 +105,7 @@ const TimeRangePicker: FC<TimeRangePickerFieldProps> = ({
         needConfirm={false}
         disabledTime={disabledTime}
         value={convertToDayjsRange(value)}
+        minuteStep={15}
         {...rest}
       />
 
