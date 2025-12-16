@@ -17,9 +17,10 @@ import { useDashboardFilters } from "src/context/DashboardFiltersContext";
 import DateRangeButton from "../DateRangeButton";
 import { BarChartCardProps, DateRange } from "src/shared/types/dashboard.type";
 import { useUserRole } from "src/shared/hooks/useUserRole";
+import FilterIconWithBadge from "../FilterIconWithBadge";
+import ClubFilterDropdown from "../ClubFilterDropdown";
 
 import styles from "./barChartCard.module.scss";
-import FilterIconWithBadge from "../FilterIconWithBadge";
 
 const { DARK_GOLD, MODAL_CLOSE_ICON } = Colors;
 
@@ -149,12 +150,6 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
           </span>
         </ConditionalRenderComponent>
         <div className={styles.chartActions}>
-          <ConditionalRenderComponent visible={isClubAdmin} fallback={<></>}>
-            <FilterIconWithBadge
-              hasFilters={hasFilters}
-              onClick={handleFilterClick}
-            />
-          </ConditionalRenderComponent>
           <ConditionalRenderComponent visible={!isClubAdmin} hideFallback>
             <div className={styles.labelPrefix} />
             <span className={styles.superAdminChatLabel}>
@@ -163,8 +158,15 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
           </ConditionalRenderComponent>
 
           <DateRangeButton value={dateRange} onChange={handleDateChange} />
-          {/* TODO: Add filter icon for superAdmin */}
-
+          <ConditionalRenderComponent
+            visible={isClubAdmin}
+            fallback={<ClubFilterDropdown chartId={id} />}
+          >
+            <FilterIconWithBadge
+              hasFilters={hasFilters}
+              onClick={handleFilterClick}
+            />
+          </ConditionalRenderComponent>
           <ConditionalRenderComponent visible={!isDefault} hideFallback>
             <IconEdit
               size={20}
