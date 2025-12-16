@@ -89,7 +89,7 @@
               @include flex-flow(row, wrap, center);
               gap: 0.8rem;
               .datePicker {
-                max-width: 20rem;
+                max-width: 12rem;
               }
               .dateTitle {
                 color: $ashgro-gold;
@@ -428,4 +428,9 @@
 }
 .calendarIcon {
   cursor: pointer;
+}
+
+.datePickerContainer {
+  @include flex-container(row, center, center);
+  height: 1rem;
 }

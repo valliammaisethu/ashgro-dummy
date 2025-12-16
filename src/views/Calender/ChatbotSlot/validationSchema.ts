@@ -1,8 +1,8 @@
 import * as Yup from "yup";
 import dayjs from "dayjs";
 
-import { DateFormats } from "src/enums/dateFormats.enum";
 import { DateUnit } from "src/enums/dateUnit.enum";
+import { convertTo24hrs } from "src/shared/utils/dateUtils";
 
 const MAX_DAYS_RANGE = 180;
 
@@ -32,11 +32,6 @@ export const VALIDATION_CONDITIONS = {
   MAX_RANGE: "max-range",
 };
 
-const toMinutes = (time: string) => {
-  const parsed = dayjs(time, DateFormats.HH_MM_A);
-  return parsed.hour() * 60 + parsed.minute();
-};
-
 export const timeRangeSchema = Yup.object({
   startTime: Yup.string().required(VALIDATION_MESSAGE.REQUIRED_START_TIME),
 
@@ -48,7 +43,7 @@ export const timeRangeSchema = Yup.object({
       function (endTime) {
         const { startTime } = this.parent;
         if (!startTime || !endTime) return true;
-        return toMinutes(endTime) > toMinutes(startTime);
+        return convertTo24hrs(endTime) > convertTo24hrs(startTime);
       },
     ),
 }).test(

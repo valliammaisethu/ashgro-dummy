@@ -79,7 +79,6 @@ const Transcripts = ({ visible, onClose, userId }: TranscriptsProps) => {
         isPending={isLoading}
         isSuccess={isSuccess}
         records={allSessions}
-        emptyDescription={EMPTY_DESCRIPTION}
       >
         <div className={styles.transcriptContainer} onScroll={handleScroll}>
           {allSessions?.map((session: TranscriptSession) => (

@@ -1,5 +1,7 @@
 import * as yup from "yup";
 
+import { convertTo24hrs } from "src/shared/utils/dateUtils";
+
 import { BOOK_MEETING_FIELDS, BOOK_MEETING_VALIDATION } from "./constants";
 
 const { TITLE, TYPE, NAME, SLOT_DATE, MEETING_TIME } = BOOK_MEETING_FIELDS;
@@ -29,7 +31,8 @@ export const validationSchema = yup.object().shape({
     .test("valid-range", TIME_INVALID_RANGE, (value) => {
       if (!value) return false;
       const { startTime, endTime } = value;
-      return endTime > startTime;
+      return convertTo24hrs(endTime) > convertTo24hrs(startTime);
     })
+
     .required(),
 });

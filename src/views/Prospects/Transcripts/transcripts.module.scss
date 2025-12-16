@@ -13,7 +13,7 @@
   @include flex-container(normal, normal, column, 1.6rem);
   padding: 1.6rem;
   border-radius: 1.6rem;
-  border: 1px solid $activity-border;
+  border: 1.5px solid #e5dbc5; //TODO: use CSS vaiable once it the #161 merged
 }
 
 .messageRow {

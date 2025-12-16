@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IconCalendarDates, IconCall, IconEmail } from "obra-icons-react";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
+import { LoadingOutlined } from "@ant-design/icons";
 
 import { Colors } from "src/enums/colors.enum";
 import { PROSPECT_LABELS } from "../constants";
@@ -19,6 +20,8 @@ import { formatAndSetPhoneNumber } from "src/shared/utils/phoneNumberUtils";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import Loader from "src/shared/components/Loader";
 import AvatarFallback from "src/shared/components/AvatarFallback";
+import { LoaderSizes } from "src/enums/LoaderSizes";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 interface ProspectInfoProps {
   data?: ViewProspect;
@@ -102,19 +105,31 @@ const ProspectInfo: React.FC<ProspectInfoProps> = ({
             onClick={() => setIsDatePickerOpen(true)}
             className={styles.calendarIcon}
           />
-          <DatePicker
-            open={isDatePickerOpen}
-            onOpenChange={setIsDatePickerOpen}
-            value={followUpDate ? dayjs(followUpDate) : null}
-            onChange={handleFollowUpDateChange}
-            format={DateFormats.DD_MMM__YYYY}
-            className={styles.datePicker}
-            suffixIcon={null}
-            placeholder={formatDate(followUpDate, DateFormats.DD_MMM__YYYY)}
-            inputReadOnly
-            allowClear={false}
-          />
-          <Loader loading={isUpdating} />
+          <div className={styles.datePickerContainer}>
+            <ConditionalRenderComponent
+              visible={!isUpdating}
+              fallback={
+                <Loader
+                  loading={isUpdating}
+                  icon={<LoadingOutlined spin />}
+                  size={LoaderSizes.SMALL}
+                />
+              }
+            >
+              <DatePicker
+                open={isDatePickerOpen}
+                onOpenChange={setIsDatePickerOpen}
+                value={followUpDate ? dayjs(followUpDate) : null}
+                onChange={handleFollowUpDateChange}
+                format={DateFormats.DD_MMM__YYYY}
+                className={styles.datePicker}
+                suffixIcon={null}
+                placeholder={formatDate(followUpDate, DateFormats.DD_MMM__YYYY)}
+                inputReadOnly
+                allowClear={false}
+              />
+            </ConditionalRenderComponent>
+          </div>
         </div>
         <div className={styles.email}>
           <IconText
