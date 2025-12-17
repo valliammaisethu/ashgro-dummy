@@ -159,8 +159,20 @@ const ClubForm = (props: ClubFormProps) => {
     });
   };
 
+  const handleUploadedFileChange = () => {
+    if (clubData?.club?.id) return;
+    setFileState((prev) => ({
+      ...prev,
+      uploadedFileId: "",
+      uploadedFileName: "",
+    }));
+    setValue("knowledgeBaseId", "", {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+
   const formSubmit = async (values: FieldValues) => {
-    if (isChatbotEnabled && !knowledgeBaseId) return;
     const formValues = {
       ...values,
       onboardingDate: convertDateToApiFormat(
@@ -208,6 +220,25 @@ const ClubForm = (props: ClubFormProps) => {
     }
   };
 
+  const {
+    formState: { isValid },
+  } = methods;
+
+  // TODO: TO optimize during revamp
+  const isSubmitEnabled = () => {
+    if (isChatbotEnabled) {
+      if (clubData?.club?.id) {
+        return (
+          isValid && clubData?.club?.id && clubData?.club?.knowledgeBaseName
+        );
+      }
+      return isValid && !!fileState?.uploadedFileId;
+    }
+    return isValid;
+  };
+
+  const isDisabled = !isSubmitEnabled();
+
   return (
     <Modal
       rootClassName={styles.addClubModal}
@@ -221,6 +252,7 @@ const ClubForm = (props: ClubFormProps) => {
       okText={clubData?.club?.id ? Buttons.SAVE_CHANGES : Buttons.ADD_CLUB}
       okButtonProps={{
         loading: clubData?.club?.id ? isEditing : isAdding,
+        disabled: isDisabled,
       }}
       handleOk={methods.handleSubmit(formSubmit)}
       styles={{
@@ -378,12 +410,9 @@ const ClubForm = (props: ClubFormProps) => {
                 description={chatbotKnowlegeBaseDescription}
                 sizeDescription={maxSizeDescription}
                 showError={!knowledgeBaseId}
+                onChangeFile={handleUploadedFileChange}
               />
             </Col>
-
-            {!knowledgeBaseId && (
-              <div className={styles.errorText}>{titles.uploadError}</div>
-            )}
           </>
         )}
       </Form>

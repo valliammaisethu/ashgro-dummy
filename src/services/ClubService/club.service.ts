@@ -88,6 +88,7 @@ export const ClubService = () => {
       return deserialize(ClubData, data?.data);
     },
     enabled: !!id,
+    refetchOnMount: true,
   });
 
   const addClub = (): UseMutationOptions<

@@ -29,8 +29,11 @@ import { extractNameParts } from "src/shared/utils/parser";
 import useRedirect from "src/shared/hooks/useRedirect";
 import useDrawer from "src/shared/hooks/useDrawer";
 import { stopPropagation } from "src/shared/utils/eventUtils";
+import { ClubListData } from "src/models/club.model";
 
 import styles from "../../clubs.module.scss";
+
+const { requiredError, requiredDescription } = chatbotKnowledgeBaseConstants;
 
 const ClubListingTable = ({
   onEditClub,
@@ -38,17 +41,18 @@ const ClubListingTable = ({
   setQueryParams,
 }: ClubListingTableProps) => {
   const { getClubs, updateStatus } = ClubService();
-  const [updatingClubId, setUpdatingClubId] = useState<string>("");
+  const [updatingClubId, setUpdatingClubId] = useState<string | undefined>(
+    undefined,
+  );
   const { navigateToInvidualClub } = useRedirect();
-  const {
-    toggleVisibility: handleChatbotQuestionsModal,
-    visible: isChatbotModalOpen,
-    hide,
-  } = useDrawer();
+  const { toggleVisibility: toggleUploadModal, visible: isChatbotModalOpen } =
+    useDrawer();
+
   const {
     data: clubsData,
     isPending,
     isSuccess,
+    refetch,
   } = useQuery(getClubs(queryParams));
   const [pendingEnableClubId, setPendingEnableClubId] = useState<string>("");
 
@@ -65,19 +69,11 @@ const ClubListingTable = ({
     isPending: isStatusUpdatePending,
   } = useMutation(updateStatus());
 
+  // status
   const handleStatusChange = async (clubId = "", value: string) => {
     setUpdatingClubId(clubId);
-    await updateClubStatusMutate(
-      { status: value, id: clubId },
-      {
-        onSuccess: () => {
-          setUpdatingClubId("");
-        },
-        onError: () => {
-          setUpdatingClubId("");
-        },
-      },
-    );
+    await updateClubStatusMutate({ status: value, id: clubId });
+    setUpdatingClubId(undefined);
   };
   const handleEditClick = useCallback((clubId?: string) => {
     return () => {
@@ -87,65 +83,41 @@ const ClubListingTable = ({
   }, []);
 
   const handleRowClick = (clubId = "", e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
+    stopPropagation(e);
     navigateToInvidualClub(clubId);
   };
 
-  const handleChatbotStatusChange = async (clubId = "", value: boolean) => {
-    const club = clubsData?.clubs?.find((c) => c.id === clubId);
-    const currentlyEnabled = club?.chatbotEnabled;
-
-    if (!currentlyEnabled && value) {
-      Notification({
-        title: chatbotKnowledgeBaseConstants.requiredError,
-        description: chatbotKnowledgeBaseConstants.requiredDescription,
-        type: NotificationTypes.WARNING,
-      });
-
-      setPendingEnableClubId(clubId);
-
-      handleChatbotQuestionsModal();
-
-      return;
-    }
-
-    if (currentlyEnabled && !value) {
-      Notification({
-        title: chatbotKnowledgeBaseConstants.disabledError,
-        description: chatbotKnowledgeBaseConstants.disabledDescription,
-        type: NotificationTypes.WARNING,
-      });
-    }
-
-    setUpdatingClubId(clubId);
-
-    await updateChatbotStatusMutate(
-      { chatbotEnabled: value, id: clubId },
-      {
-        onSuccess: () => setUpdatingClubId(""),
-        onError: () => setUpdatingClubId(""),
-      },
-    );
+  const handleChatbotStatus = async (id: string, chatbotEnabled: boolean) => {
+    if (!id) return;
+    setUpdatingClubId(id);
+    await updateChatbotStatusMutate({ chatbotEnabled, id });
+    refetch();
+    setUpdatingClubId(undefined);
   };
 
-  const handleImportSuccess = async (clubId: string) => {
-    handleChatbotQuestionsModal();
-    hide();
+  const handleChatbotStatusChange =
+    (selectedClub: ClubListData) => async (value: boolean) => {
+      const { id, knowledgeBaseName, chatbotEnabled } = selectedClub || {};
 
-    setUpdatingClubId(clubId);
+      if (!id) return;
 
-    await updateChatbotStatusMutate(
-      { chatbotEnabled: true, id: clubId },
-      {
-        onSuccess: () => {
-          handleChatbotQuestionsModal();
-          setUpdatingClubId("");
-        },
-        onError: () => {
-          setUpdatingClubId("");
-        },
-      },
-    );
+      if (!chatbotEnabled && !knowledgeBaseName) {
+        Notification({
+          title: requiredError,
+          description: requiredDescription,
+          type: NotificationTypes.WARNING,
+        });
+        // TODO: Need to remove setPendingEnableClubId during revamp
+        setPendingEnableClubId(id);
+        toggleUploadModal();
+      } else {
+        handleChatbotStatus(id, value);
+      }
+    };
+
+  const handleImportSuccess = (clubId?: string) => async () => {
+    if (!clubId) return;
+    await handleChatbotStatus(clubId, true);
   };
 
   return (
@@ -187,9 +159,7 @@ const ClubListingTable = ({
                   checked={club.chatbotEnabled}
                   className={styles.switch}
                   name={`switch-${index}`}
-                  onChange={(value) =>
-                    handleChatbotStatusChange(club.id, value)
-                  }
+                  onChange={handleChatbotStatusChange(club)}
                   loading={isChatbotUpdatePending && updatingClubId === club.id}
                 />
               </div>
@@ -216,9 +186,9 @@ const ClubListingTable = ({
       />
       <ImportModal
         visible={isChatbotModalOpen}
-        onClose={handleChatbotQuestionsModal}
+        onClose={toggleUploadModal}
         importMode={ImportModes.CHATBOT_KNOWLEDGE_BASE}
-        onImport={() => handleImportSuccess(pendingEnableClubId)}
+        onImport={handleImportSuccess(pendingEnableClubId)}
         clubId={pendingEnableClubId}
       />
     </div>
