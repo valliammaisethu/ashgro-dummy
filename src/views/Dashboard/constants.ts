@@ -32,7 +32,7 @@ export const CHART_CONSTANTS = {
 export const superAdminChartItems = [
   { id: "conversions", name: "Chatbot Conversions" },
   { id: "spend-time", name: "Chatbot Spend Time" },
-  { id: "crm-usage", name: "CRM Usage" },
+  // { id: "crm-usage", name: "CRM Usage" }
 ];
 
 export const chartFiltersTitle = "Filters - %s";
@@ -52,4 +52,10 @@ export const EMPTY_STATE_STRINGS = {
 export const ERROR_STATE_STRINGS = {
   TITLE: "Hold on...",
   DESCRIPTION: "Just a moment while we load this section",
+};
+
+export const CHART_LABEL_MAP: Record<string, string> = {
+  "Chatbot Conversions": "No of Conversions",
+  "Chatbot Spend Time": "Minutes Spent",
+  "CRM Usage": "Hours Spent",
 };

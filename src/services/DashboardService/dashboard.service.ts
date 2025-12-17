@@ -9,7 +9,7 @@ import { deserialize, serialize } from "serializr";
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
-import { ChartDetail, ChartItem } from "src/models/dashboard.model";
+import { ChartDetail, ChartItem, ChartLabel } from "src/models/dashboard.model";
 import { ResponseModel } from "src/models/response.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
@@ -22,12 +22,14 @@ import {
   ChartParams,
 } from "src/shared/types/dashboard.type";
 import { MetaOptions } from "src/models/common.model";
+import { useUserRole } from "src/shared/hooks/useUserRole";
 
 const {
   GET_DASHBOARD_CHARTS_KEY,
   GET_CHART_DETAIL_KEY,
   GET_CHART_VALUES_KEY,
   GET_DASHBOARD_STATS,
+  GET_SUPER_ADMIN_CHARTS_KEY,
 } = QueryKeys;
 const {
   ADD_CUSTOM_CHART,
@@ -47,6 +49,7 @@ const {
 export const DashboardService = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
   const queryClient = useQueryClient();
+  const { isClubAdmin, isSuperAdmin } = useUserRole();
 
   const getDashboardChartsList = (): UseQueryOptions<
     ChartItem[],
@@ -78,7 +81,7 @@ export const DashboardService = () => {
 
       return deserialize(ChartDetail, response?.data?.data?.chart);
     },
-    enabled: !!clubId && !!path,
+    enabled: !!path && isClubAdmin,
   });
 
   const canCreateCustomChart = (): UseMutationOptions<
@@ -205,6 +208,22 @@ export const DashboardService = () => {
     },
   });
 
+  const getSuperAdminChartDetails = (
+    path: string,
+    params?: ChartParams,
+  ): UseQueryOptions<ChartLabel[], ResponseModel, ChartLabel[]> => ({
+    queryKey: [GET_SUPER_ADMIN_CHARTS_KEY, path, params],
+    queryFn: async () => {
+      const response = await axiosInstance.get(path, { params });
+
+      return deserialize(
+        ChartLabel,
+        response?.data?.data?.chart,
+      ) as unknown as ChartLabel[];
+    },
+    enabled: !!path && isSuperAdmin,
+  });
+
   return {
     getDashboardChartsList,
     getChartDetails,
@@ -215,5 +234,6 @@ export const DashboardService = () => {
     updateChartOrder,
     getChartValues,
     deleteChart,
+    getSuperAdminChartDetails,
   };
 };

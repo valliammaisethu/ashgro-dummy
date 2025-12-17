@@ -1,0 +1,29 @@
+@import "src/styles/variables.scss";
+
+.filterIconWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  .actionIcon {
+    cursor: pointer;
+    transition: color 0.3s;
+    background-color: transparent;
+
+    &:hover {
+      color: $ashgro-navy;
+    }
+  }
+
+  .filterBadge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6.5px;
+    height: 6.5px;
+    background-color: $filter-badge-bg;
+    border-radius: 50%;
+  }
+}
