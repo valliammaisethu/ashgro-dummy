@@ -23,6 +23,7 @@ interface ChatbotFileUploadWrapperProps {
   description: string;
   sizeDescription: string;
   showError: boolean;
+  onChangeFile?: () => void;
 }
 
 const ChatbotFileUploadWrapper = ({
@@ -34,15 +35,16 @@ const ChatbotFileUploadWrapper = ({
   description,
   sizeDescription,
   showError,
+  onChangeFile,
 }: ChatbotFileUploadWrapperProps) => {
-  const uploadedFileProp = clubData?.club?.id
+  const uploadedFileProp = clubData?.club?.knowledgeBaseName
     ? {
         uplodedFile: {
           id: clubData.club.knowledgeBaseId ?? "",
           name: clubData.club.knowledgeBaseName ?? "",
         },
       }
-    : {};
+    : undefined;
 
   return (
     <Fragment>
@@ -83,6 +85,7 @@ const ChatbotFileUploadWrapper = ({
           uploadingClassName={importStyles.uploadingContainer}
           uploadedClassName={importStyles.uploadedFooterContent}
           customCancelClassName={styles.customCancelButton}
+          onChangeFile={onChangeFile}
           {...uploadedFileProp}
         />
       </div>

@@ -30,6 +30,7 @@ import { INPUT_TYPE } from "src/enums/inputType";
 import { DrawerPlacement } from "src/enums/drawerPlacement.enum";
 import { AttachmentTypes } from "src/enums/attachmentTypes.enum";
 import { MetaOptions } from "src/models/common.model";
+import { FileData } from "./importModes.type";
 
 export interface PhoneNumberFieldProps extends InputProps {
   name: string;
@@ -374,7 +375,7 @@ export interface ImportFileUploadProps {
   uploadingClassName?: string;
   uploadedClassName?: string;
   customCancelClassName?: string;
-  uplodedFile?: { id: string; name: string };
+  uplodedFile?: FileData;
 }
 
 export interface DeleteModalProps {
