@@ -25,6 +25,7 @@ interface DeleteModalProps {
   member?: Member;
 }
 
+// TODO: Use common delete modal
 const DeleteModal = (props: DeleteModalProps) => {
   const { visible, toggleVisibility, member } = props;
   const { navigateToMembers } = useRedirect();
@@ -77,10 +78,12 @@ const DeleteModal = (props: DeleteModalProps) => {
           </div>,
         ]}
       >
-        {replaceString(
-          deleteModalConstants.description,
-          getFullName(member?.firstName, member?.lastName),
-        )}
+        <p className={styles.modalDescription}>
+          {replaceString(
+            deleteModalConstants.description,
+            getFullName(member?.firstName, member?.lastName),
+          )}
+        </p>
       </Modal>
     </div>
   );

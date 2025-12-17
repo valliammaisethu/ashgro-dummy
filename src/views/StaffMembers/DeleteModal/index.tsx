@@ -26,6 +26,7 @@ interface DeleteModalProps {
   staffMember?: StaffMemberDetails;
 }
 
+// TODO: Use common delete modal
 const DeleteModal = (props: DeleteModalProps) => {
   const { visible, toggleVisibility, staffMember } = props;
   const queryClient = useQueryClient();
@@ -76,10 +77,12 @@ const DeleteModal = (props: DeleteModalProps) => {
           </div>,
         ]}
       >
-        {replaceString(
-          deleteModalConstants.description,
-          getFullName(staffMember?.firstName, staffMember?.lastName),
-        )}
+        <p className={styles.modalDescription}>
+          {replaceString(
+            deleteModalConstants.description,
+            getFullName(staffMember?.firstName, staffMember?.lastName),
+          )}
+        </p>
       </Modal>
     </div>
   );
