@@ -1,11 +1,6 @@
-import React from "react";
+import React, { useMemo, useCallback } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  IconReorderAlt,
-  IconFilterAlt,
-  IconEdit,
-  IconDelete,
-} from "obra-icons-react";
+import { IconReorderAlt, IconEdit, IconDelete } from "obra-icons-react";
 import clsx from "clsx";
 
 import { Colors } from "src/enums/colors.enum";
@@ -16,11 +11,14 @@ import { XAxisTypes } from "src/enums/charts.enum";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import EmptyState from "../../atoms/EmptyState";
 import ErrorState from "../../atoms/ErrorState";
-import { CHART_CONSTANTS } from "../../constants";
+import { CHART_CONSTANTS, CHART_LABEL_MAP } from "../../constants";
 import DeleteModal from "src/shared/components/DeleteModal";
 import { useDashboardFilters } from "src/context/DashboardFiltersContext";
 import DateRangeButton from "../DateRangeButton";
-import { BarChartCardProps } from "src/shared/types/dashboard.type";
+import { BarChartCardProps, DateRange } from "src/shared/types/dashboard.type";
+import { useUserRole } from "src/shared/hooks/useUserRole";
+import FilterIconWithBadge from "../FilterIconWithBadge";
+import ClubFilterDropdown from "../ClubFilterDropdown";
 
 import styles from "./barChartCard.module.scss";
 
@@ -39,6 +37,8 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
   } = chart || {};
   const { isDragging = false, isOver, dragHandleProps } = dragChartProps || {};
 
+  const { isClubAdmin } = useUserRole();
+
   if (!id) return null;
   const {
     openFilterDrawer,
@@ -52,17 +52,26 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
 
   const hasFilters = hasActiveFilters(id);
   const dateRange = getChartDateRange(id);
-  const { getChartDetails, deleteChart } = DashboardService();
+  const { getChartDetails, deleteChart, getSuperAdminChartDetails } =
+    DashboardService();
 
   const { mutateAsync: deleteChartMutation, isPending } =
     useMutation(deleteChart());
   const {
     data: chartData,
-    isLoading,
-    isSuccess,
-    isError,
-    refetch,
+    isLoading: clubChartDataLoading,
+    isSuccess: clubChartDataSuccess,
+    isError: clubChartDataError,
+    refetch: clubChartRefetch,
   } = useQuery(getChartDetails(path, queryParams));
+
+  const {
+    data: superAdminChartData,
+    isLoading: superAdminChartDataLoading,
+    isSuccess: superAdminChartDataSuccess,
+    isError: superAdminChartDataError,
+    refetch: superAdminChartRefetch,
+  } = useQuery(getSuperAdminChartDetails(path, queryParams));
 
   const { name, type, values = [] } = chartData || {};
 
@@ -94,10 +103,24 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
     }
   };
 
-  const handleDateChange = (dates: [string, string] | null) => {
+  const handleDateChange = (dates: DateRange | null) => {
     if (!id) return;
     setChartDateRange(id, dates);
   };
+
+  const chartDetails = useMemo(
+    () => (isClubAdmin ? values : superAdminChartData) ?? [],
+    [isClubAdmin, values, superAdminChartData],
+  );
+
+  const refetchData = useCallback(
+    () => (isClubAdmin ? clubChartRefetch() : superAdminChartRefetch()),
+    [isClubAdmin, clubChartRefetch, superAdminChartRefetch],
+  );
+
+  const isLoading = clubChartDataLoading || superAdminChartDataLoading;
+  const isSuccess = clubChartDataSuccess || superAdminChartDataSuccess;
+  const isError = clubChartDataError || superAdminChartDataError;
 
   return (
     <div
@@ -108,12 +131,16 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
     >
       <div className={styles.chartHeader}>
         <div className={styles.headerLeft}>
-          <IconReorderAlt
-            {...dragHandleProps}
-            size={20}
-            color={DARK_GOLD}
-            className={clsx(styles.dragIcon, { [styles.dragging]: isDragging })}
-          />
+          <ConditionalRenderComponent visible={isClubAdmin} hideFallback>
+            <IconReorderAlt
+              {...dragHandleProps}
+              size={20}
+              color={DARK_GOLD}
+              className={clsx(styles.dragIcon, {
+                [styles.dragging]: isDragging,
+              })}
+            />
+          </ConditionalRenderComponent>
           <h2 className={styles.chartTitle}>{title}</h2>
         </div>
 
@@ -123,19 +150,23 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
           </span>
         </ConditionalRenderComponent>
         <div className={styles.chartActions}>
+          <ConditionalRenderComponent visible={!isClubAdmin} hideFallback>
+            <div className={styles.labelPrefix} />
+            <span className={styles.superAdminChatLabel}>
+              {CHART_LABEL_MAP[title]}
+            </span>
+          </ConditionalRenderComponent>
+
           <DateRangeButton value={dateRange} onChange={handleDateChange} />
-          <div className={styles.filterIconWrapper}>
-            <IconFilterAlt
-              size={20}
-              color={MODAL_CLOSE_ICON}
-              className={styles.actionIcon}
+          <ConditionalRenderComponent
+            visible={isClubAdmin}
+            fallback={<ClubFilterDropdown chartId={id} />}
+          >
+            <FilterIconWithBadge
+              hasFilters={hasFilters}
               onClick={handleFilterClick}
             />
-            <ConditionalRenderComponent visible={hasFilters} hideFallback>
-              <span className={styles.filterBadge} />
-            </ConditionalRenderComponent>
-          </div>
-
+          </ConditionalRenderComponent>
           <ConditionalRenderComponent visible={!isDefault} hideFallback>
             <IconEdit
               size={20}
@@ -164,15 +195,15 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
       </div>
 
       <ConditionalRender
-        records={values}
+        records={chartDetails}
         isPending={isLoading}
         isSuccess={isSuccess}
         className={styles.loader}
         isError={isError}
-        errorComponent={<ErrorState onReload={refetch} />}
+        errorComponent={<ErrorState onReload={refetchData} />}
         {...(hasFilters && { noData: <EmptyState /> })}
       >
-        <ChartCanvas title={title} labels={values} />
+        <ChartCanvas title={title} labels={chartDetails} />
       </ConditionalRender>
     </div>
   );

@@ -2,7 +2,21 @@
 @import "src/styles/_helpers";
 
 .superAdminDashboard {
-  @include flex-flow(row, wrap, normal, 4.1rem);
+  padding: 2.4rem 1rem;
+  background-color: $ashgro-white;
+  border: 1px solid $ashgro-light-border;
+  border-radius: 16px;
+  margin-bottom: 2.4rem;
+
+  .dateRangeContainer {
+    @include flex-container(flex-end, center, row, 1.6rem);
+    margin: 0 1.5rem 1.6rem 0;
+  }
+
+  .statsContainer {
+    @include flex-flow(row, wrap, normal, 4.1rem);
+    justify-content: center;
+  }
 }
 
 .addChartButton {

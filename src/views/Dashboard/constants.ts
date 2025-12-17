@@ -27,12 +27,13 @@ export const CHART_CONSTANTS = {
   customDescription:
     "Are you sure you want to delete this %s ?This action is not reversible.",
   customWidth: 650,
+  DASHBOARD_STATS_ID: "dashboard_stats",
 };
 
 export const superAdminChartItems = [
   { id: "conversions", name: "Chatbot Conversions" },
   { id: "spend-time", name: "Chatbot Spend Time" },
-  { id: "crm-usage", name: "CRM Usage" },
+  // { id: "crm-usage", name: "CRM Usage" }
 ];
 
 export const chartFiltersTitle = "Filters - %s";
@@ -52,4 +53,14 @@ export const EMPTY_STATE_STRINGS = {
 export const ERROR_STATE_STRINGS = {
   TITLE: "Hold on...",
   DESCRIPTION: "Just a moment while we load this section",
+};
+
+export const CHART_LABEL_MAP: Record<string, string> = {
+  "Chatbot Conversions": "No of Conversions",
+  "Chatbot Spend Time": "Minutes Spent",
+  "CRM Usage": "Hours Spent",
+};
+
+export const filterConstants = {
+  CLEAR_SELECTION: "Clear Selection",
 };
