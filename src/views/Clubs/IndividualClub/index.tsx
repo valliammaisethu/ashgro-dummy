@@ -16,7 +16,6 @@ import Switch from "src/shared/components/Switch";
 import Notification from "src/shared/components/Notification";
 import { stopPropagation } from "src/shared/utils/eventUtils";
 import ClubForm from "../ClubForm";
-import ChatbotQuestionsModal from "../ChatbotQuestionsModal";
 import UnlockClubModal from "./components/UnlockClubModal";
 import {
   chatbotKnowledgeBaseConstants,
@@ -36,6 +35,8 @@ import ConditionalRenderComponent from "src/shared/components/ConditionalRenderC
 import styles from "./individualClub.module.scss";
 import { ClubGeneralSettings } from "src/models/club.model";
 
+const { requiredError, requiredDescription } = chatbotKnowledgeBaseConstants;
+
 const IndividualClub = () => {
   const { id = "" } = useParams();
 
@@ -46,6 +47,7 @@ const IndividualClub = () => {
     settingsOpen: false,
     unlockModalOpen: false,
   });
+
   const [pendingChatbotEnable, setPendingChatbotEnable] = useState(false);
 
   const { getClubProfile, updateStatus, updateGeneralSettings, unlockClub } =
@@ -55,6 +57,7 @@ const IndividualClub = () => {
     data: clubData,
     isLoading: isPending,
     isSuccess,
+    refetch,
   } = useQuery(getClubProfile(id));
 
   const {
@@ -76,37 +79,29 @@ const IndividualClub = () => {
     useMutation(unlockClub(id));
 
   const handleChatbotStatusChange = async (value: boolean) => {
-    const currentlyEnabled = clubData?.club?.chatbotEnabled;
+    const { id, knowledgeBaseName, chatbotEnabled } = clubData?.club || {};
 
-    if (!currentlyEnabled && value) {
+    if (!id) return;
+
+    if (!chatbotEnabled && !knowledgeBaseName) {
       Notification({
-        title: chatbotKnowledgeBaseConstants.requiredError,
-        description: chatbotKnowledgeBaseConstants.requiredDescription,
+        title: requiredError,
+        description: requiredDescription,
         type: NotificationTypes.WARNING,
       });
+      // TODO: Need to remove setPendingChatbotEnable during revamp
       setPendingChatbotEnable(true);
-      setIsChatbotModalOpen(true);
-      return;
+      handleUploadVisbility();
+    } else {
+      await updateChatbotStatusMutate({ chatbotEnabled: value, id });
     }
-
-    if (currentlyEnabled && !value) {
-      Notification({
-        title: chatbotKnowledgeBaseConstants.disabledError,
-        description: chatbotKnowledgeBaseConstants.disabledDescription,
-        type: NotificationTypes.WARNING,
-      });
-    }
-
-    await updateChatbotStatusMutate({ chatbotEnabled: value, id });
   };
-
   const handleImportSuccess = async () => {
     if (pendingChatbotEnable) {
       await updateChatbotStatusMutate({ chatbotEnabled: true, id });
       setPendingChatbotEnable(false);
     }
-
-    setIsChatbotModalOpen(false);
+    refetch();
   };
 
   const handleSettings = () => {
@@ -147,11 +142,18 @@ const IndividualClub = () => {
 
   const handleEditModal = () => setIsEditModalOpen((prev) => !prev);
 
-  const handleChatbotQuestionsModal = () =>
-    setIsChatbotModalOpen((prev) => !prev);
+  const handleUploadVisbility = () => setIsChatbotModalOpen((prev) => !prev);
 
   const handleStatusChange = async (value: string) =>
     await updateClubStatusMutate({ status: value, id });
+
+  // TODO: handle default values inside serialzr
+  const uploadedData = clubData?.club?.knowledgeBaseName
+    ? {
+        id: clubData?.club?.knowledgeBaseId ?? "",
+        name: clubData?.club?.knowledgeBaseName ?? "",
+      }
+    : undefined;
 
   return (
     <div className={styles.individualClub}>
@@ -159,7 +161,6 @@ const IndividualClub = () => {
         isClubLocked={clubData?.club?.isClubLocked}
         isFetching={isPending}
         onSettings={handleSettings}
-        onChatbotQuestions={handleChatbotQuestionsModal}
         onUnlockClub={handleUnlockModal}
       />
 
@@ -216,12 +217,15 @@ const IndividualClub = () => {
             <div className={styles.content}>
               <ClubInfo data={clubData?.club} />
               <ContactDetails data={clubData?.club} />
-              {clubData?.club?.logoUrl && (
+              <ConditionalRenderComponent
+                visible={!!clubData?.club?.knowledgeBaseUrl}
+                hideFallback
+              >
                 <ChatbotSection
                   data={clubData?.club}
-                  onEditKnowledgeBase={handleChatbotQuestionsModal}
+                  onEditKnowledgeBase={handleUploadVisbility}
                 />
-              )}
+              </ConditionalRenderComponent>
             </div>
           </div>
 
@@ -260,13 +264,6 @@ const IndividualClub = () => {
         />
       </ConditionalRenderComponent>
 
-      <ConditionalRenderComponent visible={isChatbotModalOpen} hideFallback>
-        <ChatbotQuestionsModal
-          open={isChatbotModalOpen}
-          onClose={handleChatbotQuestionsModal}
-        />
-      </ConditionalRenderComponent>
-
       <ConditionalRenderComponent
         visible={isSettingsOpen.unlockModalOpen}
         hideFallback
@@ -281,9 +278,10 @@ const IndividualClub = () => {
       </ConditionalRenderComponent>
       <ImportModal
         visible={isChatbotModalOpen}
-        onClose={handleChatbotQuestionsModal}
+        onClose={handleUploadVisbility}
         importMode={ImportModes.CHATBOT_KNOWLEDGE_BASE}
         onImport={handleImportSuccess}
+        file={uploadedData}
       />
     </div>
   );

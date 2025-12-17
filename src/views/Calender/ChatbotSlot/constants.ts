@@ -27,7 +27,7 @@ export const CHAT_BOT_CONSTANTS = {
   CONFIRMATION_MODAL: {
     CONFIRMATION_TITLE: "Proceed to %s Slots?",
     DESCRIPTION:
-      "This will override all the existing slots within the selected date range, this action is irreversible. Do you want to proceed?",
+      "This action will overwrite any existing slots within the selected date range, this action is irreversible. Do you want to proceed?",
     ADD_TITLE: "Add",
     UPDATE_TITLE: "Update",
   },

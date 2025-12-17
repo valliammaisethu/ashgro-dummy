@@ -40,7 +40,14 @@ import { imageAlts } from "src/constants/imageAlts";
 import styles from "./importModal.module.scss";
 
 const ImportModal = (props: ImportModalProps) => {
-  const { importMode, onClose, visible, onImport, clubId: listClubId } = props;
+  const {
+    importMode,
+    onClose,
+    visible,
+    onImport,
+    clubId: listClubId,
+    file,
+  } = props;
   const [isUploading, setIsUploading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<string>("");
@@ -164,6 +171,7 @@ const ImportModal = (props: ImportModalProps) => {
                 isUploadedClassName={styles.uploadedFooter}
                 uploadingClassName={styles.uploadingContainer}
                 uploadedClassName={styles.uploadedFooterContent}
+                uplodedFile={file}
               />
             </div>
             {isUploaded && (
