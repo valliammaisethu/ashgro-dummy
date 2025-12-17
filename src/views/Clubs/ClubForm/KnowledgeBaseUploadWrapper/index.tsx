@@ -37,14 +37,14 @@ const ChatbotFileUploadWrapper = ({
   showError,
   onChangeFile,
 }: ChatbotFileUploadWrapperProps) => {
-  const uploadedFileProp = clubData?.club?.id
+  const uploadedFileProp = clubData?.club?.knowledgeBaseName
     ? {
         uplodedFile: {
           id: clubData.club.knowledgeBaseId ?? "",
           name: clubData.club.knowledgeBaseName ?? "",
         },
       }
-    : {};
+    : undefined;
 
   return (
     <Fragment>
