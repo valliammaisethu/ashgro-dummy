@@ -93,6 +93,9 @@ const ClubForm = (props: ClubFormProps) => {
   useEffect(() => {
     if (clubId) methods.reset(defaultValues);
     else methods.reset({});
+    return () => {
+      methods.reset({});
+    };
   }, [clubId, defaultValues, methods, open]);
 
   const { setError, clearErrors, watch, reset, setValue } = methods;
@@ -172,6 +175,12 @@ const ClubForm = (props: ClubFormProps) => {
     });
   };
 
+  const getKnowledgeBaseId = () => {
+    if (fileState?.uploadedFileId) return fileState?.uploadedFileId;
+    if (clubData?.club?.knowledgeBaseId) return clubData?.club?.knowledgeBaseId;
+    return undefined;
+  };
+
   const formSubmit = async (values: FieldValues) => {
     const formValues = {
       ...values,
@@ -180,8 +189,9 @@ const ClubForm = (props: ClubFormProps) => {
         DateFormats.DD_MMM_YYYY,
       ),
       chatbotEnabled: Boolean(values.chatbotEnabled),
-      knowledgeBaseId: fileState?.uploadedFileId,
-      knowledgeBaseName: fileState?.uploadedFileName,
+      knowledgeBaseId: getKnowledgeBaseId(),
+      knowledgeBaseName:
+        fileState?.uploadedFileName || clubData?.club?.knowledgeBaseName,
       contactNumber: addPhoneCode(values.contactNumber, values.clubCountryCode),
       adminDetails: {
         ...values.adminDetails,
@@ -229,7 +239,10 @@ const ClubForm = (props: ClubFormProps) => {
     if (isChatbotEnabled) {
       if (clubData?.club?.id) {
         return (
-          isValid && clubData?.club?.id && clubData?.club?.knowledgeBaseName
+          (isValid &&
+            clubData?.club?.id &&
+            clubData?.club?.knowledgeBaseName) ||
+          fileState?.uploadedFileName
         );
       }
       return isValid && !!fileState?.uploadedFileId;
@@ -247,6 +260,8 @@ const ClubForm = (props: ClubFormProps) => {
       cancelButtonProps={{
         className: "d-none",
       }}
+      destroyOnClose
+      destroyOnHidden
       loading={Boolean(clubId) && isFetchingClubData}
       closeModal={modalClose}
       okText={clubData?.club?.id ? Buttons.SAVE_CHANGES : Buttons.ADD_CLUB}
