@@ -69,6 +69,7 @@ export const DashboardService = () => {
 
       return generateChartPaths(deserializedData);
     },
+    refetchOnMount: true,
   });
 
   const getChartDetails = (
@@ -82,6 +83,7 @@ export const DashboardService = () => {
       return deserialize(ChartDetail, response?.data?.data?.chart);
     },
     enabled: !!path && isClubAdmin,
+    refetchOnMount: true,
   });
 
   const canCreateCustomChart = (): UseMutationOptions<
@@ -196,14 +198,14 @@ export const DashboardService = () => {
     },
   });
 
-  const getDashboardStats = (): UseQueryOptions<
-    DashboardStats,
-    ResponseModel,
-    DashboardStats
-  > => ({
-    queryKey: [GET_DASHBOARD_STATS, clubId],
+  const getDashboardStats = (
+    params?: ChartParams,
+  ): UseQueryOptions<DashboardStats, ResponseModel, DashboardStats> => ({
+    queryKey: [GET_DASHBOARD_STATS, clubId, params],
     queryFn: async () => {
-      const { data } = await axiosInstance.get(GET_DASHBOARD_STATS_PATH);
+      const { data } = await axiosInstance.get(GET_DASHBOARD_STATS_PATH, {
+        params,
+      });
       return deserialize(DashboardStats, data?.data);
     },
   });

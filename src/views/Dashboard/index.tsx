@@ -28,12 +28,20 @@ import StatsCard from "./atoms/StatsCard";
 import ChartFilters from "./Filters";
 import CustomChartForm from "./CustomChartForm";
 import { useDashboardFilters } from "src/context/DashboardFiltersContext";
-import { getDashboardStatsValues, dropAnimationConfig } from "./constants";
+import {
+  getDashboardStatsValues,
+  dropAnimationConfig,
+  CHART_CONSTANTS,
+} from "./constants";
 import { ChartItem } from "src/models/dashboard.model";
 import DraggableChartCard from "./components/DraggableChartCard";
 import { CustomChart } from "src/models/chart.model";
+import DateRangeButton from "./components/DateRangeButton";
+import { DateRange } from "src/shared/types/dashboard.type";
 
 import styles from "./dashboard.module.scss";
+
+const { DASHBOARD_STATS_ID } = CHART_CONSTANTS;
 
 const Dashboard = () => {
   const { isClubAdmin, isSuperAdmin } = useUserRole();
@@ -46,7 +54,16 @@ const Dashboard = () => {
     CustomChart | undefined
   >(new CustomChart());
 
-  const { activeFilterChart, closeFilterDrawer } = useDashboardFilters();
+  const {
+    activeFilterChart,
+    closeFilterDrawer,
+    setChartDateRange,
+    getChartDateRange,
+  } = useDashboardFilters();
+
+  const dashboardStatsDateRange = getChartDateRange(
+    CHART_CONSTANTS.DASHBOARD_STATS_ID,
+  );
 
   useAppContainerPadding();
 
@@ -67,7 +84,10 @@ const Dashboard = () => {
   });
 
   const { data: dashboardStats } = useQuery({
-    ...getDashboardStats(),
+    ...getDashboardStats({
+      fromDate: dashboardStatsDateRange?.[0],
+      toDate: dashboardStatsDateRange?.[1],
+    }),
     enabled: isSuperAdmin,
   });
   const {
@@ -167,6 +187,9 @@ const Dashboard = () => {
     [orderedCharts, reorderCharts],
   );
 
+  const handleDateRangeChange = (dates: DateRange) =>
+    setChartDateRange(DASHBOARD_STATS_ID, dates);
+
   const handleDragCancel = useCallback(() => {
     setActiveDragItem(null);
   }, []);
@@ -185,9 +208,19 @@ const Dashboard = () => {
       />
       <ConditionalRenderComponent visible={isSuperAdmin} hideFallback>
         <div className={styles.superAdminDashboard}>
-          {getDashboardStatsValues(dashboardStats)?.map(({ label, value }) => (
-            <StatsCard key={value} title={label} value={value} />
-          ))}
+          <div className={styles.dateRangeContainer}>
+            <DateRangeButton
+              value={dashboardStatsDateRange}
+              onChange={handleDateRangeChange}
+            />
+          </div>
+          <div className={styles.statsContainer}>
+            {getDashboardStatsValues(dashboardStats)?.map(
+              ({ label, value }, index) => (
+                <StatsCard key={index} title={label} value={value} />
+              ),
+            )}
+          </div>
         </div>
       </ConditionalRenderComponent>
       <ConditionalRenderComponent

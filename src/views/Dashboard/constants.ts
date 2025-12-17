@@ -27,6 +27,7 @@ export const CHART_CONSTANTS = {
   customDescription:
     "Are you sure you want to delete this %s ?This action is not reversible.",
   customWidth: 650,
+  DASHBOARD_STATS_ID: "dashboard_stats",
 };
 
 export const superAdminChartItems = [
@@ -58,4 +59,8 @@ export const CHART_LABEL_MAP: Record<string, string> = {
   "Chatbot Conversions": "No of Conversions",
   "Chatbot Spend Time": "Minutes Spent",
   "CRM Usage": "Hours Spent",
+};
+
+export const filterConstants = {
+  CLEAR_SELECTION: "Clear Selection",
 };

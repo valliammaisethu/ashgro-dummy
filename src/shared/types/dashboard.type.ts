@@ -6,7 +6,7 @@ import { CustomChart } from "src/models/chart.model";
 import { ChartItem, ChartLabel } from "src/models/dashboard.model";
 import { XAxisTypes } from "src/enums/charts.enum";
 
-export type DateRange = [string, string];
+export type DateRange = [string, string] | null;
 
 export interface DashboardHeaderProps {
   onAddChart: () => void;
