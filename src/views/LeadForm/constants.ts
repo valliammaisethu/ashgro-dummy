@@ -26,10 +26,10 @@ export const LEAD_FORM_CONSTANTS = {
   FIELD_NAMES: {
     FIRST_NAME: "firstName",
     LAST_NAME: "lastName",
-    EMAIL_ADDRESS: "email",
+    EMAIL_ADDRESS: "emailId",
     PHONE_NUMBER: "phoneNumber",
     PHONE_CODE: "phoneCode",
-    MEMBERSHIP_INTEREST: "categoryName",
+    MEMBERSHIP_INTEREST: "memberInterestId",
     ADDITIONAL_COMMENTS: "additionalComments",
   } as const,
 };

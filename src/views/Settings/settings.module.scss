@@ -110,10 +110,11 @@
 }
 
 .buttonsContainer {
-  @include flex-container(flex-end, center, row, 0);
+  @include flex-container(flex-end, center, row, 1.6rem);
   margin-right: 3.2rem;
 }
 
+.leadFormButton,
 .changePasswordButton {
   min-width: 16.8rem;
   height: 4.4rem;
@@ -136,4 +137,11 @@
   cursor: pointer;
   transition: all 0.2s ease;
   padding-right: 2rem;
+}
+
+.leadFormButton {
+  width: 8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

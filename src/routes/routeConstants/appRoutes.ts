@@ -27,6 +27,8 @@ export const NavigationRoutes = {
   CALENDER: "/home/calendar",
 
   CHATBOT: "/chatbot",
+
+  LEAD_FORM: "/lead-form/:id",
 };
 
 export const AppRoutes = {
@@ -62,5 +64,5 @@ export const AppRoutes = {
 
   CHATBOT: "/chatbot",
 
-  LEAD_FORM: "/leadForm/:id?",
+  LEAD_FORM: "/lead-form/:id?",
 };

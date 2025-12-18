@@ -42,6 +42,7 @@ export enum Buttons {
   RESET_FILTERS = "Reset Filters",
   YES_LOGOUT = "Yes, Logout",
   LOGOUT = "Logout?",
+  LEAD_FORM = "Lead Form",
 }
 
 export enum HtmlButtonType {
@@ -76,4 +77,5 @@ export enum ButtonTypes {
   TERTIARY_TWO = "tertiaryTwo",
   PRIMARY_TWO = "primaryTwo",
   TRANSPARENT = "transparent",
+  GOLD = "gold",
 }
