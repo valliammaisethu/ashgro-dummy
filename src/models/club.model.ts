@@ -53,6 +53,12 @@ export class ClubFormData {
 
   @serializable
   status?: string;
+
+  @serializable
+  knowledgeBaseId?: string;
+
+  @serializable
+  knowledgeBaseName?: string;
 }
 
 export class ClubProfile extends ClubGeneralSettings {
@@ -100,6 +106,15 @@ export class ClubProfile extends ClubGeneralSettings {
 
   @serializable
   isClubLocked = false;
+
+  @serializable
+  knowledgeBaseId?: string;
+
+  @serializable
+  knowledgeBaseName = "";
+
+  @serializable
+  knowledgeBaseUrl = "";
 }
 
 export class ClubData {
@@ -131,6 +146,10 @@ export class ClubListData {
 
   @serializable
   numberOfMembers = 0;
+
+  // TODO: To create commin modal and use for knowledge base
+  @serializable
+  knowledgeBaseName = "";
 }
 
 export class ClubListReponse {

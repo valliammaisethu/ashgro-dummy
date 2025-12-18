@@ -407,3 +407,41 @@
     }
   }
 }
+.chatbotSection {
+  margin-top: 4rem;
+
+  .title {
+    font-size: 1.6rem;
+    color: $add-icon-bg;
+    letter-spacing: 0.03rem;
+  }
+
+  .attachment {
+    margin-top: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1.2rem;
+    background-color: $ashgro-white;
+    border-radius: 1.6rem;
+    margin-top: 2rem;
+    width: fit-content;
+    max-width: 35rem;
+    box-shadow: $file-attachment-box-shadow;
+  }
+}
+
+.attachmentIcon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.fileName {
+  flex: 1;
+  font-size: 1.4rem;
+  color: $ashgro-navy;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

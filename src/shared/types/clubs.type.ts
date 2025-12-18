@@ -24,6 +24,11 @@ export interface ClubInfoProps {
   data?: ClubProfile;
 }
 
+export interface ChatbotSectionProps {
+  data?: ClubProfile;
+  onEditKnowledgeBase?: () => void;
+}
+
 export interface ClubFormState {
   visible: boolean;
   clubId: string | null;
@@ -79,4 +84,9 @@ export interface UnlockClubModalProps {
   onSave: () => void;
   isLoading?: boolean;
   clubName?: string;
+}
+
+export interface UploadFileState {
+  uploadedFileName: string;
+  uploadedFileId: string;
 }

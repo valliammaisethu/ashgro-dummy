@@ -1,6 +1,7 @@
 import React from "react";
 import { Avatar } from "antd";
 import clsx from "clsx";
+import ReactMarkdown from "react-markdown";
 
 import Drawer from "src/shared/components/Drawer";
 import ConditionalRender from "src/shared/components/ConditionalRender";
@@ -79,7 +80,6 @@ const Transcripts = ({ visible, onClose, userId }: TranscriptsProps) => {
         isPending={isLoading}
         isSuccess={isSuccess}
         records={allSessions}
-        emptyDescription={EMPTY_DESCRIPTION}
       >
         <div className={styles.transcriptContainer} onScroll={handleScroll}>
           {allSessions?.map((session: TranscriptSession) => (
@@ -110,7 +110,19 @@ const Transcripts = ({ visible, onClose, userId }: TranscriptsProps) => {
                           [styles.botBubble]: isUser,
                         })}
                       >
-                        {message}
+                        <p>
+                          <ReactMarkdown
+                            components={{
+                              ul: ({ children }) => (
+                                <ul className={styles.messageList}>
+                                  {children}
+                                </ul>
+                              ),
+                            }}
+                          >
+                            {message}
+                          </ReactMarkdown>
+                        </p>
                       </div>
                       <span className={styles.timestamp}>
                         {formatDate(createdAt, DateFormats.HH_MM_A)}

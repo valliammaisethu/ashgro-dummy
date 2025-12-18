@@ -13,7 +13,7 @@
   @include flex-container(normal, normal, column, 1.6rem);
   padding: 1.6rem;
   border-radius: 1.6rem;
-  border: 1px solid $activity-border;
+  border: 1.5px solid #e5dbc5; //TODO: use CSS vaiable once it the #161 merged
 }
 
 .messageRow {
@@ -65,13 +65,11 @@
   border-radius: 1.6rem;
   font-size: 1.4rem;
   line-height: 1.5;
-  word-wrap: break-word;
-  white-space: pre-wrap;
 }
 
 .userBubble {
   background-color: $skeleton-bg;
-  color: $ashgro-black;
+  color: $ashgro-navy;
   border-radius: 1.6rem;
 }
 
@@ -90,4 +88,8 @@
   .ant-drawer .ant-drawer-body {
     margin-bottom: 2.4rem;
   }
+}
+
+.messageList {
+  padding-left: 2rem;
 }

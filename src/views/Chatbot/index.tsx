@@ -7,6 +7,7 @@ import { Input } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { v4 as uuidv4 } from "uuid";
 import { useSearchParams } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 
 import { ChatbotService } from "src/services/Chatbot/chatbotService.service";
 import chatbotProfile from "src/assets/images/chatbotProfile.webp";
@@ -217,7 +218,18 @@ const Chatbot = () => {
                     </div>
                   ) : (
                     <div className={styles.messageTxt}>
-                      <p>{msg.text}</p>
+                      <p className={styles.message}>
+                        {/* TODO: remove ReactMarkdown and use event streams once BE deploy */}
+                        <ReactMarkdown
+                          components={{
+                            ul: ({ children }) => (
+                              <ul className={styles.messageList}>{children}</ul>
+                            ),
+                          }}
+                        >
+                          {msg?.text ?? ""}
+                        </ReactMarkdown>
+                      </p>
 
                       {Array.isArray(msg.slots) && msg.slots.length > 0 && (
                         <div className={styles.slotContainer}>

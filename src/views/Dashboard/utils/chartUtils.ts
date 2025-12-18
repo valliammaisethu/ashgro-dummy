@@ -186,9 +186,9 @@ export const generateChartPaths = (charts: ChartItemModel[]) => {
 export const SUPER_ADMIN_CHARTS = superAdminChartItems?.map((item, index) => ({
   ...item,
   label: item.id,
-  isDefault: false,
+  isDefault: true,
   order: index,
-  path: generatePath(ApiRoutes.GET_CHART_DETAIL, { clubId, chartId: item.id }),
+  path: generatePath(ApiRoutes.ADMIN_DASHBOARD_CHART, { type: item.id }),
 }));
 
 export const getSwappedCharts = (

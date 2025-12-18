@@ -143,6 +143,9 @@ export const logoutMessages = {
 export const N_A = "N/A";
 export const empty = " - ";
 export const imageAccept = "image/png, image/jpeg, image/jpg";
+export const docsPdfAccept =
+  ".doc,.docx,.pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf";
+
 export const excelAccept =
   ".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 export const excelValidTypes = [

@@ -10,33 +10,12 @@ import { INPUT_TYPE } from "src/enums/inputType";
 import { renderNotification } from "src/shared/utils/renderNotification";
 import { excelAccept, fiveMb } from "src/constants/sharedComponents";
 import { uploadMessages } from "src/constants/notificationMessages";
+import { ImportFileUploadProps } from "src/shared/types/sharedComponents.type";
 import UploadArea from "./UploadArea";
 
-import styles from "./bulkFileUpload.module.scss";
+import styles from "./importFileUpload.module.scss";
 
-export interface UploadedFileData {
-  fileId: string;
-  fileName: string;
-  s3Key: string;
-}
-
-interface BulkFileUploadProps {
-  onFileUploaded?: (fileData: UploadedFileData) => void;
-  onUploadStateChange?: (isUploading: boolean) => void;
-  onChangeFile?: () => void;
-  maxFileSize?: number;
-  accept?: string;
-  validTypes?: string[];
-  attachmentType?: AttachmentTypes;
-  inputPlaceholder?: string;
-  className?: string;
-  isUploadingClassName?: string;
-  isUploadedClassName?: string;
-  uploadingClassName?: string;
-  uploadedClassName?: string;
-}
-
-const BulkFileUpload = ({
+const ImportFileUpload = ({
   onFileUploaded,
   onUploadStateChange,
   onChangeFile: onChangeFileProp,
@@ -49,7 +28,9 @@ const BulkFileUpload = ({
   isUploadedClassName,
   uploadingClassName,
   uploadedClassName,
-}: BulkFileUploadProps) => {
+  customCancelClassName,
+  uplodedFile: preUploadedFile,
+}: ImportFileUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -160,6 +141,14 @@ const BulkFileUpload = ({
     [isUploadedClassName || ""]: uploadedFile !== null,
   });
 
+  useEffect(() => {
+    if (preUploadedFile) {
+      setUploadedFile(preUploadedFile);
+      setCurrentFileName(preUploadedFile.name);
+      setIsUploading(false);
+    }
+  }, []);
+
   return (
     <div className={styles.bulkFileUpload}>
       <UploadArea
@@ -174,6 +163,7 @@ const BulkFileUpload = ({
         className={computedClassName}
         uploadingClassName={uploadingClassName}
         uploadedClassName={uploadedClassName}
+        customCancelClassName={customCancelClassName}
       />
       <input
         ref={fileInputRef}
@@ -186,4 +176,4 @@ const BulkFileUpload = ({
   );
 };
 
-export default BulkFileUpload;
+export default ImportFileUpload;

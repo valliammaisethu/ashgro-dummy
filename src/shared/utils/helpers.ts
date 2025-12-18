@@ -12,6 +12,11 @@ export const clearAuthData = () => {
   localStorageHelper.removeItem(LocalStorageKeys.TOKEN);
 };
 
+export const getCurrentUserId = (): string => {
+  const user = localStorageHelper.getItem(LocalStorageKeys.USER);
+  return user?.clubId || user?.id || "";
+};
+
 export const fillEmptyData = (val?: string) => val || "-";
 
 export const getFullName = (firstName = "", lastName = ""): string =>

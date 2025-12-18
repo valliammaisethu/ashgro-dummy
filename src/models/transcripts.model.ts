@@ -12,7 +12,7 @@ export class TranscriptConversation {
   isUser?: boolean;
 
   @serializable
-  message?: string;
+  message = "";
 
   @serializable
   createdAt?: string;
