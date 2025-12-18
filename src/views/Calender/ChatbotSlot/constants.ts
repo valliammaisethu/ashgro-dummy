@@ -24,6 +24,13 @@ export const CHAT_BOT_CONSTANTS = {
   TIME_RANGE: "Time Range",
   START_AND_END_TIME: "Start & End Time",
   ADD_BTN: "Add",
+  CONFIRMATION_MODAL: {
+    CONFIRMATION_TITLE: "Proceed to %s Slots?",
+    DESCRIPTION:
+      "This action will overwrite any existing slots within the selected date range, this action is irreversible. Do you want to proceed?",
+    ADD_TITLE: "Add",
+    UPDATE_TITLE: "Update",
+  },
 };
 
 export const POINTER_CONSTANTS = {

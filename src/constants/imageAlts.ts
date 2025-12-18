@@ -7,4 +7,6 @@ export const imageAlts = {
   loaderIcon: "loader-icon",
   renewIcon: "renew-icon",
   avatarIcon: "avatar-icon",
+  pdfIcon: "pdf-icon",
+  wordIcon: "word-icon",
 };

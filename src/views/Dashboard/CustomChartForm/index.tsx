@@ -1,14 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Divider, Row } from "antd";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-import {
-  chartFormConstants,
-  fields,
-  labels,
-  placeholders,
-  xAxisLabel,
-} from "./constants";
+import { chartFormConstants, chartConfig, xAxisLabel } from "./constants";
 import { chartformValidation } from "./validation";
 import { Buttons } from "src/enums/buttons.enum";
 import { CustomChartProps } from "src/shared/types/dashboard.type";
@@ -25,24 +19,13 @@ import { DashboardService } from "src/services/DashboardService/dashboard.servic
 import styles from "./customChartForm.module.scss";
 
 const { title } = chartFormConstants;
-const { chartTitle, xAxis, labelAlongYAxis, type } = labels;
-const {
-  chartTitle: chartTitleField,
-  labels: xAxisLabelsField,
-  xaxis: xAxisField,
-  type: xAxisTypeField,
-} = fields;
-const {
-  chartTitle: chartTitlePlaceholder,
-  xAxis: xAxisLabelsPlaceholder,
-  yAxis: yAxisPlaceholder,
-  type: typePlaceholder,
-} = placeholders;
+const { labels, fields, placeholders } = chartConfig;
 
 const CustomChartForm = (props: CustomChartProps) => {
   const { onClose, open, formValues } = props;
 
-  const { addCustomChart, editCustomChart } = DashboardService();
+  const { addCustomChart, editCustomChart, getChartValues } =
+    DashboardService();
 
   const { mutateAsync: addCustomChartMutate, isPending: isAddingCustomChart } =
     useMutation(addCustomChart());
@@ -66,9 +49,29 @@ const CustomChartForm = (props: CustomChartProps) => {
   });
 
   const {
-    formState: { isDirty, isValid },
+    formState: { isValid },
     handleSubmit,
+    watch,
+    setValue,
+    reset,
   } = methods;
+
+  // TODO: remove useEffect once fix is done for forms to handle default values
+  useEffect(() => {
+    if (formValues) {
+      reset(formValues);
+    }
+  }, [formValues, reset]);
+
+  // TODO: TO move to constants
+  const selectedType = watch("type");
+
+  const { data: chartValuesData, isFetching } = useQuery(
+    getChartValues(selectedType),
+  );
+
+  // TODO: TO move to constants
+  const handleTypeChange = () => setValue("values", []);
 
   return (
     <Modal
@@ -78,7 +81,7 @@ const CustomChartForm = (props: CustomChartProps) => {
       handleOk={handleSubmit(handleFormSubmit)}
       okText={formValues ? Buttons.SAVE_CHANGES : Buttons.ADD_CHART}
       okButtonProps={{
-        disabled: !isDirty || !isValid,
+        disabled: !isValid,
         loading: formValues?.id ? isEditingCustomChart : isAddingCustomChart,
       }}
       title={title}
@@ -90,17 +93,10 @@ const CustomChartForm = (props: CustomChartProps) => {
         <Row gutter={24}>
           <Col span={12}>
             <InputField
-              placeholder={chartTitlePlaceholder}
-              name={chartTitleField}
+              placeholder={placeholders.chartTitle}
+              name={fields.name}
               required
-              label={chartTitle}
-            />
-          </Col>
-          <Col span={12}>
-            <InputField
-              placeholder={yAxisPlaceholder}
-              name={xAxisField}
-              label={labelAlongYAxis}
+              label={labels.chartTitle}
             />
           </Col>
         </Row>
@@ -112,18 +108,22 @@ const CustomChartForm = (props: CustomChartProps) => {
           <Col span={12}>
             <SelectField
               required
-              label={type}
-              name={xAxisTypeField}
+              label={labels.type}
+              name={fields.type}
               options={xAxisTypesOptions}
-              placeholder={typePlaceholder}
+              placeholder={placeholders.type}
+              onChange={handleTypeChange}
             />
           </Col>
           <Col span={12}>
             <TagInput
               required
-              label={xAxis}
-              placeholder={xAxisLabelsPlaceholder}
-              name={xAxisLabelsField}
+              label={labels.xAxis}
+              placeholder={placeholders.xAxis}
+              name={fields.values}
+              options={chartValuesData}
+              loading={isFetching}
+              disabled={!selectedType}
             />
           </Col>
         </Row>

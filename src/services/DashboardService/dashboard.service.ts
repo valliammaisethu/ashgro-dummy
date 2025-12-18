@@ -1,28 +1,55 @@
 import { generatePath } from "react-router-dom";
-import { UseMutationOptions, UseQueryOptions } from "@tanstack/react-query";
+import {
+  UseMutationOptions,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { deserialize, serialize } from "serializr";
 
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import axiosInstance from "src/interceptor/axiosInstance";
-import { ChartDetail, ChartItem } from "src/models/dashboard.model";
+import { ChartDetail, ChartItem, ChartLabel } from "src/models/dashboard.model";
 import { ResponseModel } from "src/models/response.model";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { generateChartPaths } from "src/views/Dashboard/utils/chartUtils";
+import { DashboardStats } from "src/models/dashboardStats.model";
 import { CustomChart } from "src/models/chart.model";
 import { renderNotification } from "src/shared/utils/renderNotification";
+import {
+  ReorderChartsPayload,
+  ChartParams,
+} from "src/shared/types/dashboard.type";
+import { MetaOptions } from "src/models/common.model";
+import { useUserRole } from "src/shared/hooks/useUserRole";
 
-const { GET_DASHBOARD_CHARTS_KEY, GET_CHART_DETAIL_KEY } = QueryKeys;
-const { CAN_CREATE_CUSTOM_CHART: CAN_CREATE_CUSTOM_CHART_ROUTE } = ApiRoutes;
-const { ADD_CUSTOM_CHART, CAN_CREATE_CUSTOM_CHART } = MutationKeys;
-import { ReorderChartsPayload } from "src/shared/types/dashboard.types";
-
-const { REORDER_CHARTS } = MutationKeys;
-const { GET_DASHBOARD_CHARTS, UPDATE_CHART_ORDER } = ApiRoutes;
+const {
+  GET_DASHBOARD_CHARTS_KEY,
+  GET_CHART_DETAIL_KEY,
+  GET_CHART_VALUES_KEY,
+  GET_DASHBOARD_STATS,
+  GET_SUPER_ADMIN_CHARTS_KEY,
+} = QueryKeys;
+const {
+  ADD_CUSTOM_CHART,
+  CAN_CREATE_CUSTOM_CHART,
+  REORDER_CHARTS,
+  DELETE_CHART,
+} = MutationKeys;
+const {
+  GET_DASHBOARD_CHARTS,
+  UPDATE_CHART_ORDER,
+  GET_CHART_VALUES,
+  GET_CHART_DETAIL,
+  GET_DASHBOARD_STATS: GET_DASHBOARD_STATS_PATH,
+  CAN_CREATE_CUSTOM_CHART: CAN_CREATE_CUSTOM_CHART_ROUTE,
+} = ApiRoutes;
 
 export const DashboardService = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+  const queryClient = useQueryClient();
+  const { isClubAdmin, isSuperAdmin } = useUserRole();
 
   const getDashboardChartsList = (): UseQueryOptions<
     ChartItem[],
@@ -31,28 +58,32 @@ export const DashboardService = () => {
   > => ({
     queryKey: [GET_DASHBOARD_CHARTS_KEY, clubId],
     queryFn: async () => {
-      const response = await axiosInstance.get(
+      const { data } = await axiosInstance.get(
         generatePath(GET_DASHBOARD_CHARTS, { clubId }),
       );
 
       const deserializedData = deserialize(
         ChartItem,
-        response?.data?.charts,
+        data?.data?.charts,
       ) as unknown as ChartItem[];
 
       return generateChartPaths(deserializedData);
     },
+    refetchOnMount: true,
   });
 
   const getChartDetails = (
     path: string,
+    params?: ChartParams,
   ): UseQueryOptions<ChartDetail, ResponseModel, ChartDetail> => ({
-    queryKey: [GET_CHART_DETAIL_KEY, clubId, path],
+    queryKey: [GET_CHART_DETAIL_KEY, clubId, path, params],
     queryFn: async () => {
-      const response = await axiosInstance.get(path);
+      const response = await axiosInstance.get(path, { params });
+
       return deserialize(ChartDetail, response?.data?.data?.chart);
     },
-    enabled: !!clubId && !!path,
+    enabled: !!path && isClubAdmin,
+    refetchOnMount: true,
   });
 
   const canCreateCustomChart = (): UseMutationOptions<
@@ -84,6 +115,9 @@ export const DashboardService = () => {
     onSuccess: (response) => {
       const { title, description } = response;
       renderNotification(title, description);
+      queryClient.invalidateQueries({
+        queryKey: [GET_DASHBOARD_CHARTS_KEY, clubId],
+      });
     },
   });
 
@@ -94,15 +128,19 @@ export const DashboardService = () => {
   > => ({
     mutationKey: [ADD_CUSTOM_CHART],
     mutationFn: async (payload: CustomChart) => {
+      const { id, ...rest } = payload;
       const response = await axiosInstance.put(
-        generatePath(GET_DASHBOARD_CHARTS, { clubId }),
-        payload,
+        generatePath(GET_CHART_DETAIL, { clubId, chartId: id }),
+        rest,
       );
       return deserialize(ResponseModel, response?.data);
     },
     onSuccess: (response) => {
       const { title, description } = response;
       renderNotification(title, description);
+      queryClient.invalidateQueries({
+        queryKey: [GET_DASHBOARD_CHARTS_KEY, clubId],
+      });
     },
   });
 
@@ -121,12 +159,83 @@ export const DashboardService = () => {
     },
   });
 
+  const getChartValues = (
+    type?: string,
+  ): UseQueryOptions<MetaOptions[], ResponseModel, MetaOptions[]> => ({
+    queryKey: [GET_CHART_VALUES_KEY, clubId, type],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(
+        generatePath(GET_CHART_VALUES, { clubId }),
+        {
+          params: { type },
+        },
+      );
+      return deserialize(
+        MetaOptions,
+        data?.data?.values,
+      ) as unknown as MetaOptions[];
+    },
+    enabled: !!clubId && !!type,
+  });
+
+  const deleteChart = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    string
+  > => ({
+    mutationKey: [DELETE_CHART, clubId],
+    mutationFn: async (chartId?: string) => {
+      const response = await axiosInstance.delete(
+        generatePath(GET_CHART_DETAIL, { clubId, chartId }),
+      );
+      return deserialize(ResponseModel, response?.data);
+    },
+    onSuccess: ({ title, description }) => {
+      renderNotification(title, description);
+      queryClient.invalidateQueries({
+        queryKey: [GET_DASHBOARD_CHARTS_KEY, clubId],
+      });
+    },
+  });
+
+  const getDashboardStats = (
+    params?: ChartParams,
+  ): UseQueryOptions<DashboardStats, ResponseModel, DashboardStats> => ({
+    queryKey: [GET_DASHBOARD_STATS, clubId, params],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(GET_DASHBOARD_STATS_PATH, {
+        params,
+      });
+      return deserialize(DashboardStats, data?.data);
+    },
+  });
+
+  const getSuperAdminChartDetails = (
+    path: string,
+    params?: ChartParams,
+  ): UseQueryOptions<ChartLabel[], ResponseModel, ChartLabel[]> => ({
+    queryKey: [GET_SUPER_ADMIN_CHARTS_KEY, path, params],
+    queryFn: async () => {
+      const response = await axiosInstance.get(path, { params });
+
+      return deserialize(
+        ChartLabel,
+        response?.data?.data?.chart,
+      ) as unknown as ChartLabel[];
+    },
+    enabled: !!path && isSuperAdmin,
+  });
+
   return {
     getDashboardChartsList,
     getChartDetails,
+    getDashboardStats,
     canCreateCustomChart,
     addCustomChart,
     editCustomChart,
     updateChartOrder,
+    getChartValues,
+    deleteChart,
+    getSuperAdminChartDetails,
   };
 };

@@ -30,3 +30,11 @@ export const unlockClubModalConstants = {
   title: "Unlock Club?",
   description: `Are you sure you want to unlock “%s” club?`,
 };
+
+export const chatbotKnowledgeBaseConstants = {
+  requiredError: "Chatbot knowledge base is required",
+  requiredDescription:
+    "Please upload the chatbot knowledge base before enabling chatbot",
+  disabledError: "Chatbot knowledge base disabled!",
+  disabledDescription: "Chatbot knowledge base will be disabled",
+};

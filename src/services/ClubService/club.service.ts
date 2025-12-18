@@ -88,6 +88,7 @@ export const ClubService = () => {
       return deserialize(ClubData, data?.data);
     },
     enabled: !!id,
+    refetchOnMount: true,
   });
 
   const addClub = (): UseMutationOptions<
@@ -153,10 +154,12 @@ export const ClubService = () => {
     mutationKey: [UPDATE_CLUB_GENERAL_SETTINGS],
     mutationFn: async (body: ClubGeneralSettings) => {
       const { clubId, ...rest } = body;
+
       const { data } = await axiosInstance.put(
         generatePath(UPDATE_CLUB_GENERAL_SETTINGS_ROUTE, { id: clubId }),
         rest,
       );
+
       return deserialize(ClubGeneralSettingsResponse, data);
     },
     onSuccess: (response) =>
@@ -177,6 +180,10 @@ export const ClubService = () => {
         serialize(ClubKnowledgeBasePayload, body),
       );
       return deserialize(ResponseModel, data);
+    },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description);
     },
   });
 

@@ -100,3 +100,33 @@
     }
   }
 }
+
+.logoutModalText {
+  font-size: 1.6rem;
+  color: $ashgro-navy;
+}
+
+.logoutModal {
+  :global(.ant-modal) {
+    :global(.ant-modal-header) {
+      padding: 3.2rem 3.2rem 1.6rem;
+    }
+    :global(.ant-modal-footer) {
+      background-color: $ashgro-white;
+    }
+    :global(.ant-divider-horizontal) {
+      display: none;
+    }
+    :global(.ant-modal-body) {
+      padding: 0 0 1.6rem 2.8rem;
+      border-bottom: 1px solid #0c23400f;
+    }
+  }
+}
+
+// TODO: Make className configurable in the modal without using !important
+.cancelButton {
+  background-color: #f5f7f9 !important;
+  color: #0f131c !important;
+  width: 16rem !important;
+}

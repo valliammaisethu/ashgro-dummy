@@ -20,9 +20,9 @@ import DeleteModal from "../DeleteModal";
 import MembersForm from "../MembersForm";
 import TemplateModal from "src/views/Email/TemplateModal";
 import NewEmailModal from "src/views/Email/NewEmailModal";
-import BulkInProgressModal from "src/views/BulkImport/InProgressModal";
-import BulkImportModal from "src/views/BulkImport";
+import BulkInProgressModal from "src/views/ImportModal/InProgressModal";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
+import ImportModal from "src/views/ImportModal";
 import { SettingFormModalModel } from "src/views/Settings/constants";
 import { MembersService } from "src/services/MembersService/members.service";
 import { EmailService } from "src/services/EmailService/email.service";
@@ -30,7 +30,7 @@ import { BulkUploadService } from "src/services/BulkUploadService/bulkUpload.ser
 import { MemberShipService } from "src/services/SettingsService/memberShip.service";
 import { VisibilityType } from "src/enums/visibilityType.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { BulkModes } from "src/enums/bulkModes";
+import { ImportModes } from "src/enums/importModes.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { TemplateEntity } from "src/enums/templateEntity.enum";
 import ConditionalRender from "src/shared/components/ConditionalRender";
@@ -434,9 +434,9 @@ const Members = () => {
         isBulkEmail
         handleEmailComplete={handleClearSelections}
       />
-      <BulkImportModal
+      <ImportModal
         visible={bulkImportModalVisible}
-        importMode={BulkModes.MEMBERS}
+        importMode={ImportModes.MEMBERS}
         onClose={hideImportModal}
         onImport={handleBulkImportSuccess}
       />

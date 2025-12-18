@@ -6,32 +6,49 @@ import { useParams } from "react-router-dom";
 import Header from "./Header";
 import ClubInfo from "./components/ClubInfo";
 import ContactDetails from "./components/ContactDetails";
+import ChatbotSection from "./components/ChatbotSection";
 import NotesSection from "./components/NotesSection";
 import GeneralSettingsDrawer from "./components/GeneralSettingsDrawer";
 import Button from "src/shared/components/Button";
 import Card from "src/shared/components/Card";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import Switch from "src/shared/components/Switch";
+import Notification from "src/shared/components/Notification";
 import { stopPropagation } from "src/shared/utils/eventUtils";
 import ClubForm from "../ClubForm";
-import ChatbotQuestionsModal from "../ChatbotQuestionsModal";
 import UnlockClubModal from "./components/UnlockClubModal";
-import { CLUB_LABELS, clubStatusField, ClubStatusOptions } from "./constants";
+import {
+  chatbotKnowledgeBaseConstants,
+  CLUB_LABELS,
+  clubStatusField,
+  ClubStatusOptions,
+} from "./constants";
 import StatusDropdown from "src/shared/components/StatusDropdown";
 import { ClubService } from "src/services/ClubService/club.service";
 import { Colors } from "src/enums/colors.enum";
+import { NotificationTypes } from "src/enums/notificationTypes";
+import { ClubSettingsState } from "src/shared/types/clubs.type";
+import ImportModal from "src/views/ImportModal";
+import { ImportModes } from "src/enums/importModes.enum";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 import styles from "./individualClub.module.scss";
 import { ClubGeneralSettings } from "src/models/club.model";
+
+const { requiredError, requiredDescription } = chatbotKnowledgeBaseConstants;
 
 const IndividualClub = () => {
   const { id = "" } = useParams();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isChatbotModalOpen, setIsChatbotModalOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isUnlockModalOpen, setIsUnlockModalOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<ClubSettingsState>({
+    modalOpen: false,
+    settingsOpen: false,
+    unlockModalOpen: false,
+  });
+
+  const [pendingChatbotEnable, setPendingChatbotEnable] = useState(false);
 
   const { getClubProfile, updateStatus, updateGeneralSettings, unlockClub } =
     ClubService();
@@ -40,6 +57,7 @@ const IndividualClub = () => {
     data: clubData,
     isLoading: isPending,
     isSuccess,
+    refetch,
   } = useQuery(getClubProfile(id));
 
   const {
@@ -60,35 +78,82 @@ const IndividualClub = () => {
   const { mutateAsync: unlockClubMutate, isPending: isUnlockPending } =
     useMutation(unlockClub(id));
 
-  const handleSaveSettings = (data: ClubGeneralSettings) => {
-    updateGeneralSettingsMutate(
+  const handleChatbotStatusChange = async (value: boolean) => {
+    const { id, knowledgeBaseName, chatbotEnabled } = clubData?.club || {};
+
+    if (!id) return;
+
+    if (!chatbotEnabled && !knowledgeBaseName) {
+      Notification({
+        title: requiredError,
+        description: requiredDescription,
+        type: NotificationTypes.WARNING,
+      });
+      // TODO: Need to remove setPendingChatbotEnable during revamp
+      setPendingChatbotEnable(true);
+      handleUploadVisbility();
+    } else {
+      await updateChatbotStatusMutate({ chatbotEnabled: value, id });
+    }
+  };
+  const handleImportSuccess = async () => {
+    if (pendingChatbotEnable) {
+      await updateChatbotStatusMutate({ chatbotEnabled: true, id });
+      setPendingChatbotEnable(false);
+    }
+    refetch();
+  };
+
+  const handleSettings = () => {
+    setIsSettingsOpen((prev) => ({
+      ...prev,
+      settingsOpen: !prev.settingsOpen,
+    }));
+  };
+
+  const handleModalClose = () => {
+    setIsSettingsOpen((prev) => ({
+      ...prev,
+      modalOpen: !prev.modalOpen,
+    }));
+  };
+
+  const handleUnlockModal = () => {
+    setIsSettingsOpen((prev) => ({
+      ...prev,
+      unlockModalOpen: !prev.unlockModalOpen,
+    }));
+  };
+
+  const handleSaveSettings = async (data: ClubGeneralSettings) => {
+    await updateGeneralSettingsMutate(
       {
-        isBulkEmail: data.isBulkEmail,
-        isLeadForms: data.isLeadForms,
-        noOfCustomChartsAllowed: data.noOfCustomChartsAllowed,
-        noOfEmailTemplatesAllowed: data.noOfEmailTemplatesAllowed,
+        ...data,
         clubId: id,
       },
       {
-        onSuccess: handleSettings,
+        onSuccess: () => {
+          handleModalClose();
+          handleSettings();
+        },
       },
     );
   };
 
   const handleEditModal = () => setIsEditModalOpen((prev) => !prev);
 
-  const handleSettings = () => setIsSettingsOpen((prev) => !prev);
-
-  const handleUnlockModal = () => setIsUnlockModalOpen((prev) => !prev);
-
-  const handleChatbotQuestionsModal = () =>
-    setIsChatbotModalOpen((prev) => !prev);
-
-  const handleChatbotStatusChange = async (value: boolean) =>
-    await updateChatbotStatusMutate({ chatbotEnabled: value, id });
+  const handleUploadVisbility = () => setIsChatbotModalOpen((prev) => !prev);
 
   const handleStatusChange = async (value: string) =>
     await updateClubStatusMutate({ status: value, id });
+
+  // TODO: handle default values inside serialzr
+  const uploadedData = clubData?.club?.knowledgeBaseName
+    ? {
+        id: clubData?.club?.knowledgeBaseId ?? "",
+        name: clubData?.club?.knowledgeBaseName ?? "",
+      }
+    : undefined;
 
   return (
     <div className={styles.individualClub}>
@@ -96,7 +161,6 @@ const IndividualClub = () => {
         isClubLocked={clubData?.club?.isClubLocked}
         isFetching={isPending}
         onSettings={handleSettings}
-        onChatbotQuestions={handleChatbotQuestionsModal}
         onUnlockClub={handleUnlockModal}
       />
 
@@ -153,6 +217,15 @@ const IndividualClub = () => {
             <div className={styles.content}>
               <ClubInfo data={clubData?.club} />
               <ContactDetails data={clubData?.club} />
+              <ConditionalRenderComponent
+                visible={!!clubData?.club?.knowledgeBaseUrl}
+                hideFallback
+              >
+                <ChatbotSection
+                  data={clubData?.club}
+                  onEditKnowledgeBase={handleUploadVisbility}
+                />
+              </ConditionalRenderComponent>
             </div>
           </div>
 
@@ -170,9 +243,12 @@ const IndividualClub = () => {
         />
       </ConditionalRenderComponent>
 
-      <ConditionalRenderComponent visible={isSettingsOpen} hideFallback>
+      <ConditionalRenderComponent
+        visible={isSettingsOpen.settingsOpen}
+        hideFallback
+      >
         <GeneralSettingsDrawer
-          open={isSettingsOpen}
+          open={isSettingsOpen.settingsOpen}
           onClose={handleSettings}
           clubId={id}
           onSave={handleSaveSettings}
@@ -188,22 +264,25 @@ const IndividualClub = () => {
         />
       </ConditionalRenderComponent>
 
-      <ConditionalRenderComponent visible={isChatbotModalOpen} hideFallback>
-        <ChatbotQuestionsModal
-          open={isChatbotModalOpen}
-          onClose={handleChatbotQuestionsModal}
-        />
-      </ConditionalRenderComponent>
-
-      <ConditionalRenderComponent visible={isUnlockModalOpen} hideFallback>
+      <ConditionalRenderComponent
+        visible={isSettingsOpen.unlockModalOpen}
+        hideFallback
+      >
         <UnlockClubModal
           onClose={handleUnlockModal}
-          open={isUnlockModalOpen}
+          open={isSettingsOpen.unlockModalOpen}
           isLoading={isUnlockPending}
           onSave={unlockClubMutate}
           clubName={clubData?.club?.name}
         />
       </ConditionalRenderComponent>
+      <ImportModal
+        visible={isChatbotModalOpen}
+        onClose={handleUploadVisbility}
+        importMode={ImportModes.CHATBOT_KNOWLEDGE_BASE}
+        onImport={handleImportSuccess}
+        file={uploadedData}
+      />
     </div>
   );
 };

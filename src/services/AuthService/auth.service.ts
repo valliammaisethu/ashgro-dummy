@@ -17,6 +17,8 @@ import { logoutMessages } from "src/constants/sharedComponents";
 import { renderNotification } from "src/shared/utils/renderNotification";
 import { generatePath } from "react-router-dom";
 import { RoleNames } from "src/enums/roleNames.enum";
+import { clearFilters } from "src/utils/dashboardFilters";
+import { getCurrentUserId } from "src/shared/utils/helpers";
 
 const {
   USER_LOGIN,
@@ -137,8 +139,10 @@ export const AuthService = () => {
       return deserialize(LoginResponse, response.data);
     },
     onSuccess: () => {
+      const userId = getCurrentUserId();
       renderNotification(title, description);
       resetAuthState();
+      clearFilters(userId);
       queryClient.clear();
       navigateToLogin();
     },

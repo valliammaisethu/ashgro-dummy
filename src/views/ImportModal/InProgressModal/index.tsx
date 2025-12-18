@@ -2,7 +2,7 @@ import React from "react";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
-import { BulkInProgressModalProps } from "src/shared/types/bulkImport.type";
+import { BulkInProgressModalProps } from "src/shared/types/importModes.type";
 import excelIcon from "src/assets/images/excelIcon.webp";
 import ashgroLogo from "src/assets/images/homeLogo.webp";
 import uploadingArrow from "src/assets/images/gradientArrow.webp";

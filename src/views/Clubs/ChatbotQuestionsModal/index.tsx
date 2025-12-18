@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "src/shared/components/Modal";
 import UploadArea from "src/shared/components/UploadArea";
 
@@ -12,11 +12,15 @@ import { useParams } from "react-router-dom";
 interface ChatbotQuestionsModalProps {
   open: boolean;
   onClose: () => void;
+  existingFileS3Key?: string;
+  existingFileName?: string;
 }
 
 const ChatbotQuestionsModal: React.FC<ChatbotQuestionsModalProps> = ({
   open,
   onClose,
+  existingFileS3Key,
+  existingFileName,
 }) => {
   const { uploadKnowledgeBase } = ClubService();
   const { id = "" } = useParams();
@@ -25,6 +29,12 @@ const ChatbotQuestionsModal: React.FC<ChatbotQuestionsModalProps> = ({
   );
 
   const [uploadedFileId, setUploadedFileId] = useState<string>();
+
+  useEffect(() => {
+    if (open && existingFileS3Key) {
+      setUploadedFileId(existingFileS3Key);
+    }
+  }, [open, existingFileS3Key]);
 
   const handleFileUploaded = (fileId: string) => setUploadedFileId(fileId);
 
@@ -60,7 +70,12 @@ const ChatbotQuestionsModal: React.FC<ChatbotQuestionsModalProps> = ({
         loading: isUploading,
       }}
     >
-      <UploadArea onFileUploaded={handleFileUploaded} maxSizeMB={5} />
+      <UploadArea
+        onFileUploaded={handleFileUploaded}
+        maxSizeMB={5}
+        existingFileS3Key={existingFileS3Key}
+        existingFileName={existingFileName}
+      />
     </Modal>
   );
 };

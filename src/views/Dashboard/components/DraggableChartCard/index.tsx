@@ -8,46 +8,44 @@ import {
 import clsx from "clsx";
 
 import BarChartCard from "../BarChartCard";
-import { ChartItem } from "src/models/dashboard.model";
+import { DraggableChartCardProps } from "src/shared/types/dashboard.type";
 
 import styles from "./draggableChartCard.module.scss";
 
-interface DraggableChartCardProps {
-  chart: ChartItem;
-}
-
-const DraggableChartCard: React.FC<DraggableChartCardProps> = ({ chart }) => {
+const DraggableChartCard: React.FC<DraggableChartCardProps> = ({
+  chart,
+  onEdit,
+}) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
-    id: chart.id,
+    id: chart?.id,
   });
 
-  const { setNodeRef: setDroppableNodeRef, isOver } = useDroppable({
-    id: chart.id,
+  const { setNodeRef: setDroppableRef, isOver } = useDroppable({
+    id: chart?.id,
   });
-
-  const handleNodeRef = (node: HTMLDivElement) => {
-    setNodeRef(node);
-    setDroppableNodeRef(node);
-  };
 
   return (
     <div
-      ref={handleNodeRef}
-      className={clsx(styles.draggableCard, {
+      ref={(node) => {
+        setNodeRef(node);
+        setDroppableRef(node);
+      }}
+      className={clsx(styles.draggableChartCard, {
         [styles.dragging]: isDragging,
+        [styles.over]: isOver,
       })}
     >
       <BarChartCard
-        id={chart.id}
-        title={chart?.name}
-        isDefaultChart={chart?.isDefault}
-        apiPath={chart?.path}
-        isDragging={isDragging}
-        isOver={isOver}
-        dragHandleProps={
-          { ...attributes, ...listeners } as DraggableAttributes &
-            DraggableSyntheticListeners
-        }
+        chart={chart}
+        dragChartProps={{
+          isDragging,
+          isOver,
+          dragHandleProps: {
+            ...attributes,
+            ...listeners,
+          } as DraggableAttributes & DraggableSyntheticListeners,
+        }}
+        onEdit={onEdit}
       />
     </div>
   );

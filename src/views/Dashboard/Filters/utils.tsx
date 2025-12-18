@@ -1,5 +1,6 @@
 import { XAxisTypes } from "src/enums/charts.enum";
 import {
+  ActivityTypesData,
   LeadSourcesData,
   LeadStatusesData,
   MembershipCategoriesData,
@@ -38,12 +39,14 @@ export const getDynamicLabelOptions = (
     membershipCategoriesData,
     membershipStatusesData,
     staffDepartmentsData,
+    salesActivityData,
   }: {
     leadSourcesData?: LeadSourcesData;
     leadStatusesData?: LeadStatusesData;
     membershipCategoriesData?: MembershipCategoriesData;
     membershipStatusesData?: MembershipStatusData;
     staffDepartmentsData?: StaffDepartmentsData;
+    salesActivityData?: ActivityTypesData;
   },
 ) => {
   switch (selectedType) {
@@ -66,7 +69,45 @@ export const getDynamicLabelOptions = (
     case XAxisTypes.STAFF_DEPARTMENT:
       return mapToSelectOptionsDynamic(staffDepartmentsData?.staffDepartments);
 
+    case XAxisTypes.SALES_ACTIVITY:
+      return mapToSelectOptionsDynamic(salesActivityData?.activityTypes);
+
     default:
       return [];
   }
+};
+
+interface Status {
+  loading: boolean;
+  success: boolean;
+}
+type StatusMap = Record<string, Status>;
+
+export const getActiveQueryStatus = (
+  selectedType: XAxisTypes,
+  statusBundle: StatusMap,
+) => {
+  const {
+    leadSources,
+    leadStatuses,
+    membershipCategories,
+    membershipStatuses,
+    staffDepartments,
+    salesActivity,
+  } = statusBundle;
+  const statusMap = {
+    [XAxisTypes.LEAD_SOURCE]: leadSources,
+    [XAxisTypes.LEAD_STATUS]: leadStatuses,
+    [XAxisTypes.MEMBERSHIP_CATEGORY]: membershipCategories,
+    [XAxisTypes.MEMBERSHIP_STATUS]: membershipStatuses,
+    [XAxisTypes.STAFF_DEPARTMENT]: staffDepartments,
+    [XAxisTypes.SALES_ACTIVITY]: salesActivity,
+  };
+
+  return (
+    statusMap[selectedType as keyof typeof statusMap] ?? {
+      loading: false,
+      success: false,
+    }
+  );
 };

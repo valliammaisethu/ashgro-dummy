@@ -35,7 +35,8 @@ export const clubFormValidationSchema = yup.object().shape({
     ),
 
   clubCountryCode: yup.string().optional().notRequired(),
-
+  knowledgeBaseId: yup.string().optional().notRequired(),
+  knowledgeBaseName: yup.string().optional().notRequired(),
   address: yup
     .string()
     .required(ERROR_MESSAGES.REQUIRED.CLUB_ADDRESS)
