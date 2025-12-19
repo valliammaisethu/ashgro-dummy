@@ -4,7 +4,7 @@ import { ProfileDetails } from "./profile.model";
 
 export class LeadFormData extends ProfileDetails {
   @serializable
-  categoryName?: string;
+  memberInterestId?: string;
 
   @serializable
   additionalComments?: string;

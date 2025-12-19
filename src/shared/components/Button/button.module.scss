@@ -84,3 +84,16 @@
     border: 0.1rem solid transparent;
   }
 }
+
+:global(.ant-btn).gold {
+  background-color: $ashgro-gold;
+  color: $ashgro-white;
+  border: 1px solid $gold-bold;
+  border-radius: 3.2rem;
+
+  &:not(:disabled):not(.ant-btn-disabled):hover {
+    background-color: $ashgro-gold;
+    color: $ashgro-white;
+    border: 1px solid $gold-bold;
+  }
+}

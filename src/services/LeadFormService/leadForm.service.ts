@@ -34,11 +34,10 @@ export const LeadFormService = () => {
     mutationKey: [LEAD_FORM_MUTATION],
     mutationFn: async (payload: LeadFormData) => {
       const { id, ...formData } = payload;
+
       const response = await axiosInstance.post(
         generatePath(LEAD_FORM, { id }),
-        {
-          leadForm: serialize(LeadFormData, formData),
-        },
+        serialize(LeadFormData, formData),
       );
       return deserialize(ResponseModel, response?.data);
     },
