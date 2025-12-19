@@ -124,6 +124,17 @@ export const DashboardFiltersProvider = ({
     [chartFilters],
   );
 
+  const getFilterDetails = (chartId?: string) => {
+    const filters = chartId ? chartFilters[chartId] : undefined;
+
+    return {
+      hasDate: !!(filters?.dateRange?.[0] && filters?.dateRange?.[1]),
+      hasValues: !!filters?.selectedValues?.length,
+      dateRange: filters?.dateRange,
+      selectedValues: filters?.selectedValues,
+    };
+  };
+
   const contextValue = useMemo(
     () => ({
       chartFilters,
@@ -138,6 +149,7 @@ export const DashboardFiltersProvider = ({
       openFilterDrawer,
       closeFilterDrawer,
       getChartParams,
+      getFilterDetails,
     }),
     [
       chartFilters,
@@ -150,6 +162,7 @@ export const DashboardFiltersProvider = ({
       openFilterDrawer,
       closeFilterDrawer,
       getChartParams,
+      getFilterDetails,
     ],
   );
 

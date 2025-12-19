@@ -9,8 +9,9 @@
   @extend %hideScrollbar;
 
   .header {
-    @include flex-container(space-between, center);
+    @include flex-container(flex-start, center);
     padding: 1rem;
+    height: 3.2rem;
   }
 
   .clearSelection {
@@ -22,6 +23,7 @@
 
   .closeIcon {
     cursor: pointer;
+    margin-left: auto;
   }
 
   .listContainer {

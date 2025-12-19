@@ -73,6 +73,14 @@ export interface ChartConfig {
   chartName: string;
 }
 
+// export interface
+export interface FilterDetails {
+  hasDate: boolean;
+  hasValues: boolean;
+  dateRange?: DateRange;
+  selectedValues?: string[];
+}
+
 export interface DashboardFiltersContextType {
   chartFilters: Record<string, ChartFilterData>;
 
@@ -98,6 +106,7 @@ export interface DashboardFiltersContextType {
   openFilterDrawer: (chartConfig: ChartConfig) => void;
   closeFilterDrawer: () => void;
   getChartParams: (chartId: string) => Record<string, any>;
+  getFilterDetails: (chartId: string) => FilterDetails;
 }
 
 export interface ChartFilters {

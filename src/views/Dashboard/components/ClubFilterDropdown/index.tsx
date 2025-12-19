@@ -15,6 +15,9 @@ import { QueryParams } from "src/models/queryParams.model";
 import { Trigger } from "src/enums/trigger.enum";
 import { Placement } from "src/enums/placement.enum";
 import { filterConstants } from "../../constants";
+import Button from "src/shared/components/Button";
+import { ButtonTypes } from "src/enums/buttons.enum";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 interface ClubFilterDropdownProps {
   chartId: string;
@@ -25,7 +28,7 @@ const { MODAL_CLOSE_ICON } = Colors;
 const ClubFilterDropdown: React.FC<ClubFilterDropdownProps> = ({ chartId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { getClubs } = ClubService();
-  const { getChartFilter, setChartFilter, hasActiveFilters } =
+  const { getChartFilter, setChartFilter, getFilterDetails } =
     useDashboardFilters();
 
   // TODO: remove once BE create meta api for clubs
@@ -39,7 +42,7 @@ const ClubFilterDropdown: React.FC<ClubFilterDropdownProps> = ({ chartId }) => {
 
   const selectedValues = getChartFilter(chartId);
 
-  const hasFilters = hasActiveFilters(chartId);
+  const { hasDate, hasValues } = getFilterDetails(chartId);
 
   const handlePopupVisibility = () => setIsOpen((prev) => !prev);
 
@@ -65,12 +68,12 @@ const ClubFilterDropdown: React.FC<ClubFilterDropdownProps> = ({ chartId }) => {
       content={
         <div className={styles.clubFilterContent}>
           <div className={styles.header}>
-            <span
-              className={styles.clearSelection}
-              onClick={handleClearSelection}
-            >
-              {filterConstants.CLEAR_SELECTION}
-            </span>
+            <ConditionalRenderComponent visible={hasValues} hideFallback>
+              <Button onClick={handleClearSelection} type={ButtonTypes.LINK}>
+                {filterConstants.CLEAR_SELECTION}
+              </Button>
+            </ConditionalRenderComponent>
+
             <IconCircleClose
               size={20}
               className={styles.closeIcon}
@@ -104,7 +107,7 @@ const ClubFilterDropdown: React.FC<ClubFilterDropdownProps> = ({ chartId }) => {
       overlayClassName={styles.popoverOverlay}
       arrow={false}
     >
-      <FilterIconWithBadge hasFilters={hasFilters} />
+      <FilterIconWithBadge hasFilters={hasValues} />
     </Popover>
   );
 };
