@@ -4,6 +4,8 @@ export const LEAD_FORM_CONSTANTS = {
   LINK_NOT_WORKING: "Link Not Working",
   FORM_DISABLED_MESSAGE: "This lead form is currently not available.",
   INVALID_LINK: "This link is invalid.",
+  ACCESS_DENIED: "Access Denied",
+  OOPS: "Oops!",
 
   LABELS: {
     FIRST_NAME: "First Name",
