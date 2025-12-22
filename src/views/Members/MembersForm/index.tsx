@@ -206,9 +206,13 @@ const MembersForm = ({
         data.leadSource,
       ),
       [FIELD_NAMES.JOIN_DATE]: convertDateToDisplayFormat(data.joinedDate),
-      [FIELD_NAMES.BIRTH_DATE]: convertDateToDisplayFormat(data.birthDate),
+      [FIELD_NAMES.BIRTH_DATE]: convertDateToDisplayFormat(
+        data.birthDate,
+        DateFormats.DD_MMM__YYYY,
+      ),
       [FIELD_NAMES.RESIGNATION_DATE]: convertDateToDisplayFormat(
         data.resignationDate,
+        DateFormats.DD_MMM__YYYY,
       ),
       activityDetails: undefined,
     };

@@ -4,6 +4,7 @@ import timezone from "dayjs/plugin/timezone";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { DateUnit } from "src/enums/dateUnit.enum";
 import { DateType } from "src/enums/dateType.enum";
+import { isDateOutOfRangeProps } from "../types/dashboard.type";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -89,4 +90,14 @@ export const disablePastAndFuture180 = (date: dayjs.Dayjs) => {
   const maxDate = today.add(180, DAY);
 
   return date.isBefore(today) || date.isAfter(maxDate);
+};
+
+export const isDateOutOfRange = ({
+  current,
+  futureDate,
+  maxDays = 180,
+}: isDateOutOfRangeProps) => {
+  if (!futureDate) return false;
+  const diff = current.diff(futureDate, DAY);
+  return Math.abs(diff) > maxDays;
 };

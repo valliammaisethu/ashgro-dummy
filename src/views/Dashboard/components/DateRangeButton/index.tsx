@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { DatePicker } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import {
@@ -11,30 +11,32 @@ import { DateFormats } from "src/enums/dateFormats.enum";
 import { Colors } from "src/enums/colors.enum";
 import { stopPropagation } from "src/shared/utils/eventUtils";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
-import { DateRange } from "src/shared/types/dashboard.type";
+import {
+  DateRangeButtonProps,
+  DayjsRange,
+} from "src/shared/types/dashboard.type";
+import { isDateOutOfRange } from "src/shared/utils/dateUtils";
+import { filterConstants } from "../../constants";
 
 import styles from "./dateRangeButton.module.scss";
 
+const { RangePicker } = DatePicker;
+
 const { YYYY_MM_DD, DD_MMM_YY, MMMM_YYYY } = DateFormats;
 const { MODAL_CLOSE_ICON, ASHGRO_BLACK, ASHGRO_GOLD } = Colors;
-
-interface DateRangeButtonProps {
-  value?: DateRange;
-  onChange: (dates: DateRange | null) => void;
-}
 
 const DateRangeButton: React.FC<DateRangeButtonProps> = ({
   value,
   onChange,
 }) => {
   const [open, setOpen] = useState(false);
+  const selectedStartDate = useRef<Dayjs | null>(null);
 
   const handleChange = useCallback(
-    (dates: [Dayjs | null, Dayjs | null] | null) => {
+    (dates: DayjsRange) => {
+      selectedStartDate.current = null;
       if (dates && dates[0] && dates[1]) {
-        const startDate = dates[0].toISOString();
-        const endDate = dates[1].toISOString();
-        onChange([startDate, endDate]);
+        onChange([dates[0].toISOString(), dates[1].toISOString()]);
       } else {
         onChange(null);
       }
@@ -42,10 +44,15 @@ const DateRangeButton: React.FC<DateRangeButtonProps> = ({
     [onChange],
   );
 
+  const handleCalendarChange = useCallback((dates: DayjsRange) => {
+    selectedStartDate.current = dates?.[0] ?? null;
+  }, []);
+
   const handleClear = useCallback(
     (e: React.MouseEvent) => {
       stopPropagation(e);
       onChange(null);
+      selectedStartDate.current = null;
       setOpen(false);
     },
     [onChange],
@@ -61,6 +68,13 @@ const DateRangeButton: React.FC<DateRangeButtonProps> = ({
   };
 
   const handleVisibilityChange = () => setOpen((prev) => !prev);
+
+  const isDisabledDate = (current: Dayjs) =>
+    isDateOutOfRange({
+      current,
+      futureDate: selectedStartDate.current,
+      maxDays: filterConstants.DATE_RANGE,
+    });
 
   return (
     <div className={styles.dateRangeButton}>
@@ -85,12 +99,14 @@ const DateRangeButton: React.FC<DateRangeButtonProps> = ({
       </div>
 
       <div className={styles.pickerWrapper}>
-        <DatePicker.RangePicker
+        <RangePicker
           open={open}
           onOpenChange={setOpen}
           value={value ? [dayjs(value?.[0]), dayjs(value?.[1])] : null}
           onChange={handleChange}
           format={YYYY_MM_DD}
+          onCalendarChange={handleCalendarChange}
+          disabledDate={isDisabledDate}
         />
       </div>
     </div>
