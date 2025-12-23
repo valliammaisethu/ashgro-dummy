@@ -38,7 +38,7 @@ const StaffDepartment = () => {
 
   const {
     data: staffDepartments = [],
-    isFetching,
+    isLoading,
     isSuccess,
   } = useQuery(staffMembersList());
 
@@ -101,8 +101,9 @@ const StaffDepartment = () => {
       </Row>
       <ConditionalRender
         records={staffDepartments}
-        isPending={isFetching}
+        isPending={isLoading}
         isSuccess={isSuccess}
+        className={styles.noDataScreen}
       >
         <div className={settingStyles.cardContainer}>
           {staffDepartments?.map((item) => (

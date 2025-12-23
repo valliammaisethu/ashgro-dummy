@@ -19,3 +19,8 @@
   height: 4rem;
   background-color: $ashgro-navy;
 }
+
+.noDataScreen {
+  @include flex-container(center, center);
+  min-height: 35rem;
+}

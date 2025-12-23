@@ -58,8 +58,8 @@
         background: $modal-footer-bg;
         border-radius: 12px;
         .ant-tabs-tab-btn {
-          font-size: 1.4rem;
-          font-weight: 400;
+          font-weight: 600;
+          font-size: 1.6rem;
         }
       }
 
@@ -144,4 +144,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.noDataScreen {
+  @include flex-container(center, center);
+  min-height: 35rem;
 }

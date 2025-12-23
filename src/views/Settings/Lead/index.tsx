@@ -135,6 +135,7 @@ const Lead = () => {
         records={currentList}
         isPending={isLeadLoading}
         isSuccess={isLeadSuccess}
+        className={styles.noDataScreen}
       >
         <div className={styles.cardContainer}>
           {currentList?.map((item) => (
