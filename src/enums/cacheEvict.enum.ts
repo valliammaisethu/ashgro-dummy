@@ -3,6 +3,7 @@ export enum MutationKeys {
   FORGOT_PASSWORD = "forgotPassword",
   RESET_PASSWORD = "resetPassword",
   CHANGE_PASSWORD = "changePassword",
+  VALIDATE_PASSWORD_KEY = "validatePassword",
   LOGOUT = "logout",
 
   ATTACHMENT_UPLOAD = "attachmentUpload",
@@ -32,7 +33,7 @@ export enum MutationKeys {
 
   ADD_CLUB = "addClub",
   EDIT_CLUB = "editClub",
-  UPDATE_CLUB_PROFILE = "updateClubProfile",
+  UPDATE_ADMIN_PROFILE = "updateAdminProfile",
   UNLOCK_CLUB = "unlockClub",
   UPDATE_CLUB_GENERAL_SETTINGS = "updateClubGeneralSettings",
 

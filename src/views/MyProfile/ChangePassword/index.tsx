@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
+import { debounce } from "lodash";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 import Modal from "src/shared/components/Modal";
 import Form from "src/shared/components/Form";
@@ -18,11 +21,10 @@ import {
   labels,
   placeholders,
 } from "./constants";
+import { DEBOUNCE_TIME } from "src/constants/common";
 import { validationSchema } from "./validation";
 
 import styles from "./changePassword.module.scss";
-import { localStorageHelper } from "src/shared/utils/localStorageHelper";
-import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 
 const { currentPassword, newPassword, confirmPassword } = fields;
 const {
@@ -43,17 +45,22 @@ const ChangePassword = (props: ChangePasswordProps) => {
     validationSchema: validationSchema,
   });
 
-  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
-
   const {
     formState: { isDirty, isValid },
+    setError,
     reset,
+    setValue,
+    clearErrors,
   } = methods;
 
   const password = methods.watch(newPassword);
 
-  const { changePassword } = AuthService();
+  const { changePassword, validatePassword } = AuthService();
   const { mutateAsync, isPending } = useMutation(changePassword());
+  const {
+    mutateAsync: validatePasswordMutate,
+    isPending: isValidatePasswordPending,
+  } = useMutation(validatePassword());
 
   const handleClose = () => {
     reset();
@@ -61,19 +68,36 @@ const ChangePassword = (props: ChangePasswordProps) => {
   };
 
   const handleSubmit = (values: FieldValues) => {
-    mutateAsync(
-      {
-        oldPassword: values.currentPassword,
-        id: clubId,
+    mutateAsync(values.newPassword, {
+      onSuccess: (response) => {
+        const { title, description } = response;
+        renderNotification(title, description);
+        handleClose();
       },
-      {
-        onSuccess: (response) => {
-          const { title, description } = response;
-          renderNotification(title, description);
-          handleClose();
-        },
-      },
-    );
+    });
+  };
+
+  const debouncedValidatePassword = useMemo(
+    () =>
+      debounce(async (value: string) => {
+        await validatePasswordMutate(value, {
+          onError: (response) => {
+            // TODO: Change api response and handle invalid error in 200 status code
+            const errMsg = response?.response?.data?.error as string;
+            setError(currentPassword, { type: "manual", message: errMsg });
+          },
+        });
+      }, DEBOUNCE_TIME),
+    [validatePasswordMutate],
+  );
+
+  const handleCurrentPassword = (e?: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e?.target.value ?? "";
+    clearErrors(currentPassword);
+    setValue(currentPassword, value);
+    if (value) {
+      debouncedValidatePassword(value);
+    }
   };
 
   return (
@@ -99,6 +123,12 @@ const ChangePassword = (props: ChangePasswordProps) => {
             placeholder={currentPasswordPlaceholder}
             name={currentPassword}
             label={currentPasswordLabel}
+            onChange={handleCurrentPassword}
+            suffix={
+              isValidatePasswordPending ? (
+                <Spin indicator={<LoadingOutlined />} />
+              ) : undefined
+            }
           />
           <PasswordField
             placeholder={newPasswordPlaceholder}
