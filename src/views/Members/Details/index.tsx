@@ -235,6 +235,10 @@ const Details = () => {
                       icon={IconLocationMarker}
                       label={data?.residentialAddress}
                     />
+                    <IconLabel
+                      icon={IconLocationMarker}
+                      label={data?.residentialAddress}
+                    />
                     <div className={styles.basicFooterInfo}>
                       <IconLabel icon={IconEmail} label={data?.email} isEmail />
                       <IconLabel
@@ -260,7 +264,11 @@ const Details = () => {
                       <div key={label}>
                         <p className={styles.title}>{label}</p>
                         <p className={styles.description}>
-                          {fallbackHandler(value)}
+                          {fallbackHandler(
+                            label === RESIGNATION_DATE
+                              ? formatDate(value, DateFormats.DD_MMM__YYYY)
+                              : value,
+                          )}
                         </p>
                       </div>
                     ))}
