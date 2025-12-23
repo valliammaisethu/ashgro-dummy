@@ -10,6 +10,7 @@ export const titles = {
     chatbotStatus: "Chatbot Status",
   },
   uploadError: "Please upload Knowledge base to continue",
+  logoText: "Club Logo",
 };
 
 export const labels = {

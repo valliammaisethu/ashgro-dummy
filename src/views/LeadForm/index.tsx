@@ -41,9 +41,7 @@ const { TITLE, SUBMIT_BTN_TEXT, LABELS, PLACEHOLDERS, FIELD_NAMES } =
 const LeadForm = () => {
   const { id: clubId } = useParams<{ id: string }>();
 
-  if (!clubId) {
-    return <InvalidLink />;
-  }
+  if (!clubId) return <InvalidLink />;
 
   const methods = useForm({
     validationSchema: leadFormValidationSchema,
@@ -52,7 +50,7 @@ const LeadForm = () => {
   const {
     setError,
     clearErrors,
-    formState: { isValid },
+    formState: { isValid, errors },
     reset,
   } = methods;
 
@@ -100,7 +98,12 @@ const LeadForm = () => {
   );
 
   const handleFormSubmit = async (values: FieldValues) => {
-    await submitLeadFormMutate(values as LeadFormData);
+    const payload = {
+      ...values,
+      id: clubId,
+    } as LeadFormData;
+
+    await submitLeadFormMutate(payload);
     reset({});
   };
 

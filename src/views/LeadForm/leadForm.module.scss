@@ -5,7 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 4rem 2rem 2rem 2rem;
+  padding: 4rem 2rem 0 2rem;
   background: $ashgro-cream;
 
   @media (max-width: 768px) {
@@ -142,7 +142,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 6rem 2rem;
+  padding-bottom: 4rem;
   min-height: calc(100vh - 20rem);
   background: $ashgro-cream;
 
@@ -155,32 +155,30 @@
   text-align: center;
   max-width: 40rem;
 
-  svg {
-    margin-bottom: 2.4rem;
-    opacity: 0.8;
+  .leadFormDisabled {
+    width: 24rem;
+    height: 20rem;
+    object-fit: contain;
 
     @media (max-width: 768px) {
-      margin-bottom: 1.6rem;
+      width: 16rem;
+      height: 16rem;
     }
   }
 }
 
 .errorTitle {
-  font-size: 2.8rem;
-  font-weight: 700;
-  color: $activity-title;
-  margin: 0 0 1.2rem 0;
-
-  @media (max-width: 768px) {
-    font-size: 2.4rem;
-  }
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: $ashgro-gold;
+  margin-top: 3rem;
 }
 
 .errorMessage {
-  font-size: 1.6rem;
-  color: $ashgro-grey;
-  margin: 0;
-  line-height: 1.6;
+  font-size: 2.8rem;
+  color: $ashgro-navy;
+  font-weight: 700;
+  margin-top: 2rem;
 
   @media (max-width: 768px) {
     font-size: 1.4rem;

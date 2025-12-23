@@ -23,6 +23,7 @@
     "libphonenumber-js": "^1.12.8",
     "lodash": "^4.17.21",
     "obra-icons-react": "^1.23.1",
+    "posthog-js": "^1.309.1",
     "query-string": "^9.2.0",
     "react": "^18.2.0",
     "react-big-calendar": "^1.19.4",

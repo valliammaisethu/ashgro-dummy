@@ -12,4 +12,5 @@ export const detailsConstants = {
   feesAndDuesLabel: "Fees & Dues",
   activityCount: "Activity",
   statusPlaceholder: "Select Membership Status",
+  bookedUserType: "member",
 };

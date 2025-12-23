@@ -33,7 +33,7 @@ export const CHART_CONSTANTS = {
 export const superAdminChartItems = [
   { id: "conversions", name: "Chatbot Conversions" },
   { id: "spend-time", name: "Chatbot Spend Time" },
-  // { id: "crm-usage", name: "CRM Usage" }
+  { id: "crm-usage", name: "CRM Usage" },
 ];
 
 export const chartFiltersTitle = "Filters - %s";
@@ -63,4 +63,5 @@ export const CHART_LABEL_MAP: Record<string, string> = {
 
 export const filterConstants = {
   CLEAR_SELECTION: "Clear Selection",
+  DATE_RANGE: 180,
 };

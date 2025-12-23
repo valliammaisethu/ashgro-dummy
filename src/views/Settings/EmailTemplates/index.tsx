@@ -24,7 +24,7 @@ const EmailTemplates = () => {
 
   const {
     data: emailTemplates = [],
-    isFetching: isLoading,
+    isLoading,
     isSuccess,
   } = useQuery(emailTemplateList());
 
@@ -56,6 +56,7 @@ const EmailTemplates = () => {
         records={emailTemplates}
         isPending={isLoading}
         isSuccess={isSuccess}
+        className={styles.noDataScreen}
       >
         <div className={styles.cardContainer}>
           {emailTemplates?.map((template) => (

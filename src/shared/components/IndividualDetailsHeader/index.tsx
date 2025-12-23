@@ -12,12 +12,14 @@ interface IndividualDetailsHeaderProps {
   navigateBack?: () => void;
   onEmailClick?: () => void;
   isPending?: boolean;
+  onBookMeeting?: () => void;
 }
 
 const IndividualDetailsHeader = ({
   navigateBack,
   onEmailClick,
   isPending,
+  onBookMeeting,
 }: IndividualDetailsHeaderProps) => {
   return (
     <div className={styles.header}>
@@ -28,6 +30,7 @@ const IndividualDetailsHeader = ({
             title: headerConstants.bookAMeeting,
           }}
           className={styles.meetingButton}
+          onClick={onBookMeeting}
         >
           <IconCalendarSelectedDate />
         </Button>

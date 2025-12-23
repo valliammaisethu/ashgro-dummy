@@ -11,6 +11,7 @@ import React, {
 import { UserData, TokenData } from "src/models/user.model";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import posthog from "posthog-js";
 
 export interface AuthState {
   authenticated?: boolean;
@@ -90,6 +91,8 @@ const AuthContext = () => {
       LocalStorageKeys.REFRESH_TOKEN,
       token?.refreshToken,
     );
+
+    if (user?.clubId) posthog.identify(user.clubId);
   };
 
   const resetAuthState = () => {
@@ -98,6 +101,8 @@ const AuthContext = () => {
       user: new UserData(),
       token: new TokenData(),
     });
+
+    posthog.reset();
     localStorageHelper.clearData();
   };
 

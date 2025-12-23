@@ -85,7 +85,7 @@ export const ApiRoutes = {
   CHAT_BOT_SLOTS: "calendar/chatbotSlots",
 
   // Lead Form
-  LEAD_FORM: "/api/v1/clubs/:id/leadforms",
+  LEAD_FORM: "/clubs/:id/leadforms",
   GET_TRANSCRIPTS: "/clubs/:clubId/users/:id/transcripts",
   MEETING: "/calendar/meetings",
   RESCHEDULE_MEETING: "/calendar/:id/reschedule",
