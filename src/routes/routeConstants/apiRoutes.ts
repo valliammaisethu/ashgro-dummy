@@ -98,4 +98,6 @@ export const ApiRoutes = {
   CAN_CREATE_CUSTOM_CHART: "/dashboard/clubs/:id/charts/available",
   UPDATE_CHART_ORDER: "/dashboard/clubs/:clubId/charts",
   GET_CHART_VALUES: "/dashboard/clubs/:clubId/values",
+
+  ADMIN_PROFILE_UPDATE: "admin/:id/profile",
 };

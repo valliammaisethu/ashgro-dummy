@@ -33,4 +33,7 @@ export class ProfileDetails {
 
   @serializable
   emailId = "";
+
+  @serializable
+  isAccountLocked?: boolean;
 }
