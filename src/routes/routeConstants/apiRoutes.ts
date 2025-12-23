@@ -8,7 +8,8 @@ export const ApiRoutes = {
 
   FORGOT_PASSWORD: "/auth/forgotPassword",
   RESET_PASSWORD: "/auth/resetPassword",
-  CHANGE_PASSWORD: "/clubs/:id/password",
+  CHANGE_PASSWORD: "auth/:id/password",
+  VALIDATE_PASSWORD: "auth/:id/password/validate",
 
   ATTACHMENTS: "/attachments",
   ATTACHMENTS_SPECIFIC: "/attachments/:id",
@@ -98,4 +99,6 @@ export const ApiRoutes = {
   CAN_CREATE_CUSTOM_CHART: "/dashboard/clubs/:id/charts/available",
   UPDATE_CHART_ORDER: "/dashboard/clubs/:clubId/charts",
   GET_CHART_VALUES: "/dashboard/clubs/:clubId/values",
+
+  ADMIN_PROFILE_UPDATE: "admin/:id/profile",
 };

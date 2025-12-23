@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Divider, Row } from "antd";
 import { FieldValues } from "react-hook-form";
 
@@ -18,6 +18,7 @@ import { useMutation } from "@tanstack/react-query";
 import { ClubService } from "src/services/ClubService/club.service";
 import { stripPhoneCode } from "src/shared/utils/parser";
 import { editProfileValidation } from "./validation";
+import { ProfileDetails } from "src/models/profile.model";
 
 const { editProfile } = myProfileConstants;
 
@@ -47,13 +48,6 @@ const EditProfile = (props: EditProfileProps) => {
     useMutation(updateClubProfile());
 
   const methods = useForm({
-    defaultValues: {
-      [firstNameName]: user?.firstName,
-      [lastNameName]: user?.lastName,
-      [emailName]: user?.email,
-      [phoneNumberName]: user?.phoneNumber,
-      [attachmentId]: user?.attachmentId,
-    },
     validationSchema: editProfileValidation,
   });
 
@@ -62,26 +56,42 @@ const EditProfile = (props: EditProfileProps) => {
     formState: { isDirty, isValid },
   } = methods;
 
-  const handleSubmit = (values: FieldValues) => {
-    updateProfileMutate(
-      {
-        ...values,
-        attachmentId: values.attachmentId,
-        emailId: values.emailId,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        address: values.address,
-        phoneNumber: stripPhoneCode(values.phoneNumber),
-        id: user?.id,
-        email: "",
-        profilePicture: "",
-        contactNumber: "",
-      },
-      {
-        onSuccess: onClose,
-      },
-    );
+  const handleCloseForm = () => {
+    methods.reset({});
+    onClose();
   };
+
+  const handleSubmit = (values: FieldValues) => {
+    const updatedValues = {
+      ...values,
+      attachmentId: values.attachmentId,
+      contactNumber: stripPhoneCode(values.contactNumber) ?? "",
+      id: user?.id,
+    };
+    updateProfileMutate(updatedValues as ProfileDetails, {
+      onSuccess: handleCloseForm,
+    });
+  };
+
+  const defaultValues = () => {
+    if (user?.id && visible) {
+      methods.reset({
+        [firstNameName]: user?.firstName,
+        [lastNameName]: user?.lastName,
+        [emailName]: user?.email,
+        [phoneNumberName]: user?.contactNumber,
+        [attachmentId]: user?.attachmentId,
+      });
+    } else {
+      methods.reset({});
+    }
+  };
+
+  // TODO: Revamp Form component to handle default values and remove useEffect
+
+  useEffect(() => {
+    defaultValues();
+  }, [user?.id, visible]);
 
   return (
     <Modal
@@ -98,6 +108,8 @@ const EditProfile = (props: EditProfileProps) => {
       cancelButtonProps={{
         className: "d-none",
       }}
+      destroyOnHidden
+      destroyOnClose
     >
       <Form methods={methods}>
         <ProfilePictureInput name={attachmentId} />
