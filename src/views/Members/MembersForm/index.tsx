@@ -25,10 +25,10 @@ import { DateFormats } from "src/enums/dateFormats.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import PhoneNumberField from "src/shared/components/PhoneNumberInput";
 import {
-  disableFutureAndToday,
   formatDate,
   convertDateToApiFormat,
   convertDateToDisplayFormat,
+  disableFuture,
 } from "src/shared/utils/dateUtils";
 import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
 import { MetaService } from "src/services/MetaService/meta.service";
@@ -291,7 +291,7 @@ const MembersForm = ({
                   placeholder={PLACEHOLDERS.JOIN_DATE}
                   label={LABELS.JOIN_DATE}
                   name={FIELD_NAMES.JOIN_DATE}
-                  disabledDate={disableFutureAndToday}
+                  disabledDate={disableFuture}
                 />
               </Col>
               <Col span={12}>
@@ -317,7 +317,7 @@ const MembersForm = ({
                   placeholder={PLACEHOLDERS.BIRTH_DATE}
                   label={LABELS.BIRTH_DATE}
                   name={FIELD_NAMES.BIRTH_DATE}
-                  disabledDate={disableFutureAndToday}
+                  disabledDate={disableFuture}
                   format={DateFormats.DD_MMM__YYYY}
                 />
               </Col>
