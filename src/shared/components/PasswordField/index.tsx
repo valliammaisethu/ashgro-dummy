@@ -16,6 +16,7 @@ const PasswordField: FC<PasswordFieldProps> = ({
   name,
   label,
   className,
+  suffix,
   ...rest
 }) => {
   const { control } = useFormContext<FieldValues>();
@@ -39,7 +40,9 @@ const PasswordField: FC<PasswordFieldProps> = ({
         {...rest}
         type={showPassword ? INPUT_TYPE.TEXT : INPUT_TYPE.PASSWORD}
         status={fieldState.error ? InputStatus.ERROR : undefined}
-        suffix={passwordSuffix(showPassword, togglePasswordVisibility)}
+        suffix={
+          suffix || passwordSuffix(showPassword, togglePasswordVisibility)
+        }
         spellCheck={false}
       />
 

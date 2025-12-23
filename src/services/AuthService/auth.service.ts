@@ -1,11 +1,11 @@
 import { UseMutationOptions, useQueryClient } from "@tanstack/react-query";
 import { deserialize, serialize } from "serializr";
+import { AxiosError } from "axios";
 
 import axiosInstance from "src/interceptor/axiosInstance";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { MutationKeys } from "src/enums/cacheEvict.enum";
 import {
-  ChangePassword,
   LoginRequest,
   LoginResponse,
   ResetPassword,
@@ -19,6 +19,8 @@ import { generatePath } from "react-router-dom";
 import { RoleNames } from "src/enums/roleNames.enum";
 import { clearFilters } from "src/utils/dashboardFilters";
 import { getCurrentUserId } from "src/shared/utils/helpers";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 
 const {
   USER_LOGIN,
@@ -26,12 +28,14 @@ const {
   RESET_PASSWORD,
   CHANGE_PASSWORD,
   USER_LOGOUT,
+  VALIDATE_PASSWORD,
 } = ApiRoutes;
 const {
   LOGIN,
   FORGOT_PASSWORD: FORGOT_PASSWORD_KEY,
   RESET_PASSWORD: RESET_PASSWORD_KEY,
   CHANGE_PASSWORD: CHANGE_PASSWORD_KEY,
+  VALIDATE_PASSWORD_KEY,
   LOGOUT,
 } = MutationKeys;
 
@@ -116,16 +120,34 @@ export const AuthService = () => {
   const changePassword = (): UseMutationOptions<
     ResponseModel,
     ResponseModel,
-    ChangePassword
+    string
   > => ({
     mutationKey: [CHANGE_PASSWORD_KEY],
-    mutationFn: async (payload: ChangePassword) => {
-      const serializedData = serialize(ChangePassword, payload);
-      const response = await axiosInstance.put(
-        generatePath(CHANGE_PASSWORD, { id: payload?.id }),
+    mutationFn: async (password: string) => {
+      const id = localStorageHelper.getItem(LocalStorageKeys.USER)?.id;
+      const response = await axiosInstance.patch(
+        generatePath(CHANGE_PASSWORD, { id }),
         {
-          oldPassword: serializedData.oldPassword,
+          password,
         },
+      );
+
+      return deserialize(ResponseModel, response.data);
+    },
+  });
+
+  const validatePassword = (): UseMutationOptions<
+    ResponseModel,
+    AxiosError<ResponseModel>,
+    string
+  > => ({
+    mutationKey: [VALIDATE_PASSWORD_KEY],
+    mutationFn: async (password: string) => {
+      const id = localStorageHelper.getItem(LocalStorageKeys.USER)?.id;
+      const response = await axiosInstance.post(
+        generatePath(VALIDATE_PASSWORD, { id }),
+        { password },
+        { suppressNotifications: true },
       );
 
       return deserialize(ResponseModel, response.data);
@@ -148,5 +170,12 @@ export const AuthService = () => {
     },
   });
 
-  return { loginUser, forgotPassword, resetPassword, changePassword, logout };
+  return {
+    loginUser,
+    forgotPassword,
+    resetPassword,
+    changePassword,
+    logout,
+    validatePassword,
+  };
 };
