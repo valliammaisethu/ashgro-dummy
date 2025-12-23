@@ -32,7 +32,7 @@ export enum MutationKeys {
 
   ADD_CLUB = "addClub",
   EDIT_CLUB = "editClub",
-  UPDATE_CLUB_PROFILE = "updateClubProfile",
+  UPDATE_ADMIN_PROFILE = "updateAdminProfile",
   UNLOCK_CLUB = "unlockClub",
   UPDATE_CLUB_GENERAL_SETTINGS = "updateClubGeneralSettings",
 

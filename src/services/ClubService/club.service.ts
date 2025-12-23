@@ -35,13 +35,14 @@ const {
   UPDATE_CLUB_PROFILE: UPDATE_CLUB_PROFILE_ROUTE,
   UNLOCK_CLUB: UNLOCK_CLUB_ROUTE,
   UPDATE_CLUB_GENERAL_SETTINGS: UPDATE_CLUB_GENERAL_SETTINGS_ROUTE,
+  ADMIN_PROFILE_UPDATE,
 } = ApiRoutes;
 const {
   ADD_CLUB,
   EDIT_CLUB,
   EDIT_CHATBOT,
   UPLOAD_CHATBOT_KNOWLEDGE_BASE,
-  UPDATE_CLUB_PROFILE,
+  UPDATE_ADMIN_PROFILE,
   UNLOCK_CLUB,
   UPDATE_CLUB_GENERAL_SETTINGS,
 } = MutationKeys;
@@ -187,16 +188,19 @@ export const ClubService = () => {
     },
   });
 
+  // TODO: Move to admin service
   const updateClubProfile = (): UseMutationOptions<
     ResponseModel,
     ResponseModel,
     ProfileDetails
   > => ({
-    mutationKey: [UPDATE_CLUB_PROFILE],
-    mutationFn: async (body: ProfileDetails) => {
-      const { data } = await axiosInstance.post(
-        generatePath(UPDATE_CLUB_PROFILE_ROUTE, { id: body.id }),
-        serialize(ProfileDetails, body),
+    mutationKey: [UPDATE_ADMIN_PROFILE],
+    mutationFn: async (payload: ProfileDetails) => {
+      const { id, ...rest } = payload;
+
+      const { data } = await axiosInstance.put(
+        generatePath(ADMIN_PROFILE_UPDATE, { id }),
+        serialize(ProfileDetails, rest),
       );
       return deserialize(ResponseModel, data);
     },
@@ -209,6 +213,7 @@ export const ClubService = () => {
       const updatedUser = {
         ...oldUser,
         ...variables,
+        email: variables.emailId,
       };
       localStorageHelper.setItem(LocalStorageKeys.USER, updatedUser);
     },
