@@ -6,4 +6,5 @@ export enum DateUnit {
   HOUR = "hour",
   MINUTE = "minute",
   SECOND = "second",
+  DAYS = "days",
 }
