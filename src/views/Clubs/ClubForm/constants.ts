@@ -27,6 +27,8 @@ export const labels = {
   primaryPhone: "Phone Number",
 
   notesDescription: "Notes Description",
+
+  clubLogo: "Club Logo",
 };
 
 export const placeholders = {
