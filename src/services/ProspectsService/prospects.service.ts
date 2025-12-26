@@ -38,9 +38,8 @@ const {
 const { ADD_PROSPECT, EDIT_PROSPECT, DELETE_PROSPECT, CONVERT_TO_MEMBER } =
   MutationKeys;
 
-const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
-
 export const ProspectsService = () => {
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
   const queryClient = useQueryClient();
   const getProspects = (
     params: ProspectsListingParams = new ProspectsListingParams(),
