@@ -171,6 +171,7 @@ const BookMeeting = ({
                   }
                 >
                   <PaginatedDropdown
+                    key={String(selectedType)}
                     name={NAME.name}
                     label={NAME.label}
                     placeholder={
