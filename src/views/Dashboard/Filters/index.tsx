@@ -20,6 +20,7 @@ import {
 import { useDashboardFilters } from "src/context/DashboardFiltersContext";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+import { mapChartOptions } from "src/shared/utils/helpers";
 
 import styles from "./chartFilters.module.scss";
 
@@ -31,6 +32,7 @@ const ChartFilters = (props: ChartFilterProps) => {
     setChartFilter,
     closeFilterDrawer,
     clearChartFilters,
+    activeFilterChart,
   } = useDashboardFilters();
 
   const existingValues = getChartFilter(chartId);
@@ -139,10 +141,13 @@ const ChartFilters = (props: ChartFilterProps) => {
     salesActivityData,
   };
 
-  const dynamicLabelOptions = useMemo(
-    () => getDynamicLabelOptions(selectedType, optionsBundle),
-    [selectedType, optionsBundle],
-  );
+  const dynamicLabelOptions = useMemo(() => {
+    if (activeFilterChart?.chartValues?.length) {
+      return mapChartOptions(activeFilterChart.chartValues);
+    }
+
+    return getDynamicLabelOptions(selectedType, optionsBundle);
+  }, [selectedType, optionsBundle, activeFilterChart]);
 
   const filterCheckboxesValues = dynamicLabelOptions?.map(
     (option) => option.value,

@@ -68,10 +68,18 @@ export interface DraggableChartCardProps {
   onEdit?: (chartData?: CustomChart) => void;
 }
 
+export interface ChartValues {
+  id?: string;
+  name?: string;
+  label?: string;
+  value?: string;
+}
+
 export interface ChartConfig {
   chartId: string;
   type: XAxisTypes;
   chartName: string;
+  chartValues?: ChartValues[];
 }
 
 // export interface
@@ -99,11 +107,7 @@ export interface DashboardFiltersContextType {
 
   hasActiveFilters: (chartId: string) => boolean;
 
-  activeFilterChart: {
-    chartId: string;
-    type: XAxisTypes;
-    chartName: string;
-  } | null;
+  activeFilterChart: ChartConfig | null;
   openFilterDrawer: (chartConfig: ChartConfig) => void;
   closeFilterDrawer: () => void;
   getChartParams: (chartId: string) => Record<string, any>;
