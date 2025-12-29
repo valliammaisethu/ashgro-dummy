@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Col, Divider, Row } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -11,7 +11,6 @@ import InputField from "src/shared/components/InputField";
 import Form from "src/shared/components/Form";
 import useForm from "src/shared/components/UseForm";
 import Modal from "src/shared/components/Modal";
-import TagInput from "src/shared/components/TagInput";
 import SelectField from "src/shared/components/SelectField";
 import { CustomChart } from "src/models/chart.model";
 import { DashboardService } from "src/services/DashboardService/dashboard.service";
@@ -66,8 +65,13 @@ const CustomChartForm = (props: CustomChartProps) => {
   // TODO: TO move to constants
   const selectedType = watch("type");
 
-  const { data: chartValuesData, isFetching } = useQuery(
+  const { data: chartValuesData = [], isFetching } = useQuery(
     getChartValues(selectedType),
+  );
+
+  const memoizedChartOptions = useMemo(
+    () => chartValuesData,
+    [chartValuesData],
   );
 
   // TODO: TO move to constants
@@ -116,12 +120,13 @@ const CustomChartForm = (props: CustomChartProps) => {
             />
           </Col>
           <Col span={12}>
-            <TagInput
+            <SelectField
               required
+              showCheckboxes
               label={labels.xAxis}
               placeholder={placeholders.xAxis}
               name={fields.values}
-              options={chartValuesData}
+              options={memoizedChartOptions}
               loading={isFetching}
               disabled={!selectedType}
             />

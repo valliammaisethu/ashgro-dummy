@@ -15,7 +15,7 @@ import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { generateChartPaths } from "src/views/Dashboard/utils/chartUtils";
 import { DashboardStats } from "src/models/dashboardStats.model";
-import { CustomChart } from "src/models/chart.model";
+import { CustomChart, CustomChartAvailability } from "src/models/chart.model";
 import { renderNotification } from "src/shared/utils/renderNotification";
 import {
   ReorderChartsPayload,
@@ -87,7 +87,7 @@ export const DashboardService = () => {
   });
 
   const canCreateCustomChart = (): UseMutationOptions<
-    ResponseModel,
+    CustomChartAvailability,
     ResponseModel
   > => ({
     mutationKey: [CAN_CREATE_CUSTOM_CHART],
@@ -95,7 +95,7 @@ export const DashboardService = () => {
       const response = await axiosInstance.get(
         generatePath(CAN_CREATE_CUSTOM_CHART_ROUTE, { id: clubId }),
       );
-      return deserialize(ResponseModel, response?.data);
+      return deserialize(CustomChartAvailability, response?.data);
     },
   });
 

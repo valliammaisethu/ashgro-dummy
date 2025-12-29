@@ -8,6 +8,7 @@ import AddUserButton from "src/shared/components/atoms/Buttons/AddUserButton";
 import { Buttons } from "src/enums/buttons.enum";
 import { MembersHeaderProps } from "src/shared/types/members.type";
 import { importMembers } from "../constant";
+import { AuthContext } from "src/context/AuthContext";
 
 import styles from "../members.module.scss";
 
@@ -22,6 +23,10 @@ const Header = ({
   filtersActive,
   isCheckingImportStatus,
 }: MembersHeaderProps) => {
+  const { user } = AuthContext();
+
+  const isBulkEmailEnabled = user?.isBulkEmail;
+
   return (
     <div className={styles.header}>
       <SearchField
@@ -41,7 +46,7 @@ const Header = ({
         )}
         <BulkMailButton
           onClick={onBulkMail}
-          disabled={!selectedEmails}
+          disabled={!selectedEmails || !isBulkEmailEnabled}
           loading={!!selectedEmails && isCheckingImportStatus}
         />
         {!selectedEmails && (
