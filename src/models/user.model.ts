@@ -38,6 +38,9 @@ export class UserData {
 
   @serializable
   profilePicUrl?: string;
+
+  @serializable
+  contactNumber?: string;
 }
 
 export class TokenData {

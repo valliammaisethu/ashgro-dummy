@@ -84,13 +84,16 @@ const MemberFilters = (props: MemberFiltersProps) => {
 
   const handleClear = (field: string) => () => setValue(field, []);
 
-  const resetValues = () =>
-    reset({
+  const resetValues = () => {
+    const clearedValues = {
       [fields.followUpDateRange]: [],
       [fields.membershipStatusIds]: [],
       [fields.membershipCategoriesIds]: [],
       [fields.leadSource]: [],
-    });
+    };
+    reset(clearedValues);
+    onSubmit(clearedValues);
+  };
 
   return (
     <Drawer
@@ -99,6 +102,7 @@ const MemberFilters = (props: MemberFiltersProps) => {
       open={visible}
       closable
       onClose={toggleVisibility}
+      footer={[]}
     >
       <div className={styles.body}>
         <Form onSubmit={handleSubmit} methods={methods}>
