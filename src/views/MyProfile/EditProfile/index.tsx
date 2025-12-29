@@ -16,7 +16,7 @@ import { Buttons } from "src/enums/buttons.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { useMutation } from "@tanstack/react-query";
 import { ClubService } from "src/services/ClubService/club.service";
-import { stripPhoneCode } from "src/shared/utils/parser";
+import { formatPhone, stripPhoneCode } from "src/shared/utils/parser";
 import { editProfileValidation } from "./validation";
 import { ProfileDetails } from "src/models/profile.model";
 
@@ -79,7 +79,7 @@ const EditProfile = (props: EditProfileProps) => {
         [firstNameName]: user?.firstName,
         [lastNameName]: user?.lastName,
         [emailName]: user?.email,
-        [phoneNumberName]: user?.contactNumber,
+        [phoneNumberName]: formatPhone(user?.contactNumber),
         [attachmentId]: user?.attachmentId,
       });
     } else {

@@ -25,15 +25,17 @@ const IndividualDetailsHeader = ({
     <div className={styles.header}>
       <div className={styles.leftSide}>{navigateBack && <BackButton />}</div>
       <div className={styles.rightSide}>
-        <Button
-          tooltip={{
-            title: headerConstants.bookAMeeting,
-          }}
-          className={styles.meetingButton}
-          onClick={onBookMeeting}
-        >
-          <IconCalendarSelectedDate />
-        </Button>
+        {onBookMeeting && (
+          <Button
+            tooltip={{
+              title: headerConstants.bookAMeeting,
+            }}
+            className={styles.meetingButton}
+            onClick={onBookMeeting}
+          >
+            <IconCalendarSelectedDate />
+          </Button>
+        )}
         {onEmailClick && (
           <Button
             icon={<IconEmail strokeWidth={1.5} />}

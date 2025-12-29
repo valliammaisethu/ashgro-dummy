@@ -32,6 +32,7 @@ import {
   getDashboardStatsValues,
   dropAnimationConfig,
   CHART_CONSTANTS,
+  chartLimitErrorMessages,
 } from "./constants";
 import { ChartItem } from "src/models/dashboard.model";
 import DraggableChartCard from "./components/DraggableChartCard";
@@ -40,8 +41,11 @@ import DateRangeButton from "./components/DateRangeButton";
 import { DateRange } from "src/shared/types/dashboard.type";
 
 import styles from "./dashboard.module.scss";
+import { renderNotification } from "src/shared/utils/renderNotification";
+import { NotificationTypes } from "src/enums/notificationTypes";
 
 const { DASHBOARD_STATS_ID } = CHART_CONSTANTS;
+const { TITLE, DESCRIPTION } = chartLimitErrorMessages;
 
 const Dashboard = () => {
   const { isClubAdmin, isSuperAdmin } = useUserRole();
@@ -102,11 +106,15 @@ const Dashboard = () => {
 
   const handleChartForm = () => {
     canCreateCustomChartMutate(undefined, {
-      onSuccess: () => {
-        setChartState((prev) => ({
-          ...prev,
-          chartFormOpen: !prev.chartFormOpen,
-        }));
+      onSuccess: (response) => {
+        if (response?.data?.success) {
+          setChartState((prev) => ({
+            ...prev,
+            chartFormOpen: !prev.chartFormOpen,
+          }));
+        } else {
+          renderNotification(TITLE, DESCRIPTION, NotificationTypes.ERROR);
+        }
       },
     });
   };

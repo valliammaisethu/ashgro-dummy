@@ -146,6 +146,7 @@ const MembersShip = () => {
               loading={isDeletePending}
               deleteTitle={isMemberShipTypeSelected ? TYPE : STATUS}
               deleteDescription={item.label!}
+              color={item?.color}
             />
           ))}
         </div>

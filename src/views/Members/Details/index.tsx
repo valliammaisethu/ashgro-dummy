@@ -235,10 +235,6 @@ const Details = () => {
                       icon={IconLocationMarker}
                       label={data?.residentialAddress}
                     />
-                    <IconLabel
-                      icon={IconLocationMarker}
-                      label={data?.residentialAddress}
-                    />
                     <div className={styles.basicFooterInfo}>
                       <IconLabel icon={IconEmail} label={data?.email} isEmail />
                       <IconLabel

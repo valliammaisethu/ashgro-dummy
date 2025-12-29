@@ -9,4 +9,8 @@ export class LeadSources {
 
   @serializable(alias("id"))
   value?: string;
+
+  // TODO: use common model and make changes across settings page
+  @serializable
+  color?: string;
 }

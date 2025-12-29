@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import { Col, Row } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
-import { IconCircleClose } from "obra-icons-react";
 import { useParams } from "react-router-dom";
 
 import logo from "src/assets/images/logo.webp";
@@ -25,7 +24,6 @@ import TextArea from "src/shared/components/TextArea";
 import { leadFormValidationSchema } from "./validationSchema";
 import { LEAD_FORM_CONSTANTS } from "./constants";
 import Button from "src/shared/components/Button";
-import { Colors } from "src/enums/colors.enum";
 import { ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { TriggerType } from "src/enums/formModes.enum";
 import { LeadFormData } from "src/models/leadForm.model";
@@ -50,7 +48,7 @@ const LeadForm = () => {
   const {
     setError,
     clearErrors,
-    formState: { isValid, errors },
+    formState: { isValid },
     reset,
   } = methods;
 
@@ -128,13 +126,6 @@ const LeadForm = () => {
         <div className={styles.formCard}>
           <div className={styles.formHeader}>
             <h1 className={styles.formTitle}>{TITLE}</h1>
-
-            <IconCircleClose
-              size={30}
-              color={Colors.ASHGRO_GOLD}
-              strokeWidth={1.5}
-              className={styles.closeButton}
-            />
           </div>
 
           <Form onSubmit={handleFormSubmit} methods={methods}>

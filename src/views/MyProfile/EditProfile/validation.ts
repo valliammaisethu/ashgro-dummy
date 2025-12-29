@@ -37,7 +37,9 @@ export const editProfileValidation = Yup.object({
   countryCode: Yup.string().nullable(),
   profilePicture: Yup.string().nullable(),
   address: Yup.string().nullable(),
-  contactNumber: Yup.string().nullable().matches(REGEX.DIGITS, PHONE_NUMBER),
+  contactNumber: Yup.string()
+    .nullable()
+    .matches(REGEX.PHONE_NUMBER, PHONE_NUMBER),
   attachmentId: Yup.string().nullable(),
   emailId: Yup.string().nullable(),
   id: Yup.string().nullable(),

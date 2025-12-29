@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Col, Divider, Row } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -65,8 +65,13 @@ const CustomChartForm = (props: CustomChartProps) => {
   // TODO: TO move to constants
   const selectedType = watch("type");
 
-  const { data: chartValuesData, isFetching } = useQuery(
+  const { data: chartValuesData = [], isFetching } = useQuery(
     getChartValues(selectedType),
+  );
+
+  const memoizedChartOptions = useMemo(
+    () => chartValuesData,
+    [chartValuesData],
   );
 
   // TODO: TO move to constants
@@ -121,7 +126,7 @@ const CustomChartForm = (props: CustomChartProps) => {
               label={labels.xAxis}
               placeholder={placeholders.xAxis}
               name={fields.values}
-              options={chartValuesData}
+              options={memoizedChartOptions}
               loading={isFetching}
               disabled={!selectedType}
             />

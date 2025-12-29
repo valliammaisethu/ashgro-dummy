@@ -40,6 +40,9 @@ export class UserData {
   profilePicUrl?: string;
 
   @serializable
+  contactNumber?: string;
+
+  @serializable
   chatbotEnabled?: boolean;
 
   @serializable
