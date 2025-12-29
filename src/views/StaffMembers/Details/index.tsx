@@ -19,6 +19,7 @@ import ImageFrame from "src/shared/components/atoms/ImageFrame";
 import { StaffMembersService } from "src/services/StaffMembersService/staffMembers.service";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { getFullName } from "src/shared/utils/helpers";
+import { formatDateValue } from "src/shared/utils/dateUtils";
 import { Colors } from "src/enums/colors.enum";
 import { footerLabels } from "./constants";
 import { Justify } from "src/enums/align.enum";
@@ -49,8 +50,11 @@ const Details = () => {
   const footer = [
     { label: department, value: data?.staffDepartment },
     { label: title, value: data?.title },
-    { label: workAnniversary, value: data?.workAnniversaryDate },
-    { label: birthData, value: data?.birthDate },
+    {
+      label: workAnniversary,
+      value: formatDateValue(data?.workAnniversaryDate),
+    },
+    { label: birthData, value: formatDateValue(data?.birthDate) },
   ];
 
   const handleModalVisibility = () => setIsEditForm((prev) => !prev);

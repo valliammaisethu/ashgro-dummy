@@ -12,6 +12,9 @@ export class BaseSettingsModel {
 export class LeadStatus extends BaseSettingsModel {
   @serializable(alias("statusName"))
   label?: string;
+
+  @serializable
+  color?: string;
 }
 
 export class StaffMemberSettings extends BaseSettingsModel {
