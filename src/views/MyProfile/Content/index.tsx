@@ -12,6 +12,7 @@ import Button from "src/shared/components/Button";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { AttachmentService } from "src/services/AttachmentService/attachment.service";
 import { getFullName } from "src/shared/utils/helpers";
+import { formatPhone } from "src/shared/utils/parser";
 import { myProfileConstants, ModalType } from "../constants";
 import { MyProfileContentProps } from "src/shared/types/myProfile.type";
 
@@ -60,7 +61,7 @@ export const MyProfileContent = (props: MyProfileContentProps) => {
         </div>
         <div className={styles.phone}>
           <IconCall size={16} color={Colors.ASHGRO_GOLD} />
-          {user?.phone}
+          +1 {formatPhone(user?.contactNumber)}
         </div>
         <Divider className={styles.divider} />
         <div className={styles.buttons}>

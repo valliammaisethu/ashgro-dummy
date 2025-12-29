@@ -12,7 +12,7 @@ export class MembersListingParams extends QueryParams {
   membershipCategoriesIds?: string[];
 
   @serializable(list(primitive()))
-  leadSourcesIds?: string[];
+  leadSourceIds?: string[];
 
   @serializable
   joinedStartDate?: string;
