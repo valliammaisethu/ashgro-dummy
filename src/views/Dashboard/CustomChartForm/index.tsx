@@ -11,7 +11,6 @@ import InputField from "src/shared/components/InputField";
 import Form from "src/shared/components/Form";
 import useForm from "src/shared/components/UseForm";
 import Modal from "src/shared/components/Modal";
-import TagInput from "src/shared/components/TagInput";
 import SelectField from "src/shared/components/SelectField";
 import { CustomChart } from "src/models/chart.model";
 import { DashboardService } from "src/services/DashboardService/dashboard.service";
@@ -116,8 +115,9 @@ const CustomChartForm = (props: CustomChartProps) => {
             />
           </Col>
           <Col span={12}>
-            <TagInput
+            <SelectField
               required
+              showCheckboxes
               label={labels.xAxis}
               placeholder={placeholders.xAxis}
               name={fields.values}

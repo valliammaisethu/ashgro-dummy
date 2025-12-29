@@ -8,6 +8,7 @@ import ClearSelectionButton from "src/shared/components/atoms/Buttons/ClearSelec
 import AddUserButton from "src/shared/components/atoms/Buttons/AddUserButton";
 import { ProspectListingHeaderProps } from "src/shared/types/prospects.type";
 import { bulkImportProspects } from "../constants";
+import { AuthContext } from "src/context/AuthContext";
 
 import styles from "../listing.module.scss";
 
@@ -22,6 +23,10 @@ const Header = ({
   selectedEmails,
   isCheckingImportStatus,
 }: ProspectListingHeaderProps) => {
+  const { user } = AuthContext();
+
+  const isBulkEmailEnabled = user?.isBulkEmail;
+
   return (
     <div className={styles.header}>
       <SearchField
@@ -39,7 +44,11 @@ const Header = ({
             loading={isCheckingImportStatus}
           />
         )}
-        <BulkMailButton onClick={onBulkMail} disabled={!selectedEmails} />
+
+        <BulkMailButton
+          onClick={onBulkMail}
+          disabled={!selectedEmails || !isBulkEmailEnabled}
+        />
         {!selectedEmails && (
           <AddUserButton onClick={onAddProspect} label={Buttons.ADD_PROSPECT} />
         )}
