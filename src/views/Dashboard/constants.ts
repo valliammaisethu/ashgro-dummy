@@ -65,3 +65,9 @@ export const filterConstants = {
   CLEAR_SELECTION: "Clear Selection",
   DATE_RANGE: 180,
 };
+
+export const chartLimitErrorMessages = {
+  TITLE: "Custom Chart Limit Reached",
+  DESCRIPTION:
+    "You have reached the maximum number of custom charts allowed. Please delete an existing chart to create a new one.",
+};

@@ -38,6 +38,15 @@ export class UserData {
 
   @serializable
   profilePicUrl?: string;
+
+  @serializable
+  contactNumber?: string;
+
+  @serializable
+  chatbotEnabled?: boolean;
+
+  @serializable
+  isBulkEmail?: boolean;
 }
 
 export class TokenData {

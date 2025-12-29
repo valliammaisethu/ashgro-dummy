@@ -1,4 +1,7 @@
+import { AsYouType } from "libphonenumber-js";
+
 import { REGEX } from "../../constants/regex";
+import { COUNTRIES } from "src/enums/countryCodes.enum";
 
 export const parseNumber = (val: unknown, defaultValue = 0) => {
   const num = Number(val);
@@ -54,3 +57,8 @@ export const getInitials = (name?: string): string => {
 
 export const isObjectEmpty = (obj: { [key: string]: string } | null) =>
   !obj || Object.values(obj).every((v) => v === "");
+
+export const formatPhone = (contactNumber?: string) => {
+  if (!contactNumber) return "";
+  return new AsYouType(COUNTRIES.US).input(contactNumber);
+};

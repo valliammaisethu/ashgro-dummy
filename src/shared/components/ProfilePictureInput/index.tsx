@@ -47,9 +47,11 @@ const ProfilePictureInput = ({
     getAttachmentPreview(attachmentId),
   );
 
+  // TODO: To optimize during revamp
   useEffect(() => {
-    if (field.value && !attachmentId) setAttachmentId(field.value);
-  }, [field.value, attachmentId]);
+    setAttachmentId(field.value || "");
+    if (!field.value) setPreview(null);
+  }, [field.value]);
 
   useEffect(() => {
     if (previewUrl) setPreview(previewUrl);

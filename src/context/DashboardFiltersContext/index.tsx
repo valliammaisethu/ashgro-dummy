@@ -106,8 +106,13 @@ export const DashboardFiltersProvider = ({
     return !!(hasDate || hasValues);
   };
 
-  const openFilterDrawer = ({ chartId, type, chartName }: ChartConfig) =>
-    setActiveFilterChart({ chartId, type, chartName });
+  const openFilterDrawer = ({
+    chartId,
+    type,
+    chartName,
+    chartValues,
+  }: ChartConfig) =>
+    setActiveFilterChart({ chartId, type, chartName, chartValues });
 
   const closeFilterDrawer = () => setActiveFilterChart(null);
 

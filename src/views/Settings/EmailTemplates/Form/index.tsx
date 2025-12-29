@@ -1,5 +1,5 @@
 import { Col, Row } from "antd";
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import FileUpload from "src/shared/components/FileUpload";
 import Form from "src/shared/components/Form";
@@ -7,14 +7,17 @@ import InputField from "src/shared/components/InputField";
 import TextArea from "src/shared/components/TextArea";
 import { EMAIL_TEMPLATE_CONSTANTS } from "../../constants";
 import styles from "../../settings.module.scss";
+import emailStyles from "../../../Email/email.module.scss";
 import Button from "src/shared/components/Button";
-import { HtmlButtonType } from "src/enums/buttons.enum";
+import { Buttons, ButtonTypes, HtmlButtonType } from "src/enums/buttons.enum";
 import { addEmailTemplateValidation } from "./validation";
 import { maxFileSizeTextDescription } from "src/constants/sharedComponents";
 import { EmailTemplateService } from "src/services/SettingsService/emailTemplate.service";
 import { EmailTemplate } from "src/models/meta.model";
 import useForm from "src/shared/components/UseForm";
 import { UploadedFile } from "src/shared/types/sharedComponents.type";
+import { nameTemplate } from "src/views/Email/NewEmailModal/constants";
+import { stopPropagation } from "src/shared/utils/eventUtils";
 
 interface EmailTemplateFormProps {
   onClose: () => void;
@@ -29,6 +32,8 @@ const EmailTemplateForm = ({
     EMAIL_TEMPLATE_CONSTANTS;
 
   const isEditMode = !!selectedTemplate;
+
+  const bodyRef = useRef<HTMLTextAreaElement | null>(null);
 
   const { getEmailTemplate, emailTemplateOperations } = EmailTemplateService();
 
@@ -65,9 +70,40 @@ const EmailTemplateForm = ({
     },
   });
 
+  const { setValue } = methods;
+
   const { mutateAsync: saveTemplate, isPending } = useMutation(
     emailTemplateOperations(),
   );
+
+  // TODO: TO optimize the funtion and use common function for template creation and template selection in Prospects and Members
+  const onAddNameMouseDown = (e: React.MouseEvent) => e.preventDefault();
+
+  const handleAddName = (e: React.MouseEvent) => {
+    stopPropagation(e);
+    const textarea = bodyRef.current;
+    if (!textarea) return;
+
+    const currentValue = textarea.value;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    const body =
+      currentValue.substring(0, start) +
+      nameTemplate +
+      currentValue.substring(end);
+
+    setValue("body", body, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+
+    requestAnimationFrame(() => {
+      const pos = start + nameTemplate.length;
+      textarea.setSelectionRange(pos, pos);
+      textarea.focus();
+    });
+  };
 
   const handleSubmit = async (data: {
     title: string;
@@ -109,14 +145,26 @@ const EmailTemplateForm = ({
             required
           />
         </Col>
-        <Col span={24}>
-          <TextArea
-            name={FIELDS.EMAIL_BODY}
-            label={LABELS.EMAIL_BODY}
-            placeholder={PLACEHOLDERS.EMAIL_BODY}
-            required
-            className={styles.emailBodyInput}
-          />
+        <Col className={emailStyles.emailBodyContainer} span={24}>
+          <Col className={emailStyles.addNameContainer}>
+            <Button
+              onMouseDown={onAddNameMouseDown}
+              type={ButtonTypes.LINK}
+              onClick={(e) => handleAddName(e)}
+            >
+              {Buttons.ADD_NAME}
+            </Button>
+          </Col>
+          <Col span={24}>
+            <TextArea
+              name={FIELDS.EMAIL_BODY}
+              label={LABELS.EMAIL_BODY}
+              placeholder={PLACEHOLDERS.EMAIL_BODY}
+              required
+              className={styles.emailBodyInput}
+              ref={bodyRef}
+            />
+          </Col>
         </Col>
         <Col span={24}>
           <FileUpload

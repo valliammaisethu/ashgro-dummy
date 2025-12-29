@@ -6,7 +6,7 @@ export const fields = {
   followUpDateRange: "followUpDateRange",
   membershipStatusIds: "membershipStatusIds",
   membershipCategoriesIds: "membershipCategoriesIds",
-  leadSource: "leadSourceIds",
+  leadSource: "leadSourcesIds",
 };
 
 export const labels = {

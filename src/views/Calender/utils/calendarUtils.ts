@@ -6,11 +6,12 @@ import { DateFormats } from "src/enums/dateFormats.enum";
 import { DateUnit } from "src/enums/dateUnit.enum";
 import { CalendarEventsAndSlots } from "src/models/calender.model";
 import { CalendarEvent } from "src/shared/types/calender";
+import { formatDateValue } from "src/shared/utils/dateUtils";
 import { BOOK_MEETING_FIELDS } from "../BookMeeting/constants";
 
 const { NAME, SLOT_DATE, MEETING_TIME, TYPE } = BOOK_MEETING_FIELDS;
 
-const { HH_MM_A, YYYY_MM_DD } = DateFormats;
+const { HH_MM_A, DD_MMM__YYYY, DD_MMM_YYYY } = DateFormats;
 const { DAY } = DateUnit;
 const { CHATBOT } = SLOT_TYPE;
 const { BOOKED } = SLOT_STATUS;
@@ -87,6 +88,7 @@ export const mapCalendarDaysToEvents = (
           title,
           start: dayjs(`${date} ${startTime}`).toDate(),
           end: dayjs(`${date} ${endTime}`).toDate(),
+          date: dayjs(date).toDate(),
           resource: {
             chatbot: slotType === CHATBOT,
             status,
@@ -115,30 +117,14 @@ export const getMeetingDefaultValues = (
   calendarEvent?: CalendarEvent | null,
   selectedDate?: Date | null,
 ) => {
-  const {
-    id,
-    title = "",
-    start = "",
-    end = "",
-    date = "",
-    resource = {},
-  } = calendarEvent || {};
-  const {
-    bookedUserType = "",
-    bookedUserId = "",
-    bookedUserName = "",
-  } = resource;
-
-  // For new bookings, default to today's date if no date is provided
-  const defaultDate = selectedDate ?? new Date();
+  const { id, title, start, end, date, resource } = calendarEvent || {};
+  const { bookedUserType = "", bookedUserId = "" } = resource || {};
 
   return {
     title: calendarEvent?.id ? String(title) : "",
     [TYPE.name]: bookedUserType,
     [NAME.name]: bookedUserId,
-    [SLOT_DATE.name]: id
-      ? dayjs(date).format(YYYY_MM_DD)
-      : dayjs(defaultDate).format(YYYY_MM_DD),
+    [SLOT_DATE.name]: formatDateValue(id ? date : selectedDate, DD_MMM_YYYY),
     [MEETING_TIME.name]: {
       startTime: id ? dayjs(start).format(HH_MM_A) : "",
       endTime: id ? dayjs(end).format(HH_MM_A) : "",

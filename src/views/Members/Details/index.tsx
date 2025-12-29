@@ -16,7 +16,7 @@ import Button from "src/shared/components/Button";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import DeleteModal from "src/shared/components/DeleteModal";
 import IndividualDetailsHeader from "src/shared/components/IndividualDetailsHeader";
-import { getFullName } from "src/shared/utils/helpers";
+import { formatCurrency, getFullName } from "src/shared/utils/helpers";
 import { MembersService } from "src/services/MembersService/members.service";
 import ActivitySection from "./ActivitySection";
 import ImageFrame from "src/shared/components/atoms/ImageFrame";
@@ -45,8 +45,6 @@ import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import TemplateModal from "src/views/Email/TemplateModal";
 import StatusDropdown from "src/shared/components/StatusDropdown";
 import BookMeeting from "src/views/Calender/BookMeeting";
-import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
-import { CommonSeparators } from "src/enums/commonSeparators.enum";
 
 const {
   footer: {
@@ -235,10 +233,6 @@ const Details = () => {
                       icon={IconLocationMarker}
                       label={data?.residentialAddress}
                     />
-                    <IconLabel
-                      icon={IconLocationMarker}
-                      label={data?.residentialAddress}
-                    />
                     <div className={styles.basicFooterInfo}>
                       <IconLabel icon={IconEmail} label={data?.email} isEmail />
                       <IconLabel
@@ -283,12 +277,7 @@ const Details = () => {
                       <div key={label}>
                         <p className={styles.title}>{label}</p>
                         <p className={styles.description}>
-                          <ConditionalRenderComponent
-                            visible={!!value}
-                            fallback={CommonSeparators.DASH}
-                          >
-                            {`$ ${value}`}
-                          </ConditionalRenderComponent>
+                          {formatCurrency(value)}
                         </p>
                       </div>
                     ))}

@@ -6,6 +6,8 @@ import { localStorageHelper } from "./localStorageHelper";
 import { RcFile } from "antd/es/upload";
 import { CONTENT_TYPES } from "src/enums/contentTypes.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
+import { empty } from "src/constants/sharedComponents";
+import { ChartValues } from "../types/dashboard.type";
 
 export const clearAuthData = () => {
   localStorageHelper.removeItem(LocalStorageKeys.USER);
@@ -26,11 +28,11 @@ export const getInitials = (firstName = "", lastName = ""): string =>
   (firstName[0] ?? "").toUpperCase() + (lastName[0] ?? "").toUpperCase();
 
 export const formatCurrency = (
-  amount: number | string,
+  amount?: number | string | null,
   currencySymbol: string = "$",
   showDecimals: boolean = false,
 ): string => {
-  if (!amount) return "N/A";
+  if (amount == null || amount === "") return empty;
   const numAmount = Number(amount);
   const formattedAmount = showDecimals
     ? numAmount.toLocaleString("en-US", {
@@ -113,3 +115,9 @@ export const getCalendarMonthFromQuery = (search: string) => {
   const query = queryString.parse(search);
   return (query?.month as string) || dayjs().format(DateFormats.YYYY_MM);
 };
+
+export const mapChartOptions = (options: ChartValues[] = []) =>
+  options.map(({ id = "", name = "" }) => ({
+    value: id,
+    label: name,
+  }));
