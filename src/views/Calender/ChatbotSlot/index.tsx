@@ -20,6 +20,7 @@ import {
   getOccupiedRangesForIndex,
   initialChatbotSlots,
 } from "src/shared/utils/timeRange";
+import { disablePastDates } from "src/shared/utils/dateUtils";
 import { ChatbotSlotProps } from "src/shared/types/calender";
 import { CalenderService } from "src/services/Calender/calender.service";
 import { ChatbotSlotPayload } from "src/models/calender.model";
@@ -158,6 +159,7 @@ const ChatbotSlot = ({
                 placeholder={DATE_FROM}
                 label={FROM_DATE_LABEL}
                 name={FROM_DATE}
+                disabledDate={disablePastDates}
               />
             </Col>
 
@@ -166,6 +168,7 @@ const ChatbotSlot = ({
                 placeholder={DATE_TO}
                 label={TO_DATE_LABEL}
                 name={TO_DATE}
+                disabledDate={disablePastDates}
               />
             </Col>
           </Row>

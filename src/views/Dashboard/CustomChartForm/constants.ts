@@ -14,6 +14,7 @@ export const chartConfig = {
     xAxis: "xAxis",
     values: "values",
     type: "type",
+    empty: "",
   },
 
   placeholders: {

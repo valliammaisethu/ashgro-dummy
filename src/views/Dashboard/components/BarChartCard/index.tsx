@@ -96,6 +96,7 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
       name,
       type,
       values: values?.map((item) => item.id) || [],
+      path,
     };
 
     onEdit?.(formattedData);

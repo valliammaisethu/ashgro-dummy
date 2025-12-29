@@ -41,6 +41,7 @@ import {
   areFiltersActive,
 } from "./helpers";
 import Header from "./Header";
+import { LeadService } from "src/services/SettingsService/lead.service";
 
 import styles from "./listing.module.scss";
 
@@ -69,7 +70,9 @@ const ProspectsListing = () => {
   const { checkBulkImportStatus } = BulkUploadService();
 
   const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
-  const { data: leadStatusesData } = useQuery(getLeadStatuses());
+
+  const { leadStatusList } = LeadService();
+  const { data: leadStatusesData = [] } = useQuery(leadStatusList());
 
   const { data: emailRecipientsData } = useQuery({
     ...getProspectEmailRecipients(queryParams),
@@ -94,7 +97,11 @@ const ProspectsListing = () => {
     });
 
   const leadStatusOptions = useMemo(
-    () => leadStatusesData?.leadStatuses,
+    () =>
+      leadStatusesData?.map((status) => ({
+        ...status,
+        statusName: status?.label,
+      })),
     [leadStatusesData],
   );
 

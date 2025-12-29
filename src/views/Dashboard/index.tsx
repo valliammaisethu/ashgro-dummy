@@ -209,94 +209,96 @@ const Dashboard = () => {
   }, [dashboardCharts]);
 
   return (
-    <div className={styles.dashboardContainer}>
+    <>
       <DashboardHeader
         loading={canCreateChartLoading}
         onAddChart={handleChartForm}
       />
-      <ConditionalRenderComponent visible={isSuperAdmin} hideFallback>
-        <div className={styles.superAdminDashboard}>
-          <div className={styles.dateRangeContainer}>
-            <DateRangeButton
-              value={dashboardStatsDateRange}
-              onChange={handleDateRangeChange}
-            />
-          </div>
-          <div className={styles.statsContainer}>
-            {getDashboardStatsValues(dashboardStats)?.map(
-              ({ label, value }, index) => (
-                <StatsCard key={index} title={label} value={value} />
-              ),
-            )}
-          </div>
-        </div>
-      </ConditionalRenderComponent>
-      <ConditionalRenderComponent
-        visible={chartState.chartFormOpen}
-        hideFallback
-      >
-        <CustomChartForm
-          onClose={closeChartForm}
-          open={chartState.chartFormOpen}
-          formValues={chartFormValues}
-        />
-      </ConditionalRenderComponent>
-
-      <ConditionalRender
-        records={orderedCharts}
-        isPending={isClubAdmin ? isLoading : false}
-        isSuccess={isClubAdmin ? isSuccess : true}
-      >
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-          onDragCancel={handleDragCancel}
-        >
-          <div className={styles.chartsGrid}>
-            {orderedCharts?.map((chart) => (
-              <DraggableChartCard
-                key={chart.id}
-                chart={chart}
-                onEdit={handleChartEdit}
+      <div className={styles.dashboardContainer}>
+        <ConditionalRenderComponent visible={isSuperAdmin} hideFallback>
+          <div className={styles.superAdminDashboard}>
+            <div className={styles.dateRangeContainer}>
+              <DateRangeButton
+                value={dashboardStatsDateRange}
+                onChange={handleDateRangeChange}
               />
-            ))}
+            </div>
+            <div className={styles.statsContainer}>
+              {getDashboardStatsValues(dashboardStats)?.map(
+                ({ label, value }, index) => (
+                  <StatsCard key={index} title={label} value={value} />
+                ),
+              )}
+            </div>
           </div>
+        </ConditionalRenderComponent>
+        <ConditionalRenderComponent
+          visible={chartState.chartFormOpen}
+          hideFallback
+        >
+          <CustomChartForm
+            onClose={closeChartForm}
+            open={chartState.chartFormOpen}
+            formValues={chartFormValues}
+          />
+        </ConditionalRenderComponent>
 
-          <DragOverlay dropAnimation={dropAnimationConfig}>
-            <ConditionalRenderComponent
-              visible={!!activeChart?.id}
-              hideFallback
-            >
-              <div
-                className={styles.dragOverlayCard}
-                style={{
-                  width: activeDragItem?.width
-                    ? `${activeDragItem.width}px`
-                    : "100%",
-                }}
-              >
-                <BarChartCard
-                  key={activeChart?.id}
-                  chart={activeChart}
-                  dragChartProps={{ isDragging: true }}
+        <ConditionalRender
+          records={orderedCharts}
+          isPending={isClubAdmin ? isLoading : false}
+          isSuccess={isClubAdmin ? isSuccess : true}
+        >
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onDragCancel={handleDragCancel}
+          >
+            <div className={styles.chartsGrid}>
+              {orderedCharts?.map((chart) => (
+                <DraggableChartCard
+                  key={chart.id}
+                  chart={chart}
+                  onEdit={handleChartEdit}
                 />
-              </div>
-            </ConditionalRenderComponent>
-          </DragOverlay>
-        </DndContext>
-      </ConditionalRender>
-      <ConditionalRenderComponent visible={!!activeFilterChart} hideFallback>
-        <ChartFilters
-          open={!!activeFilterChart}
-          onClose={closeFilterDrawer}
-          title={`Filters - ${activeFilterChart?.chartName || ""}`}
-          selectedType={activeFilterChart?.type || XAxisTypes.LEAD_SOURCE}
-          chartId={activeFilterChart?.chartId}
-        />
-      </ConditionalRenderComponent>
-    </div>
+              ))}
+            </div>
+
+            <DragOverlay dropAnimation={dropAnimationConfig}>
+              <ConditionalRenderComponent
+                visible={!!activeChart?.id}
+                hideFallback
+              >
+                <div
+                  className={styles.dragOverlayCard}
+                  style={{
+                    width: activeDragItem?.width
+                      ? `${activeDragItem.width}px`
+                      : "100%",
+                  }}
+                >
+                  <BarChartCard
+                    key={activeChart?.id}
+                    chart={activeChart}
+                    dragChartProps={{ isDragging: true }}
+                  />
+                </div>
+              </ConditionalRenderComponent>
+            </DragOverlay>
+          </DndContext>
+        </ConditionalRender>
+        <ConditionalRenderComponent visible={!!activeFilterChart} hideFallback>
+          <ChartFilters
+            open={!!activeFilterChart}
+            onClose={closeFilterDrawer}
+            title={`Filters - ${activeFilterChart?.chartName || ""}`}
+            selectedType={activeFilterChart?.type || XAxisTypes.LEAD_SOURCE}
+            chartId={activeFilterChart?.chartId}
+          />
+        </ConditionalRenderComponent>
+      </div>
+    </>
   );
 };
 

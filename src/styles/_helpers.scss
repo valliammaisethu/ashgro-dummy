@@ -285,3 +285,23 @@
     display: none;
   }
 }
+
+%reducedScrollbarHeight {
+  &::-webkit-scrollbar {
+    height: 0.3rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    pointer-events: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba($ashgro-grey, 0.3);
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba($ashgro-grey, 0.5);
+  }
+}
