@@ -47,6 +47,7 @@ const Header = ({
         <BulkMailButton
           onClick={onBulkMail}
           disabled={!selectedEmails || !isBulkEmailEnabled}
+          loading={!!selectedEmails && isCheckingImportStatus}
         />
         {!selectedEmails && (
           <AddUserButton onClick={onAddMember} label={Buttons.ADD_MEMBER} />
