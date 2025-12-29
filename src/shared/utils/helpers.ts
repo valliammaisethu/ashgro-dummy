@@ -7,6 +7,7 @@ import { RcFile } from "antd/es/upload";
 import { CONTENT_TYPES } from "src/enums/contentTypes.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { empty } from "src/constants/sharedComponents";
+import { ChartValues } from "../types/dashboard.type";
 
 export const clearAuthData = () => {
   localStorageHelper.removeItem(LocalStorageKeys.USER);
@@ -114,3 +115,9 @@ export const getCalendarMonthFromQuery = (search: string) => {
   const query = queryString.parse(search);
   return (query?.month as string) || dayjs().format(DateFormats.YYYY_MM);
 };
+
+export const mapChartOptions = (options: ChartValues[] = []) =>
+  options.map(({ id = "", name = "" }) => ({
+    value: id,
+    label: name,
+  }));

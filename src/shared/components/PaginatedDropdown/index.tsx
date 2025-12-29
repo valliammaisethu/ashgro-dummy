@@ -2,8 +2,11 @@ import React, { useState, useMemo } from "react";
 import {
   useInfiniteQuery,
   UseInfiniteQueryOptions,
+  useQueryClient,
 } from "@tanstack/react-query";
 import { debounce } from "lodash";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 import { QueryParams } from "src/models/queryParams.model";
 import { DEBOUNCE_TIME } from "src/constants/common";
@@ -31,13 +34,15 @@ const PaginatedDropdown = <T extends BaseSettingsModel>({
   params,
   onSearch,
   value,
+  disabled,
   ...props
 }: PaginatedDropdownProps<T>) => {
   const [search, setSearch] = useState("");
+  const queryClient = useQueryClient();
 
-  const { data, isFetching, isFetchingNextPage, fetchNextPage } =
+  const { data, isFetching, isFetchingNextPage, fetchNextPage, refetch } =
     useInfiniteQuery<Response<T>>({
-      enabled,
+      enabled: !disabled,
       initialPageParam: 1,
       queryKey: [...queryKey, search, params],
       queryFn: async ({ pageParam }) =>
@@ -48,6 +53,7 @@ const PaginatedDropdown = <T extends BaseSettingsModel>({
         }),
       getNextPageParam: (lastPage) => lastPage?.meta?.nextPage,
       getPreviousPageParam: (firstPage) => firstPage?.meta?.previousPage,
+      staleTime: 0,
     });
 
   const options = data?.pages?.flatMap((page) => page?.data) || [];
@@ -80,6 +86,7 @@ const PaginatedDropdown = <T extends BaseSettingsModel>({
   const handleClear = () => {
     onSearch?.("");
     setSearch("");
+    refetch();
   };
 
   const showLoading =
@@ -87,7 +94,6 @@ const PaginatedDropdown = <T extends BaseSettingsModel>({
 
   return (
     <SelectField
-      allowClear
       filterOption={false}
       loading={showLoading}
       onClear={handleClear}
@@ -96,6 +102,12 @@ const PaginatedDropdown = <T extends BaseSettingsModel>({
       options={options}
       showSearch
       value={displayValue}
+      paginatedMode
+      disabled={disabled}
+      suffixIcon={
+        <span>{isFetching && <Spin indicator={<LoadingOutlined />} />}</span>
+      }
+      {...(!showLoading && { allowClear: true })}
       {...props}
     />
   );
