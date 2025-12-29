@@ -13,6 +13,7 @@ export interface SettingItem {
   label?: string;
   value?: string;
   name?: string;
+  color?: string;
 }
 
 export interface ModalState {

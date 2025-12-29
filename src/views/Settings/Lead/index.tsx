@@ -148,6 +148,7 @@ const Lead = () => {
               loading={isDeletePending}
               deleteTitle={isSourceSelected ? SOURCE : STATUS}
               deleteDescription={item.label!}
+              color={item?.color}
             />
           ))}
         </div>

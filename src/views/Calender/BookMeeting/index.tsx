@@ -11,6 +11,7 @@ import RadioField from "src/shared/components/RadioField";
 import DatePicker from "src/shared/components/DatePicker";
 import TimeRangePicker from "src/shared/components/TimeRangePicker";
 import {
+  formatDateValue,
   convertTo24hrs,
   disablePastAndFuture180,
 } from "src/shared/utils/dateUtils";
@@ -37,7 +38,7 @@ import styles from "./bookMeeting.module.scss";
 const { TITLE, TYPE, NAME, SLOT_DATE, MEETING_TIME, USER } =
   BOOK_MEETING_FIELDS;
 const { BOOK_MEETING, RESCHEDULE_MEETING, RESCHEDULE_NOW } = BOOK_MEETING_META;
-const { YYYY_MM_DD } = DateFormats;
+const { DD_MMM_YYYY } = DateFormats;
 const { GET_MEMBERS_META_LIST, GET_PROSPECTS_META_LIST } = QueryKeys;
 
 const BookMeeting = ({
@@ -85,7 +86,7 @@ const BookMeeting = ({
 
   const handleFormSubmit = async (data: FieldValues) => {
     const payload = {
-      slotDate: data.slotDate,
+      slotDate: formatDateValue(data.slotDate, DD_MMM_YYYY, true),
       startTime: convertTo24hrs(data.meetingTime.startTime),
       endTime: convertTo24hrs(data.meetingTime.endTime),
     };
@@ -203,10 +204,8 @@ const BookMeeting = ({
               placeholder={SLOT_DATE.placeholder}
               required
               disabledDate={disablePastAndFuture180}
-              format={YYYY_MM_DD}
-              disabled={
-                !!selectedDate || !!calendarEvent?.resource?.bookedUserId
-              }
+              format={DD_MMM_YYYY}
+              disabled={!!selectedDate}
             />
           </Col>
           <Col span={12}>
