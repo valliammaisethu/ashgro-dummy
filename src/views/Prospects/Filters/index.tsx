@@ -68,12 +68,16 @@ const Filters = (props: ProspectFilterProps) => {
 
   const handleSubmit = (values: FieldValues) => onSubmit(values);
 
-  const resetValues = () =>
-    reset({
+  const resetValues = () => {
+    const defaultValues = {
       [fields.followUpDateRange]: [],
       [fields.leadStatus]: [],
       [fields.leadSource]: [],
-    });
+    };
+
+    reset(defaultValues);
+    onSubmit(defaultValues);
+  };
 
   return (
     <Drawer

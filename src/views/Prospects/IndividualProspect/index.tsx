@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useMemo } from "react";
 import { IconDelete, IconEdit } from "obra-icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -19,7 +19,6 @@ import {
 } from "./constants";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import useDrawer from "src/shared/hooks/useDrawer";
-import { MetaService } from "src/services/MetaService/meta.service";
 import DeleteModal from "../DeleteModal";
 
 import MemberConversionModal from "../MemberConversionModal";
@@ -32,6 +31,7 @@ import TemplateModal from "src/views/Email/TemplateModal";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import { EmailTemplate } from "src/models/meta.model";
 import BookMeeting from "src/views/Calender/BookMeeting";
+import { LeadService } from "src/services/SettingsService/lead.service";
 
 import styles from "./individualProspect.module.scss";
 
@@ -46,9 +46,17 @@ const IndividualProspect = () => {
     refetch,
   } = useQuery(viewProspect(id));
 
-  const { getLeadStatuses } = MetaService();
+  const { leadStatusList } = LeadService();
+  const { data: leadStatusesData = [] } = useQuery(leadStatusList());
 
-  const { data: leadStatusOptions } = useQuery(getLeadStatuses());
+  const leadStatusOptions = useMemo(
+    () =>
+      leadStatusesData?.map((status) => ({
+        ...status,
+        statusName: status?.label,
+      })),
+    [leadStatusesData],
+  );
 
   const { mutateAsync: updateProspectMutate, isPending: isUpdatingStatus } =
     useMutation(editProspect());
@@ -89,7 +97,7 @@ const IndividualProspect = () => {
   const handleRefetch = () => refetch();
 
   const handleStatusChange = async (statusName: string) => {
-    const selectedStatus = leadStatusOptions?.leadStatuses?.find(
+    const selectedStatus = leadStatusOptions?.find(
       (status) => status?.id === statusName,
     );
     if (selectedStatus?.id && id) {
@@ -136,7 +144,7 @@ const IndividualProspect = () => {
             <div className={styles.header}>
               <StatusDropdown
                 value={data?.prospect?.leadStatus}
-                options={leadStatusOptions?.leadStatuses || []}
+                options={leadStatusOptions}
                 onChange={handleStatusChange}
                 loading={isUpdatingStatus}
               />

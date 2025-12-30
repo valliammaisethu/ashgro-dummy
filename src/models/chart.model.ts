@@ -17,6 +17,9 @@ export class CustomChart {
 
   @serializable
   type?: string;
+
+  @serializable
+  path?: string;
 }
 
 class AvailabilityData {
