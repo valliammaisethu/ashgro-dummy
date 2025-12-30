@@ -16,7 +16,7 @@ import Button from "src/shared/components/Button";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import DeleteModal from "src/shared/components/DeleteModal";
 import IndividualDetailsHeader from "src/shared/components/IndividualDetailsHeader";
-import { getFullName } from "src/shared/utils/helpers";
+import { formatCurrency, getFullName } from "src/shared/utils/helpers";
 import { MembersService } from "src/services/MembersService/members.service";
 import ActivitySection from "./ActivitySection";
 import ImageFrame from "src/shared/components/atoms/ImageFrame";
@@ -44,6 +44,7 @@ import { EmailTemplate } from "src/models/meta.model";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import TemplateModal from "src/views/Email/TemplateModal";
 import StatusDropdown from "src/shared/components/StatusDropdown";
+import BookMeeting from "src/views/Calender/BookMeeting";
 
 const {
   footer: {
@@ -71,8 +72,10 @@ const Details = () => {
   const queryClient = useQueryClient();
 
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
-
+  // TODO : Rename useDrawer
   const { visible: emailModalVisible, toggleVisibility: toggleEmailModal } =
+    useDrawer();
+  const { visible: bookMeetingVisible, toggleVisibility: toggleBookMeeting } =
     useDrawer();
 
   const { navigateToMembers } = useRedirect();
@@ -160,6 +163,7 @@ const Details = () => {
         navigateBack={navigateToMembers}
         onEmailClick={toggleTemplateModal}
         isPending={isPending}
+        onBookMeeting={toggleBookMeeting}
       />
 
       <ConditionalRender
@@ -218,7 +222,13 @@ const Details = () => {
                     </span>
                   </div>
                   <div className={styles.basicInfo}>
-                    <IconLabel icon={IconCakeAlt} label={data?.birthDate} />
+                    <IconLabel
+                      icon={IconCakeAlt}
+                      label={formatDate(
+                        data?.birthDate,
+                        DateFormats.DD_MMM__YYYY,
+                      )}
+                    />
                     <IconLabel
                       icon={IconLocationMarker}
                       label={data?.residentialAddress}
@@ -248,7 +258,11 @@ const Details = () => {
                       <div key={label}>
                         <p className={styles.title}>{label}</p>
                         <p className={styles.description}>
-                          {fallbackHandler(value)}
+                          {fallbackHandler(
+                            label === RESIGNATION_DATE
+                              ? formatDate(value, DateFormats.DD_MMM__YYYY)
+                              : value,
+                          )}
                         </p>
                       </div>
                     ))}
@@ -263,7 +277,7 @@ const Details = () => {
                       <div key={label}>
                         <p className={styles.title}>{label}</p>
                         <p className={styles.description}>
-                          $ {fallbackHandler(value, true)}
+                          {formatCurrency(value)}
                         </p>
                       </div>
                     ))}
@@ -300,6 +314,17 @@ const Details = () => {
         isOpen={templateModalVisible}
         onClose={toggleTemplateModal}
         toggleEmailModal={handleEmailTemplateModal}
+      />
+      <BookMeeting
+        isOpen={bookMeetingVisible}
+        onClose={toggleBookMeeting}
+        calendarEvent={{
+          resource: {
+            bookedUserId: id,
+            bookedUserName: getFullName(data?.firstName, data?.lastName),
+            bookedUserType: detailsConstants.bookedUserType,
+          },
+        }}
       />
     </>
   );

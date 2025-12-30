@@ -133,6 +133,7 @@ const MembersShip = () => {
         records={currentList}
         isPending={isLeadLoading}
         isSuccess={isLeadSuccess}
+        className={styles.noDataScreen}
       >
         <div className={styles.cardContainer}>
           {currentList?.map((item) => (
@@ -145,6 +146,7 @@ const MembersShip = () => {
               loading={isDeletePending}
               deleteTitle={isMemberShipTypeSelected ? TYPE : STATUS}
               deleteDescription={item.label!}
+              color={item?.color}
             />
           ))}
         </div>

@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { message } from "antd";
-import { IconKey, IconCopy } from "obra-icons-react";
-
+import { IconKey, IconCopy, IconLink } from "obra-icons-react";
 import { useUserRole } from "src/shared/hooks/useUserRole";
 import styles from "./settings.module.scss";
 import Tabs from "src/shared/components/Tabs";
@@ -13,12 +12,17 @@ import ChangePassword from "src/views/MyProfile/ChangePassword";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { generatePath } from "react-router-dom";
+import { NavigationRoutes } from "src/routes/routeConstants/appRoutes";
 
 const {
   SCRIPT_URL,
-  MESSAGES: { ERROR, SUCCESS, WARNING },
+  MESSAGES: { ERROR, SUCCESS, WARNING, LEAD_FORM_COPY },
   LABEL,
+  APP_BASE_URL,
 } = CHATBOT_CONSTANTS;
+
+const { LEAD_FORM } = NavigationRoutes;
 
 const SettingsWrapper = () => {
   const ClubAdminSettings = () => {
@@ -42,6 +46,20 @@ const SettingsWrapper = () => {
       }
     };
 
+    //  TODO: To create common function for copy to clipboard
+    const handleLeadForm = async () => {
+      const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
+      if (!clubId || !APP_BASE_URL) return message.warning(WARNING);
+      try {
+        const leadFormPath = generatePath(LEAD_FORM, { id: clubId });
+        const leadFormLink = `${APP_BASE_URL}${leadFormPath}`;
+        await navigator.clipboard.writeText(leadFormLink);
+        message.success(LEAD_FORM_COPY);
+      } catch {
+        message.error(ERROR);
+      }
+    };
+
     return (
       <Fragment>
         <div className={styles.buttonsContainer}>
@@ -49,6 +67,14 @@ const SettingsWrapper = () => {
             <IconCopy />
             <span>{LABEL}</span>
           </div>
+          <Button
+            onClick={handleLeadForm}
+            className={styles.leadFormButton}
+            type={ButtonTypes.GOLD}
+            icon={<IconLink />}
+          >
+            {Buttons.LEAD_FORM}
+          </Button>
           <Button
             type={ButtonTypes.LINK}
             className={styles.changePasswordButton}

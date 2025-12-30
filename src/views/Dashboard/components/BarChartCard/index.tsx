@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IconReorderAlt, IconEdit, IconDelete } from "obra-icons-react";
 import clsx from "clsx";
 
@@ -12,10 +12,15 @@ import ConditionalRenderComponent from "src/shared/components/ConditionalRenderC
 import EmptyState from "../../atoms/EmptyState";
 import ErrorState from "../../atoms/ErrorState";
 import { CHART_CONSTANTS, CHART_LABEL_MAP } from "../../constants";
+import { ChartDetail } from "src/models/dashboard.model";
 import DeleteModal from "src/shared/components/DeleteModal";
 import { useDashboardFilters } from "src/context/DashboardFiltersContext";
 import DateRangeButton from "../DateRangeButton";
-import { BarChartCardProps, DateRange } from "src/shared/types/dashboard.type";
+import {
+  BarChartCardProps,
+  ChartConfig,
+  DateRange,
+} from "src/shared/types/dashboard.type";
 import { useUserRole } from "src/shared/hooks/useUserRole";
 import FilterIconWithBadge from "../FilterIconWithBadge";
 import ClubFilterDropdown from "../ClubFilterDropdown";
@@ -57,6 +62,9 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
 
   const { mutateAsync: deleteChartMutation, isPending } =
     useMutation(deleteChart());
+
+  const queryClient = useQueryClient();
+
   const {
     data: chartData,
     isLoading: clubChartDataLoading,
@@ -95,11 +103,25 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
 
   const handleFilterClick = () => {
     if (id && type) {
-      openFilterDrawer({
+      let filterProps: ChartConfig = {
         chartId: id,
         type: type as XAxisTypes,
         chartName: title,
-      });
+      };
+
+      if (!isDefault) {
+        const customChartData = queryClient.getQueryData<ChartDetail>(
+          getChartDetails(path, {}).queryKey,
+        );
+        const updatedFilterProps = {
+          ...filterProps,
+          chartValues: customChartData?.values ?? [],
+          type: XAxisTypes.CUSTOM_CHART,
+        };
+        filterProps = updatedFilterProps;
+      }
+
+      openFilterDrawer(filterProps);
     }
   };
 

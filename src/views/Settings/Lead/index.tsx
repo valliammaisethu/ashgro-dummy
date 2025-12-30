@@ -135,6 +135,7 @@ const Lead = () => {
         records={currentList}
         isPending={isLeadLoading}
         isSuccess={isLeadSuccess}
+        className={styles.noDataScreen}
       >
         <div className={styles.cardContainer}>
           {currentList?.map((item) => (
@@ -147,6 +148,7 @@ const Lead = () => {
               loading={isDeletePending}
               deleteTitle={isSourceSelected ? SOURCE : STATUS}
               deleteDescription={item.label!}
+              color={item?.color}
             />
           ))}
         </div>

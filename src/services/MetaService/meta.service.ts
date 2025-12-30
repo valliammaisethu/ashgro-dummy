@@ -185,6 +185,8 @@ export const MetaService = () => {
 };
 
 export const getMembersMetaList = async (params: Partial<QueryParams>) => {
+  const user = localStorageHelper.getItem(LocalStorageKeys.USER);
+  const clubId = user?.clubId;
   const { data } = await axiosInstance.get(ApiRoutes.MEMBERS_META_LIST, {
     params: {
       ...serialize(QueryParams, params),
@@ -203,6 +205,8 @@ export const getMembersMetaList = async (params: Partial<QueryParams>) => {
 };
 
 export const getProspectssMetaList = async (params: Partial<QueryParams>) => {
+  const user = localStorageHelper.getItem(LocalStorageKeys.USER);
+  const clubId = user?.clubId;
   const { data } = await axiosInstance.get(ApiRoutes.PROSPECTS_META_LIST, {
     params: {
       ...serialize(QueryParams, params),

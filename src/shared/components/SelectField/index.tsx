@@ -26,6 +26,12 @@ const { Option } = Select;
 
 const { title, description } = invalidEmailMessages;
 
+interface SelectFieldProps extends DropDownProps {
+  allowCustomOption?: boolean;
+  validateCustomInput?: (value: string) => boolean;
+  paginatedMode?: boolean;
+}
+
 const SelectField = ({
   name,
   stopPropagation,
@@ -44,11 +50,10 @@ const SelectField = ({
   allowCustomOption = false,
   validateCustomInput,
   notFoundContent,
+  suffixIcon,
+  paginatedMode = false,
   ...props
-}: DropDownProps & {
-  allowCustomOption?: boolean;
-  validateCustomInput?: (value: string) => boolean;
-}) => {
+}: SelectFieldProps) => {
   const {
     field,
     fieldState: { error },
@@ -57,17 +62,22 @@ const SelectField = ({
   const [customOptions, setCustomOptions] = useState(options);
   const [searchValue, setSearchValue] = useState("");
 
+  // TODO: To optimize the component
   useEffect(() => {
-    setCustomOptions((prev) => {
-      const merged = [
-        ...options,
-        ...prev.filter(
-          (opt) => !options.some((def) => def.value === opt.value),
-        ),
-      ];
-      return merged;
-    });
-  }, [options]);
+    if (paginatedMode) {
+      setCustomOptions(options);
+    } else {
+      setCustomOptions((prev) => {
+        const merged = [
+          ...options,
+          ...prev.filter(
+            (opt) => !options.some((def) => def.value === opt.value),
+          ),
+        ];
+        return merged;
+      });
+    }
+  }, [options, paginatedMode]);
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     if (stopPropagation) e.stopPropagation();
@@ -204,7 +214,10 @@ const SelectField = ({
           placeholder={placeholder}
           status={error ? InputStatus.ERROR : undefined}
           allowClear={allowClear}
-          suffixIcon={<IconChevronDown size={20} strokeWidth={1.25} />}
+          onClear={onClear}
+          suffixIcon={
+            suffixIcon || <IconChevronDown size={20} strokeWidth={1.25} />
+          }
         >
           {showCheckboxes && sortedOptions ? (
             <>

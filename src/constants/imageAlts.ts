@@ -9,4 +9,5 @@ export const imageAlts = {
   avatarIcon: "avatar-icon",
   pdfIcon: "pdf-icon",
   wordIcon: "word-icon",
+  leadForm: "lead-form",
 };

@@ -58,7 +58,7 @@ export const leadFormValidationSchema = yup.object().shape({
     .max(MAX_LENGTHS.NAME, ERROR_MESSAGES.MAX_LENGTH.NAME("Last name"))
     .trim(),
 
-  email: yup
+  emailId: yup
     .string()
     .required(ERROR_MESSAGES.REQUIRED.EMAIL)
     .email(ERROR_MESSAGES.INVALID.EMAIL_FORMAT)

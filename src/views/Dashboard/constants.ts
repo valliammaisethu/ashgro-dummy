@@ -32,8 +32,8 @@ export const CHART_CONSTANTS = {
 
 export const superAdminChartItems = [
   { id: "conversions", name: "Chatbot Conversions" },
-  { id: "spend-time", name: "Chatbot Spend Time" },
-  // { id: "crm-usage", name: "CRM Usage" }
+  { id: "spend-time", name: "Chatbot Usage" },
+  { id: "crm-usage", name: "CRM Usage" },
 ];
 
 export const chartFiltersTitle = "Filters - %s";
@@ -57,10 +57,17 @@ export const ERROR_STATE_STRINGS = {
 
 export const CHART_LABEL_MAP: Record<string, string> = {
   "Chatbot Conversions": "No of Conversions",
-  "Chatbot Spend Time": "Minutes Spent",
+  "Chatbot Usage": "Hours Spent",
   "CRM Usage": "Hours Spent",
 };
 
 export const filterConstants = {
   CLEAR_SELECTION: "Clear Selection",
+  DATE_RANGE: 180,
+};
+
+export const chartLimitErrorMessages = {
+  TITLE: "Custom Chart Limit Reached",
+  DESCRIPTION:
+    "You have reached the maximum number of custom charts allowed. Please delete an existing chart to create a new one.",
 };

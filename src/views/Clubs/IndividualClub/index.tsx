@@ -155,10 +155,16 @@ const IndividualClub = () => {
       }
     : undefined;
 
+  const handleUnlockClub = async () => {
+    await unlockClubMutate();
+    handleUnlockModal();
+    refetch();
+  };
+
   return (
     <div className={styles.individualClub}>
       <Header
-        isClubLocked={clubData?.club?.isClubLocked}
+        isClubLocked={clubData?.club?.adminDetails?.isAccountLocked}
         isFetching={isPending}
         onSettings={handleSettings}
         onUnlockClub={handleUnlockModal}
@@ -272,7 +278,7 @@ const IndividualClub = () => {
           onClose={handleUnlockModal}
           open={isSettingsOpen.unlockModalOpen}
           isLoading={isUnlockPending}
-          onSave={unlockClubMutate}
+          onSave={handleUnlockClub}
           clubName={clubData?.club?.name}
         />
       </ConditionalRenderComponent>

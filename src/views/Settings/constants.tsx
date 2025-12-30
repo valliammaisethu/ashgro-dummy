@@ -13,6 +13,7 @@ export interface SettingItem {
   label?: string;
   value?: string;
   name?: string;
+  color?: string;
 }
 
 export interface ModalState {
@@ -168,5 +169,7 @@ export const CHATBOT_CONSTANTS = {
     SUCCESS: "Chatbot link copied to clipboard!",
     ERROR: "Failed to copy link",
     WARNING: "Club ID not found",
+    LEAD_FORM_COPY: "Lead Form Link copied to clipboard!",
   },
+  APP_BASE_URL: import.meta.env.VITE_APP_BASE_URL,
 };

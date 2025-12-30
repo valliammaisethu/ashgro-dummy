@@ -22,10 +22,26 @@
   }
 }
 
+.labelContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
 .cardLabel {
   display: block;
   font-size: 1.4rem;
   font-weight: 600;
+}
+
+.cardDot {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  border: 0.2rem solid;
+  background-clip: padding-box;
+  flex-shrink: 0;
 }
 
 .cardActions {

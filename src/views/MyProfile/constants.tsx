@@ -13,7 +13,7 @@ export const fields = {
   firstName: "firstName",
   lastName: "lastName",
   email: "emailId",
-  phoneNumber: "phoneNumber",
+  phoneNumber: "contactNumber",
   attachmentId: "attachmentId",
 };
 

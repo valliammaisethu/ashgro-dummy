@@ -5,6 +5,7 @@ export enum XAxisTypes {
   MEMBERSHIP_STATUS = "Membership Status",
   STAFF_DEPARTMENT = "Staff Department",
   SALES_ACTIVITY = "Sales Activity",
+  CUSTOM_CHART = "Custom Chart",
 }
 
 export enum XAxisTypesLabels {

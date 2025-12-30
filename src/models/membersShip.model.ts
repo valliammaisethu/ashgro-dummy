@@ -23,4 +23,8 @@ export class MemberShipTypeStatus {
 
   @serializable(alias("id"))
   value?: string;
+
+  // TODO: To use BaseSettings model
+  @serializable
+  color?: string;
 }

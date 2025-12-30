@@ -4,13 +4,14 @@ import timezone from "dayjs/plugin/timezone";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { DateUnit } from "src/enums/dateUnit.enum";
 import { DateType } from "src/enums/dateType.enum";
+import { isDateOutOfRangeProps } from "../types/dashboard.type";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const { DAY } = DateUnit;
 const { FUTURE, PAST, TODAY } = DateType;
-const { HH_MM_A, HH_MM } = DateFormats;
+const { HH_MM_A, HH_MM, DD_MMM__YYYY, YYYY_MM_DD } = DateFormats;
 
 export const formatDate = (date = "", format: DateFormats, isUTC = false) => {
   if (!date) return "";
@@ -89,4 +90,28 @@ export const disablePastAndFuture180 = (date: dayjs.Dayjs) => {
   const maxDate = today.add(180, DAY);
 
   return date.isBefore(today) || date.isAfter(maxDate);
+};
+
+export const isDateOutOfRange = ({
+  current,
+  futureDate,
+  maxDays = 180,
+}: isDateOutOfRangeProps) => {
+  if (!futureDate) return false;
+  const diff = current.diff(futureDate, DAY);
+  return Math.abs(diff) > maxDays;
+};
+
+export const formatDateValue = (
+  date?: string | Date | Dayjs | null,
+  format: DateFormats = DD_MMM__YYYY,
+  isApi = false,
+) => {
+  if (!date) return "";
+
+  const validatedDate = dayjs(date, isApi ? format : YYYY_MM_DD, true);
+
+  const parsed = validatedDate.isValid() ? validatedDate : dayjs(date);
+
+  return parsed.isValid() ? parsed.format(isApi ? YYYY_MM_DD : format) : "";
 };

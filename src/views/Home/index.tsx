@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import { Outlet, useLocation, matchPath } from "react-router-dom";
+
 import { useTopBar } from "../../shared/contexts/TopBarContext";
 import { NavigationRoutes } from "../../routes/routeConstants/appRoutes";
+import { useAppActiveTimeTracker } from "src/shared/hooks/useAppActiveTimeTracker";
 
 const {
   INDIVIDUAL_PROSPECT,
@@ -11,6 +13,8 @@ const {
 } = NavigationRoutes;
 
 const Home = () => {
+  useAppActiveTimeTracker();
+
   const location = useLocation();
   const { setHideTopBar } = useTopBar();
 

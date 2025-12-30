@@ -10,6 +10,7 @@ export const titles = {
     chatbotStatus: "Chatbot Status",
   },
   uploadError: "Please upload Knowledge base to continue",
+  logoText: "Club Logo",
 };
 
 export const labels = {
@@ -26,6 +27,8 @@ export const labels = {
   primaryPhone: "Phone Number",
 
   notesDescription: "Notes Description",
+
+  clubLogo: "Club Logo",
 };
 
 export const placeholders = {

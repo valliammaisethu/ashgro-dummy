@@ -106,8 +106,13 @@ export const DashboardFiltersProvider = ({
     return !!(hasDate || hasValues);
   };
 
-  const openFilterDrawer = ({ chartId, type, chartName }: ChartConfig) =>
-    setActiveFilterChart({ chartId, type, chartName });
+  const openFilterDrawer = ({
+    chartId,
+    type,
+    chartName,
+    chartValues,
+  }: ChartConfig) =>
+    setActiveFilterChart({ chartId, type, chartName, chartValues });
 
   const closeFilterDrawer = () => setActiveFilterChart(null);
 
@@ -124,6 +129,17 @@ export const DashboardFiltersProvider = ({
     [chartFilters],
   );
 
+  const getFilterDetails = (chartId?: string) => {
+    const filters = chartId ? chartFilters[chartId] : undefined;
+
+    return {
+      hasDate: !!(filters?.dateRange?.[0] && filters?.dateRange?.[1]),
+      hasValues: !!filters?.selectedValues?.length,
+      dateRange: filters?.dateRange,
+      selectedValues: filters?.selectedValues,
+    };
+  };
+
   const contextValue = useMemo(
     () => ({
       chartFilters,
@@ -138,6 +154,7 @@ export const DashboardFiltersProvider = ({
       openFilterDrawer,
       closeFilterDrawer,
       getChartParams,
+      getFilterDetails,
     }),
     [
       chartFilters,
@@ -150,6 +167,7 @@ export const DashboardFiltersProvider = ({
       openFilterDrawer,
       closeFilterDrawer,
       getChartParams,
+      getFilterDetails,
     ],
   );
 

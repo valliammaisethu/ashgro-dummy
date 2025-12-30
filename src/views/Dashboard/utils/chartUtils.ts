@@ -11,8 +11,6 @@ import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { superAdminChartItems, CHART_CONSTANTS } from "../constants";
 
 const { DEFAULT_ITEM_WIDTH } = CHART_CONSTANTS;
-
-const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId ?? "";
 const { GET_CHART_DETAIL } = ApiRoutes;
 
 export const calculateChartWidth = (length: number = 0) => {
@@ -177,6 +175,9 @@ export const createBarChart = (
 
 export const generateChartPaths = (charts: ChartItemModel[]) => {
   if (!charts?.length) return [];
+  const clubId =
+    localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId ?? "";
+
   return charts?.map((chart) => {
     chart.path = generatePath(GET_CHART_DETAIL, { clubId, chartId: chart.id });
     return chart;

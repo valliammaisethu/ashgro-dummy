@@ -5,6 +5,7 @@ import {
 import { CustomChart } from "src/models/chart.model";
 import { ChartItem, ChartLabel } from "src/models/dashboard.model";
 import { XAxisTypes } from "src/enums/charts.enum";
+import { Dayjs } from "dayjs";
 
 export type DateRange = [string, string] | null;
 
@@ -67,10 +68,26 @@ export interface DraggableChartCardProps {
   onEdit?: (chartData?: CustomChart) => void;
 }
 
+export interface ChartValues {
+  id?: string;
+  name?: string;
+  label?: string;
+  value?: string;
+}
+
 export interface ChartConfig {
   chartId: string;
   type: XAxisTypes;
   chartName: string;
+  chartValues?: ChartValues[];
+}
+
+// export interface
+export interface FilterDetails {
+  hasDate: boolean;
+  hasValues: boolean;
+  dateRange?: DateRange;
+  selectedValues?: string[];
 }
 
 export interface DashboardFiltersContextType {
@@ -90,14 +107,11 @@ export interface DashboardFiltersContextType {
 
   hasActiveFilters: (chartId: string) => boolean;
 
-  activeFilterChart: {
-    chartId: string;
-    type: XAxisTypes;
-    chartName: string;
-  } | null;
+  activeFilterChart: ChartConfig | null;
   openFilterDrawer: (chartConfig: ChartConfig) => void;
   closeFilterDrawer: () => void;
   getChartParams: (chartId: string) => Record<string, any>;
+  getFilterDetails: (chartId: string) => FilterDetails;
 }
 
 export interface ChartFilters {
@@ -109,4 +123,17 @@ export interface ChartParams {
   values?: string[];
   fromDate?: string;
   toDate?: string;
+}
+
+export type DayjsRange = [Dayjs | null, Dayjs | null] | null;
+
+export interface DateRangeButtonProps {
+  value?: DateRange;
+  onChange: (dates: DateRange | null) => void;
+}
+
+export interface isDateOutOfRangeProps {
+  current: Dayjs;
+  futureDate: Dayjs | null;
+  maxDays: number;
 }

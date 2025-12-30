@@ -276,7 +276,11 @@ const ClubForm = (props: ClubFormProps) => {
       }}
     >
       <Form methods={methods}>
-        <ProfilePictureInput isClubUpload name={fields.profilePicture} />
+        <ProfilePictureInput
+          label={labels.clubLogo}
+          isClubUpload
+          name={fields.profilePicture}
+        />
         <Divider />
         <div className={styles.chatbot}>
           <span className={styles.sectionTitle}>
