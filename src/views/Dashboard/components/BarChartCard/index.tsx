@@ -152,6 +152,11 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
         [styles.chartCardOver]: isOver,
       })}
     >
+      <ConditionalRenderComponent visible={!isDefault} hideFallback>
+        <span className={styles.customBadge}>
+          {CHART_CONSTANTS.CUSTOM_CHART}
+        </span>
+      </ConditionalRenderComponent>
       <div className={styles.chartHeader}>
         <div className={styles.headerLeft}>
           <ConditionalRenderComponent visible={isClubAdmin} hideFallback>
@@ -167,11 +172,6 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
           <h2 className={styles.chartTitle}>{title}</h2>
         </div>
 
-        <ConditionalRenderComponent visible={!isDefault} hideFallback>
-          <span className={styles.customBadge}>
-            {CHART_CONSTANTS.CUSTOM_CHART}
-          </span>
-        </ConditionalRenderComponent>
         <div className={styles.chartActions}>
           <ConditionalRenderComponent visible={!isClubAdmin} hideFallback>
             <div className={styles.labelPrefix} />
