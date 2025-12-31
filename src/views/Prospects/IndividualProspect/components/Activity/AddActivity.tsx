@@ -22,12 +22,18 @@ import { ActivityService } from "src/services/ActivityService/activity.service";
 import { ActivityPayload } from "src/models/activity.model";
 import { useParams } from "react-router-dom";
 import { DateFormats } from "src/enums/dateFormats.enum";
+import { formatDate } from "src/shared/utils/dateUtils";
 
 interface AddActivityProps {
   isOpen: boolean;
   onClose: () => void;
   handleRefetch?: () => void;
 }
+
+const { HH_MM_A__DD_MMM_YYYY, YYYY_MM_DD_T_HH_MM_SS } = DateFormats;
+
+// TODO: create common component for activity and use for prospects and members
+
 const AddActivity = ({ isOpen, onClose, handleRefetch }: AddActivityProps) => {
   const methods = useForm({});
 
@@ -44,9 +50,7 @@ const AddActivity = ({ isOpen, onClose, handleRefetch }: AddActivityProps) => {
 
   const now = dayjs();
 
-  const createdAt = now.format("YYYY-MM-DDTHH:mm:ss");
-
-  const formattedCreatedAt = now.format(DateFormats.HH_MM_A__DD_MMM_YYYY);
+  const createdAt = now.utc().format(YYYY_MM_DD_T_HH_MM_SS);
 
   const handleSubmit = async (data: ActivityPayload) => {
     await addActivityAsync({ ...data, createdAt, id });
@@ -80,7 +84,7 @@ const AddActivity = ({ isOpen, onClose, handleRefetch }: AddActivityProps) => {
               <Col span={12}>
                 <Label>{"Activity Date & Time"}</Label>
                 <div className={styles.currentDateAndTime}>
-                  <p>{formattedCreatedAt}</p>
+                  <p>{formatDate(createdAt, HH_MM_A__DD_MMM_YYYY, true)}</p>
                   <IconCalendarDatesFill />
                 </div>
               </Col>

@@ -6,7 +6,7 @@ import Card from "src/shared/components/Card";
 import Button from "src/shared/components/Button";
 import { headerConstants, PROSPECT_LABELS } from "../constants";
 import { ActivityDetails } from "src/models/viewProspect.model";
-import { formatDateTime } from "src/shared/utils/dateUtils";
+import { formatDate } from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import AddActivity from "./Activity/AddActivity";
 import useDrawer from "src/shared/hooks/useDrawer";
@@ -20,6 +20,7 @@ interface ActivitySectionProps {
   activityCount?: number;
   handleRefetch?: () => void;
 }
+// TODO: create common component for activity and use for prospects and members
 
 const ActivitySection: React.FC<ActivitySectionProps> = ({
   activities = [],
@@ -58,9 +59,10 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
           <div className={styles.titleContainer}>
             <div className={styles.title}>{activity.activityType}</div>
             <div className={styles.date}>
-              {formatDateTime(
+              {formatDate(
                 activity.createdAt,
                 DateFormats.HH_MM_A__DD_MMM_YYYY,
+                true,
               )}
             </div>
           </div>
