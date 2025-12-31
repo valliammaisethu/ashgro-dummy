@@ -5,6 +5,14 @@
   width: 100%;
 }
 
+.timeRangePicker {
+  :global {
+    .ant-picker-input > input {
+      text-align: center;
+    }
+  }
+}
+
 // TODO to check antd config and move to antd overrides
 :global {
   .ant-picker {
@@ -142,6 +150,6 @@
   }
 
   .ant-picker-range .ant-picker-clear {
-    inset-inline-end: 0.7rem !important;
+    inset-inline-end: 1.2rem !important;
   }
 }
