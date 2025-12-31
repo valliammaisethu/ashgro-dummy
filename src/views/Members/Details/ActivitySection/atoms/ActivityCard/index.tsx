@@ -1,7 +1,7 @@
 import React from "react";
 
 import { ActivityDetails } from "src/models/viewProspect.model";
-import { formatDateTime } from "src/shared/utils/dateUtils";
+import { formatDate } from "src/shared/utils/dateUtils";
 import { DateFormats } from "src/enums/dateFormats.enum";
 
 import styles from "../../activitySection.module.scss";
@@ -11,6 +11,8 @@ interface ActivityCardProps {
 }
 const { HH_MM_A__DD_MMM_YYYY } = DateFormats;
 
+// TODO: create common component for activity and use for prospects and members
+
 const ActivityCard = ({ activity }: ActivityCardProps) => {
   const { createdAt, activityType, description } = activity;
   return (
@@ -18,7 +20,7 @@ const ActivityCard = ({ activity }: ActivityCardProps) => {
       <div className={styles.header}>
         <p className={styles.activityType}>{activityType}</p>
         <p className={styles.createdAt}>
-          {formatDateTime(createdAt, HH_MM_A__DD_MMM_YYYY)}
+          {formatDate(createdAt, HH_MM_A__DD_MMM_YYYY, true)}
         </p>
       </div>
       <p>{description}</p>

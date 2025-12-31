@@ -19,6 +19,7 @@ import { defaultTimeRange } from "src/views/Calender/ChatbotSlot/constants";
 import { TIME_RANGE_PICKER_CONSTANTS } from "./constants";
 
 import styles from "./timeRangePicker.module.scss";
+import { CommonSeparators } from "src/enums/commonSeparators.enum";
 
 const { RangePicker } = TimePicker;
 const { MANUAL_TYPE, OVERLAP_ERROR } = TIME_RANGE_PICKER_CONSTANTS;
@@ -92,6 +93,7 @@ const TimeRangePicker: FC<TimeRangePickerFieldProps> = ({
       </Label>
 
       <RangePicker
+        separator={CommonSeparators.DASH}
         id={name}
         onChange={handleChange}
         onBlur={onBlur}
