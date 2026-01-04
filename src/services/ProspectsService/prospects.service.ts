@@ -117,6 +117,7 @@ export const ProspectsService = () => {
       const { title, description } = response;
       renderNotification(title, description);
       queryClient.invalidateQueries({ queryKey: [GET_PROSPECTS] });
+      queryClient.invalidateQueries({ queryKey: [GET_SINGLE_PROSPECT] });
     },
   });
 
