@@ -14,6 +14,7 @@ import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { generatePath } from "react-router-dom";
 import { NavigationRoutes } from "src/routes/routeConstants/appRoutes";
+import { useClubData } from "src/context/ClubContext";
 
 const {
   SCRIPT_URL,
@@ -28,6 +29,12 @@ const SettingsWrapper = () => {
   const ClubAdminSettings = () => {
     const [activeTab, setActiveTab] = useState("lead");
     const [changePasswordVisible, setChangePasswordVisible] = useState(false);
+    const { clubSettings } = useClubData();
+
+    const {
+      isLeadForms: isLeadFormsEnabled,
+      chatbotEnabled: isChatbotEnabled,
+    } = clubSettings;
 
     const handleChangePassword = () =>
       setChangePasswordVisible((prev) => !prev);
@@ -63,18 +70,26 @@ const SettingsWrapper = () => {
     return (
       <Fragment>
         <div className={styles.buttonsContainer}>
-          <div className={styles.chatbotLinkContainer} onClick={handleCopyLink}>
-            <IconCopy />
-            <span>{LABEL}</span>
-          </div>
-          <Button
-            onClick={handleLeadForm}
-            className={styles.leadFormButton}
-            type={ButtonTypes.GOLD}
-            icon={<IconLink />}
-          >
-            {Buttons.LEAD_FORM}
-          </Button>
+          <ConditionalRenderComponent visible={isChatbotEnabled} hideFallback>
+            <div
+              className={styles.chatbotLinkContainer}
+              onClick={handleCopyLink}
+            >
+              <IconCopy />
+              <span>{LABEL}</span>
+            </div>
+          </ConditionalRenderComponent>
+
+          <ConditionalRenderComponent visible={isLeadFormsEnabled} hideFallback>
+            <Button
+              onClick={handleLeadForm}
+              className={styles.leadFormButton}
+              type={ButtonTypes.GOLD}
+              icon={<IconLink />}
+            >
+              {Buttons.LEAD_FORM}
+            </Button>
+          </ConditionalRenderComponent>
           <Button
             type={ButtonTypes.LINK}
             className={styles.changePasswordButton}

@@ -66,6 +66,7 @@ export const ApiRoutes = {
 
   GET_CLUBS: "/clubs",
   GET_CLUB_PROFILE: "/clubs/:id",
+  GET_CLUB_MINIMAL_DATA: "/clubs/:id/minimal",
   UPDATE_CLUB_PROFILE: "/clubs/:id/update",
   UNLOCK_CLUB: "/clubs/:id/unlock",
   UPDATE_CLUB_GENERAL_SETTINGS: "/clubs/:id/settings",
