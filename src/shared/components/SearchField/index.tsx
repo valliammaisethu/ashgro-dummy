@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { IconFilterAlt, IconSearch } from "obra-icons-react";
+import { IconClose, IconFilterAlt, IconSearch } from "obra-icons-react";
 import clsx from "clsx";
 import { Input } from "antd";
 import { debounce } from "lodash";
@@ -10,6 +10,8 @@ import {
   defaultSearchPlaceholder,
 } from "src/constants/sharedComponents";
 import { Colors } from "src/enums/colors.enum";
+import ConditionalRenderComponent from "../ConditionalRenderComponent";
+import { POINTER_CONSTANTS } from "src/views/Calender/ChatbotSlot/constants";
 
 import styles from "./searchField.module.scss";
 
@@ -33,6 +35,11 @@ const SearchField = (props: SearchFieldProps) => {
     [onSearch, debounceTime],
   );
 
+  const handleClear = () => {
+    setSearchTerm("");
+    onSearch?.("");
+  };
+
   useEffect(() => {
     debouncedSearch(searchTerm);
     return () => debouncedSearch.cancel();
@@ -47,6 +54,16 @@ const SearchField = (props: SearchFieldProps) => {
           className={styles.searchFieldContainer}
           placeholder={placeholder}
           prefix={<IconSearch color={Colors.SEARCH_ICON_COLOR} size={18} />}
+          suffix={
+            <ConditionalRenderComponent visible={!!searchTerm} hideFallback>
+              <IconClose
+                cursor={POINTER_CONSTANTS.POINTER}
+                color={Colors.SEARCH_ICON_COLOR}
+                size={18}
+                onClick={handleClear}
+              />
+            </ConditionalRenderComponent>
+          }
         />
         {onFilter && (
           <div

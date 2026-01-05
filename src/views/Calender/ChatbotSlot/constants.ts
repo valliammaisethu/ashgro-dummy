@@ -19,7 +19,7 @@ export const LABELS = {
 };
 
 export const CHAT_BOT_CONSTANTS = {
-  TITLE: "Chatbot Slot",
+  TITLE: "AI Tour Availability",
   DATE_RANGE: "Date Range",
   TIME_RANGE: "Time Range",
   START_AND_END_TIME: "Start & End Time",

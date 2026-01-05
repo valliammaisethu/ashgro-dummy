@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { Outlet, useLocation, matchPath } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import queryString from "query-string";
 
 import { useTopBar } from "../../shared/contexts/TopBarContext";
 import { NavigationRoutes } from "../../routes/routeConstants/appRoutes";
@@ -12,6 +13,7 @@ import { ImportStatusResponse } from "src/shared/types/socket.type";
 import { SOCKET_EVENTS } from "src/enums/socket.enum";
 import { renderNotification } from "src/shared/utils/renderNotification";
 import { importToastMsg } from "src/constants/socket.constants";
+import { invalidateSocketQueries } from "src/shared/utils/socket";
 
 const {
   INDIVIDUAL_PROSPECT,
@@ -28,6 +30,7 @@ const Home = () => {
   const location = useLocation();
   const { setHideTopBar } = useTopBar();
   const { setClubSettings } = useClubData();
+  const queryClient = useQueryClient();
 
   const { getClubMinimalDetails } = ClubService();
 
@@ -41,11 +44,18 @@ const Home = () => {
     if (socketData?.type === SETTINGS_UPDATED) {
       setClubSettings(socketData);
     } else if (socketData?.type === IMPORT_STATUS) {
+      const calenderMonth = queryString.parse(location.search)?.month as string;
       const response = socketData.response as ImportStatusResponse;
+
+      invalidateSocketQueries({
+        queryClient,
+        entityType: response?.entityType,
+        month: calenderMonth,
+      });
 
       renderNotification(...Object.values(importToastMsg(response)));
     }
-  }, [socketData, setClubSettings]);
+  }, [socketData, setClubSettings, queryClient]);
 
   useEffect(() => {
     handleUpdateClubData();

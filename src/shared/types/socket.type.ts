@@ -22,6 +22,8 @@ export interface ImportStatusResponse {
   totalRows: number;
   successCount: number;
   failedCount: number;
+  description?: string;
+  error?: string;
 }
 
 export interface ClubSettings {
