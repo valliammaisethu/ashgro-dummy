@@ -11,7 +11,7 @@ import {
 } from "src/services/SocketService/socket.service";
 import { localStorageHelper } from "../utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
-import { SocketResponse } from "../types/socket.type";
+import { ClubSettings, SocketResponse } from "../types/socket.type";
 import { SOCKET_EVENTS } from "src/enums/socket.enum";
 
 export const useSocketBroadcast = () => {
@@ -28,8 +28,9 @@ export const useSocketBroadcast = () => {
 
   useEffect(() => {
     let isMounted = true;
-    let onAnyHandler: ((eventName: string, ...args: unknown[]) => void) | null =
-      null;
+    let onAnyHandler:
+      | ((eventName: string, ...args: ClubSettings[]) => void)
+      | null = null;
 
     const init = async () => {
       const handleListener = () => {
@@ -37,12 +38,10 @@ export const useSocketBroadcast = () => {
 
         if (!getGlobalSocket) return;
 
-        onAnyHandler = (eventName: string, ...args: unknown[]) => {
+        onAnyHandler = (eventName: string, ...args: ClubSettings[]) => {
           if (eventName === SOCKET_EVENTS.JOIN_ROOM) return;
 
-          if (isMounted) {
-            setData({ type: eventName, response: args[0] });
-          }
+          setData({ type: eventName, response: args[0] });
         };
 
         getGlobalSocket.onAny(onAnyHandler);

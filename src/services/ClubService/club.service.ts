@@ -18,6 +18,7 @@ import {
   ClubStatusResponse,
   ClubGeneralSettings,
   ClubGeneralSettingsResponse,
+  ClubProfile,
 } from "src/models/club.model";
 import { ProfileDetails } from "src/models/profile.model";
 import { QueryParams } from "src/models/queryParams.model";
@@ -26,8 +27,12 @@ import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { QueryKeyType } from "src/shared/types/sharedComponents.type";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { renderNotification } from "src/shared/utils/renderNotification";
+import { getCurrentUserIds } from "src/shared/utils/roleUtils";
+import { useClubData } from "src/context/ClubContext";
+import { useUserRole } from "src/shared/hooks/useUserRole";
+import { SOCKET_EVENTS } from "src/enums/socket.enum";
 
-const { GET_CLUBS, GET_CLUB_PROFILE } = QueryKeys;
+const { GET_CLUBS, GET_CLUB_PROFILE, GET_CLUB_MINIMAL_DATA_KEY } = QueryKeys;
 const {
   GET_CLUBS: GET_CLUBS_ROUTE,
   GET_CLUB_PROFILE: GET_CLUB_PROFILE_ROUTE,
@@ -36,6 +41,7 @@ const {
   UNLOCK_CLUB: UNLOCK_CLUB_ROUTE,
   UPDATE_CLUB_GENERAL_SETTINGS: UPDATE_CLUB_GENERAL_SETTINGS_ROUTE,
   ADMIN_PROFILE_UPDATE,
+  GET_CLUB_MINIMAL_DATA,
 } = ApiRoutes;
 const {
   ADD_CLUB,
@@ -66,6 +72,9 @@ const handleSuccess =
 
 export const ClubService = () => {
   const queryClient = useQueryClient();
+  const { clubId } = getCurrentUserIds();
+  const { isClubAdmin } = useUserRole();
+  const { setClubSettings } = useClubData();
   const getClubs = (
     params = new QueryParams(),
   ): UseQueryOptions<ClubListReponse, ResponseModel, ClubListReponse> => ({
@@ -235,6 +244,41 @@ export const ClubService = () => {
     },
   });
 
+  const getClubMinimalDetails = (): UseQueryOptions<
+    ClubProfile,
+    ResponseModel,
+    ClubProfile
+  > => ({
+    queryKey: [GET_CLUB_MINIMAL_DATA_KEY, clubId],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(
+        generatePath(GET_CLUB_MINIMAL_DATA, { id: clubId }),
+      );
+      const clubData = deserialize(ClubProfile, data?.data);
+      const {
+        isLeadForms,
+        isBulkEmail,
+        chatbotEnabled,
+        noOfCustomChartsAllowed,
+        noOfEmailTemplatesAllowed,
+      } = clubData;
+
+      setClubSettings({
+        type: SOCKET_EVENTS.SETTINGS_UPDATED,
+        response: {
+          isLeadForms,
+          isBulkEmail,
+          chatbotEnabled,
+          noOfCustomChartsAllowed,
+          noOfEmailTemplatesAllowed,
+        },
+      });
+      return clubData;
+    },
+    enabled: !!clubId && isClubAdmin,
+    refetchOnMount: true,
+  });
+
   return {
     getClubs,
     getClubProfile,
@@ -245,5 +289,6 @@ export const ClubService = () => {
     uploadKnowledgeBase,
     updateClubProfile,
     unlockClub,
+    getClubMinimalDetails,
   };
 };
