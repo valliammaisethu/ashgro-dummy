@@ -196,7 +196,7 @@ const Members = () => {
 
   const handleMemberDelete = (member: Member) => () => setDeleteItem(member);
 
-  const handlePageChange = (newPage: number) => () =>
+  const handlePageChange = (newPage: number) =>
     setQueryParams((prev) => ({ ...prev, page: newPage }));
 
   const handleSelectAll = useCallback(
