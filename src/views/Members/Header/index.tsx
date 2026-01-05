@@ -9,6 +9,8 @@ import { Buttons } from "src/enums/buttons.enum";
 import { MembersHeaderProps } from "src/shared/types/members.type";
 import { importMembers } from "../constant";
 import { AuthContext } from "src/context/AuthContext";
+import { useClubData } from "src/context/ClubContext";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 import styles from "../members.module.scss";
 
@@ -24,6 +26,8 @@ const Header = ({
   isCheckingImportStatus,
 }: MembersHeaderProps) => {
   const { user } = AuthContext();
+
+  const { clubSettings } = useClubData();
 
   const isBulkEmailEnabled = user?.isBulkEmail;
 
@@ -44,11 +48,16 @@ const Header = ({
             loading={isCheckingImportStatus}
           />
         )}
-        <BulkMailButton
-          onClick={onBulkMail}
-          disabled={!selectedEmails || !isBulkEmailEnabled}
-          loading={!!selectedEmails && isCheckingImportStatus}
-        />
+        <ConditionalRenderComponent
+          visible={clubSettings?.isBulkEmail}
+          hideFallback
+        >
+          <BulkMailButton
+            onClick={onBulkMail}
+            disabled={!selectedEmails || !isBulkEmailEnabled}
+            loading={!!selectedEmails && isCheckingImportStatus}
+          />
+        </ConditionalRenderComponent>
         {!selectedEmails && (
           <AddUserButton onClick={onAddMember} label={Buttons.ADD_MEMBER} />
         )}

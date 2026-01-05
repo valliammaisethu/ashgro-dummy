@@ -9,6 +9,8 @@ import AddUserButton from "src/shared/components/atoms/Buttons/AddUserButton";
 import { ProspectListingHeaderProps } from "src/shared/types/prospects.type";
 import { bulkImportProspects } from "../constants";
 import { AuthContext } from "src/context/AuthContext";
+import { useClubData } from "src/context/ClubContext";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 import styles from "../listing.module.scss";
 
@@ -24,6 +26,8 @@ const Header = ({
   isCheckingImportStatus,
 }: ProspectListingHeaderProps) => {
   const { user } = AuthContext();
+
+  const { clubSettings } = useClubData();
 
   const isBulkEmailEnabled = user?.isBulkEmail;
 
@@ -44,11 +48,16 @@ const Header = ({
             loading={isCheckingImportStatus}
           />
         )}
-        <BulkMailButton
-          onClick={onBulkMail}
-          loading={!!selectedEmails && isCheckingImportStatus}
-          disabled={!selectedEmails || !isBulkEmailEnabled}
-        />
+        <ConditionalRenderComponent
+          visible={clubSettings?.isBulkEmail}
+          hideFallback
+        >
+          <BulkMailButton
+            onClick={onBulkMail}
+            loading={!!selectedEmails && isCheckingImportStatus}
+            disabled={!selectedEmails || !isBulkEmailEnabled}
+          />
+        </ConditionalRenderComponent>
         {!selectedEmails && (
           <AddUserButton onClick={onAddProspect} label={Buttons.ADD_PROSPECT} />
         )}
