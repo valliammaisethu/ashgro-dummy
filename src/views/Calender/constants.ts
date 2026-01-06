@@ -6,7 +6,7 @@ export const CALENDAR_CONSTANTS = {
   AVAILABLE_SLOTS: "Available slots",
   MORE_SLOTS: "+ %s more",
   BOOK_MEETING: "Book Meeting",
-  CHATBOT_SLOT: "Chatbot Slot",
+  CHATBOT_SLOT: "AI Tour Availability",
 };
 
 export const CALENDAR_CONFIG = {
