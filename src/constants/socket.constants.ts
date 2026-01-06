@@ -12,6 +12,7 @@ export const entityTypeMap: Record<ImportStatusResponse["entityType"], string> =
   {
     PROSPECT: "Prospect",
     MEMBER: "Member",
+    CHATBOT_SLOTS: "Chatbot",
   };
 
 export const statusMap: Record<ImportStatusResponse["status"], string> = {
@@ -21,11 +22,26 @@ export const statusMap: Record<ImportStatusResponse["status"], string> = {
 
 export const COMPLETED_STATUS = "COMPLETED";
 
+export const CHATBOT_SLOTS_SUCCESS = "Chatbot Slots added Successfully";
+
+export const CHATBOT_SLOTS_TYPE = "CHATBOT_SLOTS";
+
 export const importToastMsg = (data: ImportStatusResponse) => {
-  const { entityType, status, successCount = 0 } = data;
+  const { entityType, status, successCount = 0, description, error } = data;
+
+  const toastDescription =
+    description ||
+    error ||
+    `${successCount} ${entityTypeMap[entityType]} have been imported successfully.`;
+
+  const title =
+    entityTypeMap[entityType] === CHATBOT_SLOTS_TYPE
+      ? CHATBOT_SLOTS_SUCCESS
+      : `${entityTypeMap[entityType]} Import ${statusMap[status]}`;
+
   return {
-    title: `${entityTypeMap[entityType]} Import ${statusMap[status] ?? ""}`,
-    description: `${successCount} ${entityTypeMap[entityType]} have been imported successfully.`,
+    title,
+    description: toastDescription,
     type: status === COMPLETED_STATUS ? SUCCESS : ERROR,
   };
 };
