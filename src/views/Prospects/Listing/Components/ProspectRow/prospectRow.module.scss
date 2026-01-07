@@ -278,3 +278,12 @@
     }
   }
 }
+
+.followUpDateContainer {
+  @include flex-container(normal, center, row);
+  flex-direction: column;
+}
+
+.followUpDateLabel {
+  @include flex-container(normal, center, row, 1rem);
+}
