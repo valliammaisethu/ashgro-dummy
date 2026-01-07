@@ -61,6 +61,9 @@ export class ViewProspect {
   @serializable
   initiationFee = "";
 
+  @serializable
+  additionalComments = "";
+
   @serializable(list(object(ActivityDetails)))
   activityDetails: ActivityDetails[] = [];
 }
