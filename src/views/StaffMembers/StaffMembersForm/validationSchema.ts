@@ -33,7 +33,6 @@ const ERROR_MESSAGES = {
     NAME: (field: string) =>
       `${field} must not exceed ${MAX_LENGTHS.NAME} characters`,
     EMAIL: `Email address must not exceed ${MAX_LENGTHS.EMAIL} characters`,
-    RESIDENTIAL_ADDRESS: `Residential address must not exceed ${MAX_LENGTHS.RESIDENTIAL_ADDRESS} characters`,
   },
 };
 
@@ -73,12 +72,4 @@ export const validationSchema = yup.object().shape({
       VALIDATION_REGEX.PHONE_NUMBER,
       ERROR_MESSAGES.INVALID.PHONE_NUMBER,
     ),
-
-  [FIELD_NAMES.RESIDENTIAL_ADDRESS]: yup
-    .string()
-    .max(
-      MAX_LENGTHS.RESIDENTIAL_ADDRESS,
-      ERROR_MESSAGES.MAX_LENGTH.RESIDENTIAL_ADDRESS,
-    )
-    .nullable(),
 });
