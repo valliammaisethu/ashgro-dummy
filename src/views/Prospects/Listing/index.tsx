@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { CheckboxChangeEvent } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
+import dayjs from "dayjs";
 
 import { getFullName } from "src/shared/utils/helpers";
 import Checkbox from "src/shared/components/Checkbox";
@@ -24,6 +25,8 @@ import { EmailService } from "src/services/EmailService/email.service";
 import { MetaService } from "src/services/MetaService/meta.service";
 import { BulkUploadService } from "src/services/BulkUploadService/bulkUpload.service";
 import { TemplateEntity } from "src/enums/templateEntity.enum";
+import { convertDateToApiFormat } from "src/shared/utils/dateUtils";
+import { DateFormats } from "src/enums/dateFormats.enum";
 import TemplateModal from "src/views/Email/TemplateModal";
 import NewEmailModal from "src/views/Email/NewEmailModal";
 import ImportModal from "src/views/ImportModal";
@@ -61,6 +64,9 @@ const ProspectsListing = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
   const [isAllSelected, setIsAllSelected] = useState(false);
   const [updatingProspectId, setUpdatingProspectId] = useState<
+    string | undefined
+  >();
+  const [updatingFollowUpId, setUpdatingFollowUpId] = useState<
     string | undefined
   >();
 
@@ -287,6 +293,27 @@ const ProspectsListing = () => {
     setUpdatingProspectId(undefined);
   };
 
+  const handleFollowUpDateChange = async (
+    prospectId: string,
+    date: dayjs.Dayjs | null,
+  ) => {
+    if (!date) return;
+
+    setUpdatingFollowUpId(prospectId);
+
+    await updateProspectMutate({
+      prospect: {
+        id: prospectId,
+        followUpDate: convertDateToApiFormat(
+          date.format(DateFormats.DD_MMM_YYYY),
+          DateFormats.DD_MMM_YYYY,
+        ),
+        clubId,
+      },
+    });
+    setUpdatingFollowUpId(undefined);
+  };
+
   const handleClearSelections = useCallback(() => {
     setSelectedProspects([]);
     setIsAllSelected(false);
@@ -357,6 +384,8 @@ const ProspectsListing = () => {
                   onDeleteClick={handleOnDelete}
                   onStatusChange={handleStatusChange}
                   isUpdatingStatus={updatingProspectId === prospect.id}
+                  onFollowUpDateChange={handleFollowUpDateChange}
+                  isUpdatingFollowUpDate={updatingFollowUpId === prospect.id}
                 />
               ))}
             </div>
