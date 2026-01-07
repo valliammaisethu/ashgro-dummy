@@ -184,3 +184,8 @@ export const clearSelectionLabel = "Clear Selection";
 export const clearSelectionKey = "clearSelection";
 
 export const selectStatus = "Select a status";
+
+export const tooltipLabels = {
+  EDIT: "Edit",
+  DELETE: "Delete",
+};
