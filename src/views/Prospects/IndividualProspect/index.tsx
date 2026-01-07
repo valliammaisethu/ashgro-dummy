@@ -32,6 +32,7 @@ import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import { EmailTemplate } from "src/models/meta.model";
 import BookMeeting from "src/views/Calender/BookMeeting";
 import { LeadService } from "src/services/SettingsService/lead.service";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 import styles from "./individualProspect.module.scss";
 
@@ -176,6 +177,19 @@ const IndividualProspect = () => {
                   data={data?.prospect}
                   type={DetailSectionType.FEES_AND_DUES}
                 />
+                <ConditionalRenderComponent
+                  visible={!!data?.prospect?.additionalComments}
+                  hideFallback
+                >
+                  <div className={styles.commentContentContainer}>
+                    <p className={styles.title}>
+                      {PROSPECT_LABELS.additionalComments}
+                    </p>
+                    <p className={styles.content}>
+                      {data?.prospect?.additionalComments}
+                    </p>
+                  </div>
+                </ConditionalRenderComponent>
               </div>
             </div>
           </div>

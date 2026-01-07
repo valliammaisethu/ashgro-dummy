@@ -74,4 +74,4 @@ export const FORM_CONSTANTS = {
   },
 };
 
-export const memberHeaders = ["Members", "Joined Date", "Member Status"];
+export const memberHeaders = ["Members Name", "Joined Date", "Member Status"];

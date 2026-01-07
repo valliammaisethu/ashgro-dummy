@@ -4,7 +4,7 @@ export interface LeadStatusOption {
 }
 
 export const TABLE_HEADERS = {
-  PROSPECTS: "Prospects",
+  PROSPECTS: "Prospects Name",
   FOLLOW_UP_DATE: "Follow-up Date",
   LEAD_SOURCE: "Lead Source",
   LEAD_STATUS: "Lead Status",

@@ -6,6 +6,7 @@ export const PROSPECT_LABELS = {
   leadDetails: "Lead Details",
   feesAndDues: "Fees & Dues",
   activity: "Activity",
+  additionalComments: "Additional Comments",
 };
 
 export const DETAIL_TITLES = {
@@ -19,6 +20,7 @@ export const DETAIL_TITLES = {
 export enum DetailSectionType {
   LEAD_DETAILS = "leadDetails",
   FEES_AND_DUES = "feesAndDues",
+  ADDITIONAL_COMMENTS = "additionalComments",
 }
 
 export const PLACEHOLDER_DATA = {
