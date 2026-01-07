@@ -24,6 +24,8 @@ import {
 import { useUserRole } from "src/shared/hooks/useUserRole";
 import FilterIconWithBadge from "../FilterIconWithBadge";
 import ClubFilterDropdown from "../ClubFilterDropdown";
+import { Tooltip } from "antd";
+import { tooltipLabels } from "src/constants/sharedComponents";
 
 import styles from "./barChartCard.module.scss";
 
@@ -191,12 +193,14 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
             />
           </ConditionalRenderComponent>
           <ConditionalRenderComponent visible={!isDefault} hideFallback>
-            <IconEdit
-              size={20}
-              color={MODAL_CLOSE_ICON}
-              className={styles.actionIcon}
-              onClick={handleOnEdit}
-            />
+            <Tooltip title={tooltipLabels.EDIT}>
+              <IconEdit
+                size={20}
+                color={MODAL_CLOSE_ICON}
+                className={styles.actionIcon}
+                onClick={handleOnEdit}
+              />
+            </Tooltip>
 
             <DeleteModal
               {...CHART_CONSTANTS}
@@ -207,11 +211,13 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
               onDelete={handleOnDelete}
               loading={isPending}
             >
-              <IconDelete
-                size={20}
-                color={MODAL_CLOSE_ICON}
-                className={styles.actionIcon}
-              />
+              <Tooltip title={tooltipLabels.DELETE}>
+                <IconDelete
+                  size={20}
+                  color={MODAL_CLOSE_ICON}
+                  className={styles.actionIcon}
+                />
+              </Tooltip>
             </DeleteModal>
           </ConditionalRenderComponent>
         </div>
