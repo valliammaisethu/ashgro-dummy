@@ -20,6 +20,7 @@
       min-width: 0;
       padding-left: 4rem;
       overflow-y: auto;
+      @extend %hideScrollbar;
 
       .header {
         @include flex-container(flex-end, center, row, 1rem);
@@ -433,4 +434,18 @@
 .datePickerContainer {
   @include flex-container(row, center, center);
   height: 1rem;
+}
+
+.commentContentContainer {
+  .title {
+    color: $add-icon-bg;
+    font-size: 1.6rem;
+    font-family: $font-secondary;
+    margin-bottom: 1.2rem;
+  }
+  .content {
+    color: $ashgro-navy;
+    font-size: 1.6rem;
+    font-family: $font-secondary;
+  }
 }

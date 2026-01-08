@@ -1,18 +1,6 @@
 @import "src/styles/_variables.scss";
 @import "src/styles/_helpers.scss";
 
-.logoContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 4rem 2rem 0 2rem;
-  background: $ashgro-cream;
-
-  @media (max-width: 768px) {
-    padding: 1.6rem 1.6rem 1.2rem 1.6rem;
-  }
-}
-
 .ashgrowlogo {
   width: 9.4rem;
   height: 9.8rem;

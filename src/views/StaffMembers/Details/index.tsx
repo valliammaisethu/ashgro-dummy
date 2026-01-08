@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  IconLocationMarker,
-  IconCall,
-  IconEdit,
-  IconEmail,
-  IconDelete,
-} from "obra-icons-react";
+import { IconCall, IconEdit, IconEmail, IconDelete } from "obra-icons-react";
 import { Col, Row } from "antd";
 import clsx from "clsx";
 import { useParams } from "react-router-dom";
@@ -98,10 +92,6 @@ const Details = () => {
               <p className={styles.staffDepartment}>{data?.staffDepartment}</p>
             </div>
             <div>
-              <p className={styles.location}>
-                <IconLocationMarker color={Colors.ASHGRO_GOLD} size={22} />
-                {fallbackHandler(data?.residentialAddress)}
-              </p>
               <div className={styles.contactDetailsContainer}>
                 <span className={clsx(styles.contactDetails, styles.email)}>
                   <IconEmail color={Colors.ASHGRO_GOLD} size={22} />

@@ -4,8 +4,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
-import logo from "src/assets/images/logo.webp";
-import { imageAlts } from "src/constants/imageAlts";
 import Form from "src/shared/components/Form";
 import useForm from "src/shared/components/UseForm";
 import InputField from "src/shared/components/InputField";
@@ -115,13 +113,6 @@ const LeadForm = () => {
 
   return (
     <>
-      <Row className={styles.logoContainer}>
-        <img
-          src={logo}
-          alt={imageAlts.ashgroLogo}
-          className={styles.ashgrowlogo}
-        />
-      </Row>
       <Row className={styles.formContainer}>
         <div className={styles.formCard}>
           <div className={styles.formHeader}>

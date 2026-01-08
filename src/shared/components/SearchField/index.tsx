@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { IconClose, IconFilterAlt, IconSearch } from "obra-icons-react";
 import clsx from "clsx";
-import { Input } from "antd";
+import { Input, Tooltip } from "antd";
 import { debounce } from "lodash";
 
 import { SearchFieldProps } from "src/shared/types/sharedComponents.type";
@@ -66,15 +66,17 @@ const SearchField = (props: SearchFieldProps) => {
           }
         />
         {onFilter && (
-          <div
-            title={defaultFilterPlaceholder}
-            className={clsx(styles.filterContainer, {
-              [styles.filtersActive]: filtersActive,
-            })}
-            onClick={onFilter}
-          >
-            <IconFilterAlt size={20} />
-          </div>
+          <Tooltip title={defaultFilterPlaceholder}>
+            <div
+              title={defaultFilterPlaceholder}
+              className={clsx(styles.filterContainer, {
+                [styles.filtersActive]: filtersActive,
+              })}
+              onClick={onFilter}
+            >
+              <IconFilterAlt size={20} />
+            </div>
+          </Tooltip>
         )}
       </div>
     </div>

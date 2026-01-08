@@ -1,6 +1,9 @@
 import React, { MouseEvent } from "react";
 import { CheckboxChangeEvent } from "antd";
-import { IconDelete, IconEdit } from "obra-icons-react";
+import { IconDelete, IconEdit, IconCalendarDates } from "obra-icons-react";
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
+import { LoadingOutlined } from "@ant-design/icons";
 
 import { ProspectsList } from "src/models/prospects.model";
 import { LeadStatus } from "src/models/meta.model";
@@ -11,6 +14,9 @@ import AvatarFallback from "src/shared/components/AvatarFallback";
 import Checkbox from "src/shared/components/Checkbox";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { Colors } from "src/enums/colors.enum";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+import Loader from "src/shared/components/Loader";
+import { LoaderSizes } from "src/enums/LoaderSizes";
 
 import styles from "./prospectRow.module.scss";
 import { stopPropagation } from "src/shared/utils/eventUtils";
@@ -26,7 +32,14 @@ interface ProspectRowProps {
   onDeleteClick: (data: ProspectsList) => void;
   onStatusChange?: (prospectId: string, leadStatusId: string) => void;
   isUpdatingStatus?: boolean;
+  onFollowUpDateChange?: (
+    prospectId: string,
+    date: dayjs.Dayjs | null,
+  ) => Promise<void>;
+  isUpdatingFollowUpDate?: boolean;
 }
+
+const { DD_MMM__YYYY } = DateFormats;
 
 const ProspectRow: React.FC<ProspectRowProps> = ({
   prospect,
@@ -38,7 +51,10 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
   onDeleteClick,
   onStatusChange,
   isUpdatingStatus = false,
+  onFollowUpDateChange,
+  isUpdatingFollowUpDate = false,
 }) => {
+  const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
   const {
     leadStatus,
     firstName,
@@ -78,6 +94,15 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
     }
   };
 
+  const handleDatePickerClose = () => setIsDatePickerOpen(false);
+  const handleDatePickerOpen = () => setIsDatePickerOpen(true);
+
+  const handleDateChange = async (date: dayjs.Dayjs | null) => {
+    if (!prospect?.id) return;
+    await onFollowUpDateChange?.(prospect?.id, date);
+    handleDatePickerClose();
+  };
+
   return (
     <div onClick={onClick} className={styles.tableRow}>
       <div className={styles.checkboxCol} onClick={stopPropagation}>
@@ -108,8 +133,46 @@ const ProspectRow: React.FC<ProspectRowProps> = ({
         </div>
       </div>
 
-      <div className={styles.dateColValue}>
-        {fillEmptyData(formatDate(followUpDate, DateFormats.DD_MMM__YYYY))}
+      <div className={styles.dateColValue} onClick={stopPropagation}>
+        <ConditionalRenderComponent
+          visible={!isUpdatingFollowUpDate}
+          fallback={
+            <Loader
+              loading={isUpdatingFollowUpDate}
+              icon={<LoadingOutlined spin />}
+              size={LoaderSizes.SMALL}
+            />
+          }
+        >
+          <div
+            onClick={handleDatePickerOpen}
+            className={styles.followUpDateContainer}
+          >
+            <div className={styles.followUpDateLabel}>
+              <span>
+                {fillEmptyData(formatDate(followUpDate, DD_MMM__YYYY))}
+              </span>
+              <IconCalendarDates size={16} color={Colors.ASHGRO_GOLD} />
+            </div>
+            <DatePicker
+              open={isDatePickerOpen}
+              onOpenChange={handleDatePickerClose}
+              value={followUpDate ? dayjs(followUpDate) : null}
+              onChange={handleDateChange}
+              format={DD_MMM__YYYY}
+              inputReadOnly
+              allowClear={false}
+              className={styles.datePicker}
+              style={{
+                visibility: "hidden",
+                width: 0,
+                height: 0,
+                padding: 0,
+                border: 0,
+              }}
+            />
+          </div>
+        </ConditionalRenderComponent>
       </div>
 
       <div className={styles.sourceColValue}>
