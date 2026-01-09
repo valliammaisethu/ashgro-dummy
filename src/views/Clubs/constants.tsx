@@ -13,6 +13,7 @@ export const VALIDATION_REGEX = {
   ALPHABETS_ONLY: /^[A-Za-z\s]+$/,
   EMAIL: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
   PHONE_NUMBER: /^(\(\d{3}\)\s?\d{3}-?\d{4}|\d{10})?$/,
+  DOMAIN: /^https:\/\/(?:[-A-Za-z0-9]+\.)+[A-Za-z]{2,6}$/,
 };
 
 export const MAX_LENGTHS = {
@@ -39,6 +40,7 @@ export const ERROR_MESSAGES = {
     EMAIL_CHARACTERS:
       "Email can only contain alphanumeric characters and (., -, _, @)",
     PHONE_NUMBER: "Invalid phone number format",
+    DOMAIN: "Invalid URL format (e.g., https://example.com)",
   },
   MAX_LENGTH: {
     CLUB_NAME: `Club name must not exceed ${MAX_LENGTHS.CLUB_NAME} characters`,
