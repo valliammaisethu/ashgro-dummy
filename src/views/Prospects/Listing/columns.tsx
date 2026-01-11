@@ -1,17 +1,15 @@
 import React from "react";
 import { ColumnsType } from "antd/es/table";
-import { IconEdit, IconDelete } from "obra-icons-react";
 import dayjs from "dayjs";
 
 import { ProspectsList } from "src/models/prospects.model";
 import PhoneNumberLabel from "src/shared/components/Table/atoms/PhoneNumberLabel";
-import { Colors } from "src/enums/colors.enum";
 import StatusDropdown from "src/shared/components/StatusDropdown";
 import { stopPropagation } from "src/shared/utils/eventUtils";
 import { LeadStatus } from "src/models/meta.model";
 import ProspectFollowUpDate from "./Components/ProspectFollowUpDate";
 
-import styles from "./listing.module.scss";
+import RowActions from "src/shared/components/Table/atoms/RowActions";
 
 interface ColumnProps {
   handleOnEdit: (prospect: ProspectsList) => void;
@@ -90,25 +88,11 @@ export const getColumns = ({
     key: "actions",
     width: "7%",
     render: (_, record) => (
-      // TODO: avoid using inline function in #220
-      <div className={styles.actionsCell}>
-        <IconEdit
-          onClick={(e) => {
-            stopPropagation(e);
-            handleOnEdit(record);
-          }}
-          size={20}
-          color={Colors.MODAL_CLOSE_ICON}
-        />
-        <IconDelete
-          onClick={(e) => {
-            stopPropagation(e);
-            handleOnDelete(record);
-          }}
-          size={20}
-          color={Colors.MODAL_CLOSE_ICON}
-        />
-      </div>
+      <RowActions
+        item={record}
+        onEdit={handleOnEdit}
+        onDelete={handleOnDelete}
+      />
     ),
   },
 ];

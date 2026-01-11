@@ -33,3 +33,10 @@ export const defaultTableProps = {
   pagination: false,
   scroll: { x: "100%", y: "calc(100vh - 28rem)" },
 } as const;
+
+export const SKELETON_KEYS = {
+  NAME: "name",
+  STATUS: "status",
+  CIRCLE: "circle",
+  SKELETON_KEY: "skeleton-%s",
+} as const;

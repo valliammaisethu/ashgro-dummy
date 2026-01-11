@@ -1,35 +1,17 @@
-import React from "react";
-import { Table as AntTable, TableProps as AntTableProps } from "antd";
+import React, { useMemo } from "react";
+import { Table as AntTable, Empty } from "antd";
 import { ColumnsType } from "antd/es/table";
 
 import Pagination from "../Pagination";
 import { commonColumns, defaultTableProps } from "./constants";
+import { useTableSkeleton } from "./hooks/useTableSkeleton";
+import { BaseRecord, TableProps } from "src/shared/types/table.type";
 
 import styles from "./table.module.scss";
 
-interface BaseRecord {
-  id?: string;
-  firstName?: string;
-  lastName?: string;
-  profilePictureUrl?: string;
-  email?: string;
-}
-
-interface TableProps<T> {
-  columns: ColumnsType<T>;
-  dataSource: T[];
-  currentPage?: number;
-  totalPages?: number;
-  onPageChange?: (page: number) => void;
-  hasData?: boolean;
-  paginationClassName?: string;
-  rowSelection?: AntTableProps<T>["rowSelection"];
-  onRow?: AntTableProps<T>["onRow"];
-}
-
 const Table = <T extends BaseRecord>({
   columns,
-  dataSource,
+  dataSource = [],
   currentPage,
   totalPages,
   onPageChange,
@@ -37,20 +19,33 @@ const Table = <T extends BaseRecord>({
   paginationClassName,
   rowSelection,
   onRow,
+  loading,
+  noDataComponent = <Empty />,
 }: TableProps<T>) => {
-  const updateColumns = [...commonColumns, ...(columns || [])]?.map((col) => ({
-    ...col,
-    ellipsis: true,
-  })) as ColumnsType<T>;
+  const updateColumns = useMemo(
+    () =>
+      [...commonColumns, ...(columns || [])]?.map((col) => ({
+        ...col,
+        ellipsis: true,
+      })) as ColumnsType<T>,
+    [columns],
+  );
+
+  const { tableColumns, tableDataSource } = useTableSkeleton({
+    loading,
+    columns: updateColumns,
+    dataSource,
+  });
 
   return (
-    <>
+    <div className={styles.tableContainer}>
       <AntTable<T>
         className={styles.customTable}
-        columns={updateColumns}
-        dataSource={dataSource}
+        columns={tableColumns}
+        dataSource={tableDataSource}
         rowSelection={rowSelection}
-        onRow={onRow}
+        onRow={loading ? undefined : onRow}
+        locale={{ emptyText: noDataComponent }}
         {...defaultTableProps}
       />
       {onPageChange && (
@@ -62,7 +57,7 @@ const Table = <T extends BaseRecord>({
           hasData={hasData}
         />
       )}
-    </>
+    </div>
   );
 };
 
