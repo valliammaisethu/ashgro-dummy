@@ -1,35 +1,68 @@
 import React from "react";
-import { Table as AntTable, PaginationProps, TableProps } from "antd";
-import { useSearchParams } from "react-router-dom";
+import { Table as AntTable, TableProps as AntTableProps } from "antd";
+import { ColumnsType } from "antd/es/table";
 
-import { parseNumber } from "src/shared/utils/parser";
+import Pagination from "../Pagination";
+import { commonColumns, defaultTableProps } from "./constants";
 
-const Table = <T extends object>({ pagination, ...props }: TableProps<T>) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+import styles from "./table.module.scss";
 
-  const current = parseNumber(searchParams.get("page") || 1);
+interface BaseRecord {
+  id?: string;
+  firstName?: string;
+  lastName?: string;
+  profilePictureUrl?: string;
+  email?: string;
+}
 
-  const pageSize = parseNumber(searchParams.get("pageSize") || 1);
+interface TableProps<T> {
+  columns: ColumnsType<T>;
+  dataSource: T[];
+  currentPage?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+  hasData?: boolean;
+  paginationClassName?: string;
+  rowSelection?: AntTableProps<T>["rowSelection"];
+  onRow?: AntTableProps<T>["onRow"];
+}
 
-  const handlePageChange: PaginationProps["onChange"] = (page, pageSize) =>
-    setSearchParams({
-      page: page.toString(),
-      pageSize: pageSize.toString(),
-    });
+const Table = <T extends BaseRecord>({
+  columns,
+  dataSource,
+  currentPage,
+  totalPages,
+  onPageChange,
+  hasData,
+  paginationClassName,
+  rowSelection,
+  onRow,
+}: TableProps<T>) => {
+  const updateColumns = [...commonColumns, ...(columns || [])]?.map((col) => ({
+    ...col,
+    ellipsis: true,
+  })) as ColumnsType<T>;
 
   return (
-    <AntTable
-      pagination={
-        pagination !== false && {
-          current,
-          onChange: handlePageChange,
-          pageSize,
-          showSizeChanger: false,
-          ...pagination,
-        }
-      }
-      {...props}
-    />
+    <>
+      <AntTable<T>
+        className={styles.customTable}
+        columns={updateColumns}
+        dataSource={dataSource}
+        rowSelection={rowSelection}
+        onRow={onRow}
+        {...defaultTableProps}
+      />
+      {onPageChange && (
+        <Pagination
+          className={paginationClassName}
+          currentPage={currentPage || 1}
+          totalPages={totalPages || 1}
+          onPageChange={onPageChange}
+          hasData={hasData}
+        />
+      )}
+    </>
   );
 };
 
