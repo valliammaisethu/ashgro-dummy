@@ -293,8 +293,8 @@ const ProspectsListing = () => {
   }, [toggleNewEmailModal]);
 
   const handleStatusChange = async (
-    prospectId: string,
-    leadStatusId: string,
+    prospectId?: string,
+    leadStatusId?: string,
   ) => {
     setUpdatingProspectId(prospectId);
 
@@ -309,8 +309,8 @@ const ProspectsListing = () => {
   };
 
   const handleFollowUpDateChange = async (
-    prospectId: string,
-    date: dayjs.Dayjs | null,
+    prospectId?: string,
+    date?: dayjs.Dayjs | null,
   ) => {
     if (!date) return;
 

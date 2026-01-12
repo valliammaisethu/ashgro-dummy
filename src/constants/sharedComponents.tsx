@@ -183,7 +183,9 @@ export const DEFAULT_MAX_FILE_SIZE_PLACEHOLDER =
 export const clearSelectionLabel = "Clear Selection";
 export const clearSelectionKey = "clearSelection";
 
-export const selectStatus = "Select a status";
+export const selectStatus = "Select Status";
+
+export const selectStatusClassName = "statusDropdown";
 
 export const tooltipLabels = {
   EDIT: "Edit",

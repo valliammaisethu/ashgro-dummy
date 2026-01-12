@@ -840,3 +840,16 @@ ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   font-size: 1.2rem;
   font-weight: 400;
 }
+
+.statusDropdown {
+  width: 100%;
+  &.ant-select-outlined:not(.ant-select-disabled):not(
+      .ant-select-customize-input
+    ):not(.ant-pagination-size-changer) {
+    .ant-select-selector {
+      border-radius: 2.2rem;
+      border-width: 0.1rem;
+      width: 15rem;
+    }
+  }
+}
