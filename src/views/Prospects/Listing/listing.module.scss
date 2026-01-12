@@ -2,7 +2,7 @@
 @import "src/styles/_helpers.scss";
 
 .prospectList {
-  margin-top: 2rem;
+  margin-top: 1.2rem;
 }
 
 .prospectCard {
@@ -95,11 +95,6 @@
   ::global(.ant-table-cell) {
     background-color: $ashgro-white;
   }
-}
-
-.tableContainer {
-  background-color: $search-field-placeholder;
-  overflow: hidden;
 }
 
 .tableHeader {
@@ -333,29 +328,6 @@
   background-color: transparent;
 }
 
-.paginationContainer {
-  margin-top: 1.6rem;
-  @include flex-container(center, center, row, 2.4rem);
-
-  .textContainer {
-    color: $ashgro-navy;
-    font-size: 1.4rem;
-    font-family: $font-secondary;
-    @include flex-flow(row, wrap, center);
-    gap: 1rem;
-
-    .active {
-      color: $ashgro-navy;
-      font-family: $font-secondary;
-      font-weight: 700;
-      font-size: 1.6rem;
-    }
-    .end {
-      padding-left: 0.5rem;
-    }
-  }
-}
-
 .clearSelection {
   margin-top: 0.4rem;
   font-size: 1.4rem;
@@ -363,4 +335,38 @@
   display: flex;
   @include flex-flow(row, wrap, normal, 0.8rem);
   cursor: pointer;
+}
+
+.followUpDateContainer {
+  position: relative;
+  @include flex-container(normal, center, row, 1.6rem);
+  .followUpDateLabel {
+    @include flex-container(normal, center, row, 0.6rem);
+    align-items: center;
+    cursor: pointer;
+  }
+  .datePicker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.leadStatus {
+  width: 100%;
+  &:global(
+    .ant-select-outlined:not(.ant-select-disabled):not(
+        .ant-select-customize-input
+      ):not(.ant-pagination-size-changer)
+  ) {
+    :global(.ant-select-selector) {
+      border-radius: 2.2rem;
+      border-width: 0.1rem;
+      width: 15rem;
+    }
+  }
 }

@@ -72,6 +72,7 @@ const prospectSchema = yup.object({
   leadSourceId: yup.string(),
   membershipCategoryId: yup.string(),
   attachmentId: yup.string(),
+  additionalComments: yup.string().max(300),
 });
 
 const activityDetailsSchema = yup
