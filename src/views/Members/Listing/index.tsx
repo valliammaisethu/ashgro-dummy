@@ -13,7 +13,6 @@ import {
   areSomeMembersSelected,
   SelectedMember,
 } from "../helpers";
-import { memberHeaders } from "../MembersForm/constants";
 import Header from "../Header";
 import MemberFilters from "../Filters";
 import DeleteModal from "../DeleteModal";
@@ -31,22 +30,12 @@ import { MemberShipService } from "src/services/SettingsService/memberShip.servi
 import { VisibilityType } from "src/enums/visibilityType.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { ImportModes } from "src/enums/importModes.enum";
-import { DateFormats } from "src/enums/dateFormats.enum";
 import { TemplateEntity } from "src/enums/templateEntity.enum";
-import ConditionalRender from "src/shared/components/ConditionalRender";
-import Pagination from "src/shared/components/Pagination";
-import Profile from "src/shared/components/atoms/Table/Profile";
-import Form from "src/shared/components/Form";
-import Checkbox from "src/shared/components/Checkbox";
-import Actions from "src/shared/components/atoms/Table/Actions";
-import { stopPropagation } from "src/shared/utils/eventUtils";
-import { formatDate } from "src/shared/utils/dateUtils";
 import useRedirect from "src/shared/hooks/useRedirect";
 import useDrawer from "src/shared/hooks/useDrawer";
-import { fallbackHandler } from "src/shared/utils/commonHelpers";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
-
-import styles from "./membersListing.module.scss";
+import Table from "src/shared/components/Table";
+import { getColumns } from "./columns";
 
 interface ModalState {
   open: boolean;
@@ -61,6 +50,7 @@ const Members = () => {
     new MembersListingParams(),
   );
   const [selectedMembers, setSelectedMembers] = useState<SelectedMember[]>([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate>();
   const [isAllSelected, setIsAllSelected] = useState(false);
 
@@ -196,12 +186,18 @@ const Members = () => {
 
   const handleMemberDelete = (member: Member) => () => setDeleteItem(member);
 
-  const handlePageChange = (newPage: number) =>
+  const handlePageChange = useCallback((newPage: number) => {
     setQueryParams((prev) => ({ ...prev, page: newPage }));
+  }, []);
 
   const handleSelectAll = useCallback(
     (checked: boolean) => {
       setSelectedMembers(toggleAllSelections(checked, data?.members));
+      if (checked) {
+        setSelectedRowKeys(data?.members?.map((m) => m.id!) ?? []);
+      } else {
+        setSelectedRowKeys([]);
+      }
       setIsAllSelected(checked);
     },
     [data?.members],
@@ -217,6 +213,23 @@ const Members = () => {
     },
     [],
   );
+
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+    onSelect: (record: Member, selected: boolean) => {
+      const { id, email, firstName } = record || {};
+      if (!id || !email || !firstName) return;
+      handleSelectOne(id, email, firstName, selected);
+    },
+    onSelectAll: (selected: boolean) => {
+      handleSelectAll(selected);
+    },
+  };
 
   const handleHeaderCheckboxChange = useCallback(
     (e?: CheckboxChangeEvent) => {
@@ -281,6 +294,7 @@ const Members = () => {
 
   const handleClearSelections = () => {
     setSelectedMembers([]);
+    setSelectedRowKeys([]);
     setIsAllSelected(false);
   };
 
@@ -306,6 +320,36 @@ const Members = () => {
     }
   }, [clubId, queryParams.clubId]);
 
+  const memberStatusOptions = useMemo(
+    () =>
+      memberShipStatusesOptions?.map((opt) => ({
+        ...opt,
+        statusName: opt.label,
+        id: opt.value,
+      })) || [],
+    [memberShipStatusesOptions],
+  );
+
+  const columns = useMemo(
+    () =>
+      getColumns({
+        handleOnEdit: (member) => handleEditClick(member),
+        handleOnDelete: (member) => setDeleteItem(member),
+        statusOptions: memberStatusOptions,
+        onStatusChange: (memberId, statusId) =>
+          handleStatusChange(memberId, statusId),
+        updatingMemberId,
+      }),
+    [memberStatusOptions, updatingMemberId],
+  );
+
+  const handleRowClick = useCallback(
+    (record: Member) => ({
+      onClick: handleNavigateToDetails(record.id),
+    }),
+    [handleNavigateToDetails],
+  );
+
   return (
     <div>
       <Header
@@ -325,89 +369,17 @@ const Members = () => {
         defaultValues={queryParams}
         onSubmit={handleApplyFilter}
       />
-      <Form>
-        <div className={styles.listContainer}>
-          <div className={styles.headerRow}>
-            <div className={styles.headerWithCheckbox}>
-              <div className={styles.checkboxCol} onClick={stopPropagation}>
-                <Checkbox
-                  checked={allSelected}
-                  indeterminate={someSelected}
-                  onChange={handleHeaderCheckboxChange}
-                />
-              </div>
-              <p className={styles.headerLabel}>{memberHeaders[0]}</p>
-            </div>
-            <p className={styles.headerLabel}>{memberHeaders[1]}</p>
-            <p className={styles.headerLabel}>{memberHeaders[2]}</p>
-          </div>
-
-          <ConditionalRender
-            records={data?.members}
-            isPending={isLoading}
-            isSuccess={isSuccess}
-          >
-            <div className={styles.listContainer}>
-              {data?.members?.map((item) => {
-                return (
-                  <div
-                    key={item.id}
-                    className={styles.rowContainer}
-                    onClick={handleNavigateToDetails(item?.id)}
-                  >
-                    <Profile
-                      firstName={item.firstName}
-                      lastName={item.lastName}
-                      email={item.email}
-                      profilePictureUrl={item.profilePictureUrl}
-                      contactNumber={
-                        item?.contactNumber
-                          ? `${item?.countryCode} ${item?.contactNumber}`
-                          : undefined
-                      }
-                      showCheckbox
-                      isSelected={selectedMembers.some((m) => m.id === item.id)}
-                      onSelectChange={(checked) =>
-                        handleSelectOne(
-                          item.id!,
-                          item.email!,
-                          item.firstName!,
-                          checked,
-                        )
-                      }
-                    />
-
-                    <div className={styles.rowItem}>
-                      {fallbackHandler(
-                        formatDate(item.joinedDate, DateFormats.DD_MMM__YYYY),
-                      )}
-                    </div>
-
-                    <Actions
-                      selectWidth={200}
-                      selectedValue={item.membershipStatus}
-                      options={memberShipStatusesOptions}
-                      onSelectChange={handleMemberStatusChange(item.id)}
-                      selectLoading={updatingMemberId === item.id}
-                      onEditClick={handleMemberEdit(item)}
-                      onDeleteClick={handleMemberDelete(item)}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            <Pagination
-              currentPage={
-                data?.pagination?.currentPage ?? queryParams.page ?? 1
-              }
-              totalPages={data?.pagination?.overallPages ?? 1}
-              onPageChange={handlePageChange}
-              hasData={!!data?.members && data.members.length > 0}
-            />
-          </ConditionalRender>
-        </div>
-      </Form>
-
+      <Table<Member>
+        columns={columns}
+        dataSource={data?.members}
+        currentPage={data?.pagination?.currentPage ?? queryParams.page}
+        totalPages={data?.pagination?.overallPages}
+        onPageChange={handlePageChange}
+        hasData={!!data?.members?.length}
+        rowSelection={rowSelection}
+        onRow={handleRowClick}
+        loading={isLoading}
+      />
       <DeleteModal
         visible={!!deleteItem?.id}
         toggleVisibility={() => setDeleteItem(undefined)}

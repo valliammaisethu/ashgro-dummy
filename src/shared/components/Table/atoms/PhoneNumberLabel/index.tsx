@@ -2,12 +2,9 @@ import React from "react";
 
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { formatTablePhoneNumber } from "../../helpers";
+import { PhoneNumberLabelProps } from "src/shared/types/table.type";
 
 import styles from "../../table.module.scss";
-
-interface PhoneNumberLabelProps {
-  phoneNumber?: string;
-}
 
 const PhoneNumberLabel = ({ phoneNumber }: PhoneNumberLabelProps) => {
   return (

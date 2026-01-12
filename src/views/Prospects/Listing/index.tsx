@@ -91,7 +91,7 @@ const ProspectsListing = () => {
   const { getProspectEmailRecipients } = EmailService();
   const { checkBulkImportStatus } = BulkUploadService();
 
-  const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
+  const { data, isLoading } = useQuery(getProspects(queryParams));
 
   const { leadStatusList } = LeadService();
   const { data: leadStatusesData = [] } = useQuery(leadStatusList());
@@ -391,18 +391,17 @@ const ProspectsListing = () => {
         isCheckingImportStatus={isCheckingImportStatus}
       />
       <div className={styles.prospectList}>
-        <div className={styles.tableContainer}>
-          <Table<ProspectsList>
-            columns={columns}
-            dataSource={data?.prospects || []}
-            currentPage={data?.pagination?.currentPage ?? queryParams.page}
-            totalPages={data?.pagination?.overallPages}
-            onPageChange={handlePageChange}
-            hasData={!!data?.prospects?.length}
-            rowSelection={rowSelection}
-            onRow={handleRowClick}
-          />
-        </div>
+        <Table<ProspectsList>
+          columns={columns}
+          dataSource={data?.prospects}
+          currentPage={data?.pagination?.currentPage ?? queryParams.page}
+          totalPages={data?.pagination?.overallPages}
+          onPageChange={handlePageChange}
+          hasData={!!data?.prospects?.length}
+          rowSelection={rowSelection}
+          onRow={handleRowClick}
+          loading={isLoading}
+        />
       </div>
       <DeleteModal
         visible={deleteModalVisible}

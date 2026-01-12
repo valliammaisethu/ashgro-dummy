@@ -60,6 +60,19 @@
     .ant-table-tbody > tr.ant-table-row-selected > td {
       background-color: $ashgro-white !important;
     }
+
+    .ant-table-placeholder {
+      background-color: $ashgro-white !important;
+      border-radius: 0 0 2rem 2rem !important;
+      .ant-table-cell {
+        border-bottom: none !important;
+        height: calc(100vh - 30rem);
+        background-color: $ashgro-bg;
+      }
+      :hover {
+        background-color: $ashgro-bg !important;
+      }
+    }
   }
 }
 
@@ -130,4 +143,41 @@
   font-weight: 400;
   color: $ashgro-blue;
   @include text-ellipsis;
+}
+
+.skeletonNameWrapper {
+  @include flex-container(flex-start, center, row, 1rem);
+}
+
+.skeletonNameInput {
+  width: 12rem !important;
+  height: 2rem !important;
+}
+
+.skeletonStatusButton {
+  width: 10rem !important;
+  border-radius: 0.4rem !important;
+}
+
+.skeletonGenericInput {
+  width: 80% !important;
+  height: 2rem !important;
+}
+
+.tableContainer {
+  background-color: $search-field-placeholder;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.actionsCell {
+  visibility: hidden;
+  @include flex-container(normal, center, row, 1.6rem);
+}
+
+.customTable :global(.ant-table-row:hover) .actionsCell {
+  visibility: visible;
+  cursor: pointer;
 }

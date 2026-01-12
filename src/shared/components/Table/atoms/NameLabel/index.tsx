@@ -5,14 +5,9 @@ import { Tooltip } from "antd";
 import AvatarFallback from "src/shared/components/AvatarFallback";
 import { useEllipsisTooltip } from "src/shared/hooks/useEllipsisTooltip";
 import { getFullName } from "src/shared/utils/helpers";
+import { NameLabelProps } from "src/shared/types/table.type";
 
 import styles from "../../table.module.scss";
-
-interface NameLabelProps {
-  firstName?: string;
-  lastName?: string;
-  avatarUrl?: string;
-}
 
 const NameLabel = ({ firstName, lastName, avatarUrl }: NameLabelProps) => {
   const name = getFullName(firstName, lastName);
