@@ -7,6 +7,7 @@ export const ADD_PROSPECT_CONSTANTS = {
     LEAD_DETAILS: "Lead Details",
     FEES_AND_DUES: "Fees & Dues",
     ACTIVITY_DETAILS: "Activity Details",
+    ADDITIONAL_COMMENTS: "Additional Comments",
   },
 
   LABELS: {
@@ -25,6 +26,7 @@ export const ADD_PROSPECT_CONSTANTS = {
     ACTIVITY_DATE_TIME: "Activity Date & Time",
     ACTIVITY_TYPE: "Activity Type",
     ACTIVITY_DESCRIPTION: "Activity Description",
+    ADDITIONAL_COMMENTS: "Additional Comments",
   },
 
   PLACEHOLDERS: {
@@ -42,6 +44,7 @@ export const ADD_PROSPECT_CONSTANTS = {
     ACTIVITY_DATE_TIME: "Enter activity date & time",
     ACTIVITY_TYPE: "Select activity type",
     ACTIVITY_DESCRIPTION: "Add activity description",
+    ADDITIONAL_COMMENTS: "Add additional comments",
   },
 
   FIELD_NAMES: {
@@ -61,6 +64,7 @@ export const ADD_PROSPECT_CONSTANTS = {
     ACTIVITY_DATE_TIME: "activityDetails.createdAt",
     ACTIVITY_TYPE: "activityDetails.activityTypeId",
     ACTIVITY_DESCRIPTION: "activityDetails.description",
+    ADDITIONAL_COMMENTS: "prospect.additionalComments",
   } as const,
 };
 

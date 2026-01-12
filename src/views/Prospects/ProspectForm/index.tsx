@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useMemo } from "react";
 import { Col, Divider, Row } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IconCalendarWait } from "obra-icons-react";
@@ -274,6 +274,14 @@ const ProspectForm = ({
     }
   };
 
+  const handleAdditionalCommentsChange = (
+    e: ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    const value = e.target.value.trim();
+    if (!value) return;
+    setValue(FIELD_NAMES.ADDITIONAL_COMMENTS, value);
+  };
+
   return (
     <Modal
       cancelButtonProps={{ className: "d-none" }}
@@ -464,6 +472,21 @@ const ProspectForm = ({
             </Row>
           </>
         )}
+        <Divider />
+        <div className={styles.sectionTitle}>
+          {SECTION_TITLES.ADDITIONAL_COMMENTS}
+        </div>
+        <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
+          <Col span={24}>
+            <TextArea
+              placeholder={PLACEHOLDERS.ADDITIONAL_COMMENTS}
+              name={FIELD_NAMES.ADDITIONAL_COMMENTS}
+              className={styles.activityDescBox}
+              label={LABELS.ADDITIONAL_COMMENTS}
+              onChange={handleAdditionalCommentsChange}
+            />
+          </Col>
+        </Row>
       </Form>
     </Modal>
   );

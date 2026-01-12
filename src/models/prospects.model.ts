@@ -125,6 +125,9 @@ export class Prospect {
 
   @serializable
   attachmentId?: string;
+
+  @serializable
+  additionalComments?: string;
 }
 
 export class ProspectFormData {
