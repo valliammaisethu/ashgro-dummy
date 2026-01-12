@@ -355,3 +355,18 @@
     pointer-events: none;
   }
 }
+
+.leadStatus {
+  width: 100%;
+  &:global(
+    .ant-select-outlined:not(.ant-select-disabled):not(
+        .ant-select-customize-input
+      ):not(.ant-pagination-size-changer)
+  ) {
+    :global(.ant-select-selector) {
+      border-radius: 2.2rem;
+      border-width: 0.1rem;
+      width: 15rem;
+    }
+  }
+}
