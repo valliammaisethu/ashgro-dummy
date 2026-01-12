@@ -21,14 +21,22 @@ const Table = <T extends BaseRecord>({
   onRow,
   loading,
   noDataComponent = <Empty />,
+  nameColWidth,
+  emailColWidth,
+  nameColTitle,
 }: TableProps<T>) => {
   const updateColumns = useMemo(
     () =>
       [...commonColumns, ...(columns || [])]?.map((col) => ({
         ...col,
+        width:
+          (col.key === "name" && nameColWidth) ||
+          (col.key === "email" && emailColWidth) ||
+          col.width,
+        title: (col.key === "name" && nameColTitle) || col.title,
         ellipsis: true,
       })) as ColumnsType<T>,
-    [columns],
+    [columns, nameColWidth, emailColWidth, nameColTitle],
   );
 
   const { tableColumns, tableDataSource } = useTableSkeleton({

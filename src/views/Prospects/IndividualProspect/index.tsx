@@ -2,16 +2,20 @@ import React, { Fragment, useState, useMemo } from "react";
 import { IconDelete, IconEdit } from "obra-icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { Select } from "antd";
 
 import Header from "./Header";
 import ProspectForm from "../ProspectForm";
-import StatusDropdown from "../../../shared/components/StatusDropdown";
 import Card from "src/shared/components/Card";
 import Button from "src/shared/components/Button";
 import ProspectInfo from "./components/ProspectInfo";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import DetailSection from "./components/DetailSection";
 import ActivitySection from "./components/ActivitySection";
+import {
+  selectStatus,
+  selectStatusClassName,
+} from "src/constants/sharedComponents";
 import {
   PROSPECT_LABELS,
   DetailSectionType,
@@ -35,6 +39,7 @@ import { LeadService } from "src/services/SettingsService/lead.service";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 import styles from "./individualProspect.module.scss";
+import clsx from "clsx";
 
 const IndividualProspect = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
@@ -143,11 +148,16 @@ const IndividualProspect = () => {
         <Card className={styles.card}>
           <div className={styles.leftSide}>
             <div className={styles.header}>
-              <StatusDropdown
+              <Select
                 value={data?.prospect?.leadStatus}
-                options={leadStatusOptions}
+                options={leadStatusOptions?.map((opt) => ({
+                  label: opt.statusName,
+                  value: opt.id,
+                }))}
                 onChange={handleStatusChange}
                 loading={isUpdatingStatus}
+                className={clsx(selectStatusClassName, styles.selectStatus)}
+                placeholder={selectStatus}
               />
               <Button
                 onClick={handleEdit}

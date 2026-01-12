@@ -21,3 +21,5 @@ export enum PageListingDirections {
 }
 
 export const bulkImportProspects = "Bulk Import Prospects";
+
+export const prospectNameColTitle = "Prospect Name";

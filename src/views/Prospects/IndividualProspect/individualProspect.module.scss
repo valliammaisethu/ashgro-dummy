@@ -449,3 +449,7 @@
     font-family: $font-secondary;
   }
 }
+
+.selectStatus {
+  width: 30% !important; //Adding important to override antd styles which defined inside antdOverride file
+}

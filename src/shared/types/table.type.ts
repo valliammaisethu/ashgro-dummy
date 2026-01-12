@@ -22,6 +22,9 @@ export interface TableProps<T> {
   onRow?: AntTableProps<T>["onRow"];
   loading?: boolean;
   noDataComponent?: React.ReactNode;
+  nameColWidth?: string | number;
+  emailColWidth?: string | number;
+  nameColTitle?: string;
 }
 
 export interface NameLabelProps {
