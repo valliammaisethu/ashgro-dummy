@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import { useQuery } from "@tanstack/react-query";
 import queryString from "query-string";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Skeleton } from "antd";
 
 import CalendarToolbar from "./CalenderToolbar/CalendarToolbar";
 import DateCell from "./DateCell";
@@ -45,7 +46,9 @@ const Calender = ({
   const { navigateToMonth } = useRedirect();
   const { calenderEventsAndSlotsList } = CalenderService();
 
-  const { data } = useQuery(calenderEventsAndSlotsList(selectedDate));
+  const { data, isLoading } = useQuery(
+    calenderEventsAndSlotsList(selectedDate),
+  );
 
   const handleSelectMonth = useCallback(
     (date: Date) => {
@@ -77,31 +80,41 @@ const Calender = ({
 
   const DateHeader = useCallback(
     (props: DateHeaderProps) => (
-      <DateCell {...props} allEvents={eventsForSelectedMonth} />
+      <ConditionalRenderComponent
+        visible={!isLoading || props.isOffRange}
+        fallback={
+          <Skeleton
+            active
+            paragraph={{ rows: 3, width: ["60%", "80%", "50%"] }}
+            title={false}
+            className={styles.calendarSkeleton}
+          />
+        }
+      >
+        <DateCell {...props} allEvents={eventsForSelectedMonth} />
+      </ConditionalRenderComponent>
     ),
-    [eventsForSelectedMonth],
+    [eventsForSelectedMonth, isLoading],
   );
 
   useAppContainerPadding();
 
   return (
     <div className={styles.calendarWrapper}>
-      <ConditionalRenderComponent visible={!!data}>
-        <Calendar
-          {...CALENDAR_CONFIG}
-          localizer={localizer}
-          events={data}
-          date={dayjs(selectedDate).toDate()}
-          onNavigate={handleSelectMonth}
-          components={{
-            toolbar: Toolbar,
-            event: () => null,
-            month: {
-              dateHeader: DateHeader,
-            },
-          }}
-        />
-      </ConditionalRenderComponent>
+      <Calendar
+        {...CALENDAR_CONFIG}
+        localizer={localizer}
+        events={data}
+        date={dayjs(selectedDate).toDate()}
+        onNavigate={handleSelectMonth}
+        components={{
+          toolbar: Toolbar,
+          event: () => null,
+          month: {
+            dateHeader: DateHeader,
+          },
+        }}
+      />
     </div>
   );
 };

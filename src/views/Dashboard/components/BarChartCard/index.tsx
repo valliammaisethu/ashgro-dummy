@@ -26,6 +26,8 @@ import FilterIconWithBadge from "../FilterIconWithBadge";
 import ClubFilterDropdown from "../ClubFilterDropdown";
 import { Tooltip } from "antd";
 import { tooltipLabels } from "src/constants/sharedComponents";
+import SkeletonBars from "src/shared/components/Skeleton/ChartSkeleton/SkeletonBars";
+import Header from "src/shared/components/Skeleton/ChartSkeleton/Header";
 
 import styles from "./barChartCard.module.scss";
 
@@ -159,81 +161,91 @@ const BarChartCard: React.FC<BarChartCardProps> = ({
           {CHART_CONSTANTS.CUSTOM_CHART}
         </span>
       </ConditionalRenderComponent>
-      <div className={styles.chartHeader}>
-        <div className={styles.headerLeft}>
-          <ConditionalRenderComponent visible={isClubAdmin} hideFallback>
-            <IconReorderAlt
-              {...dragHandleProps}
-              size={20}
-              color={DARK_GOLD}
-              className={clsx(styles.dragIcon, {
-                [styles.dragging]: isDragging,
-              })}
-            />
-          </ConditionalRenderComponent>
-          <h2 className={styles.chartTitle}>{title}</h2>
-        </div>
-
-        <div className={styles.chartActions}>
-          <ConditionalRenderComponent visible={!isClubAdmin} hideFallback>
-            <div className={styles.labelPrefix} />
-            <span className={styles.superAdminChatLabel}>
-              {CHART_LABEL_MAP[title]}
-            </span>
-          </ConditionalRenderComponent>
-
-          <DateRangeButton value={dateRange} onChange={handleDateChange} />
-          <ConditionalRenderComponent
-            visible={isClubAdmin}
-            fallback={<ClubFilterDropdown chartId={id} />}
-          >
-            <FilterIconWithBadge
-              hasFilters={hasFilters}
-              onClick={handleFilterClick}
-            />
-          </ConditionalRenderComponent>
-          <ConditionalRenderComponent visible={!isDefault} hideFallback>
-            <Tooltip title={tooltipLabels.EDIT}>
-              <IconEdit
+      <ConditionalRenderComponent
+        visible={isSuccess || isError}
+        fallback={<Header />}
+      >
+        <div className={styles.chartHeader}>
+          <div className={styles.headerLeft}>
+            <ConditionalRenderComponent visible={isClubAdmin} hideFallback>
+              <IconReorderAlt
+                {...dragHandleProps}
                 size={20}
-                color={MODAL_CLOSE_ICON}
-                className={styles.actionIcon}
-                onClick={handleOnEdit}
+                color={DARK_GOLD}
+                className={clsx(styles.dragIcon, {
+                  [styles.dragging]: isDragging,
+                })}
               />
-            </Tooltip>
+            </ConditionalRenderComponent>
+            <h2 className={styles.chartTitle}>{title}</h2>
+          </div>
 
-            <DeleteModal
-              {...CHART_CONSTANTS}
-              customDescription={CHART_CONSTANTS.customDescription.replace(
-                "%s",
-                title,
-              )}
-              onDelete={handleOnDelete}
-              loading={isPending}
+          <div className={styles.chartActions}>
+            <ConditionalRenderComponent visible={!isClubAdmin} hideFallback>
+              <div className={styles.labelPrefix} />
+              <span className={styles.superAdminChatLabel}>
+                {CHART_LABEL_MAP[title]}
+              </span>
+            </ConditionalRenderComponent>
+
+            <DateRangeButton value={dateRange} onChange={handleDateChange} />
+            <ConditionalRenderComponent
+              visible={isClubAdmin}
+              fallback={<ClubFilterDropdown chartId={id} />}
             >
-              <Tooltip title={tooltipLabels.DELETE}>
-                <IconDelete
+              <FilterIconWithBadge
+                hasFilters={hasFilters}
+                onClick={handleFilterClick}
+              />
+            </ConditionalRenderComponent>
+            <ConditionalRenderComponent visible={!isDefault} hideFallback>
+              <Tooltip title={tooltipLabels.EDIT}>
+                <IconEdit
                   size={20}
                   color={MODAL_CLOSE_ICON}
                   className={styles.actionIcon}
+                  onClick={handleOnEdit}
                 />
               </Tooltip>
-            </DeleteModal>
-          </ConditionalRenderComponent>
-        </div>
-      </div>
 
-      <ConditionalRender
-        records={chartDetails}
-        isPending={isLoading}
-        isSuccess={isSuccess}
-        className={styles.loader}
-        isError={isError}
-        errorComponent={<ErrorState onReload={refetchData} />}
-        {...(hasFilters && { noData: <EmptyState /> })}
+              <DeleteModal
+                {...CHART_CONSTANTS}
+                customDescription={CHART_CONSTANTS.customDescription.replace(
+                  "%s",
+                  title,
+                )}
+                onDelete={handleOnDelete}
+                loading={isPending}
+              >
+                <Tooltip title={tooltipLabels.DELETE}>
+                  <IconDelete
+                    size={20}
+                    color={MODAL_CLOSE_ICON}
+                    className={styles.actionIcon}
+                  />
+                </Tooltip>
+              </DeleteModal>
+            </ConditionalRenderComponent>
+          </div>
+        </div>
+      </ConditionalRenderComponent>
+      <ConditionalRenderComponent
+        visible={isSuccess || isError}
+        fallback={<SkeletonBars />}
       >
-        <ChartCanvas title={title} labels={chartDetails} />
-      </ConditionalRender>
+        <ConditionalRender
+          records={chartDetails}
+          isPending={isLoading}
+          isSuccess={isSuccess}
+          className={styles.loader}
+          isError={isError}
+          showLoader={false}
+          errorComponent={<ErrorState onReload={refetchData} />}
+          {...(hasFilters && { noData: <EmptyState /> })}
+        >
+          <ChartCanvas title={title} labels={chartDetails} />
+        </ConditionalRender>
+      </ConditionalRenderComponent>
     </div>
   );
 };

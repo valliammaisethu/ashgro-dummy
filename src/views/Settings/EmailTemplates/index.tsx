@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import styles from "../settings.module.scss";
 import ToggleHeader from "../components/ToggleHeader";
 import EmailTemplateModal from "./Modal";
 import { EmailTemplateService } from "src/services/SettingsService/emailTemplate.service";
@@ -9,6 +8,10 @@ import ConditionalRender from "src/shared/components/ConditionalRender";
 import CardItem from "../components/CardItem";
 import { EmailTemplate } from "src/models/meta.model";
 import { EMAIL_TEMPLATE_CONSTANTS } from "../constants";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+import SettingsSkeleton from "src/shared/components/Skeleton/SettingsSkeleton/SettingsSkeleton";
+
+import styles from "../settings.module.scss";
 
 const EmailTemplates = () => {
   const { TITLE } = EMAIL_TEMPLATE_CONSTANTS;
@@ -57,21 +60,27 @@ const EmailTemplates = () => {
         isPending={isLoading}
         isSuccess={isSuccess}
         className={styles.noDataScreen}
+        showLoader={false}
       >
-        <div className={styles.cardContainer}>
-          {emailTemplates?.map((template) => (
-            <CardItem
-              key={template?.id}
-              id={template?.id}
-              label={template.title!}
-              onEdit={() => handleOpenModal(template)}
-              onDelete={() => handleDelete(template)}
-              loading={isDeletePending}
-              deleteTitle={TITLE}
-              deleteDescription={template.title!}
-            />
-          ))}
-        </div>
+        <ConditionalRenderComponent
+          visible={isSuccess}
+          fallback={<SettingsSkeleton />}
+        >
+          <div className={styles.cardContainer}>
+            {emailTemplates?.map((template) => (
+              <CardItem
+                key={template?.id}
+                id={template?.id}
+                label={template.title!}
+                onEdit={() => handleOpenModal(template)}
+                onDelete={() => handleDelete(template)}
+                loading={isDeletePending}
+                deleteTitle={TITLE}
+                deleteDescription={template.title!}
+              />
+            ))}
+          </div>
+        </ConditionalRenderComponent>
       </ConditionalRender>
 
       <EmailTemplateModal
