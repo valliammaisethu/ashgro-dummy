@@ -36,6 +36,7 @@ import useDrawer from "src/shared/hooks/useDrawer";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import Table from "src/shared/components/Table";
 import { getColumns } from "./columns";
+import { memberNameColTitle } from "../constant";
 
 interface ModalState {
   open: boolean;
@@ -113,18 +114,26 @@ const Members = () => {
 
   const { navigateToMemberDetails } = useRedirect();
 
-  const { getStaffMembersList, updateMemberStatus } = MembersService();
-  const { memberShipStatuses } = MemberShipService();
+  const { getStaffMembersList, updateMemberStatus, updateMemberCategory } =
+    MembersService();
+  const { memberShipStatuses, memberShipTypeStatuses } = MemberShipService();
   const { getMemberEmailRecipients } = EmailService();
   const { checkBulkImportStatus } = BulkUploadService();
 
   const { data: memberShipStatusesOptions = [] } =
     useQuery(memberShipStatuses());
+
+  const { data: memberShipTypeStatusesOptions = [] } = useQuery(
+    memberShipTypeStatuses(),
+  );
+
   const { mutateAsync: updateMemberStatusMutate } =
     useMutation(updateMemberStatus());
-  const { data, isSuccess, isLoading } = useQuery(
-    getStaffMembersList(queryParams),
+
+  const { mutateAsync: updateMemberCategoryMutate } = useMutation(
+    updateMemberCategory(),
   );
+  const { data, isLoading } = useQuery(getStaffMembersList(queryParams));
 
   const { data: emailRecipientsData } = useQuery({
     ...getMemberEmailRecipients(queryParams),
@@ -137,6 +146,9 @@ const Members = () => {
   } = useMutation(checkBulkImportStatus());
 
   const [updatingMemberId, setUpdatingMemberId] = useState<
+    string | undefined
+  >();
+  const [updatingCategoryId, setUpdatingCategoryId] = useState<
     string | undefined
   >();
 
@@ -169,6 +181,22 @@ const Members = () => {
     } finally {
       setUpdatingMemberId(undefined);
     }
+  };
+
+  const handleCategoryChange = async (
+    memberId?: string,
+    membershipCategoryId?: string,
+  ) => {
+    if (!memberId || !membershipCategoryId) return;
+
+    setUpdatingCategoryId(memberId);
+
+    await updateMemberCategoryMutate({
+      memberId,
+      membershipCategoryId,
+    });
+
+    setUpdatingCategoryId(undefined);
   };
 
   const handleNavigateToDetails = (id?: string) => () =>
@@ -339,8 +367,17 @@ const Members = () => {
         onStatusChange: (memberId, statusId) =>
           handleStatusChange(memberId, statusId),
         updatingMemberId,
+        membershipCategoryOptions: memberShipTypeStatusesOptions,
+        onCategoryChange: (memberId, categoryId) =>
+          handleCategoryChange(memberId, categoryId),
+        updatingCategoryId,
       }),
-    [memberStatusOptions, updatingMemberId],
+    [
+      memberStatusOptions,
+      memberShipTypeStatusesOptions,
+      updatingMemberId,
+      updatingCategoryId,
+    ],
   );
 
   const handleRowClick = useCallback(
@@ -379,6 +416,7 @@ const Members = () => {
         rowSelection={rowSelection}
         onRow={handleRowClick}
         loading={isLoading}
+        nameColTitle={memberNameColTitle}
       />
       <DeleteModal
         visible={!!deleteItem?.id}

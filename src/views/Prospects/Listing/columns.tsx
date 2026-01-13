@@ -13,6 +13,7 @@ import {
   selectStatus,
   selectStatusClassName,
 } from "src/constants/sharedComponents";
+import { DateFormats } from "src/enums/dateFormats.enum";
 
 interface ColumnProps {
   handleOnEdit: (prospect: ProspectsList) => void;
@@ -68,6 +69,7 @@ export const getColumns = ({
     dataIndex: "inquiryDate",
     key: "inquiryDate",
     width: "10%",
+    render: () => <span>{dayjs().format(DateFormats.DD_MMM__YYYY)}</span>,
   },
   {
     title: "Lead Status",

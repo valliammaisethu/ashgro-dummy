@@ -16,7 +16,7 @@ export const CONTACT_TITLES = {
 
 export const ClubStatusOptions = [
   { label: "Active", value: "ACTIVE", color: Colors.ACTIVE_GREEN },
-  { label: "Inactive", value: "INACTIVE", color: Colors.INACTIVE_GREY },
+  { label: "In Active", value: "INACTIVE", color: Colors.INACTIVE_GREY },
 ];
 
 export const headerConstants = {

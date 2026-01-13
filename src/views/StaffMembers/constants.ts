@@ -55,3 +55,8 @@ export const deleteModalConstants = {
   description:
     "Are you sure you want to permanently delete %s? This action is not reversible.",
 };
+
+export const tableProps = {
+  nameColWidth: "25%",
+  emailColWidth: "25%",
+};

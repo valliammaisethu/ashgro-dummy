@@ -32,6 +32,7 @@
 
     .rbc-date-cell {
       text-align: left;
+      padding: 0 !important;
     }
 
     .rbc-button-link {
@@ -54,4 +55,15 @@
   }
 }
 
-// TODO: To change color for previous date
+.calendarSkeleton {
+  margin: 1rem;
+  :global {
+    .ant-skeleton-content {
+      .ant-skeleton-paragraph {
+        li {
+          height: 3rem;
+        }
+      }
+    }
+  }
+}

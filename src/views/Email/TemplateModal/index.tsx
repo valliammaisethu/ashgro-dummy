@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { LoadingOutlined } from "@ant-design/icons";
 
 import Modal from "src/shared/components/Modal";
 import Button from "src/shared/components/Button";
@@ -19,6 +20,7 @@ import {
 } from "./constants";
 
 import styles from "../email.module.scss";
+import { Spin } from "antd";
 
 const TemplateModal = ({
   isOpen,
@@ -92,6 +94,11 @@ const TemplateModal = ({
             label={labels.emailTemplate}
             placeholder={placeholders.emailTemplate}
             loading={isPending}
+            suffixIcon={
+              <span>
+                {isPending && <Spin indicator={<LoadingOutlined />} />}
+              </span>
+            }
           />
         </Form>
         <div className={styles.or}>or</div>

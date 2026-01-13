@@ -51,6 +51,9 @@ export class ProspectsList {
 
   @serializable
   leadSource?: string;
+
+  @serializable
+  inquiryDate?: string;
 }
 
 export class ProspectsListData {

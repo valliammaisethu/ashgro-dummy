@@ -1,0 +1,28 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.statsContainer {
+  @include flex-flow(row, wrap, normal, 4.1rem);
+  justify-content: center;
+}
+
+.statsCardSkeleton {
+  width: 100%;
+  min-height: 13rem;
+  border-radius: 1.6rem;
+  box-shadow: $stats-box-shadow;
+  background-color: $ashgro-white;
+  padding: 1.6rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+
+  @media (min-width: 768px) {
+    width: calc((100% - 4.1rem) / 2);
+  }
+
+  @media (min-width: 1200px) {
+    width: calc((100% - (4.1rem * 2)) / 3);
+  }
+}

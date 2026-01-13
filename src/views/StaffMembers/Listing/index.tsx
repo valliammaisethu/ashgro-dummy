@@ -15,6 +15,7 @@ import { SettingFormModalModel } from "src/views/Settings/constants";
 import StaffMembersForm from "../StaffMembersForm";
 import DeleteModal from "../DeleteModal";
 import { VisibilityType } from "src/enums/visibilityType.enum";
+import { tableProps } from "../constants";
 
 interface ModalState {
   open: boolean;
@@ -96,6 +97,7 @@ const StaffMembersListing = () => {
         hasData={!!data?.staffs?.length}
         onRow={handleRowClick}
         loading={isFetching}
+        {...tableProps}
       />
 
       <DeleteModal
