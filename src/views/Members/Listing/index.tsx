@@ -36,6 +36,7 @@ import useDrawer from "src/shared/hooks/useDrawer";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import Table from "src/shared/components/Table";
 import { getColumns } from "./columns";
+import { memberNameColTitle } from "../constant";
 
 interface ModalState {
   open: boolean;
@@ -379,6 +380,7 @@ const Members = () => {
         rowSelection={rowSelection}
         onRow={handleRowClick}
         loading={isLoading}
+        nameColTitle={memberNameColTitle}
       />
       <DeleteModal
         visible={!!deleteItem?.id}

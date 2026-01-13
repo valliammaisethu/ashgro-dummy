@@ -45,6 +45,7 @@ import Table from "src/shared/components/Table";
 import { getColumns } from "./columns";
 
 import styles from "./listing.module.scss";
+import { prospectNameColTitle } from "./constants";
 
 const ProspectsListing = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER).clubId;
@@ -401,6 +402,7 @@ const ProspectsListing = () => {
           rowSelection={rowSelection}
           onRow={handleRowClick}
           loading={isLoading}
+          nameColTitle={prospectNameColTitle}
         />
       </div>
       <DeleteModal

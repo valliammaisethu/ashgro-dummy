@@ -43,6 +43,7 @@ import { DateRange } from "src/shared/types/dashboard.type";
 import styles from "./dashboard.module.scss";
 import { renderNotification } from "src/shared/utils/renderNotification";
 import { NotificationTypes } from "src/enums/notificationTypes";
+import StatsSkeleton from "src/shared/components/Skeleton/StatsSkeleton/StatsSkeleton";
 
 const { DASHBOARD_STATS_ID } = CHART_CONSTANTS;
 const { TITLE, DESCRIPTION } = chartLimitErrorMessages;
@@ -87,7 +88,7 @@ const Dashboard = () => {
     enabled: isClubAdmin,
   });
 
-  const { data: dashboardStats } = useQuery({
+  const { data: dashboardStats, isFetching: isStatsLoading } = useQuery({
     ...getDashboardStats({
       fromDate: dashboardStatsDateRange?.[0],
       toDate: dashboardStatsDateRange?.[1],
@@ -223,13 +224,18 @@ const Dashboard = () => {
                 onChange={handleDateRangeChange}
               />
             </div>
-            <div className={styles.statsContainer}>
-              {getDashboardStatsValues(dashboardStats)?.map(
-                ({ label, value }, index) => (
-                  <StatsCard key={index} title={label} value={value} />
-                ),
-              )}
-            </div>
+            <ConditionalRenderComponent
+              visible={!isStatsLoading}
+              fallback={<StatsSkeleton />}
+            >
+              <div className={styles.statsContainer}>
+                {getDashboardStatsValues(dashboardStats)?.map(
+                  ({ label, value }, index) => (
+                    <StatsCard key={index} title={label} value={value} />
+                  ),
+                )}
+              </div>
+            </ConditionalRenderComponent>
           </div>
         </ConditionalRenderComponent>
         <ConditionalRenderComponent

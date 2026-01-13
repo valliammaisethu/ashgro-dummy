@@ -43,6 +43,7 @@
       color: $ashgro-gold;
       @include tableCellStyles;
       padding: 1.2rem 1.6rem;
+      z-index: 100000;
 
       &::before {
         display: none;
