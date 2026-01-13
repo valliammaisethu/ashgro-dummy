@@ -1,0 +1,45 @@
+@import "src/styles/_helpers.scss";
+@import "src/styles/_variables.scss";
+
+.skeletonRow {
+  padding: 1rem;
+}
+
+.profileSection {
+  @include flex-container(flex-start, center, row, 1rem);
+}
+
+.profileDetails {
+  @include flex-container(flex-start, stretch, column, 1rem);
+}
+
+.actions {
+  @include flex-container(flex-end, center, row, 1rem);
+}
+
+.nameSkeleton {
+  width: 15rem;
+  height: 2rem;
+}
+
+.metaSkeleton {
+  width: 10rem;
+  height: 1.6rem;
+}
+
+.badgeSkeleton {
+  width: 10rem;
+  border-radius: 2rem;
+}
+
+.switchSkeleton {
+  width: 4rem;
+  height: 2rem;
+  border-radius: 1rem;
+}
+
+.actionSkeleton {
+  width: 14rem;
+  height: 3.2rem;
+  border-radius: 2.8rem;
+}

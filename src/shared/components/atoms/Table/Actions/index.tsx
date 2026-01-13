@@ -1,14 +1,18 @@
 import React from "react";
 import { IconEdit, IconDelete } from "obra-icons-react";
 import clsx from "clsx";
+import { Select } from "antd";
 
 import { Colors } from "src/enums/colors.enum";
 import { stopPropagation } from "src/shared/utils/eventUtils";
 import { hoverActionBtnClass } from "./constants";
+import {
+  selectStatus,
+  selectStatusClassName,
+} from "src/constants/sharedComponents";
+import { ClubStatusOptions } from "src/views/Clubs/IndividualClub/constants";
 
 import styles from "./actions.module.scss";
-import StatusDropdown from "src/shared/components/StatusDropdown";
-import { formatOptions } from "./utils";
 
 export interface Option {
   label?: string;
@@ -55,11 +59,14 @@ const Actions: React.FC<ActionsProps> = ({
     <div className={styles.actionContainer}>
       {showSelect && (
         <div onClick={stopPropagation} className={styles.statusCol}>
-          <StatusDropdown
+          <Select
             value={selectedValue}
-            options={formatOptions(options)}
+            options={ClubStatusOptions}
             onChange={handleSelectChange}
             loading={selectLoading}
+            className={selectStatusClassName}
+            onClick={stopPropagation}
+            placeholder={selectStatus}
           />
         </div>
       )}
