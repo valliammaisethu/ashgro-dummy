@@ -2,9 +2,8 @@
 @import "src/styles/_helpers.scss";
 
 .cellContent {
-  padding: 0.5rem;
   height: 20rem;
-  width: 19.5rem;
+  width: 100%;
   @include flex-container(flex-start, stretch, column);
   .cellHeader {
     @include flex-container;
@@ -34,6 +33,7 @@
   flex-direction: column;
   gap: 0.4rem;
   overflow: auto;
+  padding: 0 1rem;
 
   .eventCard {
     padding: 0.8rem 1rem;

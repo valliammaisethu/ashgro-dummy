@@ -1,7 +1,12 @@
 @import "src/styles/_variables.scss";
 
 .statsCard {
-  min-width: 41rem;
+  min-width: 30rem;
+  flex: 1;
+
+  @media (max-width: 768px) {
+    min-width: 100%;
+  }
   min-height: 12rem;
   border-radius: 1.6rem;
   box-shadow: $stats-box-shadow;

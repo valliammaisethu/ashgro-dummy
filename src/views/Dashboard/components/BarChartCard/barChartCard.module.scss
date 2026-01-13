@@ -61,6 +61,11 @@
     overflow-x: auto;
     overflow-y: hidden;
     padding: 0 1.6rem 1.6rem;
+
+    @media (min-width: 1600px) {
+      height: 45rem;
+    }
+
     &::-webkit-scrollbar {
       height: 0.3rem;
     }

@@ -22,7 +22,7 @@ export const getDashboardStatsValues = (stats = new DashboardStats()) => {
 };
 export const CHART_CONSTANTS = {
   CUSTOM_CHART: "Custom chart",
-  DEFAULT_ITEM_WIDTH: 70,
+  DEFAULT_ITEM_WIDTH: 100,
   customTitle: "Delete Custom Chart",
   customDescription:
     "Are you sure you want to delete this %s ?This action is not reversible.",
