@@ -19,7 +19,10 @@ interface ColumnProps {
   handleOnDelete: (member: Member) => void;
   statusOptions: any[]; // Using any[] to match StatusDropdown flexibility or we can be specific
   onStatusChange: (memberId: string, statusId: string) => void;
+  membershipCategoryOptions?: any[];
+  onCategoryChange?: (memberId: string, categoryId: string) => void;
   updatingMemberId?: string;
+  updatingCategoryId?: string;
 }
 
 export const getColumns = ({
@@ -27,22 +30,46 @@ export const getColumns = ({
   handleOnDelete,
   statusOptions,
   onStatusChange,
+  membershipCategoryOptions,
+  onCategoryChange,
   updatingMemberId,
+  updatingCategoryId,
 }: ColumnProps): ColumnsType<Member> => [
   {
     title: "Phone Number",
     dataIndex: "contactNumber",
     key: "contactNumber",
-    width: "20%",
+    width: "10%",
     render: (_, record) => (
       <PhoneNumberLabel phoneNumber={record?.contactNumber} />
+    ),
+  },
+  {
+    title: "Membership Category",
+    dataIndex: "membershipCategory",
+    key: "membershipCategory",
+    width: "15%",
+    render: (category, record) => (
+      <div onClick={stopPropagation}>
+        <Select
+          value={record.membershipCategoryId ?? category}
+          options={membershipCategoryOptions}
+          onChange={(newCategory) =>
+            onCategoryChange?.(record.id!, newCategory)
+          }
+          loading={updatingCategoryId === record.id}
+          className={selectStatusClassName}
+          onClick={stopPropagation}
+          placeholder="Select Category"
+        />
+      </div>
     ),
   },
   {
     title: "Joined Date",
     dataIndex: "joinedDate",
     key: "joinedDate",
-    width: "17%",
+    width: "10%",
     render: (date) => (
       <span style={{ color: Colors.ASHGRO_NAVY, fontSize: "1.4rem" }}>
         {formatDate(date, DateFormats.DD_MMM__YYYY)}
