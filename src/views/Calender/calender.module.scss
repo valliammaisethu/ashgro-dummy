@@ -54,4 +54,15 @@
   }
 }
 
-// TODO: To change color for previous date
+.calendarSkeleton {
+  margin: 1rem;
+  :global {
+    .ant-skeleton-content {
+      .ant-skeleton-paragraph {
+        li {
+          height: 3rem;
+        }
+      }
+    }
+  }
+}

@@ -335,3 +335,23 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+@mixin shimmer {
+  background: linear-gradient(
+    90deg,
+    $bg-light 25%,
+    $bg-dark 37%,
+    $bg-light 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}

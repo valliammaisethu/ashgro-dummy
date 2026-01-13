@@ -17,8 +17,10 @@ import {
 } from "../constants";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import CardItem from "../components/CardItem";
+import SettingsSkeleton from "src/shared/components/Skeleton/SettingsSkeleton/SettingsSkeleton";
 
 import styles from "../settings.module.scss";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 const Lead = () => {
   const { SOURCE, STATUS, FIELD_LABELS, PLACEHOLDER, BUTTON_TEXT, FIEL_NAME } =
@@ -136,21 +138,27 @@ const Lead = () => {
         isPending={isLeadLoading}
         isSuccess={isLeadSuccess}
         className={styles.noDataScreen}
+        showLoader={false}
       >
-        <div className={styles.cardContainer}>
-          {currentList?.map((item) => (
-            <CardItem
-              key={item?.id}
-              id={item?.id}
-              label={item.label!}
-              onEdit={() => handleFormModalVisibility("edit", item)}
-              onDelete={() => handleDelete(item)}
-              loading={isDeletePending}
-              deleteTitle={isSourceSelected ? SOURCE : STATUS}
-              deleteDescription={item.label!}
-            />
-          ))}
-        </div>
+        <ConditionalRenderComponent
+          visible={isLeadSuccess}
+          fallback={<SettingsSkeleton />}
+        >
+          <div className={styles.cardContainer}>
+            {currentList?.map((item) => (
+              <CardItem
+                key={item?.id}
+                id={item?.id}
+                label={item.label!}
+                onEdit={() => handleFormModalVisibility("edit", item)}
+                onDelete={() => handleDelete(item)}
+                loading={isDeletePending}
+                deleteTitle={isSourceSelected ? SOURCE : STATUS}
+                deleteDescription={item.label!}
+              />
+            ))}
+          </div>
+        </ConditionalRenderComponent>
       </ConditionalRender>
 
       <Modal
