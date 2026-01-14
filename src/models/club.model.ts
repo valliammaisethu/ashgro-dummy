@@ -99,6 +99,9 @@ export class ClubProfile extends ClubGeneralSettings {
   attachmentId?: string;
 
   @serializable
+  domain?: string;
+
+  @serializable
   notes?: string;
 
   @serializable(object(ProfileDetails))
