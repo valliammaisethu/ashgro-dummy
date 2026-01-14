@@ -69,6 +69,7 @@ export const AttachmentService = () => {
     queryFn: async () => {
       const { data } = await axiosInstance.get(
         generatePath(ATTACHMENTS_SPECIFIC, { id: attachmentId }),
+        { suppressNotifications: true }, //TODO: making hotfix as fix require multiple file changes added in the tasks list
       );
       return data?.data?.presignedUrl;
     },
