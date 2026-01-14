@@ -14,6 +14,7 @@ import {
   selectStatusClassName,
 } from "src/constants/sharedComponents";
 import { DateFormats } from "src/enums/dateFormats.enum";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 interface ColumnProps {
   handleOnEdit: (prospect: ProspectsList) => void;
@@ -59,19 +60,6 @@ export const getColumns = ({
     ),
   },
   {
-    title: "Lead Source",
-    dataIndex: "leadSource",
-    key: "leadSource",
-    width: "10%",
-  },
-  {
-    title: "Inquiry Date",
-    dataIndex: "inquiryDate",
-    key: "inquiryDate",
-    width: "10%",
-    render: () => <span>{dayjs().format(DateFormats.DD_MMM__YYYY)}</span>,
-  },
-  {
     title: "Lead Status",
     dataIndex: "status",
     key: "status",
@@ -93,6 +81,24 @@ export const getColumns = ({
       </div>
     ),
   },
+  {
+    title: "Lead Source",
+    dataIndex: "leadSource",
+    key: "leadSource",
+    width: "10%",
+  },
+  {
+    title: "Inquiry Date",
+    dataIndex: "inquiryDate",
+    key: "inquiryDate",
+    width: "10%",
+    render: (inquiryDate) => (
+      <ConditionalRenderComponent visible={inquiryDate} hideFallback>
+        <span>{dayjs(inquiryDate).format(DateFormats.DD_MMM__YYYY)}</span>
+      </ConditionalRenderComponent>
+    ),
+  },
+
   {
     title: "",
     key: "actions",

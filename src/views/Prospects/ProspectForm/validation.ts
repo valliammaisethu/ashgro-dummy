@@ -71,7 +71,7 @@ const prospectSchema = yup.object({
   inquiryDate: yup.string(),
   leadSourceId: yup.string(),
   membershipCategoryId: yup.string(),
-  attachmentId: yup.string(),
+  attachmentId: yup.string().nullable(),
   additionalComments: yup.string().max(300),
 });
 
