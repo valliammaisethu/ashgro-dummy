@@ -27,7 +27,7 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
 
 import styles from "./details.module.scss";
-import { fallbackHandler } from "src/shared/utils/commonHelpers";
+import { fallbackHandler, replaceString } from "src/shared/utils/commonHelpers";
 import MembersForm from "../MembersForm";
 import { MemberShipService } from "src/services/SettingsService/memberShip.service";
 import { defaultCountryCode } from "src/constants/common";
@@ -50,6 +50,7 @@ import {
   selectStatus,
   selectStatusClassName,
 } from "src/constants/sharedComponents";
+import { deleteMembersMessages } from "src/constants/notificationMessages";
 
 const {
   footer: {
@@ -99,17 +100,20 @@ const Details = () => {
     refetch,
   } = useQuery(MembersDetails(id));
 
-  const { mutateAsync: deleteStaffMemberMutate } =
+  const { mutateAsync: deleteMemberMutate, isPending: ismemberDeleting } =
     useMutation(deleteResource());
   const { mutateAsync: updateMemberStatusMutate, isPending: isUpdatingStatus } =
     useMutation(updateMemberStatus());
 
   const handleDelete = async () => {
     const path = generatePath(ApiRoutes.MEMBER_DETAILS, { id });
+    const name = getFullName(data?.firstName, data?.lastName);
 
-    await deleteStaffMemberMutate(
+    await deleteMemberMutate(
       {
         path: path,
+        title: deleteMembersMessages.title,
+        description: replaceString(deleteMembersMessages.description, name),
       },
       {
         onSuccess: () => {
@@ -207,6 +211,7 @@ const Details = () => {
                     title={title}
                     description={getFullName(data?.firstName, data?.lastName)}
                     onDelete={handleDelete}
+                    loading={ismemberDeleting}
                   />
                 </Col>
               </Row>

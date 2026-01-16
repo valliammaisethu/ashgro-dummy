@@ -149,7 +149,7 @@ const IndividualProspect = () => {
           <div className={styles.leftSide}>
             <div className={styles.header}>
               <Select
-                value={data?.prospect?.leadStatus}
+                value={data?.prospect?.leadStatus || undefined}
                 options={leadStatusOptions?.map((opt) => ({
                   label: opt.statusName,
                   value: opt.id,

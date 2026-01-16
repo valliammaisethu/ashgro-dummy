@@ -37,13 +37,15 @@ const DeleteModal = (props: DeleteModalProps) => {
   const { mutateAsync, isPending } = useMutation(deleteStaffMember());
 
   const handleDelete = async () => {
+    const name = getFullName(staffMember?.firstName, staffMember?.lastName);
+
     const { title, description } = deleteStaffMessages;
     const path = generatePath(ApiRoutes.STAFF_MEMBER_DETAILS, {
       id: staffMember?.id,
     });
 
     await mutateAsync(
-      { path, title, description },
+      { path, title, description: replaceString(description, name) },
       {
         onSuccess: () => {
           queryClient.refetchQueries({

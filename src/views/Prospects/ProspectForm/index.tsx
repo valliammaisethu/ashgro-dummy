@@ -240,6 +240,7 @@ const ProspectForm = ({
           values.prospect?.inquiryDate,
           DateFormats.DD_MMM_YYYY,
         ),
+        additionalComments: values?.prospect?.additionalComments?.trim(),
       },
       activityDetails:
         isEdit || !hasActivityDetails ? undefined : values.activityDetails,
@@ -277,8 +278,7 @@ const ProspectForm = ({
   const handleAdditionalCommentsChange = (
     e: ChangeEvent<HTMLTextAreaElement>,
   ) => {
-    const value = e.target.value.trim();
-    if (!value) return;
+    const value = e.target.value;
     setValue(FIELD_NAMES.ADDITIONAL_COMMENTS, value);
   };
 

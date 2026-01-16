@@ -18,6 +18,7 @@ import styles from "./deleteModal.module.scss";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
+import { deleteMembersMessages } from "src/constants/notificationMessages";
 
 interface DeleteModalProps {
   visible: boolean;
@@ -40,9 +41,13 @@ const DeleteModal = (props: DeleteModalProps) => {
   const handleDelete = async () => {
     const path = generatePath(ApiRoutes.MEMBER_DETAILS, { id: member?.id });
 
+    const name = getFullName(member?.firstName, member?.lastName);
+
     await deleteStaffMemberMutate(
       {
         path: path,
+        title: deleteMembersMessages.title,
+        description: replaceString(deleteMembersMessages.description, name),
       },
       {
         onSuccess: () => {
