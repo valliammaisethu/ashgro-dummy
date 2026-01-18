@@ -42,25 +42,37 @@ const ClubFilterDropdown: React.FC<ClubFilterDropdownProps> = ({ chartId }) => {
 
   const selectedValues = getChartFilter(chartId);
 
+  const [selectedClubs, setSelectedClubs] = useState<string[]>(selectedValues);
+
   const { hasDate, hasValues } = getFilterDetails(chartId);
 
-  const handlePopupVisibility = () => setIsOpen((prev) => !prev);
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      setChartFilter(chartId, selectedClubs);
+    } else {
+      setSelectedClubs(selectedValues);
+    }
+    setIsOpen(open);
+  };
+
+  const handlePopupVisibility = () => handleOpenChange(!isOpen);
 
   const handleClearSelection = () => {
-    handlePopupVisibility();
     setChartFilter(chartId, []);
+    setSelectedClubs([]);
+    setIsOpen(false);
   };
 
   const handleClubToggle = (clubId?: string) => () => {
     if (!clubId) return;
 
-    const isSelected = selectedValues.includes(clubId);
+    const isSelected = selectedClubs.includes(clubId);
 
     const updatedSelection = isSelected
-      ? selectedValues.filter((id) => id !== clubId)
-      : [...selectedValues, clubId];
+      ? selectedClubs.filter((id) => id !== clubId)
+      : [...selectedClubs, clubId];
 
-    setChartFilter(chartId, updatedSelection);
+    setSelectedClubs(updatedSelection);
   };
 
   return (
@@ -68,7 +80,10 @@ const ClubFilterDropdown: React.FC<ClubFilterDropdownProps> = ({ chartId }) => {
       content={
         <div className={styles.clubFilterContent}>
           <div className={styles.header}>
-            <ConditionalRenderComponent visible={hasValues} hideFallback>
+            <ConditionalRenderComponent
+              visible={!!selectedClubs.length}
+              hideFallback
+            >
               <Button onClick={handleClearSelection} type={ButtonTypes.LINK}>
                 {filterConstants.CLEAR_SELECTION}
               </Button>
@@ -91,7 +106,7 @@ const ClubFilterDropdown: React.FC<ClubFilterDropdownProps> = ({ chartId }) => {
                 <div key={id} className={styles.clubItem}>
                   <span className={styles.clubName}>{name}</span>
                   <Checkbox
-                    checked={id ? selectedValues.includes(id) : false}
+                    checked={id ? selectedClubs.includes(id) : false}
                     onChange={handleClubToggle(id)}
                   />
                 </div>
@@ -102,7 +117,7 @@ const ClubFilterDropdown: React.FC<ClubFilterDropdownProps> = ({ chartId }) => {
       }
       trigger={Trigger.CLICK}
       open={isOpen}
-      onOpenChange={handlePopupVisibility}
+      onOpenChange={handleOpenChange}
       placement={Placement.BOTTOM_RIGHT}
       overlayClassName={styles.popoverOverlay}
       arrow={false}

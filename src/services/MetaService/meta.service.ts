@@ -170,6 +170,8 @@ export const MetaService = () => {
       return deserialize(StaffDepartmentsData, response?.data?.data);
     },
     enabled: !!clubId,
+    staleTime: 0,
+    refetchOnMount: true,
   });
 
   return {
