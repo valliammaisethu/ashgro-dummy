@@ -23,7 +23,8 @@ import { renderNotification } from "src/shared/utils/renderNotification";
 
 const { STAFF_MEMBERS_SETTINGS_LISTING } = ApiRoutes;
 
-const { GET_STAFF_MEMBERS_LIST } = QueryKeys;
+const { GET_STAFF_MEMBERS_LIST, GET_STAFF_DEPARTMENTS, GET_STAFF_MEMBER_LIST } =
+  QueryKeys;
 
 const { MEMBERSHIP_OPERATIONS, DELETE_STAFF_DEPARTMENTS } = MutationKeys;
 
@@ -42,6 +43,12 @@ export const StaffDepartmentService = () => {
 
     queryClient.invalidateQueries({
       queryKey: [GET_STAFF_MEMBERS_LIST, clubId],
+    });
+    queryClient.invalidateQueries({
+      queryKey: [GET_STAFF_MEMBER_LIST, clubId],
+    });
+    queryClient.invalidateQueries({
+      queryKey: [GET_STAFF_DEPARTMENTS, clubId],
     });
   };
 

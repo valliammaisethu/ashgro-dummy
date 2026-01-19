@@ -14,6 +14,10 @@ import {
 } from "../Listing/constants";
 
 import styles from "../Listing/Components/ProspectRow/prospectRow.module.scss";
+import { renderNotification } from "src/shared/utils/renderNotification";
+import { deleteProspectMessages } from "src/constants/notificationMessages";
+import { NotificationTypes } from "src/enums/notificationTypes";
+import { replaceString } from "src/shared/utils/commonHelpers";
 
 interface DeleteModalProps {
   visible: boolean;
@@ -33,6 +37,13 @@ const DeleteModal = (props: DeleteModalProps) => {
   const handleDelete = async () =>
     await deleteMutate(id, {
       onSuccess: () => {
+        const { title, description } = deleteProspectMessages;
+
+        renderNotification(
+          title,
+          replaceString(description, prospectName),
+          NotificationTypes.ERROR,
+        );
         queryClient.invalidateQueries({ queryKey: [QueryKeys.GET_PROSPECTS] });
         toggleVisibility();
         navigateToProspects();
