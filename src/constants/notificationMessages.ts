@@ -1,16 +1,16 @@
 export const deleteProspectMessages = {
   title: "Prospect Deleted!",
-  description: "The Prospect has been deleted successfully!",
+  description: "%s has been deleted successfully!",
 };
 
 export const deleteMembersMessages = {
   title: "Member Deleted!",
-  description: "The Member has been deleted successfully!",
+  description: "%s has been deleted successfully!",
 };
 
 export const deleteStaffMessages = {
   title: "Staff Deleted!",
-  description: "The Staff member has been deleted successfully!",
+  description: "%s  has been deleted successfully!",
 };
 
 export const invalidEmailMessages = {
