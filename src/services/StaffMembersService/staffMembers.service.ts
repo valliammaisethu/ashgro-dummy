@@ -60,12 +60,17 @@ export const StaffMembersService = () => {
       );
       return deserialize(ResponseModel, response?.data);
     },
-    onSuccess: () => {
+    onSuccess: (_, id) => {
       const { title, description } = deleteStaffMessages;
       renderNotification(title, description, NotificationTypes.ERROR);
       queryClient.invalidateQueries({
-        queryKey: [GET_STAFF_MEMBER_DETAILS, clubId],
-        // here as well
+        queryKey: [GET_STAFF_MEMBER_DETAILS, id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [GET_STAFF_MEMBER_LIST, clubId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.GET_STAFF_DEPARTMENTS, clubId],
       });
     },
   });
