@@ -5,7 +5,6 @@ import {
 } from "@tanstack/react-query";
 import { generatePath } from "react-router-dom";
 import { deserialize, serialize } from "serializr";
-import { deleteProspectMessages } from "src/constants/notificationMessages";
 import { MutationKeys, QueryKeys } from "src/enums/cacheEvict.enum";
 import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
@@ -117,6 +116,7 @@ export const ProspectsService = () => {
       const { title, description } = response;
       renderNotification(title, description);
       queryClient.invalidateQueries({ queryKey: [GET_PROSPECTS] });
+      queryClient.invalidateQueries({ queryKey: [GET_SINGLE_PROSPECT] });
     },
   });
 
@@ -128,10 +128,6 @@ export const ProspectsService = () => {
     mutationKey: [DELETE_PROSPECT],
     mutationFn: async (id: string) => {
       return await axiosInstance.delete(generatePath(GET_PROSPECT, { id }));
-    },
-    onSuccess: () => {
-      const { title, description } = deleteProspectMessages;
-      renderNotification(title, description, NotificationTypes.ERROR);
     },
   });
 

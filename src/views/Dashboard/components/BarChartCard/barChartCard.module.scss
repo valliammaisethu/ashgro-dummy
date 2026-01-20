@@ -2,12 +2,13 @@
 @import "src/styles/helpers";
 
 .chartCard {
+  margin-top: 2rem;
   border-radius: 20px;
   box-shadow: $card-box-shadow;
   background: $ashgro-white;
   border: 0.5px solid $chart-border-color;
-  overflow: hidden;
   padding: 0 1rem;
+  position: relative;
 
   &.chartCardOver {
     border: 1px dotted $active-highlight-blue;
@@ -60,6 +61,11 @@
     overflow-x: auto;
     overflow-y: hidden;
     padding: 0 1.6rem 1.6rem;
+
+    @media (min-width: 1600px) {
+      height: 45rem;
+    }
+
     &::-webkit-scrollbar {
       height: 0.3rem;
     }
@@ -81,8 +87,11 @@
 }
 
 .customBadge {
-  position: relative;
-  bottom: 1.7rem;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
   display: inline-block;
   padding: 0.5rem 2rem;
   background: linear-gradient(

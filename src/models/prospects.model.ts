@@ -51,6 +51,9 @@ export class ProspectsList {
 
   @serializable
   leadSource?: string;
+
+  @serializable
+  inquiryDate?: string;
 }
 
 export class ProspectsListData {
@@ -125,6 +128,9 @@ export class Prospect {
 
   @serializable
   attachmentId?: string;
+
+  @serializable
+  additionalComments?: string;
 }
 
 export class ProspectFormData {

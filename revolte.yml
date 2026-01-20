@@ -43,6 +43,7 @@ revolte:
               VITE_ACTIVE_TIME_REPORT_MINUTES: "#{VITE_ACTIVE_TIME_REPORT_MINUTES}"
               VITE_SENTRY_DSN: >-
                 https://1bb6737846196ee5ea836f69fd5f3838@o4510104495587328.ingest.us.sentry.io/4510104497160192
+              VITE_WS_BASE_URL: "#{VITE_WS_BASE_URL}"
     production:
       branch: main
       services:

@@ -18,7 +18,6 @@ import Modal from "src/shared/components/Modal";
 import PhoneNumberField from "src/shared/components/PhoneNumberInput";
 import ProfilePictureInput from "src/shared/components/ProfilePictureInput";
 import SelectField from "src/shared/components/SelectField";
-import TextArea from "src/shared/components/TextArea";
 import useForm from "src/shared/components/UseForm";
 import {
   convertDateToApiFormat,
@@ -209,7 +208,6 @@ const StaffMembersForm = ({
                   loading={isPending}
                 />
               </Col>
-
               <Col span={12}>
                 <InputField
                   placeholder={PLACEHOLDERS.TITLE}
@@ -217,7 +215,6 @@ const StaffMembersForm = ({
                   name={FIELD_NAMES.TITLE}
                 />
               </Col>
-
               <Col span={12}>
                 <InputField
                   placeholder={PLACEHOLDERS.EMAIL_ADDRESS}
@@ -250,14 +247,6 @@ const StaffMembersForm = ({
                   label={LABELS.WORK_ANNIVERSARY}
                   name={FIELD_NAMES.WORK_ANNIVERSARY}
                   disabledDate={disableFuture}
-                />
-              </Col>
-              <Col span={24}>
-                <TextArea
-                  placeholder={PLACEHOLDERS.RESIDENTIAL_ADDRESS}
-                  name={FIELD_NAMES.RESIDENTIAL_ADDRESS}
-                  label={LABELS.RESIDENTIAL_ADDRESS}
-                  className={styles.addressBox}
                 />
               </Col>
             </Row>

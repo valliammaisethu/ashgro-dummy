@@ -10,4 +10,5 @@ export enum DateFormats {
   DDD_MMM_DO_YYYY = "ddd, MMM Do YYYY",
   DD_MMM_YY = "DD MMM 'YY",
   MMMM_YYYY = "MMMM, YYYY",
+  YYYY_MM_DD_T_HH_MM_SS = "YYYY-MM-DDTHH:mm:ss",
 }

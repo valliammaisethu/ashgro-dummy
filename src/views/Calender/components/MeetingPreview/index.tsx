@@ -69,7 +69,7 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
         </ConditionalRenderComponent>
       }
     >
-      <div onClick={handleOpenPopup}>
+      <div onClick={handleOpenPopup} className={styles.meetingPreviewWrapper}>
         {isMorePopup ? (
           <div>
             <div

@@ -16,7 +16,6 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import { logoutMessages } from "src/constants/sharedComponents";
 import { renderNotification } from "src/shared/utils/renderNotification";
 import { generatePath } from "react-router-dom";
-import { RoleNames } from "src/enums/roleNames.enum";
 import { clearFilters } from "src/utils/dashboardFilters";
 import { getCurrentUserId } from "src/shared/utils/helpers";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
@@ -43,7 +42,7 @@ const { title, description } = logoutMessages;
 
 export const AuthService = () => {
   const { setAuthenticated, resetAuthState } = AuthContext();
-  const { navigateToLogin, navigateToCalendar, navigateToClubs } =
+  const { navigateToLogin, navigateToDashboard, navigateToClubs } =
     useRedirect();
   const queryClient = useQueryClient();
 
@@ -64,13 +63,7 @@ export const AuthService = () => {
     onSuccess: (response) => {
       const { data, title, description } = response;
       setAuthenticated(data?.user, response?.data?.token);
-      const role = data?.user?.role;
-      if (role === RoleNames.SUPER_ADMIN) {
-        navigateToClubs();
-        return;
-      }
-
-      navigateToCalendar();
+      navigateToDashboard();
       renderNotification(title, description);
     },
   });

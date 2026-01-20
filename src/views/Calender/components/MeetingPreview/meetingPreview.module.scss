@@ -1,6 +1,10 @@
 @import "src/styles/_variables.scss";
 @import "src/styles/_helpers.scss";
 
+.meetingPreviewWrapper {
+  width: 100%;
+}
+
 .meetingPreviewCard {
   background: $ashgro-white;
   border-radius: 12px;
@@ -67,7 +71,7 @@
 
 .eventCard {
   padding: 0.8rem 1rem;
-  width: 18rem;
+  width: 100%;
   background-color: $search-bg;
   border-radius: 8px;
   color: $ashgro-white;

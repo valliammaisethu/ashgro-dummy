@@ -1,35 +1,71 @@
-import React from "react";
-import { Table as AntTable, PaginationProps, TableProps } from "antd";
-import { useSearchParams } from "react-router-dom";
+import React, { useMemo } from "react";
+import { Table as AntTable, Empty } from "antd";
+import { ColumnsType } from "antd/es/table";
 
-import { parseNumber } from "src/shared/utils/parser";
+import Pagination from "../Pagination";
+import { commonColumns, defaultTableProps } from "./constants";
+import { useTableSkeleton } from "./hooks/useTableSkeleton";
+import { BaseRecord, TableProps } from "src/shared/types/table.type";
 
-const Table = <T extends object>({ pagination, ...props }: TableProps<T>) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+import styles from "./table.module.scss";
 
-  const current = parseNumber(searchParams.get("page") || 1);
+const Table = <T extends BaseRecord>({
+  columns,
+  dataSource = [],
+  currentPage,
+  totalPages,
+  onPageChange,
+  hasData,
+  paginationClassName,
+  rowSelection,
+  onRow,
+  loading,
+  noDataComponent = <Empty />,
+  nameColWidth,
+  emailColWidth,
+  nameColTitle,
+}: TableProps<T>) => {
+  const updateColumns = useMemo(
+    () =>
+      [...commonColumns, ...(columns || [])]?.map((col) => ({
+        ...col,
+        width:
+          (col.key === "name" && nameColWidth) ||
+          (col.key === "email" && emailColWidth) ||
+          col.width,
+        title: (col.key === "name" && nameColTitle) || col.title,
+        ellipsis: true,
+      })) as ColumnsType<T>,
+    [columns, nameColWidth, emailColWidth, nameColTitle],
+  );
 
-  const pageSize = parseNumber(searchParams.get("pageSize") || 1);
-
-  const handlePageChange: PaginationProps["onChange"] = (page, pageSize) =>
-    setSearchParams({
-      page: page.toString(),
-      pageSize: pageSize.toString(),
-    });
+  const { tableColumns, tableDataSource } = useTableSkeleton({
+    loading,
+    columns: updateColumns,
+    dataSource,
+  });
 
   return (
-    <AntTable
-      pagination={
-        pagination !== false && {
-          current,
-          onChange: handlePageChange,
-          pageSize,
-          showSizeChanger: false,
-          ...pagination,
-        }
-      }
-      {...props}
-    />
+    <div className={styles.tableContainer}>
+      <AntTable<T>
+        className={styles.customTable}
+        columns={tableColumns}
+        dataSource={tableDataSource}
+        rowSelection={rowSelection}
+        onRow={loading ? undefined : onRow}
+        locale={{ emptyText: noDataComponent }}
+        {...defaultTableProps}
+      />
+      {onPageChange && (
+        <Pagination
+          className={paginationClassName}
+          currentPage={currentPage || 1}
+          totalPages={totalPages || 1}
+          onPageChange={onPageChange}
+          hasData={hasData}
+        />
+      )}
+    </div>
   );
 };
 

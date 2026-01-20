@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IconEdit } from "obra-icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { Select } from "antd";
 
 import Header from "./Header";
 import ClubInfo from "./components/ClubInfo";
@@ -23,7 +24,6 @@ import {
   clubStatusField,
   ClubStatusOptions,
 } from "./constants";
-import StatusDropdown from "src/shared/components/StatusDropdown";
 import { ClubService } from "src/services/ClubService/club.service";
 import { Colors } from "src/enums/colors.enum";
 import { NotificationTypes } from "src/enums/notificationTypes";
@@ -31,9 +31,13 @@ import { ClubSettingsState } from "src/shared/types/clubs.type";
 import ImportModal from "src/views/ImportModal";
 import { ImportModes } from "src/enums/importModes.enum";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+import { ClubGeneralSettings } from "src/models/club.model";
+import {
+  selectStatus,
+  selectStatusClassName,
+} from "src/constants/sharedComponents";
 
 import styles from "./individualClub.module.scss";
-import { ClubGeneralSettings } from "src/models/club.model";
 
 const { requiredError, requiredDescription } = chatbotKnowledgeBaseConstants;
 
@@ -192,15 +196,14 @@ const IndividualClub = () => {
                 />
 
                 <div onClick={stopPropagation} className={styles.statusCol}>
-                  <StatusDropdown
+                  <Select
                     value={clubData?.club?.status}
-                    options={ClubStatusOptions.map((opt) => ({
-                      statusName: opt.label,
-                      id: opt.value,
-                      color: opt.color,
-                    }))}
+                    options={ClubStatusOptions}
                     onChange={handleStatusChange}
                     loading={isStatusUpdatePending}
+                    className={selectStatusClassName}
+                    onClick={stopPropagation}
+                    placeholder={selectStatus}
                   />
                 </div>
               </div>

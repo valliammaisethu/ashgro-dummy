@@ -17,6 +17,8 @@ import useForm from "src/shared/components/UseForm";
 import { MemberShipService } from "src/services/SettingsService/memberShip.service";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Form from "src/shared/components/Form";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+import SettingsSkeleton from "src/shared/components/Skeleton/SettingsSkeleton/SettingsSkeleton";
 
 import styles from "../settings.module.scss";
 
@@ -134,22 +136,27 @@ const MembersShip = () => {
         isPending={isLeadLoading}
         isSuccess={isLeadSuccess}
         className={styles.noDataScreen}
+        showLoader={false}
       >
-        <div className={styles.cardContainer}>
-          {currentList?.map((item) => (
-            <CardItem
-              key={item?.id}
-              id={item?.id}
-              label={item.label!}
-              onEdit={() => handleFormModalVisibility("edit", item)}
-              onDelete={() => handleDelete(item)}
-              loading={isDeletePending}
-              deleteTitle={isMemberShipTypeSelected ? TYPE : STATUS}
-              deleteDescription={item.label!}
-              color={item?.color}
-            />
-          ))}
-        </div>
+        <ConditionalRenderComponent
+          visible={isLeadSuccess}
+          fallback={<SettingsSkeleton />}
+        >
+          <div className={styles.cardContainer}>
+            {currentList?.map((item) => (
+              <CardItem
+                key={item?.id}
+                id={item?.id}
+                label={item.label!}
+                onEdit={() => handleFormModalVisibility("edit", item)}
+                onDelete={() => handleDelete(item)}
+                loading={isDeletePending}
+                deleteTitle={isMemberShipTypeSelected ? TYPE : STATUS}
+                deleteDescription={item.label!}
+              />
+            ))}
+          </div>
+        </ConditionalRenderComponent>
       </ConditionalRender>
 
       <Modal

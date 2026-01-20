@@ -18,7 +18,6 @@ export const FORM_CONSTANTS = {
     EMAIL_ADDRESS: "Email Address",
     PHONE_NUMBER: "Phone Number",
     BIRTH_DATE: "Birth Date",
-    RESIDENTIAL_ADDRESS: "Residential Address",
     STAFF_DEPARTMENT: "Department",
     TITLE: "Title",
     WORK_ANNIVERSARY: "Work Anniversary",
@@ -30,7 +29,6 @@ export const FORM_CONSTANTS = {
     EMAIL_ADDRESS: "Enter email address",
     PHONE_NUMBER: "Phone number",
     BIRTH_DATE: "Select Birth Date",
-    RESIDENTIAL_ADDRESS: "Enter Residential Address",
     STAFF_DEPARTMENT: "Select Department",
     TITLE: "Edit Job Title",
     WORK_ANNIVERSARY: "Select work anniversary",
@@ -44,7 +42,6 @@ export const FORM_CONSTANTS = {
     PHONE_NUMBER: "contactNumber",
     PHONE_CODE: "phoneCode",
     BIRTH_DATE: "birthDate",
-    RESIDENTIAL_ADDRESS: "residentialAddress",
     STAFF_DEPARTMENT: "staffDepartmentId",
     TITLE: "title",
     WORK_ANNIVERSARY: "workAnniversaryDate",
@@ -57,4 +54,9 @@ export const deleteModalConstants = {
   title: "Delete Staff?",
   description:
     "Are you sure you want to permanently delete %s? This action is not reversible.",
+};
+
+export const tableProps = {
+  nameColWidth: "25%",
+  emailColWidth: "25%",
 };

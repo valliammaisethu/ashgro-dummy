@@ -57,7 +57,7 @@ export const fields = {
   clubPhoneCountryCode: "clubCountryCode",
   notes: "notes",
   clubAddress: "address",
-  clubDomain: "clubDomain",
+  clubDomain: "domain",
 
   primaryFirstName: "adminDetails.firstName",
   primaryLastName: "adminDetails.lastName",

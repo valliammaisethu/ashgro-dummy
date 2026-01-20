@@ -18,6 +18,8 @@ import Form from "src/shared/components/Form";
 import InputField from "src/shared/components/InputField";
 import { Justify } from "src/enums/align.enum";
 import { ButtonTypes } from "src/enums/buttons.enum";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+import SettingsSkeleton from "src/shared/components/Skeleton/SettingsSkeleton/SettingsSkeleton";
 
 import styles from "./staffDepartment.module.scss";
 import settingStyles from "../settings.module.scss";
@@ -104,21 +106,27 @@ const StaffDepartment = () => {
         isPending={isLoading}
         isSuccess={isSuccess}
         className={styles.noDataScreen}
+        showLoader={false}
       >
-        <div className={settingStyles.cardContainer}>
-          {staffDepartments?.map((item) => (
-            <CardItem
-              key={item?.id}
-              id={item?.id}
-              label={item.label!}
-              onEdit={() => handleFormModalVisibility("edit", item)}
-              onDelete={() => handleDelete(item)}
-              loading={isDeletePending}
-              deleteTitle={TITLE}
-              deleteDescription={item.label!}
-            />
-          ))}
-        </div>
+        <ConditionalRenderComponent
+          visible={isSuccess}
+          fallback={<SettingsSkeleton />}
+        >
+          <div className={settingStyles.cardContainer}>
+            {staffDepartments?.map((item) => (
+              <CardItem
+                key={item?.id}
+                id={item?.id}
+                label={item.label!}
+                onEdit={() => handleFormModalVisibility("edit", item)}
+                onDelete={() => handleDelete(item)}
+                loading={isDeletePending}
+                deleteTitle={TITLE}
+                deleteDescription={item.label!}
+              />
+            ))}
+          </div>
+        </ConditionalRenderComponent>
       </ConditionalRender>
 
       <Modal

@@ -1,0 +1,78 @@
+@import "src/styles/variables";
+@import "src/styles/helpers";
+
+$skeleton-color: #e0e0e0;
+
+$bg-light: #f0f0f0;
+$bg-dark: #e6e6e6;
+
+.header {
+  @include flex-container;
+  margin: 1rem;
+}
+
+.chartSkeleton {
+  padding: 1.6rem;
+  background: #ffffff;
+  border-radius: 12px;
+}
+
+.chartArea {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  height: 32rem;
+  @media (min-width: 1600px) {
+    height: 42rem;
+  }
+
+  margin-top: 1.6rem;
+}
+
+.barWrapper {
+  @include flex-container(flex-end, center, column);
+  flex: 1;
+  height: 100%;
+}
+
+.skeletonBase {
+  @include shimmer;
+  border-radius: 6px;
+}
+
+.bar {
+  @extend .skeletonBase;
+  width: 60%;
+  border-radius: 6px 6px 0 0;
+}
+
+@media (max-width: 1199px) {
+  .barWrapper:nth-child(n + 8) {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .barWrapper:nth-child(n + 6) {
+    display: none;
+  }
+}
+
+.headerInput {
+  width: 200px !important;
+
+  @media (max-width: 599px) {
+    width: 120px !important;
+  }
+}
+
+.headerActions {
+  display: flex;
+  gap: 1rem;
+
+  @media (max-width: 599px) {
+    button:last-child {
+      display: none;
+    }
+  }
+}

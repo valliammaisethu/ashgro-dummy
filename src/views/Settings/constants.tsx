@@ -172,4 +172,6 @@ export const CHATBOT_CONSTANTS = {
     LEAD_FORM_COPY: "Lead Form Link copied to clipboard!",
   },
   APP_BASE_URL: import.meta.env.VITE_APP_BASE_URL,
+  LEAD_FORM_SCRIPT:
+    '<script src="%s" data-club-id="%s" data-container-id="lead-form-container" async></script>',
 };

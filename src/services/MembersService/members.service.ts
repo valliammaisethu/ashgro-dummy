@@ -29,6 +29,7 @@ const { GET_MEMBER_DETAILS, GET_MEMBERS } = QueryKeys;
 interface UpdateMemberStatusParams {
   memberId?: string;
   membershipStatusId?: string;
+  membershipCategoryId?: string;
 }
 
 export const MembersService = () => {
@@ -113,6 +114,27 @@ export const MembersService = () => {
     },
   });
 
+  const updateMemberCategory = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    UpdateMemberStatusParams
+  > => ({
+    mutationKey: [UPDATE_MEMBER_STATUS],
+    mutationFn: async ({ memberId, membershipCategoryId }) => {
+      const response = await axiosInstance.patch(
+        generatePath(MEMBER_DETAILS, { id: memberId }),
+        {
+          member: { membershipCategoryId },
+        },
+      );
+      return deserialize(ResponseModel, response?.data);
+    },
+    onSuccess: ({ title, description }) => {
+      renderNotification(title, description);
+      queryClient.invalidateQueries({ queryKey: [GET_MEMBERS, clubId] });
+    },
+  });
+
   const updateMemberDetails = (): UseMutationOptions<
     ResponseModel,
     ResponseModel,
@@ -148,5 +170,6 @@ export const MembersService = () => {
     getStaffMembersList,
     updateMemberStatus,
     updateMemberDetails,
+    updateMemberCategory,
   };
 };

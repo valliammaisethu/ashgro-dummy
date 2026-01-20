@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown } from "antd";
+import { Dropdown, Tooltip } from "antd";
 import type { MenuProps } from "antd";
 import { IconChevronDown } from "obra-icons-react";
 import styles from "./statusDropdown.module.scss";
@@ -9,6 +9,7 @@ import { getStatusTagBackgroundColor } from "src/shared/utils/helpers";
 import Button from "../Button";
 import { selectStatus } from "src/constants/sharedComponents";
 import clsx from "clsx";
+import { useEllipsisTooltip } from "src/shared/hooks/useEllipsisTooltip";
 
 const StatusDropdown: React.FC<StatusDropdownProps> = ({
   value,
@@ -45,54 +46,69 @@ const StatusDropdown: React.FC<StatusDropdownProps> = ({
     },
   }));
 
+  const { ref: labelRef, isTruncated } = useEllipsisTooltip<HTMLSpanElement>([
+    selectedOption?.statusName,
+  ]);
+
   return (
     <div onClick={onClick}>
       {/* TODO: Change Dropdown to Select */}
-      <Dropdown
-        menu={{ items: menuItems }}
-        trigger={[Trigger.CLICK]}
-        disabled={loading}
-        overlayClassName={styles.dropdownOverlay}
+      <Tooltip
+        {...(isTruncated
+          ? { title: selectedOption?.statusName }
+          : { open: false })}
       >
-        <Button
-          className={styles.dropdownButton}
-          loading={loading}
-          style={{
-            backgroundColor: getStatusTagBackgroundColor(selectedOption?.color),
-          }}
+        <Dropdown
+          menu={{ items: menuItems }}
+          trigger={[Trigger.CLICK]}
+          disabled={loading}
+          overlayClassName={styles.dropdownOverlay}
         >
-          <div className={styles.buttonContent}>
-            {selectedOption && (
-              <>
-                <div
-                  className={styles.dot}
-                  style={{
-                    border: `2px solid ${getStatusTagBackgroundColor(selectedOption.color)}`,
-                    color: selectedOption.color,
-                  }}
-                >
-                  <div className={clsx(styles.innerDot, styles.optionInnerDot)}>
-                    .
+          <Button
+            className={styles.dropdownButton}
+            loading={loading}
+            style={{
+              backgroundColor: getStatusTagBackgroundColor(
+                selectedOption?.color,
+              ),
+            }}
+          >
+            <div className={styles.buttonContent}>
+              {selectedOption && (
+                <>
+                  <div
+                    className={styles.dot}
+                    style={{
+                      border: `2px solid ${getStatusTagBackgroundColor(selectedOption.color)}`,
+                      color: selectedOption.color,
+                    }}
+                  >
+                    <div
+                      className={clsx(styles.innerDot, styles.optionInnerDot)}
+                    >
+                      .
+                    </div>
                   </div>
-                </div>
-                <span
-                  className={styles.label}
-                  style={{ color: selectedOption.color }}
-                >
-                  {selectedOption.statusName}
-                </span>
-              </>
-            )}
-            {!selectedOption && (
-              <span className={styles.placeholder}>{selectStatus}</span>
-            )}
-          </div>
-          <IconChevronDown
-            className={styles.chevron}
-            color={selectedOption?.color}
-          />
-        </Button>
-      </Dropdown>
+                  <span
+                    ref={labelRef}
+                    className={styles.label}
+                    style={{ color: selectedOption.color }}
+                  >
+                    {selectedOption.statusName}
+                  </span>
+                </>
+              )}
+              {!selectedOption && (
+                <span className={styles.placeholder}>{selectStatus}</span>
+              )}
+            </div>
+            <IconChevronDown
+              className={styles.chevron}
+              color={selectedOption?.color}
+            />
+          </Button>
+        </Dropdown>
+      </Tooltip>
     </div>
   );
 };

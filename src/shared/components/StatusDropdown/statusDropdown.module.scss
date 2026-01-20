@@ -6,7 +6,6 @@
   height: 3.6rem;
   border: none;
   border-radius: 2.8rem;
-  overflow: scroll;
   @include flex-container(space-between, center, row);
   border: 1px solid $dropdown-border;
   cursor: pointer;
@@ -31,6 +30,9 @@
 .buttonContent {
   @include flex-container(normal, center, row, 0.8rem);
   flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .dot {
@@ -58,6 +60,9 @@
   font-size: 1.3rem;
   font-weight: 600;
   color: $gold-bolder;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .placeholder {

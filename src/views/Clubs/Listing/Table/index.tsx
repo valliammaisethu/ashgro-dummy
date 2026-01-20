@@ -12,6 +12,7 @@ import {
 } from "../../IndividualClub/constants";
 import ImportModal from "src/views/ImportModal";
 import ListHeader from "src/shared/components/atoms/Table/Profile/ListHeader";
+import ClubListSkeleton from "src/shared/components/Skeleton/ClubListSkeleton/ClubListSkeleton";
 import Profile from "src/shared/components/atoms/Table/Profile";
 import Badge from "src/shared/components/atoms/Badge";
 import { Colors } from "src/enums/colors.enum";
@@ -122,60 +123,68 @@ const ClubListingTable = ({
 
   return (
     <div className={styles.tableContainer}>
-      <ConditionalRenderComponent hideFallback visible={!isPending}>
-        <ListHeader
-          columnTemplate={clubHeaderColumnGrid}
-          headers={clubListingHeaders}
-        />
-      </ConditionalRenderComponent>
+      <ListHeader
+        columnTemplate={clubHeaderColumnGrid}
+        headers={clubListingHeaders}
+        className={styles.listHeader}
+      />
+
       <div className={styles.tableBody}>
         <ConditionalRender
           isPending={isPending}
           isSuccess={isSuccess}
           records={clubsData?.clubs}
+          showLoader={false}
         >
-          {clubsData?.clubs?.map((club, index) => (
-            <div
-              onClick={(e) => handleRowClick(club.id, e)}
-              key={club?.id}
-              className={styles.rowContainer}
-            >
-              <Profile
-                address={club.address}
-                firstName={extractNameParts(club.name).firstName}
-                lastName={extractNameParts(club.name).lastName}
-                profilePictureUrl={club?.logoUrl}
-              />
+          <ConditionalRenderComponent
+            visible={!isPending}
+            fallback={<ClubListSkeleton />}
+          >
+            {clubsData?.clubs?.map((club, index) => (
+              <div
+                onClick={(e) => handleRowClick(club.id, e)}
+                key={club?.id}
+                className={styles.rowContainer}
+              >
+                <Profile
+                  address={club.address}
+                  firstName={extractNameParts(club.name).firstName}
+                  lastName={extractNameParts(club.name).lastName}
+                  profilePictureUrl={club?.logoUrl}
+                />
 
-              <Badge
-                text={membersText(club.numberOfMembers)}
-                color={Colors.DARK_GOLD}
-                backgroundColor={Colors.LIGHT_GOLD}
-                className={styles.badge}
-              />
+                <Badge
+                  text={membersText(club.numberOfMembers)}
+                  color={Colors.DARK_GOLD}
+                  backgroundColor={Colors.LIGHT_GOLD}
+                  className={styles.badge}
+                />
 
-              <div className={styles.switchCol} onClick={stopPropagation}>
-                <Switch
-                  checked={club.chatbotEnabled}
-                  className={styles.switch}
-                  name={`switch-${index}`}
-                  onChange={handleChatbotStatusChange(club)}
-                  loading={isChatbotUpdatePending && updatingClubId === club.id}
+                <div className={styles.switchCol} onClick={stopPropagation}>
+                  <Switch
+                    checked={club.chatbotEnabled}
+                    className={styles.switch}
+                    name={`switch-${index}`}
+                    onChange={handleChatbotStatusChange(club)}
+                    loading={
+                      isChatbotUpdatePending && updatingClubId === club.id
+                    }
+                  />
+                </div>
+
+                <Actions
+                  options={ClubStatusOptions}
+                  onSelectChange={(value) => handleStatusChange(club.id, value)}
+                  onEditClick={handleEditClick(club.id)}
+                  selectWidth={140}
+                  selectedValue={club.status}
+                  selectLoading={
+                    isStatusUpdatePending && updatingClubId === club.id
+                  }
                 />
               </div>
-
-              <Actions
-                options={ClubStatusOptions}
-                onSelectChange={(value) => handleStatusChange(club.id, value)}
-                onEditClick={handleEditClick(club.id)}
-                selectWidth={140}
-                selectedValue={club.status}
-                selectLoading={
-                  isStatusUpdatePending && updatingClubId === club.id
-                }
-              />
-            </div>
-          ))}
+            ))}
+          </ConditionalRenderComponent>
         </ConditionalRender>
       </div>
       <Pagination

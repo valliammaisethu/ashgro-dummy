@@ -42,10 +42,9 @@ const {
   GET_EMAIL_TEMPLATES: GET_EMAIL_TEMPLATES_KEY,
   GET_STAFF_DEPARTMENTS: GET_STAFF_DEPARTMENTS_KEY,
 } = QueryKeys;
-
-const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
-const clubId = user?.clubId;
 export const MetaService = () => {
+  const user = localStorageHelper.getItem(LocalStorageKeys.USER) as UserData;
+  const clubId = user?.clubId;
   const getLeadSources = (
     params: LeadSourceParams = new LeadSourceParams(),
   ): UseQueryOptions<LeadSourcesData, ResponseModel, LeadSourcesData> => {
@@ -171,6 +170,8 @@ export const MetaService = () => {
       return deserialize(StaffDepartmentsData, response?.data?.data);
     },
     enabled: !!clubId,
+    staleTime: 0,
+    refetchOnMount: true,
   });
 
   return {

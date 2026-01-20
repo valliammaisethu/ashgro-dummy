@@ -28,7 +28,7 @@ const Header = (props: ClubStaffHeaderProps) => {
     });
 
   const staffDepartmentsOptions = useMemo(
-    () => mapToSelectOptionsDynamic(staffDepartments?.staffDepartments),
+    () => mapToSelectOptionsDynamic(staffDepartments?.staffDepartments) ?? [],
     [staffDepartments],
   );
   return (
@@ -46,6 +46,7 @@ const Header = (props: ClubStaffHeaderProps) => {
           showCheckboxes
           showSelectedCount
           onChange={handleDepartmentChange}
+          paginatedMode={true}
         />
         <AddUserButton onClick={onStaffAdd} label={ADD_STAFF} />
       </Form>

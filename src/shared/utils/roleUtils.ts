@@ -17,3 +17,8 @@ export const hasAnyRole = (roleNames: RoleNames[]) => {
   const role = getCurrentUserRole();
   return role ? roleNames.includes(role as RoleNames) : false;
 };
+
+export const getCurrentUserIds = () => {
+  const user = localStorageHelper.getItem(LocalStorageKeys.USER);
+  return { userId: user?.id, clubId: user?.clubId };
+};

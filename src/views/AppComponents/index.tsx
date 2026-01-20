@@ -13,7 +13,6 @@ import NumberIncrementer from "src/shared/components/NumberIncrementer";
 import RadioField from "src/shared/components/RadioField";
 import SwitchField from "src/shared/components/SwitchField";
 import Tabs from "src/shared/components/Tabs";
-import Table from "src/shared/components/Table";
 import Notification from "src/shared/components/Notification";
 import { appComponentsValidation } from "./validation";
 
@@ -176,12 +175,7 @@ const AppComponents: FC = () => {
           </Col>
         </Row>
         <Row>
-          <Col span={24}>
-            <Table
-              dataSource={AppComponentsConstants.TABLE.DATA}
-              columns={AppComponentsConstants.TABLE.COLUMS}
-            />
-          </Col>
+          <Col span={24}></Col>
         </Row>
       </div>
     </div>

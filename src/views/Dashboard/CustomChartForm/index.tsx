@@ -1,12 +1,16 @@
 import React, { useEffect, useMemo } from "react";
-import { Col, Divider, Row } from "antd";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { Col, Divider, Row, Spin } from "antd";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { LoadingOutlined } from "@ant-design/icons";
 
 import { chartFormConstants, chartConfig, xAxisLabel } from "./constants";
 import { chartformValidation } from "./validation";
 import { Buttons } from "src/enums/buttons.enum";
 import { CustomChartProps } from "src/shared/types/dashboard.type";
 import { xAxisTypesOptions } from "src/constants/chartOptions";
+import { QueryKeys } from "src/enums/cacheEvict.enum";
+import { LocalStorageKeys } from "src/enums/localStorageKeys.enum";
+import { localStorageHelper } from "src/shared/utils/localStorageHelper";
 import InputField from "src/shared/components/InputField";
 import Form from "src/shared/components/Form";
 import useForm from "src/shared/components/UseForm";
@@ -14,6 +18,7 @@ import Modal from "src/shared/components/Modal";
 import SelectField from "src/shared/components/SelectField";
 import { CustomChart } from "src/models/chart.model";
 import { DashboardService } from "src/services/DashboardService/dashboard.service";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 import styles from "./customChartForm.module.scss";
 
@@ -22,6 +27,9 @@ const { labels, fields, placeholders } = chartConfig;
 
 const CustomChartForm = (props: CustomChartProps) => {
   const { onClose, open, formValues } = props;
+
+  const queryClient = useQueryClient();
+  const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
 
   const { addCustomChart, editCustomChart, getChartValues } =
     DashboardService();
@@ -39,7 +47,16 @@ const CustomChartForm = (props: CustomChartProps) => {
       ? editCustomChartMutate
       : addCustomChartMutate;
 
-    mutateFn(values, { onSuccess: onClose });
+    mutateFn(values, {
+      onSuccess: () => {
+        if (formValues?.id && formValues?.path) {
+          queryClient.invalidateQueries({
+            queryKey: [QueryKeys.GET_CHART_DETAIL_KEY, clubId, formValues.path],
+          });
+        }
+        onClose();
+      },
+    });
   };
 
   const methods = useForm({
@@ -120,16 +137,31 @@ const CustomChartForm = (props: CustomChartProps) => {
             />
           </Col>
           <Col span={12}>
-            <SelectField
-              required
-              showCheckboxes
-              label={labels.xAxis}
-              placeholder={placeholders.xAxis}
-              name={fields.values}
-              options={memoizedChartOptions}
-              loading={isFetching}
-              disabled={!selectedType}
-            />
+            {/*TODO: Adding this as temperoty fix, since the SelectField is cluttered with multiple logic, need to fix this during SelectField enhancement */}
+            <ConditionalRenderComponent
+              visible={!isFetching}
+              fallback={
+                <InputField
+                  placeholder={placeholders.xAxis}
+                  name={fields.empty}
+                  required
+                  label={labels.xAxis}
+                  suffix={<Spin indicator={<LoadingOutlined />} />}
+                />
+              }
+            >
+              <SelectField
+                key={selectedType}
+                required
+                showCheckboxes
+                label={labels.xAxis}
+                placeholder={placeholders.xAxis}
+                name={fields.values}
+                options={memoizedChartOptions}
+                loading={isFetching}
+                disabled={!selectedType}
+              />
+            </ConditionalRenderComponent>
           </Col>
         </Row>
 

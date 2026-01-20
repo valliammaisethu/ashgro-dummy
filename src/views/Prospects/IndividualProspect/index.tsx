@@ -1,11 +1,11 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useMemo } from "react";
 import { IconDelete, IconEdit } from "obra-icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { Select } from "antd";
 
 import Header from "./Header";
 import ProspectForm from "../ProspectForm";
-import StatusDropdown from "../../../shared/components/StatusDropdown";
 import Card from "src/shared/components/Card";
 import Button from "src/shared/components/Button";
 import ProspectInfo from "./components/ProspectInfo";
@@ -13,13 +13,16 @@ import ConditionalRender from "src/shared/components/ConditionalRender";
 import DetailSection from "./components/DetailSection";
 import ActivitySection from "./components/ActivitySection";
 import {
+  selectStatus,
+  selectStatusClassName,
+} from "src/constants/sharedComponents";
+import {
   PROSPECT_LABELS,
   DetailSectionType,
   getProspectMeetingEvent,
 } from "./constants";
 import { ProspectsService } from "src/services/ProspectsService/prospects.service";
 import useDrawer from "src/shared/hooks/useDrawer";
-import { MetaService } from "src/services/MetaService/meta.service";
 import DeleteModal from "../DeleteModal";
 
 import MemberConversionModal from "../MemberConversionModal";
@@ -32,8 +35,11 @@ import TemplateModal from "src/views/Email/TemplateModal";
 import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import { EmailTemplate } from "src/models/meta.model";
 import BookMeeting from "src/views/Calender/BookMeeting";
+import { LeadService } from "src/services/SettingsService/lead.service";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 import styles from "./individualProspect.module.scss";
+import clsx from "clsx";
 
 const IndividualProspect = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER)?.clubId;
@@ -46,9 +52,17 @@ const IndividualProspect = () => {
     refetch,
   } = useQuery(viewProspect(id));
 
-  const { getLeadStatuses } = MetaService();
+  const { leadStatusList } = LeadService();
+  const { data: leadStatusesData = [] } = useQuery(leadStatusList());
 
-  const { data: leadStatusOptions } = useQuery(getLeadStatuses());
+  const leadStatusOptions = useMemo(
+    () =>
+      leadStatusesData?.map((status) => ({
+        ...status,
+        statusName: status?.label,
+      })),
+    [leadStatusesData],
+  );
 
   const { mutateAsync: updateProspectMutate, isPending: isUpdatingStatus } =
     useMutation(editProspect());
@@ -89,7 +103,7 @@ const IndividualProspect = () => {
   const handleRefetch = () => refetch();
 
   const handleStatusChange = async (statusName: string) => {
-    const selectedStatus = leadStatusOptions?.leadStatuses?.find(
+    const selectedStatus = leadStatusOptions?.find(
       (status) => status?.id === statusName,
     );
     if (selectedStatus?.id && id) {
@@ -134,11 +148,16 @@ const IndividualProspect = () => {
         <Card className={styles.card}>
           <div className={styles.leftSide}>
             <div className={styles.header}>
-              <StatusDropdown
-                value={data?.prospect?.leadStatus}
-                options={leadStatusOptions?.leadStatuses || []}
+              <Select
+                value={data?.prospect?.leadStatus || undefined}
+                options={leadStatusOptions?.map((opt) => ({
+                  label: opt.statusName,
+                  value: opt.id,
+                }))}
                 onChange={handleStatusChange}
                 loading={isUpdatingStatus}
+                className={clsx(selectStatusClassName, styles.selectStatus)}
+                placeholder={selectStatus}
               />
               <Button
                 onClick={handleEdit}
@@ -168,6 +187,19 @@ const IndividualProspect = () => {
                   data={data?.prospect}
                   type={DetailSectionType.FEES_AND_DUES}
                 />
+                <ConditionalRenderComponent
+                  visible={!!data?.prospect?.additionalComments}
+                  hideFallback
+                >
+                  <div className={styles.commentContentContainer}>
+                    <p className={styles.title}>
+                      {PROSPECT_LABELS.additionalComments}
+                    </p>
+                    <p className={styles.content}>
+                      {data?.prospect?.additionalComments}
+                    </p>
+                  </div>
+                </ConditionalRenderComponent>
               </div>
             </div>
           </div>

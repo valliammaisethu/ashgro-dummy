@@ -3,7 +3,6 @@ import { IconEdit } from "obra-icons-react";
 
 import Button from "src/shared/components/Button";
 import DeleteModal from "src/shared/components/DeleteModal";
-import { getStatusTagBackgroundColor } from "src/shared/utils/helpers";
 
 import styles from "./cardItem.module.scss";
 
@@ -15,7 +14,6 @@ interface CardItemProps {
   deleteTitle: string;
   deleteDescription: string;
   loading?: boolean;
-  color?: string;
 }
 
 const CardItem: React.FC<CardItemProps> = ({
@@ -25,20 +23,10 @@ const CardItem: React.FC<CardItemProps> = ({
   deleteTitle,
   deleteDescription,
   loading,
-  color,
 }) => {
   return (
     <div className={styles.card}>
       <div className={styles.labelContainer}>
-        {color && (
-          <span
-            className={styles.cardDot}
-            style={{
-              backgroundColor: color,
-              borderColor: getStatusTagBackgroundColor(color),
-            }}
-          />
-        )}
         <span className={styles.cardLabel}>{label}</span>
       </div>
 

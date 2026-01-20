@@ -24,12 +24,12 @@ const {
 export const editProfileValidation = Yup.object({
   firstName: Yup.string()
     .required(FIRST_NAME)
-    .matches(REGEX.LETTERS_WITH_SPACES, ONLY_LETTERS_ALLOWED)
+    .matches(REGEX.LETTERS, ONLY_LETTERS_ALLOWED)
     .max(MAX_LENGTH, FIRST_NAME_MAX_LENGTH),
 
   lastName: Yup.string()
     .required(LAST_NAME)
-    .matches(REGEX.LETTERS_WITH_SPACES, ONLY_LETTERS_ALLOWED)
+    .matches(REGEX.LETTERS, ONLY_LETTERS_ALLOWED)
     .max(MAX_LENGTH, LAST_NAME_MAX_LENGTH),
 
   email: Yup.string().nullable().email(),

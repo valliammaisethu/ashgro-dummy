@@ -1,13 +1,11 @@
-import React, { useState, useCallback, useMemo, useEffect } from "react";
+import React, { useState, useCallback, useMemo, useEffect, Key } from "react";
 import { CheckboxChangeEvent } from "antd";
+import { ColumnsType } from "antd/es/table";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
+import dayjs from "dayjs";
 
 import { getFullName } from "src/shared/utils/helpers";
-import Checkbox from "src/shared/components/Checkbox";
-import ConditionalRender from "src/shared/components/ConditionalRender";
-import ProspectRow from "./Components/ProspectRow";
-import Pagination from "src/shared/components/Pagination";
 import useRedirect from "src/shared/hooks/useRedirect";
 import useDrawer from "src/shared/hooks/useDrawer";
 import { localStorageHelper } from "src/shared/utils/localStorageHelper";
@@ -24,6 +22,8 @@ import { EmailService } from "src/services/EmailService/email.service";
 import { MetaService } from "src/services/MetaService/meta.service";
 import { BulkUploadService } from "src/services/BulkUploadService/bulkUpload.service";
 import { TemplateEntity } from "src/enums/templateEntity.enum";
+import { convertDateToApiFormat } from "src/shared/utils/dateUtils";
+import { DateFormats } from "src/enums/dateFormats.enum";
 import TemplateModal from "src/views/Email/TemplateModal";
 import NewEmailModal from "src/views/Email/NewEmailModal";
 import ImportModal from "src/views/ImportModal";
@@ -32,7 +32,6 @@ import { EmailModalEnum } from "src/views/Email/TemplateModal/constants";
 import Filters from "../Filters";
 import DeleteModal from "../DeleteModal";
 import ProspectForm from "../ProspectForm";
-import { TABLE_HEADERS } from "./constants";
 import {
   toggleAllSelections,
   toggleSingleSelection,
@@ -41,8 +40,12 @@ import {
   areFiltersActive,
 } from "./helpers";
 import Header from "./Header";
+import { LeadService } from "src/services/SettingsService/lead.service";
+import Table from "src/shared/components/Table";
+import { getColumns } from "./columns";
 
 import styles from "./listing.module.scss";
+import { prospectNameColTitle } from "./constants";
 
 const ProspectsListing = () => {
   const clubId = localStorageHelper.getItem(LocalStorageKeys.USER).clubId;
@@ -62,14 +65,37 @@ const ProspectsListing = () => {
   const [updatingProspectId, setUpdatingProspectId] = useState<
     string | undefined
   >();
+  const [updatingFollowUpId, setUpdatingFollowUpId] = useState<
+    string | undefined
+  >();
+
+  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
+
+  const onSelectChange = (newSelectedRowKeys: Key[]) =>
+    setSelectedRowKeys(newSelectedRowKeys);
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+    onSelect: (record: ProspectsList, selected: boolean) => {
+      const { id, email, firstName } = record || {};
+      if (!id || !email || !firstName) return;
+      handleSelectOne(id, email, firstName, selected);
+    },
+    onSelectAll: (selected: boolean) => {
+      handleSelectAll(selected);
+    },
+  };
 
   const { getProspects, editProspect } = ProspectsService();
   const { getLeadStatuses } = MetaService();
   const { getProspectEmailRecipients } = EmailService();
   const { checkBulkImportStatus } = BulkUploadService();
 
-  const { data, isPending, isSuccess } = useQuery(getProspects(queryParams));
-  const { data: leadStatusesData } = useQuery(getLeadStatuses());
+  const { data, isLoading } = useQuery(getProspects(queryParams));
+
+  const { leadStatusList } = LeadService();
+  const { data: leadStatusesData = [] } = useQuery(leadStatusList());
 
   const { data: emailRecipientsData } = useQuery({
     ...getProspectEmailRecipients(queryParams),
@@ -94,7 +120,11 @@ const ProspectsListing = () => {
     });
 
   const leadStatusOptions = useMemo(
-    () => leadStatusesData?.leadStatuses,
+    () =>
+      leadStatusesData?.map((status) => ({
+        ...status,
+        statusName: status?.label,
+      })),
     [leadStatusesData],
   );
 
@@ -192,8 +222,7 @@ const ProspectsListing = () => {
     return selectedProspects;
   }, [isAllSelected, emailRecipientsData, selectedProspects]);
 
-  const navigateToProspect = (id: string) => () =>
-    navigateToIndividualProspect(id);
+  const navigateToProspect = (id: string) => navigateToIndividualProspect(id);
 
   const handleSearch = useCallback((term: string) => {
     setQueryParams((prev) => ({ ...prev, search: term }));
@@ -265,8 +294,8 @@ const ProspectsListing = () => {
   }, [toggleNewEmailModal]);
 
   const handleStatusChange = async (
-    prospectId: string,
-    leadStatusId: string,
+    prospectId?: string,
+    leadStatusId?: string,
   ) => {
     setUpdatingProspectId(prospectId);
 
@@ -280,14 +309,68 @@ const ProspectsListing = () => {
     setUpdatingProspectId(undefined);
   };
 
+  const handleFollowUpDateChange = async (
+    prospectId?: string,
+    date?: dayjs.Dayjs | null,
+  ) => {
+    if (!date) return;
+
+    setUpdatingFollowUpId(prospectId);
+
+    await updateProspectMutate({
+      prospect: {
+        id: prospectId,
+        followUpDate: convertDateToApiFormat(
+          date.format(DateFormats.DD_MMM_YYYY),
+          DateFormats.DD_MMM_YYYY,
+        ),
+        clubId,
+      },
+    });
+    setUpdatingFollowUpId(undefined);
+  };
+
+  const columns: ColumnsType<ProspectsList> = useMemo(
+    () =>
+      getColumns({
+        handleOnEdit,
+        handleOnDelete,
+        leadStatusOptions,
+        onStatusChange: handleStatusChange,
+        updatingProspectId,
+        onFollowUpDateChange: handleFollowUpDateChange,
+        updatingFollowUpId,
+      }),
+    [
+      handleOnEdit,
+      handleOnDelete,
+      leadStatusOptions,
+      handleStatusChange,
+      updatingProspectId,
+      handleFollowUpDateChange,
+      updatingFollowUpId,
+    ],
+  );
+
   const handleClearSelections = useCallback(() => {
     setSelectedProspects([]);
+    setSelectedRowKeys([]);
     setIsAllSelected(false);
   }, []);
 
   const handleBulkMail = useCallback(() => {
     checkImportStatus({ clubId, entity: TemplateEntity.PROSPECT });
   }, [clubId, checkImportStatus]);
+
+  const handleRowClick = useCallback(
+    (record: ProspectsList) => ({
+      onClick: () => {
+        if (!record.id) return;
+        navigateToProspect(record.id);
+      },
+    }),
+    [navigateToProspect],
+  );
 
   useEffect(() => {
     if (clubId && queryParams.clubId !== clubId) {
@@ -309,60 +392,18 @@ const ProspectsListing = () => {
         isCheckingImportStatus={isCheckingImportStatus}
       />
       <div className={styles.prospectList}>
-        <div className={styles.tableContainer}>
-          <div className={styles.tableHeader}>
-            <div className={styles.checkboxCol}>
-              <Checkbox
-                checked={allSelected}
-                indeterminate={someSelected}
-                onChange={handleHeaderCheckboxChange}
-              />
-            </div>
-            <div className={styles.prospectCol}>{TABLE_HEADERS.PROSPECTS}</div>
-            <div className={styles.dateCol}>{TABLE_HEADERS.FOLLOW_UP_DATE}</div>
-            <div className={styles.sourceCol}>{TABLE_HEADERS.LEAD_SOURCE}</div>
-            <div className={styles.statusCol}>{TABLE_HEADERS.LEAD_STATUS}</div>
-          </div>
-          <ConditionalRender
-            records={data?.prospects}
-            isPending={isPending}
-            isSuccess={isSuccess}
-          >
-            <div className={styles.tableBody}>
-              {data?.prospects?.filter(Boolean).map((prospect) => (
-                <ProspectRow
-                  key={prospect.id}
-                  onClick={navigateToProspect(prospect.id!)}
-                  prospect={prospect}
-                  isSelected={selectedProspects.some(
-                    (p) => p.id === prospect.id,
-                  )}
-                  leadStatusOptions={leadStatusOptions}
-                  onSelectChange={(checked) =>
-                    handleSelectOne(
-                      prospect.id!,
-                      prospect.email!,
-                      prospect.firstName!,
-                      checked,
-                    )
-                  }
-                  onEditClick={handleOnEdit}
-                  onDeleteClick={handleOnDelete}
-                  onStatusChange={handleStatusChange}
-                  isUpdatingStatus={updatingProspectId === prospect.id}
-                />
-              ))}
-            </div>
-            <Pagination
-              currentPage={
-                data?.pagination?.currentPage ?? queryParams.page ?? 1
-              }
-              totalPages={data?.pagination?.overallPages ?? 1}
-              onPageChange={handlePageChange}
-              hasData={!!data?.prospects && data.prospects.length > 0}
-            />
-          </ConditionalRender>
-        </div>
+        <Table<ProspectsList>
+          columns={columns}
+          dataSource={data?.prospects}
+          currentPage={data?.pagination?.currentPage ?? queryParams.page}
+          totalPages={data?.pagination?.overallPages}
+          onPageChange={handlePageChange}
+          hasData={!!data?.prospects?.length}
+          rowSelection={rowSelection}
+          onRow={handleRowClick}
+          loading={isLoading}
+          nameColTitle={prospectNameColTitle}
+        />
       </div>
       <DeleteModal
         visible={deleteModalVisible}

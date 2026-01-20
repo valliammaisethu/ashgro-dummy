@@ -5,3 +5,5 @@ export const deleteModalConstants = {
 };
 
 export const importMembers = "Bulk Import Members";
+
+export const memberNameColTitle = "Member Name";
