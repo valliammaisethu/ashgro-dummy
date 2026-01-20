@@ -29,8 +29,8 @@ const MemberFilters = (props: MemberFiltersProps) => {
     values: {
       [fields.followUpDateRange]:
         defaultValues?.[fields.followUpDateRange] || [],
-      [fields.membershipCategoriesIds]:
-        defaultValues?.[fields.membershipCategoriesIds] || [],
+      [fields.membershipCategoryIds]:
+        defaultValues?.[fields.membershipCategoryIds] || [],
       [fields.membershipStatusIds]:
         defaultValues?.[fields.membershipStatusIds] || [],
       [fields.leadSource]: defaultValues?.[fields.leadSource] || [],
@@ -80,7 +80,7 @@ const MemberFilters = (props: MemberFiltersProps) => {
 
   const leadSourceWatch = watch(fields.leadSource);
   const membershipStatus = watch(fields.membershipStatusIds);
-  const membershipCategory = watch(fields.membershipCategoriesIds);
+  const membershipCategory = watch(fields.membershipCategoryIds);
 
   const handleClear = (field: string) => () => setValue(field, []);
 
@@ -88,7 +88,7 @@ const MemberFilters = (props: MemberFiltersProps) => {
     const clearedValues = {
       [fields.followUpDateRange]: [],
       [fields.membershipStatusIds]: [],
-      [fields.membershipCategoriesIds]: [],
+      [fields.membershipCategoryIds]: [],
       [fields.leadSource]: [],
     };
     reset(clearedValues);
@@ -137,10 +137,10 @@ const MemberFilters = (props: MemberFiltersProps) => {
                 options={membershipCategoriesOptions}
                 showCheckboxes
                 loading={membershipCategoriesPending}
-                name={fields.membershipCategoriesIds}
+                name={fields.membershipCategoryIds}
                 placeholder={placeholders.membershipType}
                 showClear={membershipCategory?.length > 0}
-                onClear={handleClear(fields.membershipCategoriesIds)}
+                onClear={handleClear(fields.membershipCategoryIds)}
               />
             </div>
           </div>
