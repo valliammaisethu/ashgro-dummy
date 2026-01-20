@@ -59,8 +59,8 @@ export const areFiltersActive = (
     queryParams.membershipStatusIds.length > 0;
 
   const hasMembershipCategory =
-    Array.isArray(queryParams.membershipCategoriesIds) &&
-    queryParams.membershipCategoriesIds.length > 0;
+    Array.isArray(queryParams.membershipCategoryIds) &&
+    queryParams.membershipCategoryIds.length > 0;
 
   const hasLeadSource =
     Array.isArray(queryParams.leadSourceIds) &&
