@@ -5,7 +5,7 @@ export const memberFiltersConstants = {
 export const fields = {
   followUpDateRange: "followUpDateRange",
   membershipStatusIds: "membershipStatusIds",
-  membershipCategoriesIds: "membershipCategoriesIds",
+  membershipCategoryIds: "membershipCategoryIds",
   leadSource: "leadSourceIds",
 };
 
