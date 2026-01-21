@@ -5,9 +5,9 @@
 
   if (!clubId || !host) return;
 
-  const BASE = "https://constitutional-violet-swift.rootquotient.revolte.io/chatbot";
+  const BASE = "https://complete-azure-macaw.ashgro.revolte.io/chatbot";
 
-  const BASE_API_URL = `https://molecular-tan-reptile.rootquotient.revolte.io/api/v1/chatbot/${clubId}`;
+  const BASE_API_URL = `https://useful-lime-landfowl.ashgro.revolte.io/api/v1/chatbot/${clubId}`;
 
   const IFRAME_URL = `${BASE}/?clubId=${encodeURIComponent(
     clubId
