@@ -23,7 +23,7 @@ revolte:
               VITE_IDLE_TIMEOUT_MINUTES: "#{VITE_IDLE_TIMEOUT_MINUTES}"
               VITE_ACTIVE_TIME_REPORT_MINUTES: "#{VITE_ACTIVE_TIME_REPORT_MINUTES}"
               VITE_SENTRY_DSN: >-
-                https://1bb6737846196ee5ea836f69fd5f3838@o4510104495587328.ingest.us.sentry.io/4510104497160192
+                https://6605b2851db34b5735039363aafa741b@o4510477939441664.ingest.us.sentry.io/4510509584678912
               VITE_WS_BASE_URL: "#{VITE_WS_BASE_URL}"
     qa:
       branch: qa
@@ -59,6 +59,16 @@ revolte:
             errorPage: error.html
             variables:
               BASE_URL: /api/v1
+              VITE_CHATBOT_SCRIPT_URL: "#{VITE_CHATBOT_SCRIPT_URL}"
+              VITE_API_BASE_URL: "#{VITE_API_BASE_URL}"
+              VITE_APP_BASE_URL: "#{VITE_APP_BASE_URL}"
+              VITE_POSTHOG_KEY: "#{VITE_POSTHOG_KEY}"
+              VITE_POSTHOG_HOST: "#{VITE_POSTHOG_HOST}"
+              VITE_IDLE_TIMEOUT_MINUTES: "#{VITE_IDLE_TIMEOUT_MINUTES}"
+              VITE_ACTIVE_TIME_REPORT_MINUTES: "#{VITE_ACTIVE_TIME_REPORT_MINUTES}"
+              VITE_SENTRY_DSN: >-
+                https://6605b2851db34b5735039363aafa741b@o4510477939441664.ingest.us.sentry.io/4510509584678912
+              VITE_WS_BASE_URL: "#{VITE_WS_BASE_URL}"
     preview:
       services:
         rid_1:
