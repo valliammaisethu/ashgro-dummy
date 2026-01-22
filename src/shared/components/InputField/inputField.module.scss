@@ -1,0 +1,17 @@
+@use "src/styles/variables" as *;
+
+.inputWrapper {
+  display: flex;
+  gap: 0.6rem;
+  flex-flow: column nowrap;
+  width: 100%;
+}
+
+.passwordInput {
+  font-size: 1.4rem;
+  font-family: $font-secondary;
+}
+
+.passwordIcon {
+  cursor: pointer;
+}

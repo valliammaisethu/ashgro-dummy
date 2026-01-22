@@ -1,0 +1,119 @@
+@import "src/styles/_variables";
+@import "src/styles/_helpers";
+
+.superAdminDashboard {
+  padding: 2.4rem 1rem;
+  background-color: $ashgro-white;
+  border: 1px solid $ashgro-light-border;
+  border-radius: 16px;
+  margin-bottom: 2.4rem;
+
+  .dateRangeContainer {
+    @include flex-container(flex-end, center, row, 1.6rem);
+    margin: 0 1.5rem 1.6rem 0;
+  }
+
+  .statsContainer {
+    @include flex-flow(row, wrap, normal, 2rem);
+    justify-content: center;
+
+    @media (min-width: 1024px) {
+      gap: 4.1rem;
+    }
+  }
+}
+
+.addChartButton {
+  position: relative;
+  background-color: $ashgro-navy;
+  color: $ashgro-white;
+  border-radius: 3.6rem;
+  width: 14.4rem;
+  height: 4.4rem;
+
+  &:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+  ) {
+    color: $ashgro-white;
+    background-color: $ashgro-navy;
+  }
+}
+.addIcon {
+  position: absolute;
+  top: 0.8rem;
+  left: 3.8rem;
+}
+
+.resetButton {
+  margin-right: 2rem;
+  color: $ashgro-gold;
+  border: none;
+  background: transparent;
+  font-weight: 400;
+  box-shadow: none;
+  font-size: 1.6rem;
+  // TODO: TO handle inside button types and remove !important
+  &:hover {
+    color: $ashgro-gold !important;
+    background: transparent !important;
+    opacity: 0.8;
+  }
+}
+
+.header {
+  @include flex-container(flex-end, center, row);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dashboardContainer {
+  height: calc(100vh - 11rem);
+  margin-top: 1.4rem;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+
+  .header {
+    @include flex-container(flex-end, center);
+    margin-bottom: 2.4rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .headerLeft {
+      @include flex-container(flex-start, center, row, 1.6rem);
+
+      .datePickerWrapper {
+        @include flex-container(flex-start, center);
+      }
+    }
+
+    .headerRight {
+      @include flex-container(flex-start);
+    }
+  }
+}
+
+.dragOverlayCard {
+  opacity: 0.95;
+  cursor: grabbing;
+  transform: scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem 2.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  white-space: nowrap;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1600px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,78 @@
+@import "variables";
+@import "helpers";
+@import "@antOverrides";
+
+/* General component styles */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%; // 1 rem = 10px
+  font-family: $font-secondary;
+}
+
+input::placeholder,
+select::placeholder {
+  font-family: $font-secondary;
+  color: $placeholder-color;
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+label {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: $ashgro-label;
+  font-family: $font-secondary !important;
+}
+
+body {
+  background-color: $search-field-placeholder;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  color: $primary-black;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid inherit;
+  /* Reset text color */
+  -webkit-text-fill-color: inherit;
+  /* Reset background */
+  -webkit-box-shadow: 0 0 0 1000px $input-background inset !important;
+}
+
+/* Firefox */
+input:-moz-autofill,
+textarea:-moz-autofill,
+select:-moz-autofill,
+input:autofill,
+textarea:autofill,
+select:autofill {
+  box-shadow: none;
+  background-color: transparent;
+  color: inherit;
+}
+
+span.ant-input-affix-wrapper.customInput > .ant-input:not(.ant-input-disabled) {
+  // Using important as antd used important to override browser default
+  -webkit-box-shadow: 0 0 0 1000px $input-background inset !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

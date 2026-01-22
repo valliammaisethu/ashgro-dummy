@@ -1,0 +1,99 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.chatbot {
+  @include flex-container(space-between, center, row);
+}
+
+.clubAddressInput {
+  min-height: 8rem;
+}
+
+.notesInput {
+  min-height: 24rem;
+}
+.addClubModal {
+  :global(.ant-modal) {
+    top: 2rem;
+  }
+}
+
+.sectionTitle {
+  color: $add-icon-bg;
+  @include secondaryRegular;
+  font-size: 1.6rem;
+}
+.noMarginDivider {
+  margin: 0;
+}
+.chatbotUploadContainer {
+  border: none;
+  border-radius: 1.2rem;
+  min-height: 15.6rem;
+  background-color: $ashgro-white;
+  cursor: pointer;
+  box-shadow: 0px 4px 16px 0px rgba(98, 62, 3, 0.1);
+  transition: background-image 0.3s ease;
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='12' ry='12' stroke='%23E5DBC566' stroke-width='2' stroke-dasharray='6%2c 6' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+  margin-top: 2rem;
+}
+
+.iconButton {
+  background-color: $search-bg;
+  border-radius: 1.4rem;
+  height: 4.4rem;
+  width: 4.4rem;
+
+  &:global(.ant-btn.ant-btn-icon-only) {
+    width: 4.4rem;
+  }
+  &:hover {
+    background-color: $search-bg;
+  }
+}
+.excelIcon {
+  height: 2.2rem;
+  width: 2rem;
+}
+
+.uploadingArrow {
+  width: 3.2rem;
+  height: 1rem;
+}
+
+.iconsContainer {
+  @include flex-container(center, center, row, 1.6rem);
+  padding-top: 2.4rem;
+}
+
+.description {
+  margin-top: 2rem;
+  @include flex-flow(column, wrap, center);
+
+  .importDescription {
+    color: $ashgro-navy;
+    font-weight: 600;
+    font-size: 1.8rem;
+  }
+  .uploadDescription {
+    color: $ashgro-gold;
+    font-size: 1.4rem;
+    font-weight: 400;
+    letter-spacing: 0.1px;
+  }
+}
+
+.uploadContainer {
+  margin-top: 2rem;
+  text-align: center;
+  padding-bottom: 2rem;
+}
+
+.customCancelButton {
+  display: none;
+}
+
+.errorText {
+  padding-top: 2rem;
+  color: $danger-color;
+}

@@ -1,0 +1,123 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.listContainer {
+  .headerRow {
+    display: grid;
+    grid-template-columns: 55% 23% 20% 5%;
+    align-items: center;
+    gap: 1rem;
+    padding: $table-padding;
+    background-color: $ashgro-white;
+    border-radius: 2rem 2rem 0 0;
+    margin: 2rem 0 0.6rem 0;
+
+    .headerLabel {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: $ashgro-gold;
+      font-family: $font-secondary;
+    }
+
+    .headerWithCheckbox {
+      display: flex;
+      align-items: center;
+      gap: 4.4rem;
+    }
+
+    .checkboxCol {
+      display: flex;
+      align-items: center;
+      padding-left: 1.2rem;
+    }
+  }
+
+  .rowContainer {
+    display: grid;
+    grid-template-columns: 55% 24% 20% 5%;
+    align-items: center;
+    padding: 1.6rem 2rem;
+    background-color: $ashgro-white;
+    margin-bottom: 0.6rem;
+    cursor: pointer;
+
+    :global(.actions-icons) {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      @include flex-flow(row, wrap, center, 1.8rem);
+    }
+
+    &:hover :global(.actions-icons) {
+      opacity: 1;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .rowItem {
+    width: 45rem;
+    align-items: flex-start;
+    color: $ashgro-navy;
+    font-weight: 600;
+    font-family: $font-secondary;
+    font-size: 1.4rem;
+    .profileInfo {
+      @include flex-container(start);
+
+      gap: 1rem;
+
+      .info {
+        @include flex-container(start);
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.6rem;
+        .name {
+          font-size: 1.8rem;
+          font-weight: 600;
+          font-family: $font-secondary;
+        }
+        .email {
+          color: $email;
+          font-weight: 400;
+          font-size: 1.4rem;
+          font-family: $font-secondary;
+        }
+      }
+    }
+  }
+
+  .paginationContainer {
+    margin-top: 1.6rem;
+    @include flex-container(center, center, row, 2.4rem);
+
+    .textContainer {
+      color: $ashgro-navy;
+      font-size: 1.4rem;
+      font-family: $font-secondary;
+      @include flex-flow(row, wrap, center);
+      gap: 1rem;
+
+      .active {
+        color: $ashgro-navy;
+        font-family: $font-secondary;
+        font-weight: 700;
+        font-size: 1.6rem;
+      }
+      .end {
+        padding-left: 0.5rem;
+      }
+    }
+  }
+
+  .listContainer {
+    background-color: $search-field-placeholder;
+    max-height: 50rem;
+    overflow-y: scroll;
+  }
+
+  .actionContainer {
+    @include flex-container;
+  }
+}

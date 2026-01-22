@@ -1,0 +1,48 @@
+@import "src/styles/variables";
+@import "src/styles/helpers";
+
+.clubFilterContent {
+  width: 30rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  @extend %hideScrollbar;
+
+  .header {
+    @include flex-container(flex-start, center);
+    padding: 1rem;
+    height: 3.2rem;
+  }
+
+  .clearSelection {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    cursor: pointer;
+    font-weight: 400;
+  }
+
+  .closeIcon {
+    cursor: pointer;
+    margin-left: auto;
+  }
+
+  .listContainer {
+    overflow-y: auto;
+    max-height: 27rem;
+    padding: 0 1rem;
+
+    @extend %hideScrollbar;
+  }
+
+  .clubItem {
+    @include flex-container(space-between, center);
+    padding: 1rem 0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    .clubName {
+      font-size: 1.4rem;
+      color: $ashgro-navy;
+    }
+  }
+}

@@ -1,0 +1,185 @@
+@import "src/styles/variables";
+@import "src/styles/helpers";
+
+@mixin tableCellStyles {
+  font-weight: 600;
+  font-size: 1.4rem;
+  font-family: $font-secondary;
+  border-bottom: 0.1rem solid $ashgro-input-border;
+
+  &:first-child {
+    border-top-left-radius: 2rem !important;
+    border-bottom-left-radius: 2rem;
+    padding-left: 30px !important;
+  }
+
+  &:last-child {
+    border-top-right-radius: 2rem !important;
+    border-bottom-right-radius: 2rem;
+    padding-right: 22px !important;
+  }
+}
+
+.customTable {
+  :global {
+    .ant-table,
+    .ant-table-container,
+    .ant-table-content {
+      background-color: transparent !important;
+    }
+
+    .ant-table-body {
+      @extend %thinScrollbar;
+      margin-top: -1rem !important;
+    }
+
+    .ant-table table {
+      border-collapse: separate !important;
+      border-spacing: 0 0.6rem !important;
+    }
+
+    .ant-table-thead > tr > th {
+      background-color: $ashgro-white;
+      color: $ashgro-gold;
+      @include tableCellStyles;
+      padding: 1.2rem 1.6rem;
+      z-index: 10;
+
+      &::before {
+        display: none;
+      }
+    }
+
+    .ant-table-tbody > tr > td {
+      background-color: $ashgro-white;
+      color: $ashgro-navy;
+      @include tableCellStyles;
+      padding: 1.2rem 1.6rem;
+    }
+
+    .ant-table-tbody > tr.ant-table-row:hover > td,
+    .ant-table-tbody > tr.ant-table-row-selected > td {
+      background-color: $ashgro-white !important;
+    }
+
+    .ant-table-placeholder {
+      background-color: $ashgro-white !important;
+      border-radius: 0 0 2rem 2rem !important;
+      .ant-table-cell {
+        border-bottom: none !important;
+        height: calc(100vh - 30rem);
+        background-color: $ashgro-bg;
+      }
+      :hover {
+        background-color: $ashgro-bg !important;
+      }
+    }
+  }
+}
+
+.paginationContainer {
+  flex-shrink: 0;
+  height: 4rem;
+  @include flex-container(center, center, row, 2.4rem);
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+
+  @media (max-width: 768px) {
+    gap: 1.2rem;
+    padding: 0 1rem;
+    flex-wrap: wrap;
+    height: auto;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .textContainer {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    font-family: $font-secondary;
+    @include flex-flow(row, wrap, center);
+    gap: 1rem;
+
+    @media (max-width: 768px) {
+      font-size: 1.2rem;
+      gap: 0.5rem;
+    }
+
+    .active {
+      color: $ashgro-navy;
+      font-family: $font-secondary;
+      font-weight: 700;
+      font-size: 1.6rem;
+
+      @media (max-width: 768px) {
+        font-size: 1.4rem;
+      }
+    }
+    .end {
+      padding-left: 0.5rem;
+    }
+  }
+}
+
+.nameLabel {
+  @include flex-container(flex-start, center, row, 1.2rem);
+  font-size: 1.6rem;
+
+  .name {
+    @include text-ellipsis;
+  }
+}
+.avatar {
+  flex-shrink: 0;
+  width: 3.2rem;
+  height: 3.2rem;
+}
+
+.phoneNumberLabel {
+  color: $ashgro-phone-number;
+  font-weight: 400;
+}
+
+.emailLabel {
+  font-weight: 400;
+  color: $ashgro-blue;
+  @include text-ellipsis;
+}
+
+.skeletonNameWrapper {
+  @include flex-container(flex-start, center, row, 1rem);
+}
+
+.skeletonNameInput {
+  width: 12rem !important;
+  height: 2rem !important;
+}
+
+.skeletonStatusButton {
+  width: 10rem !important;
+  border-radius: 0.4rem !important;
+}
+
+.skeletonGenericInput {
+  width: 80% !important;
+  height: 2rem !important;
+}
+
+.tableContainer {
+  background-color: $search-field-placeholder;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.2rem;
+}
+
+.actionsCell {
+  visibility: hidden;
+  @include flex-container(normal, center, row, 1.6rem);
+}
+
+.customTable :global(.ant-table-row:hover) .actionsCell {
+  visibility: visible;
+  cursor: pointer;
+}

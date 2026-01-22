@@ -1,0 +1,43 @@
+@import "src/styles/_variables.scss";
+
+.sectionTitle {
+  color: $add-icon-bg;
+  font-size: 1.6rem;
+  font-family: $font-secondary;
+  padding-bottom: 1.6rem;
+}
+
+.okButton {
+  background-color: $ashgro-navy;
+  color: $ashgro-white;
+  border-radius: 3.6rem;
+  padding: 1.2rem 1.6rem;
+  width: 14.4rem;
+  height: 4.4rem;
+
+  &:hover {
+    background-color: $ashgro-navy !important;
+    color: $ashgro-white !important;
+  }
+}
+
+.prospectFormModal {
+  :global(.ant-modal) {
+    top: 2rem;
+  }
+
+  :global(.ant-modal-footer) {
+    background-color: $modal-footer-bg;
+    border-radius: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-content: flex-end;
+  }
+}
+
+.activityDescBox {
+  textArea {
+    min-height: 24rem;
+  }
+}

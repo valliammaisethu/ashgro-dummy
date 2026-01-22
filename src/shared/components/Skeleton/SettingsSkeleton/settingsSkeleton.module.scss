@@ -1,0 +1,39 @@
+@import "src/styles/variables";
+@import "src/styles/helpers";
+
+.skeletonWrapper {
+  @include flex-container(flex-start, stretch, column);
+  width: 100%;
+}
+
+.cardGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  margin-top: 2rem;
+}
+
+.cardSkeleton {
+  width: calc((100% - 1.6rem) / 2);
+  height: 8rem;
+  background: $ashgro-white;
+  border-radius: 12px;
+  padding: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 0;
+  @include shimmer;
+
+  @media (min-width: 768px) {
+    width: calc((100% - (1.6rem * 2)) / 3);
+  }
+
+  @media (min-width: 1024px) {
+    width: calc((100% - (1.6rem * 3)) / 4);
+  }
+
+  @media (min-width: 1440px) {
+    width: calc((100% - (1.6rem * 4)) / 5);
+  }
+}

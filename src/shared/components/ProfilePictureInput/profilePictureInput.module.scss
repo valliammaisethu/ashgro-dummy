@@ -1,0 +1,118 @@
+@import "src/styles/variables";
+@import "src/styles/helpers";
+
+.title {
+  font-size: 1.6rem;
+  font-family: $font-secondary;
+  color: $add-icon-bg;
+  text-align: center;
+
+  .asterisk {
+    color: $danger-color;
+    margin-left: 0.4rem;
+    font-weight: 600;
+  }
+}
+
+.container {
+  @include flex-flow(column, wrap, center, 1rem);
+}
+
+.maxSize {
+  color: $upload-text;
+  @include secondaryRegular;
+  font-size: 1.3rem;
+}
+
+.imageWrapperOuter {
+  border-radius: 50%;
+  @include flex-container(center, center, row, 0);
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &.withBorder {
+    background: $profile-bg-gradient;
+    padding: 0.15rem;
+    cursor: default;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &.loading {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &.clubUploadWrapper {
+    border-radius: 0;
+  }
+
+  &.clubUploadWrapperBorder {
+    border-radius: 50%;
+  }
+}
+
+.imageWrapperInner {
+  width: 8.8rem;
+  height: 8.8rem;
+  border-radius: 50%;
+  overflow: hidden;
+  @include flex-container(center, center);
+  position: relative;
+
+  &.withoutBorder {
+    border-radius: 0;
+  }
+
+  &.clubUploadBorder {
+    border-radius: 50%;
+  }
+}
+
+.loaderOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(247, 244, 237, 0.9);
+  @include flex-container(center, center);
+  z-index: 10;
+}
+
+.profileImage {
+  width: 8.8rem;
+  height: 8.8rem;
+  object-fit: cover;
+}
+
+.actions {
+  @include flex-container(normal, center, row, 2rem);
+}
+
+.actionButton {
+  width: 5.6rem;
+  height: 5.6rem;
+  border-radius: 50%;
+  border: none;
+  background-color: $ashgro-cream;
+  color: $ashgro-grey;
+  @include flex-container(center, center, row, 0);
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: darken($ashgro-cream, 5%);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}

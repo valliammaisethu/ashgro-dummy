@@ -1,0 +1,74 @@
+@import "src/styles/variables";
+@import "src/styles/_helpers.scss";
+
+.wrapper {
+  @include flex-container(normal, normal, column);
+
+  .label {
+    font-size: 1.2rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .countryCodePrefix {
+    @include flex-container(center, center, row);
+    gap: 0.8rem;
+    min-width: 8rem;
+    height: 4rem;
+    border: 1px solid $input-border;
+    border-right: none;
+    border-top-left-radius: 1.4rem;
+    border-bottom-left-radius: 1.4rem;
+    background-color: $input-background;
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    font-weight: 500;
+    font-family: $font-secondary;
+    padding: 0 1.2rem;
+    position: relative;
+
+    .flag {
+      font-size: 1.6rem;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 1rem;
+      bottom: 1rem;
+      right: 0;
+      width: 1px;
+      background-color: $light-grey;
+    }
+  }
+
+  :global {
+    .ant-input {
+      border-left: none;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}
+
+.phoneCode {
+  @include flex-container(normal, center, row);
+  gap: 0.9rem;
+
+  .flag {
+    font-size: 1.6rem;
+  }
+}
+
+.codeError {
+  width: 10.9rem;
+}
+.inputWrapper {
+  @include flex-container(normal, normal, row);
+  width: 100%;
+
+  .phoneInput {
+    &:disabled {
+      background-color: $input-background;
+    }
+  }
+}

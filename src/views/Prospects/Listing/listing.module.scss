@@ -1,0 +1,372 @@
+@import "src/styles/variables";
+@import "src/styles/_helpers.scss";
+
+.prospectList {
+  margin-top: 1.2rem;
+}
+
+.prospectCard {
+  background-color: $ashgro-white;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 0.6rem;
+  padding: 2rem 1.6rem 1.6rem;
+
+  .left {
+    @include flex-container(normal, flex-start, row, 1.2rem);
+
+    .profileInfo {
+      @include flex-flow(column, nowrap);
+
+      .name {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: $ashgro-navy;
+        font-family: $font-secondary;
+      }
+
+      .email {
+        font-size: 1.2rem;
+        font-weight: 400;
+        color: $ashgro-navy;
+        font-family: $font-secondary;
+        opacity: 60%;
+        @include flex-flow(row, wrap, center);
+        gap: 0.6rem;
+      }
+
+      .dot {
+        font-size: 2rem;
+      }
+    }
+  }
+}
+
+.bulkUploadButton {
+  &:global(.ant-btn) {
+    border-color: $gold-bold;
+    color: $gold-text;
+    border-radius: 3.6rem;
+    background-color: transparent;
+    font-size: 1.4rem;
+    height: 4.4rem;
+    font-weight: 600;
+    font-family: $font-secondary;
+    @include flex-flow(row, wrap, center);
+
+    :global(.ant-btn-icon) {
+      padding-top: 0.3rem;
+    }
+
+    &:hover {
+      border-color: $gold-bold;
+      background-color: transparent;
+      color: $gold-text;
+    }
+  }
+}
+.bulkUploadButton:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
+  ):hover {
+  border-color: $gold-bold;
+  background-color: transparent;
+  color: $gold-text;
+}
+
+.addProspectButton {
+  &:global(.ant-btn) {
+    border-radius: 3.6rem;
+    font-size: 1.4rem;
+    height: 4.4rem;
+    font-weight: 600;
+    font-family: $font-secondary;
+    color: $ashgro-white;
+  }
+}
+
+.header {
+  @include flex-container(space-between, center, row);
+}
+
+.actions {
+  @include flex-container(normal, center, row, 1.6rem);
+}
+
+.prospectListTable {
+  ::global(.ant-table-cell) {
+    background-color: $ashgro-white;
+  }
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: $table-grid-columns;
+  gap: $table-gap;
+  padding: $table-padding;
+  background-color: $ashgro-white;
+  border-bottom: 1px solid $gradient-border;
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: $ashgro-gold;
+  font-family: $font-secondary;
+  border-radius: 2rem 2rem 0 0;
+}
+
+.tableBody {
+  background-color: $search-field-placeholder;
+  max-height: 50rem;
+  overflow-y: scroll;
+}
+.bulkMailIcon {
+  margin-right: 0.8rem;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: $table-grid-columns;
+  gap: $table-gap;
+  padding: $table-padding;
+  align-items: center;
+  transition: background-color 0.2s;
+  border: 1px solid;
+  border-image-source: linear-gradient(
+    151.49deg,
+    rgba(246, 239, 222, 0.5) 0%,
+    rgba(216, 201, 167, 0.5) 100%
+  );
+  border-image-slice: 1;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.checkboxCol {
+  @include flex-flow(row, wrap, center);
+  padding-left: 1.2rem;
+}
+
+.prospectCol,
+.dateCol,
+.sourceCol,
+.statusCol {
+  @include flex-flow(row, wrap, center);
+}
+.prospectCol {
+  padding-left: 1.2rem;
+}
+
+.prospectInfo {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.avatar {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.details {
+  @include flex-flow(column, wrap, normal, 0.6rem);
+}
+
+.name {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: $ashgro-navy;
+  font-family: $font-secondary;
+}
+
+.contact {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: $ashgro-navy;
+  opacity: 0.6;
+  font-family: $font-secondary;
+  @include flex-container(normal, center, row, 1.2rem);
+
+  .email {
+    color: $ashgro-blue;
+    font-size: 1.4rem;
+    font-family: $font-secondary;
+  }
+
+  .phone {
+    color: $ashgro-navy;
+    font-size: 1.4rem;
+    font-family: $font-secondary;
+  }
+
+  .dot {
+    color: $dot-color;
+    font-size: 2rem;
+  }
+}
+
+.statusTag {
+  display: inline-flex;
+  align-items: center;
+  width: 14rem;
+  height: 3.6rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border-radius: 2.8rem;
+  font-family: $font-secondary;
+  border: 1px solid transparent;
+  text-align: left;
+  gap: 0.5rem;
+
+  &.blue {
+    background-color: $new-lead-tag-bg;
+    color: $ashgro-blue;
+
+    .statusTagDot {
+      border-color: rgba($new-lead-tag-bg, 0.3);
+      background-color: $ashgro-blue;
+    }
+  }
+
+  &.default {
+    background-color: $unqualified-lead-tag-bg;
+    color: $unqualified-lead-text;
+
+    .statusTagDot {
+      border-color: rgba($unqualified-lead-tag-bg, 0.3);
+      background-color: $unqualified-lead-text;
+    }
+  }
+
+  &.red {
+    background-color: $hot-tag-bg;
+    color: $hot-text;
+
+    .statusTagDot {
+      border-color: rgb($hot-tag-bg, 0.3);
+      background-color: $hot-text;
+    }
+  }
+
+  &.orange {
+    background-color: $warm-tag-bg;
+    color: $warm-text;
+
+    .statusTagDot {
+      border-color: rgb($warm-tag-bg, 0.3);
+      background-color: $warm-text;
+    }
+  }
+
+  &.green {
+    background-color: $closed-won-tag;
+    color: $closed-won-tag-text;
+
+    .statusTagDot {
+      border-color: rgb($closed-won-tag, 0.3);
+      background-color: $closed-won-tag-text;
+    }
+  }
+
+  &.purple {
+    background-color: $closed-tag-bg;
+    color: $closed-tag-text;
+
+    .statusTagDot {
+      border-color: rgb($closed-tag-bg, 0.3);
+      background-color: $closed-tag-text;
+    }
+  }
+}
+
+.statusSelect {
+  :global(.ant-select.ant-select.ant-select-open .ant-select-selector) {
+    border: none;
+    box-shadow: none;
+  }
+
+  &:global(.ant-select) {
+    width: 14rem;
+    height: 3.6rem;
+
+    :global(.ant-select-selector) {
+      border: none;
+      box-shadow: none;
+      padding: 0.5rem;
+      background: transparent;
+    }
+
+    &:hover :global(.ant-select-selector) {
+      border: none;
+    }
+
+    &:global(.ant-select-focused) :global(.ant-select-selector) {
+      border: none;
+      box-shadow: none;
+    }
+  }
+}
+
+:global(.ant-select-dropdown) {
+  :global(.ant-select-item-option) {
+    padding: 0.4rem 0.8rem;
+
+    .statusTag {
+      width: 100%;
+      height: auto;
+      min-height: 3.2rem;
+    }
+  }
+}
+
+.statusTagDot {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 2px solid;
+  background-color: transparent;
+}
+
+.clearSelection {
+  margin-top: 0.4rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  display: flex;
+  @include flex-flow(row, wrap, normal, 0.8rem);
+  cursor: pointer;
+}
+
+.followUpDateContainer {
+  position: relative;
+  @include flex-container(normal, center, row, 1.6rem);
+  .followUpDateLabel {
+    @include flex-container(normal, center, row, 0.6rem);
+    align-items: center;
+    cursor: pointer;
+  }
+  .datePicker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.leadStatus {
+  width: 100%;
+  &:global(
+    .ant-select-outlined:not(.ant-select-disabled):not(
+        .ant-select-customize-input
+      ):not(.ant-pagination-size-changer)
+  ) {
+    :global(.ant-select-selector) {
+      border-radius: 2.2rem;
+      border-width: 0.1rem;
+      width: 15rem;
+    }
+  }
+}

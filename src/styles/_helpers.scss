@@ -1,0 +1,357 @@
+@import "variables";
+
+/* Helpers CSS */
+
+.d-block {
+  display: block !important;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.float-right {
+  float: right !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-underline {
+  text-decoration: underline !important;
+}
+
+.text-primary {
+  color: $primary-color;
+}
+
+.text-light-grey {
+  color: $light-grey;
+}
+
+.text-dark-grey {
+  color: $dark-grey;
+}
+
+.text-white {
+  color: #ffffff !important;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.bb-5 {
+  border-bottom: ($spacer-y * 1.25) solid $primary-color !important;
+}
+
+.float-right {
+  float: right !important;
+}
+
+.float-left {
+  float: left !important;
+}
+
+.float-none {
+  float: none !important;
+}
+
+.primary-black {
+  color: $primary-black !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+/* Padding */
+
+.p-0 {
+  padding: 0 !important;
+}
+
+.pr-0 {
+  padding-right: 0 !important;
+}
+
+.pb-0 {
+  padding-bottom: 0 !important;
+}
+
+/* Margins */
+
+.mt-0 {
+  margin-top: 0 !important;
+}
+
+.mt-1 {
+  margin-top: ($spacer-y * 0.25) !important;
+}
+
+.mt-2 {
+  margin-top: ($spacer-y * 0.5) !important;
+}
+
+.mt-3 {
+  margin-top: ($spacer-y * 0.75) !important;
+}
+
+.mt-4 {
+  margin-top: ($spacer-y * 1) !important;
+}
+
+.mt-5 {
+  margin-top: ($spacer-y * 1.25) !important;
+}
+
+.mb-2 {
+  margin-bottom: ($spacer-y * 0.5) !important;
+}
+
+.mb-3 {
+  margin-bottom: ($spacer-y * 0.75) !important;
+}
+
+.mb-4 {
+  margin-bottom: ($spacer-y * 1) !important;
+}
+
+.mb-5 {
+  margin-bottom: ($spacer-y * 1.25) !important;
+}
+
+.ml-2 {
+  margin-left: ($spacer-x * 0.5) !important;
+}
+
+.ml-3 {
+  margin-left: ($spacer-x * 0.75) !important;
+}
+
+.ml-4 {
+  margin-left: ($spacer-x * 1) !important;
+}
+
+.ml-5 {
+  margin-left: ($spacer-x * 1.25) !important;
+}
+
+.mr-1 {
+  margin-right: ($spacer-x * 0.25) !important;
+}
+
+.mr-2 {
+  margin-right: ($spacer-x * 0.5) !important;
+}
+
+.mr-3 {
+  margin-right: ($spacer-x * 0.75) !important;
+}
+
+.mr-4 {
+  margin-right: ($spacer-x * 1) !important;
+}
+
+.mr-5 {
+  margin-right: ($spacer-x * 1.25) !important;
+}
+
+@mixin flex-container(
+  $justify: space-between,
+  $align: center,
+  $direction: row,
+  $gap: 0
+) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+  gap: $gap;
+}
+
+@mixin flex-flow($direction: row, $wrap: wrap, $align-items: normal, $gap: 0) {
+  display: flex;
+  flex-flow: $direction $wrap;
+  align-items: $align-items;
+  gap: $gap;
+}
+
+@mixin primaryRegular {
+  font-family: $font-primary;
+  font-weight: 400;
+}
+
+@mixin secondaryRegular {
+  font-family: $font-secondary;
+  font-weight: 400;
+}
+
+@mixin primaryBold {
+  font-family: $font-primary;
+  font-weight: 600;
+}
+
+@mixin primarySemiBold {
+  font-family: $font-primary;
+  font-weight: 500;
+}
+
+@mixin secondaryBold {
+  font-family: $font-secondary;
+  font-weight: 600;
+}
+
+@mixin secondarySemiBold {
+  font-family: $font-secondary;
+  font-weight: 500;
+}
+
+// TODO: To check ant overrides configuration and remove !important
+@mixin actionButton {
+  background-color: $search-bg;
+  border-color: transparent;
+  color: $filter-icon;
+  padding: 2rem 1rem;
+  border-radius: 1.6rem;
+  width: 4.2rem !important;
+  height: 4.2rem;
+
+  &:hover {
+    background-color: $search-bg !important;
+    color: $filter-icon !important;
+    border-color: transparent !important;
+  }
+}
+
+@mixin gradientBorder($color: transparent) {
+  border: 1px solid;
+  border-image-slice: 1;
+  border-image-source: $color;
+}
+
+@mixin modalFooter {
+  background-color: $modal-footer-bg;
+  min-height: 7.6rem;
+  border-radius: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  justify-content: flex-end;
+  padding: 1.6rem 3.2rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+@mixin modalOkButton {
+  background-color: $ashgro-navy;
+  color: $ashgro-white;
+  border-radius: 3.6rem;
+  padding: 1.2rem 1.6rem;
+  width: 14.4rem;
+  height: 4.4rem;
+
+  &:hover {
+    background-color: $ashgro-navy !important;
+    color: $ashgro-white !important;
+  }
+}
+
+%hideScrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+%reducedScrollbarHeight {
+  &::-webkit-scrollbar {
+    height: 0.3rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    pointer-events: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba($ashgro-grey, 0.3);
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba($ashgro-grey, 0.5);
+  }
+}
+
+%thinScrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba($ashgro-grey, 0.3) transparent;
+
+  &::-webkit-scrollbar {
+    width: 0.3rem;
+    height: 0.3rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba($ashgro-grey, 0.3);
+    border-radius: 2rem;
+    border: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: rgba($ashgro-grey, 0.5);
+  }
+}
+
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin shimmer {
+  background: linear-gradient(
+    90deg,
+    $bg-light 25%,
+    $bg-dark 37%,
+    $bg-light 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}

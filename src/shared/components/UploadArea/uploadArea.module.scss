@@ -1,0 +1,128 @@
+@import "src/styles/variables";
+@import "src/styles/_helpers";
+
+.uploadArea {
+  border: none;
+  border-radius: 1.2rem;
+  min-width: 48rem;
+  min-height: 12rem;
+  padding: 3.8rem 5.4rem;
+  @include flex-container(center, center, column);
+  background-color: $ashgro-cream;
+  cursor: pointer;
+  transition: background-image 0.3s ease;
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='12' ry='12' stroke='%23E5DBC566' stroke-width='2' stroke-dasharray='6%2c 6' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+}
+
+.uploadingArea {
+  padding: 1.8rem 5.4rem;
+}
+
+.content {
+  @include flex-container(normal, center, column, 0.6rem);
+  text-align: center;
+}
+
+.mainText {
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: $ashgro-navy;
+}
+
+.subText {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: $range-picker-tr;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.uploadingContent {
+  @include flex-container(normal, center, column, 0.4rem);
+  text-align: center;
+}
+
+.uploadedContent {
+  text-align: center;
+}
+
+.uploadingFileName {
+  color: $ashgro-navy;
+  font-size: 1.4rem;
+}
+
+.uploadedText {
+  font-size: 1.4rem;
+  @include flex-flow(row, wrap, normal, 1rem);
+
+  .fileName {
+    color: $ashgro-navy;
+  }
+}
+
+.fileIcon {
+  font-size: 4.8rem;
+  color: $ashgro-grey;
+}
+
+.fileName {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: $filter-icon;
+}
+
+.uploadingText {
+  margin-top: 2rem;
+  @include flex-container(normal, center, row, 0.4rem);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: $filter-icon;
+}
+
+.spinner {
+  font-size: 1.6rem;
+  color: $ashgro-grey;
+}
+.loaderDiv {
+  margin-top: 2rem;
+  @include flex-container(center, center, row, 0.4rem);
+}
+
+.retryDiv {
+  margin-top: 1.8rem;
+}
+.renewIcon {
+  width: 2rem;
+  height: 2rem;
+  animation: spin 1s linear infinite;
+}
+
+.loader {
+  width: 2rem;
+  height: 2rem;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.reupload {
+  color: $dark-gold;
+  text-decoration: underline;
+  font-size: 1.2rem;
+}
+.errorContainer {
+  text-align: center;
+
+  .errorText {
+    font-size: 1.4rem;
+    color: $ashgro-navy;
+  }
+}

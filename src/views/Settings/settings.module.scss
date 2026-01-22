@@ -1,0 +1,152 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.settingsWrapper {
+  display: flex;
+  height: 70rem;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+
+  .selectedSettingContainer {
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .cardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    margin-top: 2rem;
+  }
+
+  .verticalTabs {
+    width: 100%;
+
+    :global {
+      .ant-tabs.ant-tabs-left {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        background: transparent;
+      }
+
+      .ant-tabs-nav {
+        min-width: 26rem;
+        background: $ashgro-white;
+        padding: 1rem;
+        border-radius: 12px;
+        border: none;
+      }
+
+      .ant-tabs-tab {
+        padding: 1.2rem 2.4rem;
+        margin: 0.4rem 0;
+        border-radius: 8px;
+        background-color: transparent;
+        .ant-tabs-tab-btn {
+          font-size: 1.4rem;
+          font-weight: 400;
+        }
+        transition: all 0.2s ease;
+      }
+
+      .ant-tabs-tab:hover {
+        background: $modal-footer-bg;
+      }
+
+      .ant-tabs-tab-active {
+        background: $modal-footer-bg;
+        border-radius: 12px;
+        .ant-tabs-tab-btn {
+          font-weight: 600;
+          font-size: 1.6rem;
+        }
+      }
+
+      .ant-tabs-content-holder {
+        flex: 1;
+        padding: 2rem 1rem;
+      }
+      .ant-tabs-content-holder {
+        border-left: 0;
+      }
+    }
+  }
+}
+.emailBodyInput {
+  textArea {
+    min-height: 14rem;
+  }
+}
+
+.modalFooter {
+  background-color: $modal-footer-bg;
+  min-height: 7.6rem;
+  border-radius: 1.6rem;
+  @include flex-container(flex-end, center, row, 2rem);
+  padding: 1.6rem 3.2rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+
+  .okButton {
+    background-color: $ashgro-navy;
+    color: $ashgro-white;
+    border-radius: 3.6rem;
+    padding: 1.2rem 1.6rem;
+    width: 14.4rem;
+    height: 4.4rem;
+
+    &:hover {
+      background-color: $ashgro-navy !important;
+      color: $ashgro-white !important;
+    }
+  }
+}
+.formRow {
+  padding-bottom: 6rem;
+}
+
+.buttonsContainer {
+  @include flex-container(flex-end, center, row, 1.6rem);
+  margin-right: 3.2rem;
+}
+
+.leadFormButton,
+.changePasswordButton {
+  min-width: 16.8rem;
+  height: 4.4rem;
+  border: 1px solid $gold-bold;
+  border-radius: 3.6rem;
+  padding: 1.4rem;
+  color: $gold-text;
+  font-weight: 600;
+  @include flex-container(end, center, row, 0.8rem);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chatbotLinkContainer {
+  @include flex-container(center, center, row, 0.8rem);
+  color: $ashgro-gold;
+  font-weight: 600;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding-right: 2rem;
+}
+
+.leadFormButton {
+  width: 8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.noDataScreen {
+  @include flex-container(center, center);
+  min-height: 35rem;
+}

@@ -1,0 +1,130 @@
+import React, { useState } from "react";
+import { Popover } from "antd";
+import { IconCircleClose } from "obra-icons-react";
+import { useQuery } from "@tanstack/react-query";
+
+import { useDashboardFilters } from "src/context/DashboardFiltersContext";
+import Checkbox from "src/shared/components/Checkbox";
+import { Colors } from "src/enums/colors.enum";
+
+import styles from "./clubFilterDropdown.module.scss";
+import { ClubService } from "src/services/ClubService/club.service";
+import ConditionalRender from "src/shared/components/ConditionalRender";
+import FilterIconWithBadge from "../FilterIconWithBadge";
+import { QueryParams } from "src/models/queryParams.model";
+import { Trigger } from "src/enums/trigger.enum";
+import { Placement } from "src/enums/placement.enum";
+import { filterConstants } from "../../constants";
+import Button from "src/shared/components/Button";
+import { ButtonTypes } from "src/enums/buttons.enum";
+import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+
+interface ClubFilterDropdownProps {
+  chartId: string;
+}
+
+const { MODAL_CLOSE_ICON } = Colors;
+
+const ClubFilterDropdown: React.FC<ClubFilterDropdownProps> = ({ chartId }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const { getClubs } = ClubService();
+  const { getChartFilter, setChartFilter, getFilterDetails } =
+    useDashboardFilters();
+
+  // TODO: remove once BE create meta api for clubs
+  const queryParams = Object.assign(new QueryParams(), { limit: 100 });
+
+  const {
+    data: clubsData,
+    isLoading,
+    isSuccess,
+  } = useQuery(getClubs(queryParams));
+
+  const selectedValues = getChartFilter(chartId);
+
+  const [selectedClubs, setSelectedClubs] = useState<string[]>(selectedValues);
+
+  const { hasDate, hasValues } = getFilterDetails(chartId);
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      setChartFilter(chartId, selectedClubs);
+    } else {
+      setSelectedClubs(selectedValues);
+    }
+    setIsOpen(open);
+  };
+
+  const handlePopupVisibility = () => handleOpenChange(!isOpen);
+
+  const handleClearSelection = () => {
+    setChartFilter(chartId, []);
+    setSelectedClubs([]);
+    setIsOpen(false);
+  };
+
+  const handleClubToggle = (clubId?: string) => () => {
+    if (!clubId) return;
+
+    const isSelected = selectedClubs.includes(clubId);
+
+    const updatedSelection = isSelected
+      ? selectedClubs.filter((id) => id !== clubId)
+      : [...selectedClubs, clubId];
+
+    setSelectedClubs(updatedSelection);
+  };
+
+  return (
+    <Popover
+      content={
+        <div className={styles.clubFilterContent}>
+          <div className={styles.header}>
+            <ConditionalRenderComponent
+              visible={!!selectedClubs.length}
+              hideFallback
+            >
+              <Button onClick={handleClearSelection} type={ButtonTypes.LINK}>
+                {filterConstants.CLEAR_SELECTION}
+              </Button>
+            </ConditionalRenderComponent>
+
+            <IconCircleClose
+              size={20}
+              className={styles.closeIcon}
+              onClick={handlePopupVisibility}
+              color={MODAL_CLOSE_ICON}
+            />
+          </div>
+          <ConditionalRender
+            records={clubsData?.clubs}
+            isPending={isLoading}
+            isSuccess={isSuccess}
+          >
+            <div className={styles.listContainer}>
+              {clubsData?.clubs?.map(({ id, name }) => (
+                <div key={id} className={styles.clubItem}>
+                  <span className={styles.clubName}>{name}</span>
+                  <Checkbox
+                    checked={id ? selectedClubs.includes(id) : false}
+                    onChange={handleClubToggle(id)}
+                  />
+                </div>
+              ))}
+            </div>
+          </ConditionalRender>
+        </div>
+      }
+      trigger={Trigger.CLICK}
+      open={isOpen}
+      onOpenChange={handleOpenChange}
+      placement={Placement.BOTTOM_RIGHT}
+      overlayClassName={styles.popoverOverlay}
+      arrow={false}
+    >
+      <FilterIconWithBadge hasFilters={hasValues} />
+    </Popover>
+  );
+};
+
+export default ClubFilterDropdown;

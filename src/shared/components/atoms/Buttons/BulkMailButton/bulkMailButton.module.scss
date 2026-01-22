@@ -1,0 +1,43 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.bulkMailButton {
+  &:global(.ant-btn) {
+    border-color: $gold-bold;
+    color: $gold-text;
+    border-radius: 3.6rem;
+    background-color: transparent;
+    font-size: 1.4rem;
+    height: 4.4rem;
+    font-weight: 600;
+    font-family: $font-secondary;
+    @include flex-flow(row, wrap, center);
+    gap: 0rem;
+
+    :global(.ant-btn-icon) {
+      padding-top: 0.3rem;
+    }
+
+    &:global(.ant-btn-loading) {
+      gap: 1rem;
+    }
+
+    &:hover {
+      border-color: $gold-bold;
+      background-color: transparent;
+      color: $gold-text;
+    }
+  }
+}
+
+.bulkMailButton:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
+  ):hover {
+  border-color: $gold-bold;
+  background-color: transparent;
+  color: $gold-text;
+}
+
+.bulkMailIcon {
+  margin-right: 0.8rem;
+}

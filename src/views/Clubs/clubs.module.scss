@@ -1,0 +1,114 @@
+@import "src/styles/_variables";
+@import "src/styles/_helpers";
+
+.header {
+  @include flex-container(space-between, normal, row, 0);
+}
+
+.listHeader {
+  @media (max-width: 1024px) {
+    grid-template-columns: 40% 15% 25% 20% !important;
+  }
+
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+}
+.addClubButton {
+  background-color: $ashgro-navy;
+  border-radius: 3.6rem;
+  height: 4.4rem;
+  width: 14.4rem;
+  color: $ashgro-white;
+  @include secondaryBold;
+  font-size: 1.4rem;
+
+  &:global(
+      .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled)
+    ):hover {
+    background-color: $ashgro-navy;
+    color: $ashgro-white;
+  }
+}
+.addClub {
+  position: relative;
+}
+.plusIcon {
+  position: absolute;
+  height: 1rem;
+  width: 1rem;
+  top: 0.8rem;
+  left: 4.2rem;
+  z-index: 4;
+}
+.tableContainer {
+  margin-top: 2rem;
+  overflow: hidden;
+  border-radius: 2rem;
+}
+
+.tableBody {
+  background-color: $search-field-placeholder;
+  height: calc(100vh - 30rem);
+  overflow-y: scroll;
+  margin-top: 0.6rem;
+  @include flex-flow(column, nowrap, normal, 0.4rem);
+}
+
+.rowContainer {
+  padding: 2.4rem 2.4rem 2.4rem 0;
+  background-color: $ashgro-white;
+  height: 10.4rem;
+  @include gradientBorder($club-row-border-bg);
+  display: grid;
+  grid-template-columns: 50% 7.5% 26% 16%;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 40% 15% 25% 20%;
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    align-items: flex-start;
+  }
+  align-items: center;
+  cursor: pointer;
+
+  &:hover :global(.actions-icons) {
+    opacity: 1;
+  }
+  &:hover {
+    background-color: $table-row-hover;
+  }
+}
+.switchCol {
+  text-align: center;
+}
+
+.badge {
+  justify-self: center;
+}
+
+.switchCol,
+.switch {
+  justify-self: center;
+  text-align: center;
+}
+
+.statusSelect {
+  &:global(.ant-select) {
+    width: 14rem;
+
+    :global(.ant-select-selector) {
+      border-radius: 2.8rem !important;
+    }
+    :global(.ant-select-arrow) {
+      inset-inline-end: 1.5rem;
+    }
+  }
+  margin-right: 2rem;
+}

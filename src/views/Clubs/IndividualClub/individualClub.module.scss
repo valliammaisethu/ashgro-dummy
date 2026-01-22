@@ -1,0 +1,447 @@
+@import "src/styles/_variables.scss";
+@import "src/styles/_helpers.scss";
+
+.individualClub {
+  flex: 1;
+  @include flex-flow(column, wrap, normal);
+  min-height: 0;
+
+  .card {
+    margin-top: 2rem;
+    padding: 1.4rem;
+    flex: 1;
+    @include flex-container(normal, normal, row, 2rem);
+    min-height: 0;
+    overflow: hidden;
+
+    .leftSide {
+      flex: 1;
+      min-width: 0;
+      padding-left: 4rem;
+      overflow-y: auto;
+
+      .header {
+        @include flex-container(flex-end, center, row, 1rem);
+        margin-top: 2rem;
+
+        .chatbotStatusContainer {
+          @include flex-container(flex-start, center, row, 1rem);
+
+          .statusLabel {
+            color: $filter-icon;
+            font-size: 1.3rem;
+            font-weight: 600;
+          }
+
+          .statusDropdown {
+            :global(.ant-select-selector) {
+              border-radius: 1.6rem;
+              border-color: $activity-border;
+            }
+          }
+        }
+
+        .actionButtons {
+          @include flex-container(flex-end, center, row, 1rem);
+
+          .editButton {
+            background-color: $search-bg;
+            border-color: transparent;
+            color: $filter-icon;
+            padding: 2rem 1rem;
+            border-radius: 1.6rem;
+            width: 4.2rem;
+            height: 4.2rem;
+
+            &:hover {
+              background-color: $search-bg !important;
+              color: $filter-icon !important;
+              border-color: transparent !important;
+            }
+          }
+        }
+      }
+
+      .content {
+        .top {
+          @include flex-container(normal, center, row);
+          gap: 3.2rem;
+
+          .left {
+            position: relative;
+            width: 17.2rem;
+            height: 17.2rem;
+            border-radius: 50%;
+            padding: 1.19px;
+            background: linear-gradient(
+              180deg,
+              rgba(197, 162, 93, 0) 0%,
+              rgba(197, 162, 93, 0.3) 50%,
+              #c5a25d 100%
+            );
+
+            .clubImage {
+              width: 100%;
+              height: 100%;
+              border-radius: 50%;
+              object-fit: cover;
+              display: block;
+            }
+          }
+
+          .right {
+            position: relative;
+            flex: 1;
+
+            .nameContainer {
+              @include flex-container(flex-start, center, row);
+              gap: 1.6rem;
+
+              .name {
+                color: $ashgro-navy;
+                font-size: 3.2rem;
+                font-family: $font-primary;
+              }
+
+              .memberBadge {
+                position: absolute;
+                right: 0;
+                top: 0;
+                background-color: $light-gold;
+                color: $dark-gold;
+                font-size: 1.3rem;
+                font-weight: 600;
+                padding: 0.9rem 2.1rem;
+                border-radius: 2rem;
+              }
+            }
+
+            .details {
+              margin-top: 0.5rem;
+              @include flex-flow(row, wrap, center);
+              gap: 0.8rem;
+              margin-bottom: 2rem;
+
+              .dateTitle {
+                color: $ashgro-gold;
+                font-size: 1.4rem;
+              }
+
+              .date {
+                color: $ashgro-navy;
+                font-weight: 600;
+                font-size: 1.6rem;
+              }
+            }
+
+            .contactInfo {
+              @include flex-container(normal, center, row, 3.2rem);
+              margin-top: 0.8rem;
+
+              .iconContainer {
+                @include flex-flow(row, wrap, center, 0.8rem);
+              }
+
+              .address {
+                color: $ashgro-navy;
+                font-size: 1.6rem;
+              }
+
+              .mail {
+                color: $ashgro-blue;
+                font-size: 1.6rem;
+              }
+
+              .phone {
+                color: $ashgro-navy;
+                font-size: 1.6rem;
+                font-family: $font-secondary;
+              }
+            }
+          }
+        }
+
+        .contactDetailsSection {
+          margin-top: 5.4rem;
+
+          .sectionTitle {
+            color: $add-icon-bg;
+            font-size: 1.6rem;
+            font-weight: 400;
+            font-family: $font-secondary;
+          }
+
+          .contactDetailsContainer {
+            margin-top: 1.2rem;
+            @include flex-container(normal, flex-start, row, 10.4rem);
+
+            .contactDetail {
+              .label {
+                color: $subdetails-title;
+                font-size: 1.3rem;
+              }
+
+              .value {
+                margin-top: 0.2rem;
+                color: $ashgro-navy;
+                font-size: 1.6rem;
+                font-weight: 600;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .rightSide {
+      width: 60rem;
+      border: 1px solid $activity-border;
+      padding: 2rem 2.4rem;
+      border-radius: 1.6rem;
+      height: 100%;
+      @include flex-flow(column, nowrap, normal);
+      overflow-y: auto;
+
+      .notesSection {
+        height: 54rem;
+        .notesSectionTitle {
+          font-size: 2rem;
+          font-family: $font-primary;
+          color: $ashgro-navy;
+        }
+
+        .notesContent {
+          margin-top: 2rem;
+          @include flex-container(normal, normal, column, 2rem);
+          background-color: $activity-card;
+          padding: 1.4rem 2.4rem;
+          border-radius: 1.2rem;
+          height: 100%;
+        }
+      }
+    }
+  }
+}
+.noteText {
+  color: $activity-content;
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.header {
+  @include flex-container(space-between, center, row);
+
+  .headerLeft {
+    @include flex-flow(row, nowrap, center);
+    gap: 0.4rem;
+    cursor: pointer;
+  }
+
+  .backText {
+    color: $ashgro-navy;
+    font-weight: 600;
+    font-size: 1.4rem;
+    font-family: $font-secondary;
+  }
+
+  .headerRight {
+    @include flex-flow(row, nowrap, center);
+    gap: 1.6rem;
+
+    .settingsButton {
+      background-color: $search-bg;
+      border-radius: 1.4rem;
+      padding: 2rem;
+      border-color: transparent;
+
+      &:hover {
+        background-color: $search-bg !important;
+        border-color: transparent !important;
+      }
+    }
+
+    .chatbotButton {
+      border-radius: 3.6rem;
+      padding: 2rem;
+    }
+  }
+}
+
+.statusSelect {
+  :global(.ant-select.ant-select.ant-select-open .ant-select-selector) {
+    border: 1px solid $activity-border;
+    box-shadow: none;
+  }
+
+  &:global(.ant-select) {
+    width: 14rem;
+    height: 3.6rem;
+
+    :global(.ant-select-selector) {
+      border: 1px solid $activity-border;
+      border-radius: 1.6rem;
+      box-shadow: none;
+    }
+
+    &:hover :global(.ant-select-selector) {
+      border: 1px solid $activity-border;
+    }
+
+    &:global(.ant-select-focused) :global(.ant-select-selector) {
+      border: 1px solid $activity-border;
+      box-shadow: none;
+    }
+  }
+}
+
+.statusTag {
+  @include flex-container(center, center, row, 0);
+  display: inline-flex;
+  width: 100%;
+  height: 3.6rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border-radius: 1.6rem;
+  text-align: center;
+}
+
+.iconContainer {
+  @include flex-flow(row, wrap, center, 0.8rem);
+}
+
+.statusSwitch {
+  margin-right: 1rem;
+}
+.warningModalTitle {
+  font-size: 2.2rem;
+  color: $ashgro-navy;
+  font-weight: 700;
+  font-family: $font-primary;
+  letter-spacing: 0.13rem;
+}
+
+.warningModalDescription {
+  padding-top: 1.6rem;
+  font-size: 1.6rem;
+  color: $modal-description-text;
+  font-weight: 400;
+}
+
+.divider {
+  position: absolute;
+  left: 0;
+}
+
+.warningModal {
+  :global(.ant-modal .ant-modal-footer) {
+    margin-top: 2.4rem;
+    background-color: $ashgro-white;
+  }
+}
+
+.emptyWrapper {
+  :global(.ant-empty) {
+    position: absolute;
+    left: 75%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.unlockButton {
+  width: 16.4rem;
+  height: 4.4rem;
+  border-radius: 3.6rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: $ashgro-white;
+  background-color: $ashgro-navy;
+
+  &:global(
+    .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+  ) {
+    background-color: $ashgro-navy;
+    color: $ashgro-white;
+  }
+}
+
+.unlockModalTitle {
+  color: $ashgro-navy;
+  font-weight: 700;
+  font-family: $font-primary;
+  font-size: 2.2rem;
+  letter-spacing: 0.1px;
+}
+.unlockModalText {
+  margin-top: 1.2rem;
+  color: $modal-description-text;
+  font-size: 1.6rem;
+}
+
+.unlockClubFooter {
+  @include flex-container(flex-end, center, row, 2.4rem);
+
+  .cancelButton,
+  .unlockButton {
+    width: 16rem;
+    height: 4rem;
+    border-radius: 3.2rem;
+    background-color: $ashgro-light-grey;
+    color: $ashgro-black;
+    font-size: 1.4rem;
+    font-weight: 400;
+  }
+
+  .unlockButton {
+    color: $ashgro-white;
+    background-color: $ashgro-navy;
+  }
+
+  .cancelButton {
+    &:global(
+      .ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover
+    ) {
+      background-color: $ashgro-light-grey;
+      color: $ashgro-black;
+      opacity: 70%;
+    }
+  }
+}
+.chatbotSection {
+  margin-top: 4rem;
+
+  .title {
+    font-size: 1.6rem;
+    color: $add-icon-bg;
+    letter-spacing: 0.03rem;
+  }
+
+  .attachment {
+    margin-top: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1.2rem;
+    background-color: $ashgro-white;
+    border-radius: 1.6rem;
+    margin-top: 2rem;
+    width: fit-content;
+    max-width: 35rem;
+    box-shadow: $file-attachment-box-shadow;
+  }
+}
+
+.attachmentIcon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.fileName {
+  flex: 1;
+  font-size: 1.4rem;
+  color: $ashgro-navy;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

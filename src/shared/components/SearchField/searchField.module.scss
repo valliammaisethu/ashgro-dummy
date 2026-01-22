@@ -1,0 +1,51 @@
+@import "src/styles/variables";
+
+.searchField {
+  color: $search-input-color;
+
+  .searchFieldContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    height: 4.8rem;
+    width: 49.7rem;
+    color: $search-input-color;
+    font-size: 1.4rem;
+    font-family: $font-secondary;
+    border-radius: 4.6rem;
+    background-color: $search-bg;
+  }
+  .searchWrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .filterContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: $filter-icon;
+    font-size: 1.4rem;
+    font-family: $font-secondary;
+    background-color: $search-bg;
+    min-width: 4.8rem;
+    min-height: 4.8rem;
+    padding: 1.4rem;
+    border-radius: 1.4rem;
+    cursor: pointer;
+    position: relative;
+
+    &.filtersActive {
+      &::after {
+        content: "";
+        position: absolute;
+        top: 1rem;
+        right: 0.6rem;
+        width: 0.8rem;
+        height: 0.8rem;
+        background-color: red;
+        border-radius: 50%;
+      }
+    }
+  }
+}

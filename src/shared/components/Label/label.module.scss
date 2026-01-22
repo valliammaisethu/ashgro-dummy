@@ -1,0 +1,21 @@
+@use "src/styles/variables" as *;
+
+.label {
+  display: inline-block;
+  font-size: 1.2rem;
+  font-family: $font-secondary;
+  font-weight: 400;
+  color: $ashgro-navy;
+  line-height: 2rem;
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.asterisk {
+  color: $danger-color;
+  margin-left: 0.4rem;
+  font-weight: 600;
+}

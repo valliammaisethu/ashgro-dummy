@@ -1,0 +1,49 @@
+@import "src/styles/_variables";
+@import "src/styles/_helpers";
+
+.chartFiltersDrawer {
+  &:global(.ant-drawer .ant-drawer-body) {
+    padding-top: 0;
+  }
+}
+
+.titleLabel {
+  font-size: 1.6rem;
+  color: $add-icon-bg;
+  letter-spacing: 0.1px;
+  font-weight: 400;
+  padding-bottom: 1.2rem;
+}
+.selectAll {
+  color: $ashgro-grey;
+  font-size: 1.4rem;
+  letter-spacing: 0.1px;
+  font-weight: 400;
+  padding-left: 1rem;
+  cursor: pointer;
+}
+.formDatePicker {
+  &:global(.ant-picker-range .ant-picker-input) {
+    height: 4rem;
+  }
+}
+.filtersContainer {
+  @include flex-container(normal, normal, row, 2rem);
+  flex-flow: wrap;
+  margin-top: -1rem;
+}
+.checkboxContainer {
+  min-width: 21rem;
+  @include flex-flow(row, nowrap, normal, 0.8rem);
+}
+
+.checkboxLabel {
+  font-size: 1.4rem;
+  color: $ashgro-navy;
+  letter-spacing: 0.1px;
+  font-weight: 400;
+}
+.labelContainer {
+  width: 100%;
+  @include flex-container(space-between, flex-start, row, 0);
+}
