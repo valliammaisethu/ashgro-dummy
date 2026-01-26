@@ -23,6 +23,8 @@
       font-size: 3.2rem;
       font-weight: 400;
       @include primaryRegular;
+      @include text-ellipsis;
+      max-width: 40rem;
     }
     .joinedDatelabel {
       font-size: 1.4rem;
@@ -76,5 +78,7 @@
     margin-top: 0.4rem;
     font-size: 1.6rem;
     font-weight: 600;
+    @include text-ellipsis;
+    max-width: 20rem;
   }
 }

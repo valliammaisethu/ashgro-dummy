@@ -4,12 +4,14 @@ import { Col, Row } from "antd";
 import clsx from "clsx";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import TextTooltip from "src/shared/components/atoms/TextTooltip";
 
 import Card from "src/shared/components/Card";
 import ConditionalRender from "src/shared/components/ConditionalRender";
 import IndividualDetailsHeader from "src/shared/components/IndividualDetailsHeader";
 import Button from "src/shared/components/Button";
 import ImageFrame from "src/shared/components/atoms/ImageFrame";
+import IconLabel from "src/shared/components/atoms/IconLabel";
 import { StaffMembersService } from "src/services/StaffMembersService/staffMembers.service";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { getFullName } from "src/shared/utils/helpers";
@@ -86,22 +88,34 @@ const Details = () => {
           <div className={styles.detailsContainer}>
             <div className={styles.profileContainer}>
               <ImageFrame src={data?.profilePictureUrl} />
-              <p className={styles.profileName}>
-                {getFullName(data?.firstName, data?.lastName)}
-              </p>
-              <p className={styles.staffDepartment}>{data?.staffDepartment}</p>
+              <TextTooltip
+                text={getFullName(data?.firstName, data?.lastName)}
+                className={styles.profileName}
+              />
             </div>
             <div>
               <div className={styles.contactDetailsContainer}>
-                <span className={clsx(styles.contactDetails, styles.email)}>
-                  <IconEmail color={Colors.ASHGRO_GOLD} size={22} />
-                  {data?.email}
-                </span>
-                <span className={styles.contactDetails}>
-                  <IconCall color={Colors.ASHGRO_GOLD} size={22} />
-                  {data?.contactNumber ? `+1 ${data?.contactNumber}` : "-"}
-                  {/* to add +1 fallback here */}
-                </span>
+                <IconLabel
+                  icon={IconEmail}
+                  label={data?.email}
+                  color={Colors.ASHGRO_GOLD}
+                  size={22}
+                  className={clsx(
+                    styles.contactDetails,
+                    styles.email,
+                    styles.removeMargin,
+                  )}
+                  isEmail
+                />
+                <IconLabel
+                  icon={IconCall}
+                  label={
+                    data?.contactNumber ? `+1 ${data?.contactNumber}` : "-"
+                  }
+                  color={Colors.ASHGRO_GOLD}
+                  size={22}
+                  className={clsx(styles.contactDetails, styles.removeMargin)}
+                />
               </div>
             </div>
             <div className={styles.footer}>
@@ -110,9 +124,10 @@ const Details = () => {
                 {footer?.map(({ label, value }) => (
                   <div key={label}>
                     <p className={styles.title}>{label}</p>
-                    <p className={styles.description}>
-                      {fallbackHandler(value)}
-                    </p>
+                    <TextTooltip
+                      className={styles.description}
+                      text={fallbackHandler(value)}
+                    />
                   </div>
                 ))}
               </div>

@@ -3,6 +3,7 @@ import { IconEdit } from "obra-icons-react";
 
 import Button from "src/shared/components/Button";
 import DeleteModal from "src/shared/components/DeleteModal";
+import TextTooltip from "src/shared/components/atoms/TextTooltip";
 
 import styles from "./cardItem.module.scss";
 
@@ -27,7 +28,7 @@ const CardItem: React.FC<CardItemProps> = ({
   return (
     <div className={styles.card}>
       <div className={styles.labelContainer}>
-        <span className={styles.cardLabel}>{label}</span>
+        <TextTooltip text={label} className={styles.cardLabel} />
       </div>
 
       <div className={styles.cardActions}>

@@ -22,6 +22,7 @@ import Loader from "src/shared/components/Loader";
 import AvatarFallback from "src/shared/components/AvatarFallback";
 import { LoaderSizes } from "src/enums/LoaderSizes";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
+import TextTooltip from "src/shared/components/atoms/TextTooltip";
 
 interface ProspectInfoProps {
   data?: ViewProspect;
@@ -94,7 +95,10 @@ const ProspectInfo: React.FC<ProspectInfoProps> = ({
         />
       </div>
       <div className={styles.right}>
-        <div className={styles.name}>{getFullName(firstName, lastName)}</div>
+        <TextTooltip
+          text={getFullName(firstName, lastName)}
+          className={styles.name}
+        />
         <div className={styles.details}>
           <span className={styles.dateTitle}>
             {PROSPECT_LABELS.followUpDate}

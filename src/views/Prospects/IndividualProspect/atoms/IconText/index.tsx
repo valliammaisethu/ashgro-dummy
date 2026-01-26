@@ -1,4 +1,7 @@
 import React from "react";
+import { Tooltip } from "antd";
+
+import { useEllipsisTooltip } from "src/shared/hooks/useEllipsisTooltip";
 
 import styles from "../../individualProspect.module.scss";
 
@@ -9,10 +12,16 @@ interface IconTextProps {
 }
 
 const IconText: React.FC<IconTextProps> = ({ icon, text, className }) => {
+  const { ref, isTruncated } = useEllipsisTooltip<HTMLSpanElement>([text]);
+
   return (
     <div className={styles.iconContainer}>
       {icon}
-      <span className={className}>{text}</span>
+      <Tooltip title={isTruncated ? text : undefined}>
+        <span ref={ref} className={className}>
+          {text}
+        </span>
+      </Tooltip>
     </div>
   );
 };
