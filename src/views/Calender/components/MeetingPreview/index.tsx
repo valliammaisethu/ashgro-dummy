@@ -14,6 +14,7 @@ import ConditionalRenderComponent from "src/shared/components/ConditionalRenderC
 import { checkDate } from "src/shared/utils/dateUtils";
 import { DateType } from "src/enums/dateType.enum";
 import BookedChatbotIcon from "../atoms/BookedChatbotIcon";
+import TextTooltip from "src/shared/components/atoms/TextTooltip";
 
 import styles from "./meetingPreview.module.scss";
 import { SLOT_STATUS } from "src/enums/calender.enum";
@@ -81,7 +82,10 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
                 color={isPastDate ? ASHGRO_GREY : ASHGRO_GOLD}
                 size={17}
               />
-              <p>{event.title}</p>
+              <TextTooltip
+                text={event.title as string}
+                className={styles.ellipsisText}
+              />
             </div>
 
             <div
@@ -109,7 +113,12 @@ const MeetingPreview: React.FC<MeetingPreviewProps> = ({
               [styles.isPastDate]: isPastDate,
             })}
           >
-            <div className={styles.eventTitle}>{event.title}</div>
+            <div className={styles.eventTitle}>
+              <TextTooltip
+                text={event.title as string}
+                className={styles.ellipsisText}
+              />
+            </div>
 
             <div className={clsx(styles.eventTime, styles.timeSlot)}>
               {formatTimeRange(event.start, event.end)}

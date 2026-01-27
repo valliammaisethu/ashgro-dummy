@@ -5,6 +5,7 @@ import { getFullName } from "src/shared/utils/helpers";
 import Checkbox from "src/shared/components/Checkbox";
 import AvatarFallback from "src/shared/components/AvatarFallback";
 import { stopPropagation } from "src/shared/utils/eventUtils";
+import TextTooltip from "src/shared/components/atoms/TextTooltip";
 
 import styles from "./profile.module.scss";
 
@@ -50,10 +51,15 @@ const Profile: React.FC<ProfileProps> = ({
           className={styles.avatar}
         />
         <div className={styles.info}>
-          <p className={styles.name}>{getFullName(firstName, lastName)}</p>
+          <TextTooltip
+            text={getFullName(firstName, lastName)}
+            className={styles.name}
+          />
           <div className={styles.contactInfo}>
-            {email && <p className={styles.email}>{email}</p>}
-            {address && <p className={styles.address}>{address}</p>}
+            {email && <TextTooltip text={email} className={styles.email} />}
+            {address && (
+              <TextTooltip text={address} className={styles.address} />
+            )}
             {contactNumber && (
               <div className={styles.contactNumber}>
                 <span className={styles.phone}>{contactNumber}</span>
