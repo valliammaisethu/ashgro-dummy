@@ -21,6 +21,8 @@ export const placeholders = {
 };
 
 export const currentPasswordValidation = "Current password is required";
+export const samePasswordValidation =
+  "New password cannot be the same as current password";
 
 // Reuse validation messages from ResetPassword
 export {

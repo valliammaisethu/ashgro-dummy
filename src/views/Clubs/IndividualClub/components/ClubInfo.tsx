@@ -4,6 +4,7 @@ import { IconCall, IconEmail, IconLocationMarker } from "obra-icons-react";
 import { formatDate } from "src/shared/utils/dateUtils";
 import { ClubInfoProps } from "src/shared/types/clubs.type";
 import IconText from "src/shared/components/atoms/IconText";
+import TextTooltip from "src/shared/components/atoms/TextTooltip";
 import { CLUB_LABELS } from "../constants";
 import { Colors } from "src/enums/colors.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
@@ -36,7 +37,7 @@ const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
       </div>
       <div className={styles.right}>
         <div className={styles.nameContainer}>
-          <div className={styles.name}>{name}</div>
+          <TextTooltip text={name} className={styles.name} />
           <div className={styles.memberBadge}>
             {numberOfMembers} {CLUB_LABELS.members}
           </div>

@@ -30,12 +30,16 @@
     .profileName {
       margin-top: 3.2rem;
       font-size: 3.2rem;
+      @include text-ellipsis;
+      max-width: 40rem;
     }
 
     .staffDepartment {
       font-size: 2rem;
       color: $ashgro-gold;
       margin-top: 1rem;
+      @include text-ellipsis;
+      max-width: 40rem;
     }
   }
 
@@ -62,6 +66,10 @@
     .email {
       color: $ashgro-blue;
     }
+
+    .removeMargin {
+      margin-top: 0 !important;
+    }
   }
 }
 
@@ -83,11 +91,15 @@
   .title {
     color: $subdetails-title;
     font-size: 1.3rem;
+    @include text-ellipsis;
+    max-width: 20rem;
   }
 
   .description {
     margin-top: 0.4rem;
     font-size: 1.6rem;
     font-weight: 600;
+    @include text-ellipsis;
+    max-width: 20rem;
   }
 }

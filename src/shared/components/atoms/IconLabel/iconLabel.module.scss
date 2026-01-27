@@ -7,6 +7,15 @@
   gap: 1rem;
 
   &.isEmail {
-    color: $ashgro-blue;
+    .label {
+      color: $ashgro-blue;
+    }
+  }
+
+  .label {
+    @include text-ellipsis;
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 20rem;
   }
 }

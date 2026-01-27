@@ -1,10 +1,12 @@
 import React from "react";
 import clsx from "clsx";
+import { Tooltip } from "antd";
 
 import { Colors } from "src/enums/colors.enum";
 
 import styles from "./iconLabel.module.scss";
 import { fallbackHandler } from "src/shared/utils/commonHelpers";
+import { useEllipsisTooltip } from "src/shared/hooks/useEllipsisTooltip";
 
 interface IconLabelProps {
   icon: React.ElementType;
@@ -23,15 +25,21 @@ const IconLabel: React.FC<IconLabelProps> = ({
   className,
   isEmail,
 }) => {
+  const { ref, isTruncated } = useEllipsisTooltip<HTMLSpanElement>([label]);
+
   return (
-    <p
+    <div
       className={clsx(styles.iconLabel, className, {
         [styles.isEmail]: isEmail,
       })}
     >
       <Icon color={color} size={size} />
-      {fallbackHandler(label)}
-    </p>
+      <Tooltip title={isTruncated ? label : undefined}>
+        <span ref={ref} className={styles.label}>
+          {fallbackHandler(label)}
+        </span>
+      </Tooltip>
+    </div>
   );
 };
 

@@ -14,6 +14,8 @@
     .name {
       font-size: 1.8rem;
       @include secondaryBold;
+      @include text-ellipsis;
+      max-width: 40rem;
     }
   }
 }
@@ -35,6 +37,9 @@
     font-family: $font-secondary;
     width: 22rem;
     line-height: 2rem;
+    @include text-ellipsis;
+    display: block;
+    max-width: 40rem;
   }
   .address {
     color: $ashgro-navy;
@@ -42,6 +47,9 @@
     opacity: 60%;
     @include secondaryRegular;
     line-height: 2rem;
+    @include text-ellipsis;
+    max-width: 40rem;
+    display: block;
   }
   .contactNumber {
     opacity: 0.6;

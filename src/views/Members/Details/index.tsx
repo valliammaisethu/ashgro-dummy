@@ -21,6 +21,7 @@ import { MembersService } from "src/services/MembersService/members.service";
 import ActivitySection from "./ActivitySection";
 import ImageFrame from "src/shared/components/atoms/ImageFrame";
 import IconLabel from "src/shared/components/atoms/IconLabel";
+import TextTooltip from "src/shared/components/atoms/TextTooltip";
 import { detailsConstants } from "./constants";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import useRedirect from "src/shared/hooks/useRedirect";
@@ -221,9 +222,10 @@ const Details = () => {
                   <ImageFrame src={data?.profilePictureUrl} />
                 </Col>
                 <Col span={16}>
-                  <p className={styles.fullName}>
-                    {getFullName(data?.firstName, data?.lastName)}
-                  </p>
+                  <TextTooltip
+                    text={getFullName(data?.firstName, data?.lastName)}
+                    className={styles.fullName}
+                  />
                   <div>
                     <span className={styles.joinedDatelabel}>{joinedDate}</span>
                     <span className={styles.joinedDate}>
@@ -268,13 +270,14 @@ const Details = () => {
                     {memberDetails?.map(({ label, value }) => (
                       <div key={label}>
                         <p className={styles.title}>{label}</p>
-                        <p className={styles.description}>
-                          {fallbackHandler(
+                        <TextTooltip
+                          className={styles.description}
+                          text={fallbackHandler(
                             label === RESIGNATION_DATE
                               ? formatDate(value, DateFormats.DD_MMM__YYYY)
                               : value,
                           )}
-                        </p>
+                        />
                       </div>
                     ))}
                   </div>
