@@ -20,6 +20,7 @@ import { generatePath } from "react-router-dom";
 import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { responseHandlers } from "src/shared/utils/responseHandlers";
 import DeleteModal from "src/shared/components/DeleteModal";
+import TextTooltip from "src/shared/components/atoms/TextTooltip";
 
 import styles from "./meetingPreview.module.scss";
 
@@ -64,13 +65,19 @@ const MeetingPopoverContent: React.FC<MeetingPopoverContentProps> = ({
   return (
     <div className={styles.meetingPreviewCard}>
       <div className={styles.header}>
-        <p className={styles.name}>{event?.resource?.bookedUserName}</p>
+        <TextTooltip
+          text={event?.resource?.bookedUserName}
+          className={styles.name}
+        />
         <IconClose onClick={onCancel} />
       </div>
 
       <div className={styles.details}>
         <p className={styles.title}>
-          {event.title}
+          <TextTooltip
+            text={event?.title as string}
+            className={styles.ellipsisText}
+          />
 
           <BookedChatbotIcon isBooked={isBookedThroughBot} isPastDate={false} />
         </p>

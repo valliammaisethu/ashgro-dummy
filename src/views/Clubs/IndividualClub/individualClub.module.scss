@@ -101,6 +101,8 @@
                 color: $ashgro-navy;
                 font-size: 3.2rem;
                 font-family: $font-primary;
+                @include text-ellipsis;
+                max-width: 35rem;
               }
 
               .memberBadge {
@@ -145,17 +147,26 @@
               .address {
                 color: $ashgro-navy;
                 font-size: 1.6rem;
+                @include text-ellipsis;
+                max-width: 30rem;
+                display: block;
               }
 
               .mail {
                 color: $ashgro-blue;
                 font-size: 1.6rem;
+                @include text-ellipsis;
+                max-width: 30rem;
+                display: block;
               }
 
               .phone {
                 color: $ashgro-navy;
                 font-size: 1.6rem;
                 font-family: $font-secondary;
+                @include text-ellipsis;
+                max-width: 20rem;
+                display: block;
               }
             }
           }
@@ -186,6 +197,9 @@
                 color: $ashgro-navy;
                 font-size: 1.6rem;
                 font-weight: 600;
+                @include text-ellipsis;
+                max-width: 20rem;
+                display: block;
               }
             }
           }
@@ -226,6 +240,8 @@
   color: $activity-content;
   font-size: 1.4rem;
   font-weight: 400;
+  width: 100%;
+  word-break: break-word;
 }
 
 .header {
