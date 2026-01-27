@@ -26,6 +26,9 @@
     .name {
       font-size: 1.6rem;
       font-weight: 600;
+      @include text-ellipsis;
+      flex: 1;
+      min-width: 0;
     }
   }
 
@@ -116,6 +119,14 @@
   @include flex-container;
   justify-content: start;
   gap: 1rem;
+}
+
+.ellipsisText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
 }
 
 .timeSlot {
