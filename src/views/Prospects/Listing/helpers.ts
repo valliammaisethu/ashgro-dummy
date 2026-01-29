@@ -3,38 +3,26 @@ import {
   ProspectsList,
   ProspectsListingParams,
 } from "src/models/prospects.model";
+import {
+  toggleAllSelections as toggleAll,
+  toggleSingleSelection as toggleSingle,
+  areAllItemsSelected,
+  areSomeItemsSelected,
+  getAllItems,
+  SelectedItem,
+} from "src/shared/utils/selectionHelpers";
 
-export type SelectedProspect = {
-  id: string;
-  email: string;
-  name: string;
-};
+export type SelectedProspect = SelectedItem;
 
-export const getAllProspects = (
-  prospects: ProspectsList[] = [],
-): SelectedProspect[] =>
-  prospects.map((p) => ({ id: p.id!, email: p.email!, name: p.firstName! }));
+export const getAllProspects = getAllItems<ProspectsList>;
 
 export const toggleAllSelections = (
   checked: boolean,
   prospects: ProspectsList[] = [],
-): SelectedProspect[] => (checked ? getAllProspects(prospects) : []);
+  currentSelections: SelectedProspect[] = [],
+): SelectedProspect[] => toggleAll(checked, prospects, currentSelections);
 
-export const toggleSingleSelection = (
-  prospectId: string,
-  email: string,
-  name: string,
-  checked: boolean,
-  currentSelections: SelectedProspect[],
-): SelectedProspect[] => {
-  if (checked) {
-    if (!currentSelections.some((p) => p.id === prospectId)) {
-      return [...currentSelections, { id: prospectId, email, name }];
-    }
-    return currentSelections;
-  }
-  return currentSelections.filter((p) => p.id !== prospectId);
-};
+export const toggleSingleSelection = toggleSingle;
 
 export const getStatusValue = (
   statusLabel: string,
@@ -42,18 +30,8 @@ export const getStatusValue = (
 ): string | undefined =>
   statusOptions?.find((opt) => opt.label === statusLabel)?.value;
 
-export const areAllProspectsSelected = (
-  prospects: ProspectsList[] = [],
-  selectedProspects: SelectedProspect[],
-): boolean =>
-  prospects.length > 0 && selectedProspects.length === prospects.length;
-
-export const areSomeProspectsSelected = (
-  prospects: ProspectsList[] = [],
-  selectedProspects: SelectedProspect[],
-): boolean =>
-  selectedProspects.length > 0 &&
-  !areAllProspectsSelected(prospects, selectedProspects);
+export const areAllProspectsSelected = areAllItemsSelected<ProspectsList>;
+export const areSomeProspectsSelected = areSomeItemsSelected<ProspectsList>;
 
 export const areFiltersActive = (
   queryParams: ProspectsListingParams,

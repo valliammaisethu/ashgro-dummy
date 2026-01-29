@@ -12,6 +12,7 @@ import {
   areAllMembersSelected,
   areSomeMembersSelected,
   SelectedMember,
+  getAllMembers,
 } from "../helpers";
 import Header from "../Header";
 import MemberFilters from "../Filters";
@@ -154,6 +155,9 @@ const Members = () => {
 
   const handleSearch = useCallback((term: string) => {
     setQueryParams((prev) => ({ ...prev, search: term }));
+    setSelectedMembers([]);
+    setSelectedRowKeys([]);
+    setIsAllSelected(false);
   }, []);
 
   const handleApplyFilter = (filters: FieldValues) => {
@@ -165,6 +169,9 @@ const Members = () => {
       page: 1,
     }));
     toggleMemberFilters();
+    setSelectedMembers([]);
+    setSelectedRowKeys([]);
+    setIsAllSelected(false);
   };
 
   const handleStatusChange = async (
@@ -220,11 +227,22 @@ const Members = () => {
 
   const handleSelectAll = useCallback(
     (checked: boolean) => {
-      setSelectedMembers(toggleAllSelections(checked, data?.members));
+      setSelectedMembers((prev) =>
+        toggleAllSelections(checked, data?.members, prev),
+      );
+      const currentPageIds = data?.members?.map((m) => m.id!) ?? [];
+
       if (checked) {
-        setSelectedRowKeys(data?.members?.map((m) => m.id!) ?? []);
+        setSelectedRowKeys((prev) => {
+          const prevSet = new Set(prev);
+          currentPageIds.forEach((id) => prevSet.add(id));
+          return Array.from(prevSet);
+        });
       } else {
-        setSelectedRowKeys([]);
+        setSelectedRowKeys((prev) => {
+          const currentPageIdsSet = new Set(currentPageIds);
+          return prev.filter((key) => !currentPageIdsSet.has(key as string));
+        });
       }
       setIsAllSelected(checked);
     },
@@ -242,22 +260,26 @@ const Members = () => {
     [],
   );
 
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+  const onSelectChange = useCallback((newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
-  };
+  }, []);
 
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-    onSelect: (record: Member, selected: boolean) => {
-      const { id, email, firstName } = record || {};
-      if (!id || !email || !firstName) return;
-      handleSelectOne(id, email, firstName, selected);
-    },
-    onSelectAll: (selected: boolean) => {
-      handleSelectAll(selected);
-    },
-  };
+  const rowSelection = useMemo(
+    () => ({
+      selectedRowKeys,
+      onChange: onSelectChange,
+      preserveSelectedRowKeys: true,
+      onSelect: (record: Member, selected: boolean) => {
+        const { id, email, firstName } = record || {};
+        if (!id || !email || !firstName) return;
+        handleSelectOne(id, email, firstName, selected);
+      },
+      onSelectAll: (selected: boolean) => {
+        handleSelectAll(selected);
+      },
+    }),
+    [selectedRowKeys, onSelectChange, handleSelectOne, handleSelectAll],
+  );
 
   const handleHeaderCheckboxChange = useCallback(
     (e?: CheckboxChangeEvent) => {
@@ -347,6 +369,39 @@ const Members = () => {
       setQueryParams((prev) => ({ ...prev, clubId }));
     }
   }, [clubId, queryParams.clubId]);
+
+  useEffect(() => {
+    if (isAllSelected && data?.members?.length) {
+      const alreadySelectedIds = new Set(selectedMembers?.map((m) => m?.id));
+      const membersToAdd = data?.members?.filter(
+        (m) => m?.id && !alreadySelectedIds.has(m.id),
+      );
+
+      if (membersToAdd?.length > 0) {
+        const newSelectedMembers = getAllMembers(membersToAdd);
+        setSelectedMembers((prev) => [...prev, ...newSelectedMembers]);
+        setSelectedRowKeys((prev) => {
+          const prevSet = new Set(prev);
+          membersToAdd?.forEach((m) => {
+            if (m?.id) prevSet.add(m.id);
+          });
+          return Array.from(prevSet);
+        });
+      }
+    }
+  }, [data?.members, isAllSelected, selectedMembers]);
+
+  useEffect(() => {
+    if (isAllSelected && emailRecipientsData?.prospects) {
+      const allRecipients = getAllMembers(
+        emailRecipientsData.prospects as Member[],
+      );
+      setSelectedMembers(allRecipients);
+      setSelectedRowKeys(
+        allRecipients.map((m) => m.id).filter((id): id is string => !!id),
+      );
+    }
+  }, [isAllSelected, emailRecipientsData]);
 
   const memberStatusOptions = useMemo(
     () =>
