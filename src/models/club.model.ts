@@ -139,6 +139,9 @@ export class ClubListData {
   address = "";
 
   @serializable
+  email = "";
+
+  @serializable
   onboardingDate?: string;
 
   @serializable

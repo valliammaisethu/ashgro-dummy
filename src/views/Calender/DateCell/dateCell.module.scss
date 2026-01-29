@@ -7,8 +7,8 @@
   @include flex-container(flex-start, stretch, column);
   .cellHeader {
     @include flex-container;
-    margin-bottom: 0.6rem;
 
+    margin: 1rem;
     .switchLabel {
       font-size: 1.2rem;
       font-weight: 400;

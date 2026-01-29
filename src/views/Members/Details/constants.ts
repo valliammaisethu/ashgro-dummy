@@ -4,7 +4,7 @@ export const detailsConstants = {
     MEMBERSHIP_TYPE: "Membership Type",
     RESIGNATION_DATE: "Resignation Date",
     MONTHLY_DUES: "Monthly Dues",
-    INITIAL_FEE: "Initial Fee",
+    INITIAL_FEE: "Initiation Fee",
   },
   title: "Member",
   joinedDate: "Joined Date",

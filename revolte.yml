@@ -1,6 +1,6 @@
 revolte:
   version: "1.0"
-  project: Ashgro
+  project: Ashgrow
   appName: ashgro-admin-web
   env:
     staging:

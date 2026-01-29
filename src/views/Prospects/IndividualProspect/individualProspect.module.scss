@@ -83,6 +83,8 @@
               color: $ashgro-navy;
               font-size: 3.2rem;
               font-family: $font-primary;
+              @include text-ellipsis;
+              max-width: 40rem;
             }
 
             .details {
@@ -156,6 +158,10 @@
                 color: $ashgro-blue;
                 font-size: 1.6rem;
                 font-family: $font-secondary;
+                @include text-ellipsis;
+                max-width: 25rem;
+                display: inline-block;
+                vertical-align: middle;
               }
 
               .phone {
@@ -200,6 +206,8 @@
                 font-size: 1.6rem;
                 font-weight: 600;
                 font-family: $font-secondary;
+                @include text-ellipsis;
+                max-width: 20rem;
               }
             }
           }
