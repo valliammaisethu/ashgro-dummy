@@ -59,7 +59,8 @@
 
     .ant-table-tbody > tr.ant-table-row:hover > td,
     .ant-table-tbody > tr.ant-table-row-selected > td {
-      background-color: $ashgro-white !important;
+      background-color: $table-row-hover !important;
+      cursor: pointer;
     }
 
     .ant-table-placeholder {

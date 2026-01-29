@@ -38,6 +38,7 @@ import {
   areAllProspectsSelected,
   areSomeProspectsSelected,
   areFiltersActive,
+  getAllProspects,
 } from "./helpers";
 import Header from "./Header";
 import { LeadService } from "src/services/SettingsService/lead.service";
@@ -71,21 +72,10 @@ const ProspectsListing = () => {
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
 
-  const onSelectChange = (newSelectedRowKeys: Key[]) =>
-    setSelectedRowKeys(newSelectedRowKeys);
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-    onSelect: (record: ProspectsList, selected: boolean) => {
-      const { id, email, firstName } = record || {};
-      if (!id || !email || !firstName) return;
-      handleSelectOne(id, email, firstName, selected);
-    },
-    onSelectAll: (selected: boolean) => {
-      handleSelectAll(selected);
-    },
-  };
+  const onSelectChange = useCallback(
+    (newSelectedRowKeys: Key[]) => setSelectedRowKeys(newSelectedRowKeys),
+    [],
+  );
 
   const { getProspects, editProspect } = ProspectsService();
   const { getLeadStatuses } = MetaService();
@@ -172,7 +162,23 @@ const ProspectsListing = () => {
 
   const handleSelectAll = useCallback(
     (checked = false) => {
-      setSelectedProspects(toggleAllSelections(checked, data?.prospects));
+      setSelectedProspects((prev) =>
+        toggleAllSelections(checked, data?.prospects, prev),
+      );
+      const currentPageIds = data?.prospects?.map((p) => p.id!) ?? [];
+
+      if (checked) {
+        setSelectedRowKeys((prev) => {
+          const prevSet = new Set(prev);
+          currentPageIds.forEach((id) => prevSet.add(id));
+          return Array.from(prevSet);
+        });
+      } else {
+        setSelectedRowKeys((prev) => {
+          const toRemove = new Set(currentPageIds);
+          return prev.filter((k) => !toRemove.has(k as string));
+        });
+      }
       setIsAllSelected(checked);
     },
     [data?.prospects],
@@ -194,6 +200,23 @@ const ProspectsListing = () => {
       handleSelectAll(e?.target?.checked);
     },
     [handleSelectAll],
+  );
+
+  const rowSelection = useMemo(
+    () => ({
+      selectedRowKeys,
+      onChange: onSelectChange,
+      preserveSelectedRowKeys: true,
+      onSelect: (record: ProspectsList, selected: boolean) => {
+        const { id, email, firstName } = record || {};
+        if (!id || !email || !firstName) return;
+        handleSelectOne(id, email, firstName, selected);
+      },
+      onSelectAll: (selected: boolean) => {
+        handleSelectAll(selected);
+      },
+    }),
+    [selectedRowKeys, onSelectChange, handleSelectOne, handleSelectAll],
   );
 
   const allSelected = useMemo(
@@ -226,6 +249,9 @@ const ProspectsListing = () => {
 
   const handleSearch = useCallback((term: string) => {
     setQueryParams((prev) => ({ ...prev, search: term }));
+    setSelectedProspects([]);
+    setSelectedRowKeys([]);
+    setIsAllSelected(false);
   }, []);
 
   const handleOnEdit = useCallback(
@@ -276,6 +302,9 @@ const ProspectsListing = () => {
       page: 1,
     }));
     toggleDrawerVisibility();
+    setSelectedProspects([]);
+    setSelectedRowKeys([]);
+    setIsAllSelected(false);
   };
 
   const handleEmailTemplateModal = (
@@ -377,6 +406,37 @@ const ProspectsListing = () => {
       setQueryParams((prev) => ({ ...prev, clubId }));
     }
   }, [clubId]);
+
+  useEffect(() => {
+    if (isAllSelected && data?.prospects?.length) {
+      const alreadySelectedIds = new Set(selectedProspects?.map((p) => p?.id));
+      const prospectsToAdd = data?.prospects?.filter(
+        (p) => p?.id && !alreadySelectedIds.has(p.id),
+      );
+
+      if (prospectsToAdd?.length > 0) {
+        const newSelectedProspects = getAllProspects(prospectsToAdd);
+        setSelectedProspects((prev) => [...prev, ...newSelectedProspects]);
+        setSelectedRowKeys((prev) => {
+          const prevSet = new Set(prev);
+          prospectsToAdd?.forEach((p) => {
+            if (p?.id) prevSet.add(p.id);
+          });
+          return Array.from(prevSet);
+        });
+      }
+    }
+  }, [data?.prospects, isAllSelected, selectedProspects]);
+
+  useEffect(() => {
+    if (isAllSelected && emailRecipientsData?.prospects) {
+      const allRecipients = getAllProspects(emailRecipientsData.prospects);
+      setSelectedProspects(allRecipients);
+      setSelectedRowKeys(
+        allRecipients.map((p) => p.id).filter((id): id is string => !!id),
+      );
+    }
+  }, [isAllSelected, emailRecipientsData]);
 
   return (
     <div>
