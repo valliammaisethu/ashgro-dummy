@@ -72,22 +72,10 @@ const ProspectsListing = () => {
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
 
-  const onSelectChange = (newSelectedRowKeys: Key[]) =>
-    setSelectedRowKeys(newSelectedRowKeys);
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-    preserveSelectedRowKeys: true,
-    onSelect: (record: ProspectsList, selected: boolean) => {
-      const { id, email, firstName } = record || {};
-      if (!id || !email || !firstName) return;
-      handleSelectOne(id, email, firstName, selected);
-    },
-    onSelectAll: (selected: boolean) => {
-      handleSelectAll(selected);
-    },
-  };
+  const onSelectChange = useCallback(
+    (newSelectedRowKeys: Key[]) => setSelectedRowKeys(newSelectedRowKeys),
+    [],
+  );
 
   const { getProspects, editProspect } = ProspectsService();
   const { getLeadStatuses } = MetaService();
@@ -214,6 +202,23 @@ const ProspectsListing = () => {
     [handleSelectAll],
   );
 
+  const rowSelection = useMemo(
+    () => ({
+      selectedRowKeys,
+      onChange: onSelectChange,
+      preserveSelectedRowKeys: true,
+      onSelect: (record: ProspectsList, selected: boolean) => {
+        const { id, email, firstName } = record || {};
+        if (!id || !email || !firstName) return;
+        handleSelectOne(id, email, firstName, selected);
+      },
+      onSelectAll: (selected: boolean) => {
+        handleSelectAll(selected);
+      },
+    }),
+    [selectedRowKeys, onSelectChange, handleSelectOne, handleSelectAll],
+  );
+
   const allSelected = useMemo(
     () => areAllProspectsSelected(data?.prospects, selectedProspects),
     [data?.prospects, selectedProspects],
@@ -244,6 +249,9 @@ const ProspectsListing = () => {
 
   const handleSearch = useCallback((term: string) => {
     setQueryParams((prev) => ({ ...prev, search: term }));
+    setSelectedProspects([]);
+    setSelectedRowKeys([]);
+    setIsAllSelected(false);
   }, []);
 
   const handleOnEdit = useCallback(
@@ -294,6 +302,9 @@ const ProspectsListing = () => {
       page: 1,
     }));
     toggleDrawerVisibility();
+    setSelectedProspects([]);
+    setSelectedRowKeys([]);
+    setIsAllSelected(false);
   };
 
   const handleEmailTemplateModal = (
@@ -416,6 +427,16 @@ const ProspectsListing = () => {
       }
     }
   }, [data?.prospects, isAllSelected, selectedProspects]);
+
+  useEffect(() => {
+    if (isAllSelected && emailRecipientsData?.prospects) {
+      const allRecipients = getAllProspects(emailRecipientsData.prospects);
+      setSelectedProspects(allRecipients);
+      setSelectedRowKeys(
+        allRecipients.map((p) => p.id).filter((id): id is string => !!id),
+      );
+    }
+  }, [isAllSelected, emailRecipientsData]);
 
   return (
     <div>
