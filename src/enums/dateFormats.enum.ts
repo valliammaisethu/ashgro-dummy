@@ -1,6 +1,6 @@
 export enum DateFormats {
   DD_MMM__YYYY = "DD MMM, YYYY",
-  HH_MM_A__DD_MMM_YYYY = "hh:mm A, DD MMM YYYY",
+  HH_MM_A__DD_MMM_YYYY = "hh:mm A, MMM DD, YYYY",
   DD_MMM_YYYY = "DD MMM YYYY",
   YYYY_MM_DD = "YYYY-MM-DD",
   HH_MM_A = "hh:mm A",
@@ -11,4 +11,5 @@ export enum DateFormats {
   DD_MMM_YY = "DD MMM 'YY",
   MMMM_YYYY = "MMMM, YYYY",
   YYYY_MM_DD_T_HH_MM_SS = "YYYY-MM-DDTHH:mm:ss",
+  MMM_DD__YYYY = "MMM DD, YYYY",
 }

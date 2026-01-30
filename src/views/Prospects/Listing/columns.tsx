@@ -94,7 +94,7 @@ export const getColumns = ({
     width: "10%",
     render: (inquiryDate) => (
       <ConditionalRenderComponent visible={inquiryDate} hideFallback>
-        <span>{dayjs(inquiryDate).format(DateFormats.DD_MMM__YYYY)}</span>
+        <span>{dayjs(inquiryDate).format(DateFormats.MMM_DD__YYYY)}</span>
       </ConditionalRenderComponent>
     ),
   },

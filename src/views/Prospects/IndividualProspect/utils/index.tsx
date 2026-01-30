@@ -21,7 +21,7 @@ export const getLeadDetails = (
   return [
     {
       title: detailTitles.inquiryDate,
-      value: fillEmptyData(formatDate(inquiryDate, DateFormats.DD_MMM__YYYY)),
+      value: fillEmptyData(formatDate(inquiryDate, DateFormats.MMM_DD__YYYY)),
     },
     {
       title: detailTitles.leadSource,
