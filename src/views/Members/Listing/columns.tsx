@@ -72,7 +72,7 @@ export const getColumns = ({
     width: "10%",
     render: (date) => (
       <span style={{ color: Colors.ASHGRO_NAVY, fontSize: "1.4rem" }}>
-        {formatDate(date, DateFormats.DD_MMM__YYYY)}
+        {formatDate(date, DateFormats.MMM_DD__YYYY)}
       </span>
     ),
   },

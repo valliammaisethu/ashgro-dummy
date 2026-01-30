@@ -230,7 +230,7 @@ const Details = () => {
                     <span className={styles.joinedDatelabel}>{joinedDate}</span>
                     <span className={styles.joinedDate}>
                       {fallbackHandler(
-                        formatDate(data?.joinedDate, DateFormats.DD_MMM__YYYY),
+                        formatDate(data?.joinedDate, DateFormats.MMM_DD__YYYY),
                       )}
                     </span>
                   </div>
@@ -239,7 +239,7 @@ const Details = () => {
                       icon={IconCakeAlt}
                       label={formatDate(
                         data?.birthDate,
-                        DateFormats.DD_MMM__YYYY,
+                        DateFormats.MMM_DD__YYYY,
                       )}
                     />
                     <IconLabel
@@ -274,7 +274,7 @@ const Details = () => {
                           className={styles.description}
                           text={fallbackHandler(
                             label === RESIGNATION_DATE
-                              ? formatDate(value, DateFormats.DD_MMM__YYYY)
+                              ? formatDate(value, DateFormats.MMM_DD__YYYY)
                               : value,
                           )}
                         />

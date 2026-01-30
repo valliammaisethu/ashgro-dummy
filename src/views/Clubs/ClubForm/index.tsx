@@ -71,9 +71,12 @@ const ClubForm = (props: ClubFormProps) => {
       ...clubData?.club,
       notes: clubData?.club?.notes,
       contactNumber: stripPhoneCode(clubData?.club?.contactNumber),
-      onboardingDate: convertDateToDisplayFormat(
-        clubData?.club?.onboardingDate,
-      ),
+      onboardingDate: clubData?.club?.onboardingDate
+        ? convertDateToDisplayFormat(
+            clubData?.club?.onboardingDate,
+            DateFormats.MMM_DD__YYYY,
+          )
+        : "",
       knowledgeBaseId: clubData?.club?.knowledgeBaseId ?? "",
       knowledgeBaseName: clubData?.club?.knowledgeBaseName ?? "",
       adminDetails: {
@@ -186,7 +189,7 @@ const ClubForm = (props: ClubFormProps) => {
       ...values,
       onboardingDate: convertDateToApiFormat(
         values.onboardingDate,
-        DateFormats.DD_MMM_YYYY,
+        DateFormats.MMM_DD__YYYY,
       ),
       chatbotEnabled: Boolean(values.chatbotEnabled),
       knowledgeBaseId: getKnowledgeBaseId(),
@@ -313,6 +316,7 @@ const ClubForm = (props: ClubFormProps) => {
               label={labels.onBoardingDate}
               name={fields.onboardingDate}
               placeholder={placeholders.onBoardingDate}
+              format={DateFormats.MMM_DD__YYYY}
             />
           </Col>
 
