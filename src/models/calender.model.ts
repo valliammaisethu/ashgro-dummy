@@ -8,7 +8,7 @@ import {
   createTimeSerializer,
 } from "src/shared/utils/serializers";
 
-const { HH_MM_A, HH_MM, DD_MMM_YYYY, YYYY_MM_DD } = DateFormats;
+const { HH_MM_A, HH_MM, MMM_DD__YYYY, YYYY_MM_DD } = DateFormats;
 
 export class TimeRangeItem {
   @serializable
@@ -71,10 +71,10 @@ export class ChatbotSlotPayload {
   @serializable
   title?: string;
 
-  @serializable(createDateSerializer(DD_MMM_YYYY, YYYY_MM_DD))
+  @serializable(createDateSerializer(MMM_DD__YYYY, YYYY_MM_DD))
   fromDate?: string;
 
-  @serializable(createDateSerializer(DD_MMM_YYYY, YYYY_MM_DD))
+  @serializable(createDateSerializer(MMM_DD__YYYY, YYYY_MM_DD))
   toDate?: string;
 
   @serializable(list(object(TimeRangeSchema)))

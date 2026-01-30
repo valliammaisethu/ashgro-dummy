@@ -25,6 +25,7 @@ import { ChatbotSlotProps } from "src/shared/types/calender";
 import { CalenderService } from "src/services/Calender/calender.service";
 import { ChatbotSlotPayload } from "src/models/calender.model";
 import { chatbotSlotSchema } from "./validationSchema";
+import { DateFormats } from "src/enums/dateFormats.enum";
 import { getCalendarMonthFromQuery } from "src/shared/utils/helpers";
 import {
   CHAT_BOT_CONSTANTS,
@@ -37,6 +38,7 @@ import {
 } from "./constants";
 
 import styles from "./chatbotSlot.module.scss";
+import dayjs from "dayjs";
 
 const { TIME_RANGES, FROM_DATE, TO_DATE } = FIELD_NAME;
 const {
@@ -52,6 +54,7 @@ const { NOT_ALLOWED, POINTER } = POINTER_CONSTANTS;
 const { FROM_DATE_LABEL, TO_DATE_LABEL } = LABELS;
 const { ADD_SLOTS, UPDATE_SLOTS, YES_PROCEED } = Buttons;
 const { ADD_TITLE, UPDATE_TITLE, CONFIRMATION_TITLE } = CONFIRMATION_MODAL;
+const { MMM_DD__YYYY } = DateFormats;
 
 const ChatbotSlot = ({
   isOpen,
@@ -98,8 +101,13 @@ const ChatbotSlot = ({
 
   const { mutateAsync, isPending } = useMutation(addChatbotSlots());
 
-  const handleSubmitForm = (data: Partial<ChatbotSlotPayload>) =>
-    setFormData(data);
+  const handleSubmitForm = (data: Partial<ChatbotSlotPayload>) => {
+    setFormData({
+      ...data,
+      [FROM_DATE]: dayjs(data?.fromDate).format(MMM_DD__YYYY),
+      [TO_DATE]: dayjs(data?.toDate).format(MMM_DD__YYYY),
+    });
+  };
 
   const handleConfirmSubmit = async () => {
     if (!formData) return;
@@ -160,6 +168,7 @@ const ChatbotSlot = ({
                 label={FROM_DATE_LABEL}
                 name={FROM_DATE}
                 disabledDate={disablePastDates}
+                format={MMM_DD__YYYY}
               />
             </Col>
 
@@ -169,6 +178,7 @@ const ChatbotSlot = ({
                 label={TO_DATE_LABEL}
                 name={TO_DATE}
                 disabledDate={disablePastDates}
+                format={MMM_DD__YYYY}
               />
             </Col>
           </Row>
