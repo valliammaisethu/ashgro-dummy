@@ -125,10 +125,10 @@ const ProspectInfo: React.FC<ProspectInfoProps> = ({
                 onOpenChange={setIsDatePickerOpen}
                 value={followUpDate ? dayjs(followUpDate) : null}
                 onChange={handleFollowUpDateChange}
-                format={DateFormats.DD_MMM__YYYY}
+                format={DateFormats.MMM_DD__YYYY}
                 className={styles.datePicker}
                 suffixIcon={null}
-                placeholder={formatDate(followUpDate, DateFormats.DD_MMM__YYYY)}
+                placeholder={formatDate(followUpDate, DateFormats.MMM_DD__YYYY)}
                 inputReadOnly
                 allowClear={false}
               />

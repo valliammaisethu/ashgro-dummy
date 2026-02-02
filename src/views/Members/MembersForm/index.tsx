@@ -205,14 +205,17 @@ const MembersForm = ({
         leadSourcesOptions,
         data.leadSource,
       ),
-      [FIELD_NAMES.JOIN_DATE]: convertDateToDisplayFormat(data.joinedDate),
+      [FIELD_NAMES.JOIN_DATE]: convertDateToDisplayFormat(
+        data.joinedDate,
+        DateFormats.MMM_DD__YYYY,
+      ),
       [FIELD_NAMES.BIRTH_DATE]: convertDateToDisplayFormat(
         data.birthDate,
-        DateFormats.DD_MMM__YYYY,
+        DateFormats.MMM_DD__YYYY,
       ),
       [FIELD_NAMES.RESIGNATION_DATE]: convertDateToDisplayFormat(
         data.resignationDate,
-        DateFormats.DD_MMM__YYYY,
+        DateFormats.MMM_DD__YYYY,
       ),
       activityDetails: undefined,
     };
@@ -296,6 +299,7 @@ const MembersForm = ({
                   label={LABELS.JOIN_DATE}
                   name={FIELD_NAMES.JOIN_DATE}
                   disabledDate={disableFuture}
+                  format={DateFormats.MMM_DD__YYYY}
                 />
               </Col>
               <Col span={12}>
@@ -322,7 +326,7 @@ const MembersForm = ({
                   label={LABELS.BIRTH_DATE}
                   name={FIELD_NAMES.BIRTH_DATE}
                   disabledDate={disableFuture}
-                  format={DateFormats.DD_MMM__YYYY}
+                  format={DateFormats.MMM_DD__YYYY}
                 />
               </Col>
               <Col span={24}>
@@ -362,7 +366,7 @@ const MembersForm = ({
                   placeholder={PLACEHOLDERS.RESIGNATION_DATE}
                   label={LABELS.RESIGNATION_DATE}
                   name={FIELD_NAMES.RESIGNATION_DATE}
-                  format={DateFormats.DD_MMM__YYYY}
+                  format={DateFormats.MMM_DD__YYYY}
                 />
               </Col>
             </Row>

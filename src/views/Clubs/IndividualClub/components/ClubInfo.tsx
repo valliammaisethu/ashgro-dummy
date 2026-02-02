@@ -46,7 +46,7 @@ const ClubInfo: React.FC<ClubInfoProps> = ({ data }) => {
           <span className={styles.dateTitle}>{CLUB_LABELS.onBoardedDate}</span>
           <span className={styles.date}>
             {fallbackHandler(
-              formatDate(onboardingDate, DateFormats.DD_MMM__YYYY),
+              formatDate(onboardingDate, DateFormats.MMM_DD__YYYY),
             )}
           </span>
         </div>

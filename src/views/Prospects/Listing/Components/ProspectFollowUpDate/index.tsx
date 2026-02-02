@@ -16,7 +16,7 @@ import { DateFormats } from "src/enums/dateFormats.enum";
 
 import styles from "../../listing.module.scss";
 
-const { DD_MMM__YYYY } = DateFormats;
+const { MMM_DD__YYYY } = DateFormats;
 
 const ProspectFollowUpDate = ({
   record,
@@ -60,7 +60,7 @@ const ProspectFollowUpDate = ({
           <div className={styles.followUpDateLabel}>
             <IconCalendarDates size={18} color={Colors.ASHGRO_GOLD} />
             <span>
-              {fillEmptyData(formatDate(record.followUpDate, DD_MMM__YYYY))}
+              {fillEmptyData(formatDate(record.followUpDate, MMM_DD__YYYY))}
             </span>
           </div>
           <DatePicker
@@ -68,7 +68,7 @@ const ProspectFollowUpDate = ({
             onOpenChange={handleDatePickerClose}
             value={record.followUpDate ? dayjs(record.followUpDate) : null}
             onChange={handleDateChange}
-            format={DD_MMM__YYYY}
+            format={MMM_DD__YYYY}
             inputReadOnly
             allowClear={false}
             className={styles.datePicker}

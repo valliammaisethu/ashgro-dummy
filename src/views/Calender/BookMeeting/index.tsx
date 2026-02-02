@@ -38,7 +38,7 @@ import styles from "./bookMeeting.module.scss";
 const { TITLE, TYPE, NAME, SLOT_DATE, MEETING_TIME, USER } =
   BOOK_MEETING_FIELDS;
 const { BOOK_MEETING, RESCHEDULE_MEETING, RESCHEDULE_NOW } = BOOK_MEETING_META;
-const { DD_MMM_YYYY } = DateFormats;
+const { DD_MMM_YYYY, MMM_DD__YYYY } = DateFormats;
 const { GET_MEMBERS_META_LIST, GET_PROSPECTS_META_LIST } = QueryKeys;
 
 const BookMeeting = ({
@@ -204,7 +204,7 @@ const BookMeeting = ({
               placeholder={SLOT_DATE.placeholder}
               required
               disabledDate={disablePastAndFuture180}
-              format={DD_MMM_YYYY}
+              format={MMM_DD__YYYY}
               disabled={!!selectedDate}
             />
           </Col>
