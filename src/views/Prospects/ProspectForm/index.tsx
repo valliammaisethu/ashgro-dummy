@@ -141,11 +141,11 @@ const ProspectForm = ({
         leadStatusId: findValueByLabel(leadStatusOptions, prospect.leadStatus),
         followUpDate: convertDateToDisplayFormat(
           prospect.followUpDate,
-          DateFormats.DD_MMM_YYYY,
+          DateFormats.MMM_DD__YYYY,
         ),
         inquiryDate: convertDateToDisplayFormat(
           prospect.inquiryDate,
-          DateFormats.DD_MMM_YYYY,
+          DateFormats.MMM_DD__YYYY,
         ),
       },
     };
@@ -346,7 +346,7 @@ const ProspectForm = ({
               placeholder={PLACEHOLDERS.FOLLOW_UP_DATE}
               label={LABELS.FOLLOW_UP_DATE}
               name={FIELD_NAMES.FOLLOW_UP_DATE}
-              format={DateFormats.DD_MMM_YYYY}
+              format={DateFormats.MMM_DD__YYYY}
             />
           </Col>
           <Col span={12}>
@@ -377,7 +377,7 @@ const ProspectForm = ({
               label={LABELS.INQUIRY_DATE}
               name={FIELD_NAMES.INQUIRY_DATE}
               disabledDate={disableFuture}
-              format={DateFormats.DD_MMM_YYYY}
+              format={DateFormats.MMM_DD__YYYY}
             />
           </Col>
           <Col span={12}>

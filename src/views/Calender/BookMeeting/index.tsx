@@ -38,7 +38,7 @@ import styles from "./bookMeeting.module.scss";
 const { TITLE, TYPE, NAME, SLOT_DATE, MEETING_TIME, USER } =
   BOOK_MEETING_FIELDS;
 const { BOOK_MEETING, RESCHEDULE_MEETING, RESCHEDULE_NOW } = BOOK_MEETING_META;
-const { DD_MMM_YYYY } = DateFormats;
+const { MMM_DD__YYYY } = DateFormats;
 const { GET_MEMBERS_META_LIST, GET_PROSPECTS_META_LIST } = QueryKeys;
 
 const BookMeeting = ({
@@ -50,7 +50,6 @@ const BookMeeting = ({
   const methods = useForm({
     validationSchema,
   });
-
   const { bookMeeting, rescheduleMeeting } = CalenderService();
 
   const { mutateAsync: addMeeting, isPending: isAddMeetingLoading } =
@@ -86,7 +85,7 @@ const BookMeeting = ({
 
   const handleFormSubmit = async (data: FieldValues) => {
     const payload = {
-      slotDate: formatDateValue(data.slotDate, DD_MMM_YYYY, true),
+      slotDate: formatDateValue(data.slotDate, MMM_DD__YYYY, true),
       startTime: convertTo24hrs(data.meetingTime.startTime),
       endTime: convertTo24hrs(data.meetingTime.endTime),
     };
@@ -204,7 +203,7 @@ const BookMeeting = ({
               placeholder={SLOT_DATE.placeholder}
               required
               disabledDate={disablePastAndFuture180}
-              format={DD_MMM_YYYY}
+              format={MMM_DD__YYYY}
               disabled={!!selectedDate}
             />
           </Col>

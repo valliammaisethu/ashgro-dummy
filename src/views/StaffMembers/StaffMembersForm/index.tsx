@@ -36,6 +36,7 @@ import { Justify } from "src/enums/align.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 
 import styles from "./staffMembersForm.module.scss";
+import { DateFormats } from "src/enums/dateFormats.enum";
 
 interface MembersFormProps {
   isOpen?: boolean;
@@ -109,9 +110,11 @@ const StaffMembersForm = ({
       ),
       [FIELD_NAMES.BIRTH_DATE]: convertDateToApiFormat(
         values[FIELD_NAMES.BIRTH_DATE],
+        DateFormats.MMM_DD__YYYY,
       ),
       [FIELD_NAMES.WORK_ANNIVERSARY]: convertDateToApiFormat(
         values[FIELD_NAMES.WORK_ANNIVERSARY],
+        DateFormats.MMM_DD__YYYY,
       ),
     };
 
@@ -141,9 +144,13 @@ const StaffMembersForm = ({
         staffDepartments,
         data.staffDepartment,
       ),
-      [FIELD_NAMES.BIRTH_DATE]: convertDateToDisplayFormat(data.birthDate),
+      [FIELD_NAMES.BIRTH_DATE]: convertDateToDisplayFormat(
+        data.birthDate,
+        DateFormats.MMM_DD__YYYY,
+      ),
       [FIELD_NAMES.WORK_ANNIVERSARY]: convertDateToDisplayFormat(
         data.workAnniversaryDate,
+        DateFormats.MMM_DD__YYYY,
       ),
     };
   }, [data, staffDepartments]);
@@ -239,6 +246,7 @@ const StaffMembersForm = ({
                   label={LABELS.BIRTH_DATE}
                   name={FIELD_NAMES.BIRTH_DATE}
                   disabledDate={disableFuture}
+                  format={DateFormats.MMM_DD__YYYY}
                 />
               </Col>
               <Col span={12}>
@@ -247,6 +255,7 @@ const StaffMembersForm = ({
                   label={LABELS.WORK_ANNIVERSARY}
                   name={FIELD_NAMES.WORK_ANNIVERSARY}
                   disabledDate={disableFuture}
+                  format={DateFormats.MMM_DD__YYYY}
                 />
               </Col>
             </Row>

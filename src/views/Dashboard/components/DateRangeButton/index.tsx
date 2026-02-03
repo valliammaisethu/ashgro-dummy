@@ -22,7 +22,7 @@ import styles from "./dateRangeButton.module.scss";
 
 const { RangePicker } = DatePicker;
 
-const { YYYY_MM_DD, DD_MMM_YY, MMMM_YYYY } = DateFormats;
+const { MMMM_YYYY, MMM_DD__YYYY } = DateFormats;
 const { MODAL_CLOSE_ICON, ASHGRO_BLACK, ASHGRO_GOLD } = Colors;
 
 const DateRangeButton: React.FC<DateRangeButtonProps> = ({
@@ -60,8 +60,8 @@ const DateRangeButton: React.FC<DateRangeButtonProps> = ({
 
   const formatDisplayText = () => {
     if (value && value[0] && value[1]) {
-      const start = dayjs(value[0]).format(DD_MMM_YY);
-      const end = dayjs(value[1]).format(DD_MMM_YY);
+      const start = dayjs(value[0]).format(MMM_DD__YYYY);
+      const end = dayjs(value[1]).format(MMM_DD__YYYY);
       return `${start} - ${end}`;
     }
     return dayjs().format(MMMM_YYYY);
@@ -104,7 +104,7 @@ const DateRangeButton: React.FC<DateRangeButtonProps> = ({
           onOpenChange={setOpen}
           value={value ? [dayjs(value?.[0]), dayjs(value?.[1])] : null}
           onChange={handleChange}
-          format={YYYY_MM_DD}
+          format={MMM_DD__YYYY}
           onCalendarChange={handleCalendarChange}
           disabledDate={isDisabledDate}
         />
