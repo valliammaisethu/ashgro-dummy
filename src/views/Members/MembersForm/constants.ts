@@ -47,7 +47,7 @@ export const FORM_CONSTANTS = {
     ACTIVITY_DESCRIPTION: "Add activity description",
     BIRTH_DATE: "Select Birth Date",
     MEMBERSHIP_TYPE: "Select Membership Type",
-    RESIGNATION_DATE: "Selectn Resignation Date",
+    RESIGNATION_DATE: "Select Resignation Date",
     RESIDENTIAL_ADDRESS: "Enter Residential Address",
   },
 
