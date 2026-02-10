@@ -1,4 +1,7 @@
-import { list, object, serializable } from "serializr";
+import { list, object, serializable, custom } from "serializr";
+import { XAxisTypes } from "src/enums/charts.enum";
+
+const { LEAD_TO_MEMBER_CONVERSION, LEAD_SOURCE } = XAxisTypes;
 
 export class BaseChartModel {
   @serializable
@@ -9,7 +12,12 @@ export class BaseChartModel {
 }
 
 export class ChartItem extends BaseChartModel {
-  @serializable
+  @serializable(
+    custom(
+      (v: string) => v,
+      (v: string) => (v === LEAD_TO_MEMBER_CONVERSION ? LEAD_SOURCE : v),
+    ),
+  )
   type?: string;
 
   @serializable
