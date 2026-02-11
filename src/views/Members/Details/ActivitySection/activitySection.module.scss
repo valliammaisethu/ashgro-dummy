@@ -52,4 +52,10 @@
       color: $ashgro-title-gold;
     }
   }
+
+  .description {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
 }
