@@ -109,9 +109,6 @@ export const membersFormValidationSchema = yup.object().shape({
 
   [FIELD_NAMES.ACTIVITY_DESCRIPTION]: yup
     .string()
-    .max(
-      MAX_LENGTHS.ACTIVITY_DESCRIPTION,
-      ERROR_MESSAGES.MAX_LENGTH.ACTIVITY_DESCRIPTION,
-    )
+
     .nullable(),
 });

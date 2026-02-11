@@ -72,14 +72,14 @@ const prospectSchema = yup.object({
   leadSourceId: yup.string(),
   membershipCategoryId: yup.string(),
   attachmentId: yup.string().nullable(),
-  additionalComments: yup.string().max(300),
+  additionalComments: yup.string(),
 });
 
 const activityDetailsSchema = yup
   .object({
     createdAt: yup.string(),
     activityTypeId: yup.string(),
-    description: yup.string().max(300),
+    description: yup.string(),
   })
   .test("activity-required-if-other-filled", function (value) {
     const { path, createError } = this;
