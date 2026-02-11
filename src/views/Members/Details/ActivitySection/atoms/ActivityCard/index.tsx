@@ -23,7 +23,7 @@ const ActivityCard = ({ activity }: ActivityCardProps) => {
           {formatDate(createdAt, HH_MM_A__DD_MMM_YYYY, true)}
         </p>
       </div>
-      <p>{description}</p>
+      <p className={styles.description}>{description}</p>
     </div>
   );
 };
