@@ -25,6 +25,7 @@ import useRedirect from "src/shared/hooks/useRedirect";
 import { fallbackHandler } from "src/shared/utils/commonHelpers";
 
 import styles from "./details.module.scss";
+import { DateFormats } from "src/enums/dateFormats.enum";
 
 const { birthData, department, title, workAnniversary } = footerLabels;
 
@@ -48,9 +49,15 @@ const Details = () => {
     { label: title, value: data?.title },
     {
       label: workAnniversary,
-      value: formatDateValue(data?.workAnniversaryDate),
+      value: formatDateValue(
+        data?.workAnniversaryDate,
+        DateFormats.MMM_DD__YYYY,
+      ),
     },
-    { label: birthData, value: formatDateValue(data?.birthDate) },
+    {
+      label: birthData,
+      value: formatDateValue(data?.birthDate, DateFormats.MMM_DD__YYYY),
+    },
   ];
 
   const handleModalVisibility = () => setIsEditForm((prev) => !prev);

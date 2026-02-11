@@ -11,7 +11,7 @@ import { BOOK_MEETING_FIELDS } from "../BookMeeting/constants";
 
 const { NAME, SLOT_DATE, MEETING_TIME, TYPE } = BOOK_MEETING_FIELDS;
 
-const { HH_MM_A, DD_MMM__YYYY, DD_MMM_YYYY } = DateFormats;
+const { HH_MM_A, MMM_DD__YYYY } = DateFormats;
 const { DAY } = DateUnit;
 const { CHATBOT } = SLOT_TYPE;
 const { BOOKED } = SLOT_STATUS;
@@ -124,7 +124,7 @@ export const getMeetingDefaultValues = (
     title: calendarEvent?.id ? String(title) : "",
     [TYPE.name]: bookedUserType,
     [NAME.name]: bookedUserId,
-    [SLOT_DATE.name]: formatDateValue(id ? date : selectedDate, DD_MMM_YYYY),
+    [SLOT_DATE.name]: formatDateValue(id ? date : selectedDate, MMM_DD__YYYY),
     [MEETING_TIME.name]: {
       startTime: id ? dayjs(start).format(HH_MM_A) : "",
       endTime: id ? dayjs(end).format(HH_MM_A) : "",

@@ -291,6 +291,9 @@
             font-weight: 400;
             font-size: 1.4rem;
             font-family: $font-secondary;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
           }
         }
       }

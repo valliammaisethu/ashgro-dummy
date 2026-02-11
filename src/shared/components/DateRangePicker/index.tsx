@@ -35,7 +35,7 @@ const DateRangePickerField: React.FC<DateRangePickerFieldProps> = ({
   name,
   fromLabel = "From",
   toLabel = "To",
-  format = DateFormats.DD_MMM_YYYY,
+  format = DateFormats.MMM_DD__YYYY,
   placeholder = [datePickerFromPlaceholder, datePickerToPlaceholder],
   className,
 }) => {
