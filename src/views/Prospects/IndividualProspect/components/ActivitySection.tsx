@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IconAdd, IconMessage } from "obra-icons-react";
+import { IconAdd, IconMessage, IconEdit } from "obra-icons-react";
 import { useParams } from "react-router-dom";
 
 import Card from "src/shared/components/Card";
@@ -14,6 +14,7 @@ import Transcripts from "../../Transcripts";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 
 import styles from "../individualProspect.module.scss";
+import { Colors } from "src/enums/colors.enum";
 
 interface ActivitySectionProps {
   activities?: ActivityDetails[];
@@ -29,10 +30,23 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
 }) => {
   const { id = "" } = useParams();
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
+  const [isEditActivityModalOpen, setIsEditActivityModalOpen] = useState(false);
+  const [selectedActivity, setSelectedActivity] =
+    useState<ActivityDetails | null>(null);
   const { visible: transcriptsVisible, toggleVisibility: toggleTranscripts } =
     useDrawer();
 
   const handleToggleVisibility = () => setIsActivityModalOpen((prev) => !prev);
+
+  const handleEditActivity = (activity: ActivityDetails) => {
+    setSelectedActivity(activity);
+    setIsEditActivityModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditActivityModalOpen(false);
+    setSelectedActivity(null);
+  };
   return (
     <div className={styles.activityContainer}>
       <div className={styles.header}>
@@ -57,7 +71,15 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
       {activities?.map((activity) => (
         <Card key={activity.id} className={styles.activityCard}>
           <div className={styles.titleContainer}>
-            <div className={styles.title}>{activity.activityType}</div>
+            <div className={styles.title}>
+              {activity.activityType}
+              <IconEdit
+                size={17}
+                color={Colors.MODAL_CLOSE_ICON}
+                className={styles.icon}
+                onClick={() => handleEditActivity(activity)}
+              />
+            </div>
             <div className={styles.date}>
               {formatDate(
                 activity.createdAt,
@@ -73,6 +95,17 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
         onClose={handleToggleVisibility}
         isOpen={isActivityModalOpen}
         handleRefetch={handleRefetch}
+      />
+      <AddActivity
+        isOpen={isEditActivityModalOpen}
+        onClose={handleCloseEditModal}
+        handleRefetch={handleRefetch}
+        isEdit={true}
+        activityId={String(selectedActivity?.id)}
+        defaultValues={{
+          activityTypeId: selectedActivity?.activityType,
+          description: selectedActivity?.description,
+        }}
       />
       <ConditionalRenderComponent visible={transcriptsVisible} hideFallback>
         <Transcripts

@@ -51,6 +51,7 @@ const DatePicker: FC<DatePickerFieldProps> = ({
         onChange={handleOnChange}
         placeholder={placeholder}
         onBlur={onBlur}
+        needConfirm={false}
         {...rest}
         format={format}
         suffixIcon={
