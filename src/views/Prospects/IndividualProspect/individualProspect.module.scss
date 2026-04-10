@@ -350,6 +350,12 @@
 .titleContainer {
   @include flex-container(space-between, normal, row, 0);
 
+  .icon {
+    margin-left: 1rem;
+    margin-bottom: -0.2rem;
+    cursor: pointer;
+  }
+
   .date {
     color: $ashgro-title-gold;
     opacity: 75%;

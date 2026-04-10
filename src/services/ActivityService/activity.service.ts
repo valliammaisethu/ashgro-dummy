@@ -10,7 +10,7 @@ import { ApiRoutes } from "src/routes/routeConstants/apiRoutes";
 import { cleanObject } from "src/shared/utils/helpers";
 import { renderNotification } from "src/shared/utils/renderNotification";
 
-const { Add_ACTIVITY } = ApiRoutes;
+const { Add_ACTIVITY, EDIT_ACTIVITY } = ApiRoutes;
 const { EDIT_PROSPECT } = MutationKeys;
 
 export const ActivityService = () => {
@@ -38,7 +38,32 @@ export const ActivityService = () => {
     },
   });
 
+  const editActivity = (): UseMutationOptions<
+    ResponseModel,
+    ResponseModel,
+    ActivityPayload
+  > => ({
+    mutationKey: [EDIT_PROSPECT],
+    mutationFn: async (payload: ActivityPayload) => {
+      const { id, activityId, ...activity } = payload;
+
+      const response = await axiosInstance.put(
+        generatePath(EDIT_ACTIVITY, { id, activityId }),
+
+        cleanObject({
+          activity,
+        }),
+      );
+      return deserialize(ResponseModel, response?.data);
+    },
+    onSuccess: (response) => {
+      const { title, description } = response;
+      renderNotification(title, description);
+    },
+  });
+
   return {
     addActivity,
+    editActivity,
   };
 };
