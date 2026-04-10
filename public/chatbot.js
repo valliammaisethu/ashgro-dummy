@@ -10,7 +10,7 @@
   const BASE_API_URL = `https://useful-lime-landfowl.ashgro.revolte.io/api/v1/chatbot/${clubId}`;
 
   const IFRAME_URL = `${BASE}/?clubId=${encodeURIComponent(
-    clubId
+    clubId,
   )}&host=${encodeURIComponent(host)}`;
 
   async function checkIsValidHost(url, attempt = 1, maxRetries = 3) {
@@ -86,7 +86,7 @@
             zIndex: 999999991,
             transition: "opacity 0.25s, transform 0.25s",
             opacity: "0",
-            transform: "translateY(20px)"
+            transform: "translateY(20px)",
           }
         : {
             position: "fixed",
@@ -102,7 +102,7 @@
             boxShadow: "0 4px 15px rgba(0,0,0,0.15)",
             transition: "opacity 0.25s, transform 0.25s",
             opacity: "0",
-            transform: "translateY(20px)"
+            transform: "translateY(20px)",
           };
     };
 
@@ -116,7 +116,7 @@
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        zIndex: 999999999
+        zIndex: 999999999,
       },
       `
         <div style="
@@ -146,7 +146,7 @@
         ">
           Explore with Your Concierge
         </div>
-      `
+      `,
     );
     launcher.id = "rqt-chatbot-launcher";
 

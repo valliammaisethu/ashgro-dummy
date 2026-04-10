@@ -43,6 +43,7 @@ const Filters = (props: ProspectFilterProps) => {
     defaultValues: {
       [fields.followUpDateRange]:
         defaultValues?.[fields.followUpDateRange] || [],
+      [fields.inquiryDateRange]: defaultValues?.[fields.inquiryDateRange] || [],
       [fields.leadStatus]: defaultValues?.[fields.leadStatus] || [],
       [fields.leadSource]: defaultValues?.[fields.leadSource] || [],
     },
@@ -60,6 +61,7 @@ const Filters = (props: ProspectFilterProps) => {
     reset({
       [fields.followUpDateRange]:
         defaultValues?.[fields.followUpDateRange] || [],
+      [fields.inquiryDateRange]: defaultValues?.[fields.inquiryDateRange] || [],
       [fields.leadStatus]: defaultValues?.[fields.leadStatus] || [],
       [fields.leadSource]: defaultValues?.[fields.leadSource] || [],
     });
@@ -71,6 +73,7 @@ const Filters = (props: ProspectFilterProps) => {
   const resetValues = () => {
     const defaultValues = {
       [fields.followUpDateRange]: [],
+      [fields.inquiryDateRange]: [],
       [fields.leadStatus]: [],
       [fields.leadSource]: [],
     };
@@ -94,6 +97,13 @@ const Filters = (props: ProspectFilterProps) => {
             <div className={styles.title}>{labels.followUpDateRange}</div>
             <div className={styles.datepicker}>
               <DateRangePickerField name={fields.followUpDateRange} />
+            </div>
+          </div>
+
+          <div className={styles.container}>
+            <div className={styles.title}>{labels.inquiryDateRange}</div>
+            <div className={styles.datepicker}>
+              <DateRangePickerField name={fields.inquiryDateRange} />
             </div>
           </div>
 

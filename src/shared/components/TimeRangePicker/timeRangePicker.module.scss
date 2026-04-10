@@ -27,6 +27,9 @@
   :where(.ant-picker-dropdown-range) {
     padding: 0 !important;
   }
+  :where(.ant-picker-dropdown-range) .ant-picker-time-panel-column {
+    padding-top: 4.5rem !important;
+  }
   .ant-picker-dropdown {
     margin-top: -0.45rem !important;
   }
@@ -37,7 +40,6 @@
   }
   .ant-picker-time-panel-column {
     height: 15rem !important;
-    padding-top: 4.5rem !important;
     padding-bottom: 4.5rem !important;
     box-sizing: content-box !important;
     scrollbar-width: none;

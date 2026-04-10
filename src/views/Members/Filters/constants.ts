@@ -17,7 +17,7 @@ export const labels = {
 };
 
 export const placeholders = {
-  leadSource: "Select one or more lead status",
+  leadSource: "Select one or more lead source",
   membershipStatus: "Select one or more membership status",
   membershipType: "Select one or more membership type",
 };
