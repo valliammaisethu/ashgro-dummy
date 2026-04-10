@@ -8,8 +8,11 @@ export class ActivityPayload {
   createdAt?: string;
 
   @serializable
-  activityTypeId?: number;
+  activityTypeId?: string;
 
   @serializable
   description?: string;
+
+  @serializable
+  activityId?: string;
 }

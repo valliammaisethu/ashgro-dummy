@@ -16,6 +16,12 @@ export class ProspectsListingParams extends QueryParams {
 
   @serializable
   followUpEndDate?: string;
+
+  @serializable
+  inquiryStartDate?: string;
+
+  @serializable
+  inquiryEndDate?: string;
 }
 
 export class ProspectsList {

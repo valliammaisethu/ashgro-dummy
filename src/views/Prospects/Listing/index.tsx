@@ -299,6 +299,8 @@ const ProspectsListing = () => {
       ...filters,
       followUpStartDate: filters.followUpDateRange?.[0],
       followUpEndDate: filters.followUpDateRange?.[1],
+      inquiryStartDate: filters.inquiryDateRange?.[0],
+      inquiryEndDate: filters.inquiryDateRange?.[1],
       page: 1,
     }));
     toggleDrawerVisibility();

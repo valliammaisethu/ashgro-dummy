@@ -33,7 +33,8 @@ export const convertDateToApiFormat = (
   format: DateFormats = DateFormats.DD_MMM_YYYY,
 ) => {
   if (!date) return;
-  const parsed = dayjs(date, format, true);
+  const strictParsed = dayjs(date, format, true);
+  const parsed = strictParsed.isValid() ? strictParsed : dayjs(date);
   return parsed.isValid() ? parsed.format(DateFormats.YYYY_MM_DD) : date;
 };
 
