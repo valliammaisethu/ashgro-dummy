@@ -30,7 +30,6 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
 }) => {
   const { id = "" } = useParams();
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
-  const [isEditActivityModalOpen, setIsEditActivityModalOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] =
     useState<ActivityDetails | null>(null);
   const { visible: transcriptsVisible, toggleVisibility: toggleTranscripts } =
@@ -38,13 +37,14 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
 
   const handleToggleVisibility = () => setIsActivityModalOpen((prev) => !prev);
 
-  const handleEditActivity = (activity: ActivityDetails) => {
+  const handleEditActivity = (activity: ActivityDetails) =>
     setSelectedActivity(activity);
-    setIsEditActivityModalOpen(true);
-  };
 
-  const handleCloseEditModal = () => {
-    setIsEditActivityModalOpen(false);
+  const getEditHandler = (activity: ActivityDetails) => () =>
+    handleEditActivity(activity);
+
+  const handleCloseModal = () => {
+    setIsActivityModalOpen(false);
     setSelectedActivity(null);
   };
   return (
@@ -77,7 +77,7 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
                 size={17}
                 color={Colors.MODAL_CLOSE_ICON}
                 className={styles.icon}
-                onClick={() => handleEditActivity(activity)}
+                onClick={getEditHandler(activity)}
               />
             </div>
             <div className={styles.date}>
@@ -92,20 +92,10 @@ const ActivitySection: React.FC<ActivitySectionProps> = ({
         </Card>
       ))}
       <AddActivity
-        onClose={handleToggleVisibility}
-        isOpen={isActivityModalOpen}
+        isOpen={isActivityModalOpen || !!selectedActivity}
+        onClose={handleCloseModal}
         handleRefetch={handleRefetch}
-      />
-      <AddActivity
-        isOpen={isEditActivityModalOpen}
-        onClose={handleCloseEditModal}
-        handleRefetch={handleRefetch}
-        isEdit={true}
-        activityId={String(selectedActivity?.id)}
-        defaultValues={{
-          activityTypeId: selectedActivity?.activityType,
-          description: selectedActivity?.description,
-        }}
+        selectedActivity={selectedActivity}
       />
       <ConditionalRenderComponent visible={transcriptsVisible} hideFallback>
         <Transcripts

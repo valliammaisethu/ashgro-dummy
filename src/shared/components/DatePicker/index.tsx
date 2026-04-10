@@ -31,7 +31,12 @@ const DatePicker: FC<DatePickerFieldProps> = ({
     fieldState,
   } = useController({ name, control });
 
-  const dateValue = value ? dayjs(value, format, true) : null;
+  const parsedStrict = value ? dayjs(value, format, true) : null;
+  const dateValue = parsedStrict?.isValid()
+    ? parsedStrict
+    : value
+      ? dayjs(value)
+      : null;
 
   const handleOnChange: DatePickerProps["onChange"] = (
     _date: dayjs.Dayjs | null,

@@ -18,6 +18,7 @@ import { MetaService } from "src/services/MetaService/meta.service";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ActivityService } from "src/services/ActivityService/activity.service";
 import { ActivityPayload } from "src/models/activity.model";
+import { ActivityDetails } from "src/models/viewProspect.model";
 import { useParams } from "react-router-dom";
 import { DateFormats } from "src/enums/dateFormats.enum";
 
@@ -25,9 +26,7 @@ interface AddActivityProps {
   isOpen: boolean;
   onClose: () => void;
   handleRefetch?: () => void;
-  isEdit?: boolean;
-  activityId?: string;
-  defaultValues?: Partial<ActivityPayload>;
+  selectedActivity?: ActivityDetails | null;
 }
 
 const { YYYY_MM_DD_T_HH_MM_SS, DD_MMM_YYYY__HH_MM_A } = DateFormats;
@@ -38,10 +37,11 @@ const AddActivity = ({
   isOpen,
   onClose,
   handleRefetch,
-  isEdit,
-  activityId,
-  defaultValues = {},
+  selectedActivity = null,
 }: AddActivityProps) => {
+  const isEdit = !!selectedActivity;
+  const activityId = selectedActivity?.id;
+
   const getDefaultCreatedAt = () => dayjs().toISOString();
 
   const methods = useForm({});
@@ -49,13 +49,14 @@ const AddActivity = ({
   const { reset } = methods;
 
   useEffect(() => {
-    if (isEdit && Object.keys(defaultValues).length > 0) {
-      const localCreatedAt = defaultValues.createdAt
-        ? dayjs.utc(defaultValues.createdAt).local().toISOString()
+    if (isEdit && selectedActivity) {
+      const { activityTypeId, description, id, createdAt } = selectedActivity;
+      const localCreatedAt = createdAt
+        ? dayjs.utc(createdAt).local().toISOString()
         : getDefaultCreatedAt();
-      reset({ ...defaultValues, createdAt: localCreatedAt });
+      reset({ activityTypeId, description, id, createdAt: localCreatedAt });
     }
-  }, [isEdit, defaultValues, reset, isOpen]);
+  }, [isEdit, selectedActivity, reset, isOpen]);
 
   const { id = "" } = useParams();
 

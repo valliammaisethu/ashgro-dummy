@@ -13,6 +13,9 @@ export class ActivityDetails {
 
   @serializable
   createdAt?: string;
+
+  @serializable
+  activityTypeId?: string;
 }
 
 export class ViewProspect {
