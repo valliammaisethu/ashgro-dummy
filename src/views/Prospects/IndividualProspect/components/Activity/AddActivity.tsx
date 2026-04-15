@@ -122,6 +122,7 @@ const AddActivity = ({
                   showTime={{ use12Hours: true, format: "hh:mm A" }}
                   placeholder="Select date & time"
                   changeOnScroll
+                  needConfirm={true}
                 />
               </Col>
               <Col span={12}>
