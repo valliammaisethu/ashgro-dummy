@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useCallback, useEffect, useMemo } from "react";
 import { Col, Divider, Row } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IconCalendarWait } from "obra-icons-react";
 import { FieldValues } from "react-hook-form";
 
 import Modal from "src/shared/components/Modal";
@@ -15,7 +14,6 @@ import useForm from "src/shared/components/UseForm";
 import TextArea from "src/shared/components/TextArea";
 import { INPUT_TYPE } from "src/enums/inputType";
 import { Justify } from "src/enums/align.enum";
-import { Colors } from "src/enums/colors.enum";
 import { DateFormats } from "src/enums/dateFormats.enum";
 import { QueryKeys } from "src/enums/cacheEvict.enum";
 import { Buttons } from "src/enums/buttons.enum";
@@ -27,7 +25,6 @@ import {
   convertDateToApiFormat,
   convertDateToDisplayFormat,
   disableFuture,
-  formatDate,
 } from "src/shared/utils/dateUtils";
 import { ProspectFormProps } from "src/shared/types/prospects.type";
 import { getValidationSchema } from "./validation";
@@ -430,23 +427,14 @@ const ProspectForm = ({
             </div>
             <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
               <Col span={12}>
-                <InputField
-                  placeholder={PLACEHOLDERS.ACTIVITY_DATE_TIME}
-                  label={LABELS.ACTIVITY_DATE_TIME}
-                  value={formatDate(
-                    activityDateTime,
-                    DateFormats.HH_MM_A__DD_MMM_YYYY,
-                    true,
-                  )}
-                  name={FIELD_NAMES.ACTIVITY_DATE_TIME}
-                  readOnly
-                  suffix={
-                    <IconCalendarWait
-                      color={Colors.ASHGRO_NAVY}
-                      strokeWidth={1.25}
-                      size={16}
-                    />
-                  }
+                <DatePicker
+                  name="createdAt"
+                  label="Activity Date & Time"
+                  format={DateFormats.DD_MMM_YYYY__HH_MM_A}
+                  showTime={{ use12Hours: true, format: "hh:mm A" }}
+                  placeholder="Select date & time"
+                  changeOnScroll
+                  needConfirm={true}
                 />
               </Col>
               <Col span={12}>
