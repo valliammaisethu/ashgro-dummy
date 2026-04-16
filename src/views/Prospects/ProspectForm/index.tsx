@@ -428,11 +428,11 @@ const ProspectForm = ({
             <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
               <Col span={12}>
                 <DatePicker
-                  name="createdAt"
-                  label="Activity Date & Time"
+                  placeholder={PLACEHOLDERS.ACTIVITY_DATE_TIME}
+                  label={LABELS.ACTIVITY_DATE_TIME}
+                  name={FIELD_NAMES.ACTIVITY_DATE_TIME}
                   format={DateFormats.DD_MMM_YYYY__HH_MM_A}
-                  showTime={{ use12Hours: true, format: "hh:mm A" }}
-                  placeholder="Select date & time"
+                  showTime={{ use12Hours: true, format: DateFormats.HH_MM_A }}
                   changeOnScroll
                   needConfirm={true}
                 />
