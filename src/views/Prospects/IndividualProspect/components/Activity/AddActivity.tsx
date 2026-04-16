@@ -42,21 +42,22 @@ const AddActivity = ({
   const isEdit = !!selectedActivity;
   const activityId = selectedActivity?.id;
 
-  const getDefaultCreatedAt = () => dayjs().toISOString();
-
   const methods = useForm({});
 
   const { reset } = methods;
 
   useEffect(() => {
+    if (!isOpen) return;
     if (isEdit && selectedActivity) {
       const { activityTypeId, description, id, createdAt } = selectedActivity;
       const localCreatedAt = createdAt
         ? dayjs.utc(createdAt).local().toISOString()
-        : getDefaultCreatedAt();
+        : dayjs().toISOString();
       reset({ activityTypeId, description, id, createdAt: localCreatedAt });
+    } else {
+      reset({ createdAt: dayjs().toISOString() });
     }
-  }, [isEdit, selectedActivity, reset, isOpen]);
+  }, [isOpen]);
 
   const { id = "" } = useParams();
 
@@ -94,7 +95,6 @@ const AddActivity = ({
 
   const handleCloseModal = () => {
     onClose();
-    reset({ createdAt: getDefaultCreatedAt() });
   };
 
   return (
@@ -122,6 +122,7 @@ const AddActivity = ({
                   showTime={{ use12Hours: true, format: "hh:mm A" }}
                   placeholder="Select date & time"
                   changeOnScroll
+                  needConfirm={true}
                 />
               </Col>
               <Col span={12}>

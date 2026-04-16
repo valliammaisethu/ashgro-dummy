@@ -77,6 +77,9 @@ export class ProspectsListResponse extends ResponseModel {
 
 export class ActivityDetails {
   @serializable
+  id?: string;
+
+  @serializable
   createdAt?: string;
 
   @serializable
