@@ -1,7 +1,6 @@
 import { Col, Divider, Row } from "antd";
 import React, { ChangeEvent, useCallback, useEffect, useMemo } from "react";
 import { FieldValues } from "react-hook-form";
-import { IconCalendarWait } from "obra-icons-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { EmailService } from "src/services/EmailService/email.service";
@@ -25,14 +24,12 @@ import { DateFormats } from "src/enums/dateFormats.enum";
 import { INPUT_TYPE } from "src/enums/inputType";
 import PhoneNumberField from "src/shared/components/PhoneNumberInput";
 import {
-  formatDate,
   convertDateToApiFormat,
   convertDateToDisplayFormat,
   disableFuture,
 } from "src/shared/utils/dateUtils";
 import { mapToSelectOptionsDynamic } from "src/shared/utils/helpers";
 import { MetaService } from "src/services/MetaService/meta.service";
-import { Colors } from "src/enums/colors.enum";
 import TextArea from "src/shared/components/TextArea";
 import { LeadService } from "src/services/SettingsService/lead.service";
 import { MemberShipService } from "src/services/SettingsService/memberShip.service";
@@ -404,23 +401,17 @@ const MembersForm = ({
                 </div>
                 <Row gutter={[20, 20]} justify={Justify.SPACE_BETWEEN}>
                   <Col span={12}>
-                    <InputField
+                    <DatePicker
                       placeholder={PLACEHOLDERS.ACTIVITY_DATE_TIME}
                       label={LABELS.ACTIVITY_DATE_TIME}
-                      value={formatDate(
-                        activityDateTime,
-                        DateFormats.HH_MM_A__DD_MMM_YYYY,
-                        true,
-                      )}
                       name={FIELD_NAMES.ACTIVITY_DATE_TIME}
-                      readOnly
-                      suffix={
-                        <IconCalendarWait
-                          color={Colors.ASHGRO_NAVY}
-                          strokeWidth={1.25}
-                          size={16}
-                        />
-                      }
+                      format={DateFormats.DD_MMM_YYYY__HH_MM_A}
+                      showTime={{
+                        use12Hours: true,
+                        format: DateFormats.HH_MM_A,
+                      }}
+                      changeOnScroll
+                      needConfirm={true}
                     />
                   </Col>
                   <Col span={12}>
