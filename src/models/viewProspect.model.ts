@@ -3,7 +3,7 @@ import { ResponseModel } from "./response.model";
 
 export class ActivityDetails {
   @serializable
-  id?: number;
+  id?: string;
 
   @serializable
   activityType?: string;
@@ -13,6 +13,9 @@ export class ActivityDetails {
 
   @serializable
   createdAt?: string;
+
+  @serializable
+  activityTypeId?: string;
 }
 
 export class ViewProspect {

@@ -25,8 +25,21 @@ const ActivitySection = ({
   isSuccess,
 }: ActivitySectionProps) => {
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
+  const [selectedActivity, setSelectedActivity] =
+    useState<ActivityDetails | null>(null);
 
   const handleToggleVisibility = () => setIsActivityModalOpen((prev) => !prev);
+
+  const handleEditActivity = (activity: ActivityDetails) =>
+    setSelectedActivity(activity);
+
+  const getEditHandler = (activity: ActivityDetails) => () =>
+    handleEditActivity(activity);
+
+  const handleCloseModal = () => {
+    setIsActivityModalOpen(false);
+    setSelectedActivity(null);
+  };
 
   return (
     <div>
@@ -45,15 +58,20 @@ const ActivitySection = ({
           records={activities}
         >
           {activities?.map((activity) => (
-            <ActivityCard key={activity?.id} activity={activity} />
+            <ActivityCard
+              key={activity?.id}
+              activity={activity}
+              onEdit={getEditHandler(activity)}
+            />
           ))}
         </ConditionalRender>
       </div>
 
       <AddActivity
-        onClose={handleToggleVisibility}
-        isOpen={isActivityModalOpen}
+        isOpen={isActivityModalOpen || !!selectedActivity}
+        onClose={handleCloseModal}
         handleRefetch={refetch}
+        selectedActivity={selectedActivity}
       />
     </div>
   );

@@ -33,7 +33,8 @@ export const convertDateToApiFormat = (
   format: DateFormats = DateFormats.DD_MMM_YYYY,
 ) => {
   if (!date) return;
-  const parsed = dayjs(date, format, true);
+  const strictParsed = dayjs(date, format, true);
+  const parsed = strictParsed.isValid() ? strictParsed : dayjs(date);
   return parsed.isValid() ? parsed.format(DateFormats.YYYY_MM_DD) : date;
 };
 
@@ -101,6 +102,9 @@ export const isDateOutOfRange = ({
   const diff = current.diff(futureDate, DAY);
   return Math.abs(diff) > maxDays;
 };
+
+export const getLocalYearMonth = (date: Date): string =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 
 export const formatDateValue = (
   date?: string | Date | Dayjs | null,
