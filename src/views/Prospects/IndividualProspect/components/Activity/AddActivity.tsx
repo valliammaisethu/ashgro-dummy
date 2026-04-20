@@ -155,7 +155,7 @@ const AddActivity = ({
               className={styles.okButton}
               htmlType={HtmlButtonType.SUBMIT}
               loading={isLoading}
-              disabled={!isActivitySelected || !isDescription}
+              disabled={!isEdit && (!isActivitySelected || !isDescription)}
             >
               {isEdit ? "Save" : "Add Activity"}
             </Button>
