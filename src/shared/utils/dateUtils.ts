@@ -103,6 +103,9 @@ export const isDateOutOfRange = ({
   return Math.abs(diff) > maxDays;
 };
 
+export const getLocalYearMonth = (date: Date): string =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+
 export const formatDateValue = (
   date?: string | Date | Dayjs | null,
   format: DateFormats = DD_MMM__YYYY,
