@@ -6,7 +6,7 @@ import { DateFormats } from "src/enums/dateFormats.enum";
 import { DateUnit } from "src/enums/dateUnit.enum";
 import { CalendarEventsAndSlots } from "src/models/calender.model";
 import { CalendarEvent } from "src/shared/types/calender";
-import { formatDateValue } from "src/shared/utils/dateUtils";
+import { formatDateValue, getLocalYearMonth } from "src/shared/utils/dateUtils";
 import { BOOK_MEETING_FIELDS } from "../BookMeeting/constants";
 
 const { NAME, SLOT_DATE, MEETING_TIME, TYPE } = BOOK_MEETING_FIELDS;
@@ -105,7 +105,7 @@ export const mapCalendarDaysToEvents = (
 };
 
 export const updateLocationMonthQuery = (currentQuery: object, date: Date) => {
-  const month = dayjs(date).format(DateFormats.YYYY_MM);
+  const month = getLocalYearMonth(date);
 
   return queryString?.stringify(
     { ...currentQuery, month },
