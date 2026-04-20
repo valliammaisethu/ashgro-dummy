@@ -1,11 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import {
-  Calendar,
-  DateHeaderProps,
-  dayjsLocalizer,
-  ToolbarProps,
-} from "react-big-calendar";
-import dayjs from "dayjs";
+import { Calendar, DateHeaderProps, ToolbarProps } from "react-big-calendar";
 import { useQuery } from "@tanstack/react-query";
 import queryString from "query-string";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -16,15 +10,16 @@ import DateCell from "./DateCell";
 import { CALENDAR_CONFIG } from "./constants";
 import ConditionalRenderComponent from "src/shared/components/ConditionalRenderComponent";
 import { CalenderService } from "src/services/Calender/calender.service";
-import { DateFormats } from "src/enums/dateFormats.enum";
 import useRedirect from "src/shared/hooks/useRedirect";
 import { CalendarEvent } from "src/shared/types/calender";
 import { useAppContainerPadding } from "src/shared/hooks/useAppContainerPadding";
-
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import styles from "./calender.module.scss";
 
-const localizer = dayjsLocalizer(dayjs);
+import moment from "moment";
+import { momentLocalizer } from "react-big-calendar";
+
+const localizer = momentLocalizer(moment);
 
 interface CalenderProps {
   handleBookingModalVisbility?: () => void;
@@ -40,8 +35,7 @@ const Calender = ({
 
   const query = queryString.parse(location.search);
 
-  const selectedDate =
-    (query.month as string) || dayjs().format(DateFormats.YYYY_MM);
+  const selectedDate = (query.month as string) || moment().format("YYYY-MM");
 
   const { navigateToMonth } = useRedirect();
   const { calenderEventsAndSlotsList } = CalenderService();
@@ -66,6 +60,11 @@ const Calender = ({
     () => (Array.isArray(data) ? data : []),
     [data],
   );
+
+  const calendarDate = useMemo(() => {
+    const [year, month] = selectedDate.split("-").map(Number);
+    return new Date(year, month - 1, 1); // local midnight — safe with momentLocalizer
+  }, [selectedDate]);
 
   const Toolbar = useCallback(
     (props: ToolbarProps<CalendarEvent, object>) => (
@@ -105,7 +104,7 @@ const Calender = ({
         {...CALENDAR_CONFIG}
         localizer={localizer}
         events={data}
-        date={dayjs(selectedDate).toDate()}
+        date={calendarDate}
         onNavigate={handleSelectMonth}
         components={{
           toolbar: Toolbar,

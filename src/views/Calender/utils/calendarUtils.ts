@@ -105,7 +105,7 @@ export const mapCalendarDaysToEvents = (
 };
 
 export const updateLocationMonthQuery = (currentQuery: object, date: Date) => {
-  const month = dayjs(date).format(DateFormats.YYYY_MM);
+  const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 
   return queryString?.stringify(
     { ...currentQuery, month },
