@@ -1,6 +1,6 @@
 revolte:
   version: '1.0'
-  project: Ashgro test
+  project: Ashgro
   appName: Ashgro dummy
   workflow:
     developerWorkflow:
