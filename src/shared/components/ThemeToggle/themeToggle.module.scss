@@ -1,0 +1,35 @@
+.themeToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.4rem;
+  transition: all 0.3s ease;
+  color: $nav-text;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: $nav-active-text;
+  }
+
+  .icon {
+    width: 2rem;
+    height: 2rem;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+:global(.dark-mode) {
+  .themeToggle {
+    color: #e0e0e0;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #ffd700;
+    }
+  }
+}

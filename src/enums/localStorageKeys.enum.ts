@@ -4,4 +4,5 @@ export enum LocalStorageKeys {
   AUTH = "auth",
   REFRESH_TOKEN = "refreshToken",
   DASHBOARD_FILTERS = "dashboardFilters",
+  THEME = "theme",
 }

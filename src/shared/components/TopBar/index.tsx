@@ -20,6 +20,7 @@ import MyProfile from "src/views/MyProfile";
 import Button from "../Button";
 import { Buttons } from "src/enums/buttons.enum";
 import Modal from "../Modal";
+import ThemeToggle from "../ThemeToggle";
 
 import styles from "./topBar.module.scss";
 
@@ -77,6 +78,7 @@ const TopBar = () => {
       <div className={styles.topBarEnd}>
         {!isSuperAdmin && <div className={styles.clubName}>{clubName}</div>}
         {isSuperAdmin && <MyProfile />}
+        <ThemeToggle />
         <Button
           className={styles.logoutButton}
           disabled={logoutPending}
